@@ -1,4 +1,4 @@
-target_sources(taller_client
+target_sources(cs2d_client
     PRIVATE
     # .cpp files
     main.cpp

@@ -1,4 +1,4 @@
-target_sources(taller_common
+target_sources(cs2d_common
     PRIVATE
     # .cpp files
     foo.cpp
