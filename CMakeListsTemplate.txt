@@ -1,0 +1,20 @@
+# Use this file as a template for including all .h and .cpp files in a folder
+#
+# To make it work, add
+#   add_subdirectory(*directory name*)
+#
+# In the parent folder, replacing *directory name* with the actual directory name
+
+file(GLOB CPP_SRC
+    ".cpp"
+    )
+
+file(GLOB H_SRC
+    ".h"
+    )
+
+# Replace *target name* with the actual target name
+target_sources(*target name*
+    PRIVATE ${CPP_SRC}
+    PUBLIC ${H_SRC}
+    )
