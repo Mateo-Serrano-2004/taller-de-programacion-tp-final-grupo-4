@@ -6,11 +6,11 @@
 # In the parent folder, replacing *directory name* with the actual directory name
 
 file(GLOB CPP_SRC
-    ".cpp"
+    "*.cpp"
     )
 
 file(GLOB H_SRC
-    ".h"
+    "*.h"
     )
 
 # Replace *target name* with the actual target name
