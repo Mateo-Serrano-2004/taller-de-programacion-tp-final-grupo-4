@@ -55,6 +55,9 @@ target_include_directories(cs2d_common PUBLIC .)
 # HEY!! TODO XXX: add more dependendies (either for client, server or editor)
 if(CS2D_CLIENT OR CS2D_EDITOR)
     include(FetchContent)
+
+    set(SDL2PP_WITH_IMAGE ON CACHE BOOL "Enable SDL2_image support in SDL2pp")
+
     FetchContent_Declare(
         SDL2
         GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
@@ -116,6 +119,7 @@ if(CS2D_CLIENT)
     set_project_warnings(cs2d_client ${CS2D_MAKE_WARNINGS_AS_ERRORS} FALSE)
 
     # add libSDL2pp's headers
+    target_include_directories(cs2d_client PRIVATE ${CMAKE_SOURCE_DIR})
     target_include_directories(cs2d_client PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the cs2d_common lib target
