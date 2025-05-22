@@ -8,7 +8,7 @@
 
 namespace Controller {
     class SDLEvent : public Event {
-    private:
+    protected:
         SDL_Event event;
     
     public:
@@ -16,7 +16,7 @@ namespace Controller {
 
         Uint32 type() const;
 
-        ~SDLEvent() override = default;
+        virtual ~SDLEvent() override = default;
     };
 };
 

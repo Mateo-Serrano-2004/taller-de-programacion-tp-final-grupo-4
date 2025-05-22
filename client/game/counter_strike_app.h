@@ -1,23 +1,24 @@
 #ifndef CLIENT_GAME_COUNTER_STRIKE_APP_H
 #define CLIENT_GAME_COUNTER_STRIKE_APP_H
 
-#include <list>
-#include <string>
-
 #include "app.h"
 #include "sdl_controller.h"
+#include "model/game_state.h"
 #include "window/sdl_window.h"
-#include "render/sync_sdl_renderer.h"
+#include "render/sdl_renderer.h"
+#include "texture/texture_storage.h"
 
 namespace App {
     class CounterStrikeApp : public App {
     private:
+        Model::GameState game_state;
         Controller::SDLController sdl_controller;
         SDLWindow sdl_window;
-        View::SyncSDLRenderer sdl_renderer;
+        View::SDLRenderer sdl_renderer;
+        Model::TextureStorage texture_storage;
 
     public:
-        CounterStrikeApp(const std::list<std::string>& images);
+        CounterStrikeApp();
 
         void run() override;
 

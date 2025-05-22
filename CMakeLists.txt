@@ -109,6 +109,10 @@ if(CS2D_CLIENT)
     # HEY!! TODO XXX: Change the name of the executable to the one you like!
     add_executable(cs2d_client)
 
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        target_compile_definitions(cs2d_client PRIVATE DEBUG_MODE)
+    endif()
+
     # Make them depend on cs2d_common lib
     add_dependencies(cs2d_client cs2d_common SDL2pp::SDL2pp)
 

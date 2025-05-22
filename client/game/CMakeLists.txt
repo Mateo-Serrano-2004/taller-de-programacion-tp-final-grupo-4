@@ -14,6 +14,7 @@ target_sources(cs2d_client
 add_subdirectory(event/)
 add_subdirectory(exception/)
 add_subdirectory(render/)
+add_subdirectory(model/)
 add_subdirectory(texture/)
 add_subdirectory(utils/)
 add_subdirectory(window/)

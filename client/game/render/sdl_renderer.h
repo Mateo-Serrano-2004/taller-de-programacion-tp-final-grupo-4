@@ -1,34 +1,37 @@
 #ifndef CLIENT_GAME_RENDER_SDL_RENDERER_H
 #define CLIENT_GAME_RENDER_SDL_RENDERER_H
 
-#include <list>
-#include <string>
-
 #include <SDL2pp/Renderer.hh>
 
 #include "../window/sdl_window.h"
-#include "../texture/sdl_texture_manager.h"
+
+namespace Model {
+    class GameState;
+    class Player;
+    class TextureStorage;
+};
 
 namespace View {
-
-    class SDLTextureManager;
-
     class SDLRenderer  {
-    protected:
+    private:
         App::SDLWindow* window;
+        Model::GameState* game_state;
+        Model::TextureStorage* texture_storage;
         SDL2pp::Renderer renderer;
-        SDLTextureManager texture_manager;
+
+        void render_player(const Model::Player& player);
 
     public:
         SDLRenderer(
             App::SDLWindow* sdl_window,
-            const std::list<std::string>& pathnames
+            Model::GameState* game_state,
+            Model::TextureStorage* texture_storage
         );
 
-        virtual void render();
+        void render();
         SDL2pp::Renderer* get_renderer();
 
-        virtual ~SDLRenderer() = default;
+        ~SDLRenderer() = default;
     };
 }
 

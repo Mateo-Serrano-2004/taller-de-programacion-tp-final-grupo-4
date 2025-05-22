@@ -6,22 +6,23 @@
 #include "definitions.h"
 
 #include "controller.h"
-#include "render/sync_sdl_renderer.h"
 #include "event/sdl_event.h"
 #include "utils/synchronizer.h"
 
-using namespace Abstract;
-
+namespace Model {
+    class GameState;
+};
 namespace Controller {
-    class SDLController : public Controller, public Synchronizer<SDLEvent> {
+    class SDLController : public Controller {
     private:
+        Model::GameState* game_state;
         SDL_Event placeholder;
 
     protected:
         void handle_event(TS<Event> event) override;
 
     public:
-        SDLController();
+        SDLController(Model::GameState* game_state);
 
         void dispatch_events() override;
     };
