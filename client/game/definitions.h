@@ -2,8 +2,12 @@
 #define CLIENT_GAME_DEFINITIONS_H
 
 #include <memory>
+#include <chrono>
 
 #include "common/queue.h"
+
+using ms = std::chrono::milliseconds;
+using time_point = std::chrono::steady_clock::time_point;
 
 template <typename T>
 using ThreadSafe = std::shared_ptr<T>;

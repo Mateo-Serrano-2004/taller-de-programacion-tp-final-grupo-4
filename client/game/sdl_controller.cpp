@@ -28,18 +28,6 @@ void Controller::SDLController::handle_event(TS<Event> event) {
         const Sint32 key = keydown_event->get_key_sym();
         if (key == SDLK_q) {
             game_state->register_player(Model::Player(80, 90, 3));
-        } else if (key == SDLK_w) {
-            Model::Player& player = game_state->get_players()[0];
-            player.set_y(player.get_y() - 1);
-        } else if (key == SDLK_a) {
-            Model::Player& player = game_state->get_players()[0];
-            player.set_x(player.get_x() - 1);
-        } else if (key == SDLK_s) {
-            Model::Player& player = game_state->get_players()[0];
-            player.set_y(player.get_y() + 1);
-        } else if (key == SDLK_d) {
-            Model::Player& player = game_state->get_players()[0];
-            player.set_x(player.get_x() + 1);
         }
     }
 }
@@ -51,5 +39,28 @@ void Controller::SDLController::dispatch_events() {
         } catch (ClosedQueue& error) {
             throw App::ClosedWindowException("Received a QUIT event");
         }
+    }
+
+    uint8_t speed = 3;
+
+    const Uint8* state = SDL_GetKeyboardState(NULL);
+
+    if (state[SDL_SCANCODE_LSHIFT]) speed = 5;
+
+    if (state[SDL_SCANCODE_W]) {
+        Model::Player& player = game_state->get_players()[0];
+        player.set_y(player.get_y() - speed);
+    }
+    if (state[SDL_SCANCODE_A]) {
+        Model::Player& player = game_state->get_players()[0];
+        player.set_x(player.get_x() - speed);
+    }
+    if (state[SDL_SCANCODE_S]) {
+        Model::Player& player = game_state->get_players()[0];
+        player.set_y(player.get_y() + speed);
+    }
+    if (state[SDL_SCANCODE_D]) {
+        Model::Player& player = game_state->get_players()[0];
+        player.set_x(player.get_x() + speed);
     }
 }

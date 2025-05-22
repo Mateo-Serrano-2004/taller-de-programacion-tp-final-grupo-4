@@ -3,11 +3,15 @@
 #include <vector>
 #include <string>
 #include <utility>
+#include <thread>
 
 #include <SDL2pp/SDL2pp.hh>
 #include <SDL2/SDL.h>
 
-#include "client/game/exception/closed_window.h"
+#include "definitions.h"
+
+#include "exception/closed_window.h"
+#include "clock.h"
 
 const std::vector<std::string> paths = {
     "player/ct1.bmp",
@@ -47,11 +51,31 @@ App::CounterStrikeApp::CounterStrikeApp()
 }
 
 void App::CounterStrikeApp::run() {
+    Model::Clock clock;
     bool running = true;
+    Model::Clock::Time start = clock.now();
+    uint64_t frame = 0;
+    uint64_t rate = 30; // 30 fps
+    int64_t rest_time = 0;
+    uint64_t behind = 0;
+    uint64_t lost = 0;
     while (running) {
         try {
             sdl_controller.dispatch_events();
             sdl_renderer.render();
+
+            Model::Clock::Time end = clock.now();
+            rest_time = rate - (end - start);
+            if (rest_time < 0) {
+                behind = -rest_time;
+                rest_time = rate - (behind % rate);
+                lost = behind + rest_time;
+                start += lost;
+                frame += (int) (lost / rate);
+            }
+            std::this_thread::sleep_for(ms(rest_time));
+            start += rate;
+            frame++;
         } catch (ClosedWindowException& exception) {
             running = false;
         }

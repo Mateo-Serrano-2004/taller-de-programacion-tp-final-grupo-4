@@ -44,6 +44,7 @@ void View::SDLRenderer::render_player(const Model::Player& player) {
 }
 
 void View::SDLRenderer::render() {
+    renderer.Clear();
     const auto& players = game_state->get_players();
     for (auto& player : players) {
         render_player(player);
