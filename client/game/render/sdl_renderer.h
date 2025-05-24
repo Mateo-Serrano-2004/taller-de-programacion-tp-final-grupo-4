@@ -1,6 +1,8 @@
 #ifndef CLIENT_GAME_RENDER_SDL_RENDERER_H
 #define CLIENT_GAME_RENDER_SDL_RENDERER_H
 
+#include <utility>
+
 #include <SDL2pp/Renderer.hh>
 
 #include "../window/sdl_window.h"
@@ -19,6 +21,7 @@ namespace View {
         Model::TextureStorage* texture_storage;
         SDL2pp::Renderer renderer;
 
+        std::pair<int16_t, int16_t> get_skin_piece(const Model::Player& player);
         void render_player(const Model::Player& player);
 
     public:

@@ -11,9 +11,9 @@
 namespace App {
     class CounterStrikeApp : public App {
     private:
+        SDLWindow sdl_window;
         Model::GameState game_state;
         Controller::SDLController sdl_controller;
-        SDLWindow sdl_window;
         View::SDLRenderer sdl_renderer;
         Model::TextureStorage texture_storage;
 

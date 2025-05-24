@@ -10,18 +10,11 @@ using ms = std::chrono::milliseconds;
 using time_point = std::chrono::steady_clock::time_point;
 
 template <typename T>
-using ThreadSafe = std::shared_ptr<T>;
+using Shared = std::shared_ptr<T>;
+
+using std::make_shared;
 
 template <typename T>
-using TS = ThreadSafe<T>;
-
-template <typename T, typename... Args>
-ThreadSafe<T> make_TS(Args&&... args) {
-    return std::make_shared<T>(std::forward<Args>(args)...);
-}
-
-
-template <typename T>
-using TSQueue = Queue<TS<T>>;
+using SharedQueue = Queue<Shared<T>>;
 
 #endif // CLIENT_GAME_DEFINITIONS_H

@@ -36,11 +36,11 @@ App::CounterStrikeApp::CounterStrikeApp()
         texture_storage.load_texture(i, paths[i]);
     }
 
-    Model::Player p1(0, 0, 0);
+    Model::Player p1(0, 0, 0, 0, 0);
     p1.set_skin_piece(0);
-    Model::Player p2(64, 32, 1);
+    Model::Player p2(1, 64, 32, 0, 1);
     p2.set_skin_piece(2);
-    Model::Player p3(35, 60, 3);
+    Model::Player p3(2, 35, 60, 0, 3);
     p3.set_skin_piece(4);
 
     game_state.register_player(std::move(p1));
@@ -55,7 +55,7 @@ void App::CounterStrikeApp::run() {
     bool running = true;
     Model::Clock::Time start = clock.now();
     uint64_t frame = 0;
-    uint64_t rate = 30; // 30 fps
+    uint64_t rate = (uint64_t) (1000 / 30); // 30 fps
     int64_t rest_time = 0;
     uint64_t behind = 0;
     uint64_t lost = 0;
@@ -63,7 +63,6 @@ void App::CounterStrikeApp::run() {
         try {
             sdl_controller.dispatch_events();
             sdl_renderer.render();
-
             Model::Clock::Time end = clock.now();
             rest_time = rate - (end - start);
             if (rest_time < 0) {

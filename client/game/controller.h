@@ -11,9 +11,9 @@
 namespace Controller {
     class Controller : public Thread {
     protected:
-        TSQueue<Event> dispatched_events_queue;
+        SharedQueue<Event> dispatched_events_queue;
 
-        virtual void handle_event(TS<Event> event) = 0;
+        virtual void handle_event(Shared<Event> event) = 0;
 
     public:
         virtual void dispatch_events() = 0;

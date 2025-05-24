@@ -1,6 +1,8 @@
 #ifndef CLIENT_GAME_SDL_WINDOW_H
 #define CLIENT_GAME_SDL_WINDOW_H
 
+#include <cstdint>
+
 #include <SDL2pp/SDL.hh>
 #include <SDL2pp/Window.hh>
 
@@ -16,6 +18,9 @@ namespace App {
         SDLWindow();
 
         SDL2pp::Window& get_window();
+
+        uint16_t get_width() const;
+        uint16_t get_height() const;
 
         ~SDLWindow() override = default;
     };
