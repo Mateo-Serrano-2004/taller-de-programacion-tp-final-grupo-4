@@ -1,0 +1,22 @@
+#include "sdl_event_handler.h"
+
+#include "event/event.h"
+#include "event/quit_event.h"
+
+#include "exception/closed_window.h"
+
+Controller::SDLEventHandler::SDLEventHandler(SharedQueue<Model::Event>& queue)
+: event_queue(queue) {}
+
+void Controller::SDLEventHandler::handle() {
+    while (SDL_PollEvent(&placeholder)) {
+        if (placeholder.type == SDL_QUIT) {
+            Shared<Model::QuitEvent> quit_event = make_shared<Model::QuitEvent>();
+            try {
+                event_queue.try_push(quit_event);
+            } catch (ClosedQueue& error) {
+                throw App::ClosedWindowException("Received a QUIT event");
+            }
+        }
+    }
+}

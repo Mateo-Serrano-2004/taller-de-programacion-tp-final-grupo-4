@@ -6,10 +6,8 @@
 #include <SDL2pp/SDL.hh>
 #include <SDL2pp/Window.hh>
 
-#include "window.h"
-
 namespace App {
-    class SDLWindow : public Window {
+    class SDLWindow {
     private:
         SDL2pp::SDL sdl;
         SDL2pp::Window window;
@@ -22,7 +20,7 @@ namespace App {
         uint16_t get_width() const;
         uint16_t get_height() const;
 
-        ~SDLWindow() override = default;
+        ~SDLWindow() = default;
     };
 };
 

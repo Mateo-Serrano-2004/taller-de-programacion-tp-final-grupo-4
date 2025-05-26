@@ -6,6 +6,7 @@
 namespace Model {
     class Player {
     private:
+        const int16_t default_angle;
         uint16_t id;
         int32_t x;
         int32_t y;
@@ -31,7 +32,7 @@ namespace Model {
 
         void set_x(int32_t new_x);
         void set_y(int32_t new_y);
-        void set_angle(int32_t point_x, int32_t point_y, uint16_t ref_x, uint16_t ref_y);
+        void set_angle(int16_t new_angle);
         void set_skin_piece(uint8_t new_skin_piece);
 
         ~Player() = default;

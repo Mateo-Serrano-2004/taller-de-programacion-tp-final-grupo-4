@@ -26,8 +26,10 @@ const std::vector<std::string> paths = {
 };
 
 App::CounterStrikeApp::CounterStrikeApp()
-: sdl_controller(&game_state),
-   sdl_renderer(
+:  sdl_controller(
+    &sdl_window,
+    &game_state
+), sdl_renderer(
     &sdl_window,
     &game_state,
     &texture_storage
@@ -55,7 +57,7 @@ void App::CounterStrikeApp::run() {
     bool running = true;
     Model::Clock::Time start = clock.now();
     uint64_t frame = 0;
-    uint64_t rate = (uint64_t) (1000 / 30); // 30 fps
+    uint64_t rate = (uint64_t) (1000 / 40); // 30 fps
     int64_t rest_time = 0;
     uint64_t behind = 0;
     uint64_t lost = 0;

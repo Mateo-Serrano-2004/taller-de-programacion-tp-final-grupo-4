@@ -12,7 +12,7 @@ target_sources(cs2d_client
     )
 
 add_subdirectory(event/)
-add_subdirectory(translators/)
+add_subdirectory(handler/)
 add_subdirectory(exception/)
 add_subdirectory(render/)
 add_subdirectory(model/)

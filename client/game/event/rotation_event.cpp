@@ -2,11 +2,8 @@
 
 #include <cstdint>
 
-Model::RotationEvent::RotationEvent(
-    int16_t x,
-    int16_t y
-) : x_coordinate(x), y_coordinate(y) {}
+Model::RotationEvent::RotationEvent(int16_t angle_in_degrees)
+: Model::Event(Model::EventType::ROTATION),
+  angle_in_degrees(angle_in_degrees) {}
 
-int16_t Model::RotationEvent::get_x_coordinate() const { return x_coordinate; }
-
-int16_t Model::RotationEvent::get_y_coordinate() const { return y_coordinate; }
+int16_t Model::RotationEvent::get_angle_in_degrees() const { return angle_in_degrees; }

@@ -1,90 +1,61 @@
-#include "client/game/sdl_controller.h"
+#include "sdl_controller.h"
+
+#include <cstdint>
 
 #include <SDL2pp/SDL2pp.hh>
 #include <SDL2/SDL.h>
 
-#include <iostream>
-
+#include "event/event.h"
+#include "event/movement_event.h"
+#include "event/rotation_event.h"
+#include "event/quit_event.h"
 #include "window/sdl_window.h"
 #include "exception/closed_window.h"
 #include "model/game_state.h"
 #include "model/player.h"
-#include "event/sdl_keydown_event.h"
 
 Controller::SDLController::SDLController(
+    App::SDLWindow* window,
     Model::GameState* game_state
-) : game_state(game_state), m_translator(game_state) {
+) : window(window),
+    game_state(game_state),
+    sdl_event_handler(dispatched_events_queue),
+    state_handler(window, game_state, dispatched_events_queue) {
     start();
 }
 
-void Controller::SDLController::handle_event(Shared<Event> event) {
-    Shared<SDLEvent> sdl_event = std::static_pointer_cast<SDLEvent>(event);
-    const Uint32 event_type = sdl_event->type();
-    if (event_type == SDL_QUIT) {
+void Controller::SDLController::handle_event(Shared<Model::Event> event) {
+    Model::EventType event_type = event->get_type();
+    if (event_type == Model::EventType::QUIT) {
         try {
             dispatched_events_queue.close();
         } catch (...) {}
-    }
-    if (event_type == SDL_KEYDOWN) {
-        Shared<SDLKeydownEvent> keydown_event = std::static_pointer_cast<SDLKeydownEvent>(sdl_event);
-        const Sint32 key = keydown_event->get_key_sym();
-        if (key == SDLK_q) {
-            game_state->register_player(Model::Player(3, 80, 90, 0, 3));
-        }
+    } else if (event_type == Model::EventType::MOVEMENT) {
+        auto movement_event = std::static_pointer_cast<Model::MovementEvent>(event);
+        int8_t speed = 3;
+        int8_t speed_type = movement_event->get_speed_type();
+        if (speed_type == -1) speed = 1;
+        else if (speed_type == 1) speed = 5;
+
+        int8_t x = movement_event->get_x_direction() * speed;
+        int8_t y = movement_event->get_y_direction() * speed;
+
+        Model::Player& player = game_state->get_reference_player();
+        player.set_x(player.get_x() + x);
+        player.set_y(player.get_y() + y);
+    } else if (event_type == Model::EventType::ROTATION) {
+        auto rotation_event = std::static_pointer_cast<Model::RotationEvent>(event);
+        int16_t angle_in_degrees = rotation_event->get_angle_in_degrees();
+        Model::Player& player = game_state->get_reference_player();
+        player.set_angle(angle_in_degrees);
     }
 }
 
 void Controller::SDLController::dispatch_events() {
-    while (SDL_PollEvent(&placeholder)) {
-        try {
-            dispatched_events_queue.try_push(make_shared<SDLEvent>(placeholder));
-        } catch (ClosedQueue& error) {
-            throw App::ClosedWindowException("Received a QUIT event");
-        }
+    sdl_event_handler.handle();
+    try {
+        state_handler.handle();
+    } catch (ClosedQueue& error) {
+        throw App::ClosedWindowException("Received a QUIT event");
     }
-
-    Shared<Model::MovementEvent> k_event = k_translator.get_movement_event();
-    Shared<Model::RotationEvent> m_event = m_translator.get_rotation_event();
-
-    if (k_event) {
-        int8_t speed = 3;
-        int8_t speed_type = k_event->get_speed_type();
-        if (speed_type == -1) speed = 1;
-        else if (speed_type == 1) speed = 5;
-
-        int8_t x = k_event->get_x_direction() * speed;
-        int8_t y = k_event->get_y_direction() * speed;
-
-        Model::Player& player = game_state->get_players()[0];
-        player.set_x(player.get_x() + x);
-        player.set_y(player.get_y() + y);
-    }
-
-    if (m_event) {
-        int16_t x = m_event->get_x_coordinate();
-        int16_t y = m_event->get_y_coordinate();
-        Model::Player& player = game_state->get_players()[0];
-        player.set_angle(x, y, 320 - 15, 240 - 15);
-    }
-
-    // const Uint8* state = SDL_GetKeyboardState(NULL);
-
-    // if (state[SDL_SCANCODE_LSHIFT]) speed = 5;
-
-    // if (state[SDL_SCANCODE_W]) {
-    //     Model::Player& player = game_state->get_players()[0];
-    //     player.set_y(player.get_y() - speed);
-    // }
-    // if (state[SDL_SCANCODE_A]) {
-    //     Model::Player& player = game_state->get_players()[0];
-    //     player.set_x(player.get_x() - speed);
-    // }
-    // if (state[SDL_SCANCODE_S]) {
-    //     Model::Player& player = game_state->get_players()[0];
-    //     player.set_y(player.get_y() + speed);
-    // }
-    // if (state[SDL_SCANCODE_D]) {
-    //     Model::Player& player = game_state->get_players()[0];
-    //     player.set_x(player.get_x() + speed);
-    // }
 }

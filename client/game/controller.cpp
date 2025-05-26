@@ -3,11 +3,13 @@
 #include <memory>
 #include <functional>
 
+#include "event/event.h"
+
 void Controller::Controller::run() {
     bool keep_handling = true;
     while (keep_handling) {
         try {
-            Shared<Event> event = dispatched_events_queue.pop();
+            Shared<Model::Event> event = dispatched_events_queue.pop();
             handle_event(event);
         } catch (ClosedQueue& error) {
             keep_handling = false;

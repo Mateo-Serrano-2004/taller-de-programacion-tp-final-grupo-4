@@ -6,16 +6,14 @@
 #include "event.h"
 
 namespace Model {
-    class RotationEvent : Event {
+    class RotationEvent : public Event {
     private:
-        int16_t x_coordinate;
-        int16_t y_coordinate;
+        int16_t angle_in_degrees;
     
     public:
-        RotationEvent(int16_t x, int16_t y);
+        RotationEvent(int16_t angle_in_degrees);
 
-        int16_t get_x_coordinate() const;
-        int16_t get_y_coordinate() const;
+        int16_t get_angle_in_degrees() const;
 
         ~RotationEvent() override = default;
     };

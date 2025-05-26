@@ -6,9 +6,8 @@
 #include "definitions.h"
 
 #include "controller.h"
-#include "event/sdl_event.h"
-#include "translators/keyboard_translator.h"
-#include "translators/mouse_translator.h"
+#include "handler/state_handler.h"
+#include "handler/sdl_event_handler.h"
 
 namespace App {
     class SDLWindow;
@@ -16,21 +15,22 @@ namespace App {
 
 namespace Model {
     class GameState;
+    class Event;
 };
 namespace Controller {
     class SDLController : public Controller {
     private:
         App::SDLWindow* window;
         Model::GameState* game_state;
-        Model::KeyboardTranslator k_translator;
-        Model::MouseTranslator m_translator;
-        SDL_Event placeholder;
+        SDLEventHandler sdl_event_handler;
+        StateHandler state_handler;
 
     protected:
-        void handle_event(Shared<Event> event) override;
+        void handle_event(Shared<Model::Event> event) override;
 
     public:
         SDLController(
+            App::SDLWindow* window,
             Model::GameState* game_state
         );
 
