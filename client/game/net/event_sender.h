@@ -1,7 +1,7 @@
 #ifndef CLIENT_GAME_NET_EVENT_SENDER_H
 #define CLIENT_GAME_NET_EVENT_SENDER_H
 
-#include "definitions.h"
+#include "common/definitions.h"
 #include "common/thread.h"
 
 namespace Model {
@@ -15,10 +15,14 @@ namespace Net {
 namespace Controller {
     class EventSender : public Thread {
     private:
+        SharedQueue<Model::Event>& event_queue;
         Net::Protocol& protocol;
 
     public:
-        EventSender(Net::Protocol& protocol) : protocol(protocol) {}
+        EventSender(
+            SharedQueue<Model::Event>& queue,
+            Net::Protocol& protocol
+        );
 
         void run() override;
 

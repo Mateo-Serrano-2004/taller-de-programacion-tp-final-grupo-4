@@ -3,7 +3,7 @@
 
 #include <chrono>
 
-#include "definitions.h"
+#include "common/definitions.h"
 
 namespace Model {
     class Clock {

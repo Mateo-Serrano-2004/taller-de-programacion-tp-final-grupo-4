@@ -3,7 +3,7 @@
 
 #include <SDL2/SDL.h>
 
-#include "definitions.h"
+#include "common/definitions.h"
 
 namespace Model {
     class Event;

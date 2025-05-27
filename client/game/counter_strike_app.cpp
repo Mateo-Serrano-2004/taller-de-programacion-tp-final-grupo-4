@@ -8,7 +8,7 @@
 #include <SDL2pp/SDL2pp.hh>
 #include <SDL2/SDL.h>
 
-#include "definitions.h"
+#include "common/definitions.h"
 
 #include "exception/closed_window.h"
 #include "clock.h"

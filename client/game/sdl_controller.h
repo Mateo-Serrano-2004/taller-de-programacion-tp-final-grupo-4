@@ -3,7 +3,7 @@
 
 #include <SDL2pp/SDL2pp.hh>
 
-#include "definitions.h"
+#include "common/definitions.h"
 
 #include "controller.h"
 #include "handler/state_handler.h"

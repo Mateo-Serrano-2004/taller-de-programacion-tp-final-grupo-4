@@ -20,9 +20,7 @@ void Controller::KeyboardStateHanlder::handle_movement() {
     if (keyboard_state[SDL_SCANCODE_S]) y_movement++;
     if (keyboard_state[SDL_SCANCODE_D]) x_movement++;
 
-    if (x_movement || y_movement || speed_type) {
-        event_queue.push(make_shared<Model::MovementEvent>(x_movement, y_movement, speed_type));
-    }
+    event_queue.push(make_shared<Model::MovementEvent>(x_movement, y_movement, speed_type));
 }
 
 Controller::KeyboardStateHanlder::KeyboardStateHanlder(SharedQueue<Model::Event>& queue)

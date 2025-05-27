@@ -1,5 +1,5 @@
-#ifndef CLIENT_GAME_MODEL_PLAYER_H
-#define CLIENT_GAME_MODEL_PLAYER_H
+#ifndef COMMON_MODEL_PLAYER_H
+#define COMMON_MODEL_PLAYER_H
 
 #include <cstdint>
 
@@ -39,4 +39,4 @@ namespace Model {
     };
 };
 
-#endif // CLIENT_GAME_MODEL_PLAYER_H
+#endif // COMMON_MODEL_PLAYER_H
