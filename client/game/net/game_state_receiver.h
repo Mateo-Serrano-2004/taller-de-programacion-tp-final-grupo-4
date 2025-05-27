@@ -1,27 +1,31 @@
 #ifndef CLIENT_GAME_NET_GAME_STATE_RECEIVER_H
 #define CLIENT_GAME_NET_GAME_STATE_RECEIVER_H
 
+#include <atomic>
+
 #include "dto_handler/game_state_updater.h"
 #include "common/thread.h"
 
-class Model {
+namespace Model {
     class GameState;
 };
 
 namespace Net {
-    class Protocol;
+    class ClientProtocol;
 };
 
-class Controller {
+namespace Controller {
     class GameStateReceiver : public Thread {
     private:
-        GameStateUpdater game_state_updater;
-        Net::Protocol& protocol;
+        std::atomic<bool>& keep_running;
+        DTO::GameStateUpdater game_state_updater;
+        Net::ClientProtocol& protocol;
 
     public:
         GameStateReceiver(
+            std::atomic<bool>& keep_running,
             Model::GameState* game_state,
-            Net::Protocol& protocol
+            Net::ClientProtocol& protocol
         );
 
         void run() override;

@@ -9,24 +9,24 @@ namespace Model {
 }
 
 namespace Net {
-    class Protocol;
+    class ClientProtocol;
 };
 
 namespace Controller {
     class EventSender : public Thread {
     private:
         SharedQueue<Model::Event>& event_queue;
-        Net::Protocol& protocol;
+        Net::ClientProtocol& protocol;
 
     public:
         EventSender(
             SharedQueue<Model::Event>& queue,
-            Net::Protocol& protocol
+            Net::ClientProtocol& protocol
         );
 
         void run() override;
 
-        ~EventSender() override = default;
+        ~EventSender() override;
     };
 };
 

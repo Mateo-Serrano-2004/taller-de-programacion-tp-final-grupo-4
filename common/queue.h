@@ -40,6 +40,10 @@ class Queue {
 	Queue() : max_size(UINT_MAX-1), closed(false) {}
 	explicit Queue(const unsigned int max_size) : max_size(max_size), closed(false) {}
 
+        void clear() {
+            std::lock_guard<std::mutex> lck(mtx);
+            while (!q.empty()) q.pop();
+        }
 
         bool try_push(T const& val) {
             std::unique_lock<std::mutex> lck(mtx);

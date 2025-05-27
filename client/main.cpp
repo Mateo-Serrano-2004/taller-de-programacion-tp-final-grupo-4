@@ -1,7 +1,14 @@
-#include "game/counter_strike_app.h"
+#include "client.h"
 
-int main() try {
-	App::CounterStrikeApp cs_app;
+int main(int argc, char* argv[]) try {
+	char* hostname = argv[1];
+	char* port = argv[2];
+
+	std::string join;
+
+	if (argc == 4) join = ".";
+
+	Client client(hostname, port, join);
 
 	return 0;
 } catch (std::exception& e) {

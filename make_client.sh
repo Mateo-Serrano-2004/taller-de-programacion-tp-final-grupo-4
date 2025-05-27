@@ -5,5 +5,5 @@ cmake -S . -B build/ -DCMAKE_BUILD_TYPE=Debug -DCS2D_CLIENT=ON -DCS2D_SERVER=OFF
 cd build/
 make cs2d_client
 if [ $? -eq 0 ]; then
-    ./cs2d_client
+    ./cs2d_client localhost 8080
 fi

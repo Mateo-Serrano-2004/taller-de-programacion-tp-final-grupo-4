@@ -8,9 +8,14 @@
 #include "texture/texture_storage.h"
 #include "common/model/game_state.h"
 
+namespace Net {
+    class ClientProtocol;
+}
+
 namespace App {
     class CounterStrikeApp : public App {
     private:
+        Net::ClientProtocol& protocol;
         SDLWindow sdl_window;
         Model::GameState game_state;
         Controller::SDLController sdl_controller;
@@ -18,7 +23,7 @@ namespace App {
         Model::TextureStorage texture_storage;
 
     public:
-        CounterStrikeApp();
+        CounterStrikeApp(Net::ClientProtocol& protocol);
 
         void run() override;
 

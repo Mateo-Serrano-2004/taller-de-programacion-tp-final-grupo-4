@@ -10,8 +10,9 @@
 
 #include "common/definitions.h"
 
-#include "exception/closed_window.h"
 #include "clock.h"
+#include "exception/closed_window.h"
+#include "client/net/include/client_protocol.h"
 
 const std::vector<std::string> paths = {
     "player/ct1.bmp",
@@ -25,8 +26,11 @@ const std::vector<std::string> paths = {
     "player/vip.bmp"
 };
 
-App::CounterStrikeApp::CounterStrikeApp()
-:  sdl_controller(
+App::CounterStrikeApp::CounterStrikeApp(Net::ClientProtocol& protocol)
+:  protocol(protocol),
+   game_state(protocol.receive_player_id()),
+   sdl_controller(
+    protocol,
     &sdl_window,
     &game_state
 ), sdl_renderer(
@@ -38,17 +42,6 @@ App::CounterStrikeApp::CounterStrikeApp()
         texture_storage.load_texture(i, paths[i]);
     }
 
-    Model::Player p1(0, 0, 0, 0, 0);
-    p1.set_skin_piece(0);
-    Model::Player p2(1, 64, 32, 0, 1);
-    p2.set_skin_piece(2);
-    Model::Player p3(2, 35, 60, 0, 3);
-    p3.set_skin_piece(4);
-
-    game_state.register_player(std::move(p1));
-    game_state.register_player(std::move(p2));
-    game_state.register_player(std::move(p3));
-
     run();
 }
 
@@ -57,7 +50,7 @@ void App::CounterStrikeApp::run() {
     bool running = true;
     Model::Clock::Time start = clock.now();
     uint64_t frame = 0;
-    uint64_t rate = (uint64_t) (1000 / 40); // 30 fps
+    uint64_t rate = (uint64_t) (1000 / 40); // 40 fps
     int64_t rest_time = 0;
     uint64_t behind = 0;
     uint64_t lost = 0;
@@ -77,7 +70,7 @@ void App::CounterStrikeApp::run() {
             std::this_thread::sleep_for(ms(rest_time));
             start += rate;
             frame++;
-        } catch (ClosedWindowException& exception) {
+        } catch (...) {
             running = false;
         }
     }

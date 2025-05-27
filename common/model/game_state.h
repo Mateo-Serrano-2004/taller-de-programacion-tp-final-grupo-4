@@ -3,7 +3,9 @@
 
 #include <map>
 #include <mutex>
+#include <iostream>
 
+#include "common/definitions.h"
 #include "player.h"
 
 namespace DTO {
@@ -21,9 +23,11 @@ namespace Model {
 
     public:
         GameState(const uint8_t reference_player_id)
-        : reference_player_id(reference_player_id) {}
+        : reference_player_id(reference_player_id) {
+            std::cout << reference_player_id;
+        }
 
-        std::vector<Player>& get_players();
+        std::map<uint8_t, Player>& get_players();
 
         uint8_t get_reference_player_id() const;
         Player& get_reference_player();

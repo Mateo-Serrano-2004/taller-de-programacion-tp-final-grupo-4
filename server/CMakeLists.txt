@@ -5,3 +5,9 @@ target_sources(cs2d_server
     PUBLIC
     # .h files
     )
+
+add_subdirectory(net/include/)
+add_subdirectory(net/src/)
+add_subdirectory(game/include/)
+add_subdirectory(game/src/)
+add_subdirectory(events/)

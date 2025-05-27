@@ -1,29 +1,32 @@
 #include "event_sender.h"
 
-#include <utils>
+#include <utility>
+#include <iostream>
 
 #include "event/event.h"
-#include "client/net/protocol.h"
-#include "common/DTO/event_dto_creator.h"
+#include "client/net/include/client_protocol.h"
+#include "dto_handler/event_dto_creator.h"
+
+#include "exception/closed_window.h"
 
 Controller::EventSender::EventSender(
     SharedQueue<Model::Event>& queue,
-    Net::Protocol& protocol
+    Net::ClientProtocol& protocol
 ) : event_queue(queue), protocol(protocol) {
     start();
 }
 
-Controller::EventSender::run() {
+void Controller::EventSender::run() {
     bool running = true;
     while (running) {
         try {
             Shared<Model::Event> event = event_queue.pop();
-            protocol.send_event(std::move(EventDTOCreator(event)));
-        } catch (const ClosedQueue& error) {
-            running = false;
+            DTO::EventDTOCreator event_dto_creator(event);
+            std::cout << event->get_type() << "\n";
+            protocol.send_event(event_dto_creator);
         } catch (...) {
-            // Closed protocol
             running = false;
+            throw App::ClosedWindowException("Received a QUIT event");
         }
     }
 }

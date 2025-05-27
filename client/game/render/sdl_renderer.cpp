@@ -34,12 +34,12 @@ std::pair<int16_t, int16_t> View::SDLRenderer::get_skin_piece(const Model::Playe
 }
 
 void View::SDLRenderer::render_player(const Model::Player& player) {
-    auto& players = game_state->get_players();
+    auto& reference_player = game_state->get_reference_player();
     auto skin_piece = get_skin_piece(player);
 
-    uint16_t reference_id = players[0].get_id();
-    int32_t reference_x = players[0].get_x();
-    int32_t reference_y = players[0].get_y();
+    uint16_t reference_id = reference_player.get_id();
+    int32_t reference_x = reference_player.get_x();
+    int32_t reference_y = reference_player.get_y();
 
     uint16_t id = player.get_id();
     uint16_t skin_id = player.get_skin_id();
@@ -77,7 +77,7 @@ void View::SDLRenderer::render() {
     renderer.Clear();
     const auto& players = game_state->get_players();
     for (auto& player : players) {
-        render_player(player);
+        render_player(player.second);
     }
     renderer.Present();
 }

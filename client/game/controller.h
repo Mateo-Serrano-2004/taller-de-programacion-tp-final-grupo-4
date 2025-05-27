@@ -13,18 +13,14 @@ namespace Model {
 }
 
 namespace Controller {
-    class Controller : public Thread {
+    class Controller {
     protected:
         SharedQueue<Model::Event> dispatched_events_queue;
-
-        virtual void handle_event(Shared<Model::Event> event) = 0;
 
     public:
         virtual void dispatch_events() = 0;
 
-        void run() override;
-
-        virtual ~Controller() override;
+        virtual ~Controller() = default;
     };
 };
 

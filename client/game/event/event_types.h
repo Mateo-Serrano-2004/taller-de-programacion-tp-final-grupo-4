@@ -5,6 +5,8 @@ namespace Model {
     enum EventType {
         MOVEMENT = 0x00,
         ROTATION = 0x01,
+        MATCH_CREATION = 0x0B,
+        JOIN_MATCH = 0x0C,
         QUIT = 0x30
     };
 };

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/Counter-Strike-Logo.png</file>
+        <file>assets/welcome1.jpg</file>
+    </qresource>
+</RCC>

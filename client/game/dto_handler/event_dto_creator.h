@@ -10,16 +10,19 @@
 namespace DTO {
     class EventDTOCreator {
     private:
-        Shared<Event> event;
+        Shared<Model::Event> event;
 
-        EventDTO create_movement_event();
-        EventDTO create_rotation_event();
+        EventDTO create_quit_event() const;
+        EventDTO create_new_match_event() const;
+        EventDTO create_join_match_event() const;
+        EventDTO create_movement_event() const;
+        EventDTO create_rotation_event() const;
 
     public:
-        EventDTOCreator(Shared<Event> event)
+        EventDTOCreator(Shared<Model::Event> event)
         : event(std::move(event)) {}
 
-        EventDTO create();
+        EventDTO to_dto() const;
 
         ~EventDTOCreator() = default;
     };
