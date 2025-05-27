@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 
 #include "window/sdl_window.h"
-#include "model/game_state.h"
+#include "common/model/game_state.h"
 #include "event/event.h"
 
 Controller::StateHandler::StateHandler(

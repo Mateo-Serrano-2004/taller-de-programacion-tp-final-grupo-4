@@ -1,7 +1,7 @@
 #include "texture_storage.h"
 
-#include "../render/sdl_renderer.h"
-#include "../assets.h"
+#include "render/sdl_renderer.h"
+#include "assets.h"
 
 Model::TextureStorage::TextureStorage(View::SDLRenderer* sdl_renderer)
 : sdl_renderer(sdl_renderer->get_renderer()) {}

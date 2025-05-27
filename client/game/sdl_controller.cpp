@@ -11,8 +11,8 @@
 #include "event/quit_event.h"
 #include "window/sdl_window.h"
 #include "exception/closed_window.h"
-#include "model/game_state.h"
-#include "model/player.h"
+#include "common/model/game_state.h"
+#include "common/model/player.h"
 
 Controller::SDLController::SDLController(
     App::SDLWindow* window,

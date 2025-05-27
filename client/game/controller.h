@@ -3,10 +3,10 @@
 
 #include <memory>
 
-#include "client/game/definitions.h"
+#include "definitions.h"
 
 #include "common/thread.h"
-#include "client/game/event/event.h"
+#include "event/event.h"
 
 namespace Model {
     class Event;

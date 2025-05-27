@@ -5,7 +5,7 @@
 
 #include <SDL2pp/Renderer.hh>
 
-#include "../window/sdl_window.h"
+#include "window/sdl_window.h"
 
 namespace Model {
     class GameState;
