@@ -9,6 +9,7 @@
 #include <QGraphicsView>
 
 #include "../widgets/styled_button.h"
+#include "../widgets/styled_line_edit.h"
 
 WelcomeScene::WelcomeScene(QObject *parent) : BackgroundScene(parent) {
     setUpWelcome();
@@ -23,44 +24,14 @@ void WelcomeScene::setUpWelcome() {
     QLabel *textLabel = new QLabel("¡Bienvenido!");
     textLabel->setStyleSheet("QLabel { color: white; font-size: 16px; font-weight: bold; }");
 
-    nameInput = new QLineEdit();
+    nameInput = new StyledLineEdit();
     nameInput->setPlaceholderText("Ingrese su username");
-    nameInput->setFixedWidth(180);
-    nameInput->setStyleSheet(R"(
-        QLineEdit {
-            background-color: rgba(255, 255, 255, 0.9);
-            color: #000000;
-            border: 1px solid #cccccc;
-            border-radius: 6px;
-            padding: 4px;
-        }
-    )");
 
-    ipInput = new QLineEdit();
+    ipInput = new StyledLineEdit();
     ipInput->setPlaceholderText("IP del servidor");
-    ipInput->setFixedWidth(180);
-    ipInput->setStyleSheet(R"(
-        QLineEdit {
-            background-color: rgba(255, 255, 255, 0.9);
-            color: #000000;
-            border: 1px solid #cccccc;
-            border-radius: 6px;
-            padding: 4px;
-        }
-    )");
 
-    portInput = new QLineEdit();
+    portInput = new StyledLineEdit();
     portInput->setPlaceholderText("Puerto");
-    portInput->setFixedWidth(180);
-    portInput->setStyleSheet(R"(
-        QLineEdit {
-            background-color: rgba(255, 255, 255, 0.9);
-            color: #000000;
-            border: 1px solid #cccccc;
-            border-radius: 6px;
-            padding: 4px;
-        }
-    )");
 
     StyledButton* startButton = new StyledButton("Ingresar");
 

@@ -17,11 +17,62 @@ MainWindow::~MainWindow()
     }
 }
 
-void MainWindow::onPushButtonClicked() {
+void MainWindow::clearCurrentScene() {
+    QGraphicsScene* current = qobject_cast<QGraphicsScene*>(ui->mainView->scene());
+    if (current) {
+        ui->mainView->setScene(nullptr);
+        current->disconnect();
+        delete current;
+    }
+    welcomeScene = nullptr;
+    lobbyScene = nullptr;
+    gameCreationScene = nullptr;
+    joinGameScene = nullptr;
+}
+
+void MainWindow::showWelcomeScene() {
+    clearCurrentScene();
+    welcomeScene = new WelcomeScene(this);
+    ui->mainView->setScene(welcomeScene);
+    connect(welcomeScene, &WelcomeScene::startClicked, this, [this](QString username, QString ip, QString port) {
+        protocol = new Net::ClientProtocol(ip.toStdString(), port.toStdString());
+        auto usernameEvent = std::make_shared<Model::UsernameEvent>(username.toStdString());
+        DTO::EventDTOCreator creator(usernameEvent);
+        protocol->send_event(creator);
+        showLobbyScene();
+    }, Qt::QueuedConnection);
+}
+
+void MainWindow::showLobbyScene() {
+    clearCurrentScene();
+    lobbyScene = new LobbyScene(this);
     ui->mainView->setScene(lobbyScene);
+    connect(lobbyScene, &LobbyScene::createClicked, this, &MainWindow::showGameCreationScene, Qt::QueuedConnection);
+    connect(lobbyScene, &LobbyScene::joinClicked, this, &MainWindow::showJoinGameScene, Qt::QueuedConnection);
+}
+
+void MainWindow::showGameCreationScene() {
+    clearCurrentScene();
+    gameCreationScene = new GameCreationScene(this);
+    ui->mainView->setScene(gameCreationScene);
+    connect(gameCreationScene, &GameCreationScene::backClicked, this, &MainWindow::showLobbyScene, Qt::QueuedConnection);
+}
+
+void MainWindow::showJoinGameScene() {
+    clearCurrentScene();
+    joinGameScene = new JoinGameScene(this);
+    ui->mainView->setScene(joinGameScene);
+    connect(joinGameScene, &JoinGameScene::backClicked, this, &MainWindow::showLobbyScene, Qt::QueuedConnection);
+}
+
+void MainWindow::onPushButtonClicked() {
+    showLobbyScene();
 }
 
 void MainWindow::receiveAvailableGames(const QStringList& partidas) {
+    if (!joinGameScene) {
+        showJoinGameScene();
+    }
     joinGameScene->setAvailableGames(partidas);
     ui->mainView->setScene(joinGameScene);
 }
@@ -37,46 +88,7 @@ void MainWindow::setUpWindow() {
     ui->mainView->setRenderHint(QPainter::SmoothPixmapTransform);
     ui->mainView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
-    welcomeScene = new WelcomeScene(this);
-    welcomeScene->setSceneRect(0, 0, 640, 400);
-
-    lobbyScene = new LobbyScene(this);
-    ui->mainView->setScene(welcomeScene);
-
-    connect(welcomeScene, &WelcomeScene::startClicked, this, [this](QString username, QString ip, QString port) {
-        protocol = new Net::ClientProtocol(ip.toStdString(), port.toStdString());
-
-        auto usernameEvent = make_shared<Model::UsernameEvent>(username.toStdString()); 
-        DTO::EventDTOCreator creator(usernameEvent);
-
-        protocol->send_event(creator);
-        ui->mainView->setScene(lobbyScene);
-    });
-
-    gameCreationScene = new GameCreationScene(this);
-
-    connect(lobbyScene, &LobbyScene::createClicked, this, [this]() {
-        ui->mainView->setScene(gameCreationScene);
-    });
-
-    connect(lobbyScene, &LobbyScene::createClicked, this, [this]() {
-        QStringList mapsTester = { "Desierto", "Pueblito Azteca", "Zona de entrenamiento" };
-        gameCreationScene->setAvailableMaps(mapsTester);
-        ui->mainView->setScene(gameCreationScene);
-    });
-    
-    joinGameScene = new JoinGameScene(this);
-    
-    connect(lobbyScene, &LobbyScene::joinClicked, this, [this]() {
-        ui->mainView->setScene(joinGameScene);
-    });
-
-    connect(gameCreationScene, &GameCreationScene::backClicked, this, [this]() {
-        ui->mainView->setScene(lobbyScene);
-    });
-    connect(joinGameScene, &JoinGameScene::backClicked, this, [this]() {
-        ui->mainView->setScene(lobbyScene);
-    });
+    showWelcomeScene();
 
     if (ui->mainView->scene()) {
         ui->mainView->fitInView(ui->mainView->scene()->sceneRect(), Qt::KeepAspectRatio);

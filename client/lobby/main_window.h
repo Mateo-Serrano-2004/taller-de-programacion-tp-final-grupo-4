@@ -34,11 +34,17 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    LobbyScene* lobbyScene;
-    WelcomeScene* welcomeScene;
-    GameCreationScene *gameCreationScene;
-    JoinGameScene* joinGameScene;
+    LobbyScene* lobbyScene = nullptr;
+    WelcomeScene* welcomeScene = nullptr;
+    GameCreationScene* gameCreationScene = nullptr;
+    JoinGameScene* joinGameScene = nullptr;
     Net::ClientProtocol* protocol = nullptr;
     void setUpWindow();
+
+    void clearCurrentScene();
+    void showLobbyScene();
+    void showWelcomeScene();
+    void showGameCreationScene();
+    void showJoinGameScene();
 };
 #endif // MAIN_WINDOW_H
