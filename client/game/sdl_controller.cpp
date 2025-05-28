@@ -6,13 +6,13 @@
 #include <SDL2pp/SDL2pp.hh>
 #include <SDL2/SDL.h>
 
-#include "event/event.h"
-#include "event/movement_event.h"
-#include "event/rotation_event.h"
-#include "event/quit_event.h"
+#include "common/event/event.h"
+#include "common/event/movement_event.h"
+#include "common/event/rotation_event.h"
+#include "common/event/quit_event.h"
 #include "window/sdl_window.h"
 #include "exception/closed_window.h"
-#include "client/net/include/client_protocol.h"
+#include "client/net/client_protocol.h"
 #include "common/model/game_state.h"
 #include "common/model/player.h"
 

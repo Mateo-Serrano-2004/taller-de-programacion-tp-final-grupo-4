@@ -6,8 +6,8 @@
 #include <SDL2/SDL.h>
 
 #include "window/sdl_window.h"
-#include "event/event.h"
-#include "event/rotation_event.h"
+#include "common/event/event.h"
+#include "common/event/rotation_event.h"
 
 Controller::MouseStateHandler::MouseStateHandler(
     App::SDLWindow* window,

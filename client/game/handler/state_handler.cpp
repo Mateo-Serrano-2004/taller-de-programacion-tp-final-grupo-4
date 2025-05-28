@@ -4,7 +4,7 @@
 
 #include "window/sdl_window.h"
 #include "common/model/game_state.h"
-#include "event/event.h"
+#include "common/event/event.h"
 
 Controller::StateHandler::StateHandler(
     App::SDLWindow* window,

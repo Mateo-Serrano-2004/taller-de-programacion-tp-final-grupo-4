@@ -12,7 +12,7 @@
 
 #include "clock.h"
 #include "exception/closed_window.h"
-#include "client/net/include/client_protocol.h"
+#include "client/net/client_protocol.h"
 
 const std::vector<std::string> paths = {
     "player/ct1.bmp",

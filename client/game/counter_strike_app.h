@@ -1,11 +1,11 @@
 #ifndef CLIENT_GAME_COUNTER_STRIKE_APP_H
 #define CLIENT_GAME_COUNTER_STRIKE_APP_H
 
-#include "app.h"
 #include "sdl_controller.h"
 #include "window/sdl_window.h"
 #include "render/sdl_renderer.h"
 #include "texture/texture_storage.h"
+#include "client/app.h"
 #include "common/model/game_state.h"
 
 namespace Net {

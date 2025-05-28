@@ -3,8 +3,8 @@
 #include <utility>
 #include <iostream>
 
-#include "event/event.h"
-#include "client/net/include/client_protocol.h"
+#include "common/event/event.h"
+#include "client/net/client_protocol.h"
 #include "dto_handler/event_dto_creator.h"
 
 #include "exception/closed_window.h"

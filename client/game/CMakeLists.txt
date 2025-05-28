@@ -11,7 +11,6 @@ target_sources(cs2d_client
     PUBLIC ${H_SRC}
     )
 
-add_subdirectory(event/)
 add_subdirectory(handler/)
 add_subdirectory(net/)
 add_subdirectory(dto_handler/)

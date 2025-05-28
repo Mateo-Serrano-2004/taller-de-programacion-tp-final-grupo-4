@@ -5,7 +5,7 @@
 #include <iostream>
 
 #include "dto_handler/game_state_updater.h"
-#include "client/net/include/client_protocol.h"
+#include "client/net/client_protocol.h"
 #include "common/model/game_state.h"
 #include "common/DTO/match_dto.h"
 #include "exception/closed_window.h"

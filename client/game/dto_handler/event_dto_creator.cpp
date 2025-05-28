@@ -1,14 +1,33 @@
 #include "event_dto_creator.h"
 
-#include "event/event_types.h"
-#include "event/movement_event.h"
-#include "event/rotation_event.h"
-#include "event/create_game_event.h"
-#include "event/quit_event.h"
+#include "common/event/event_type.h"
+#include "common/event/username_event.h"
+#include "common/event/movement_event.h"
+#include "common/event/rotation_event.h"
+#include "common/event/create_game_event.h"
+#include "common/event/quit_event.h"
 
 #include <cstdint>
 #include <vector>
+#include <iostream>
 #include <arpa/inet.h>
+
+DTO::EventDTO DTO::EventDTOCreator::create_username_event() const {
+    auto username_event = std::static_pointer_cast<Model::UsernameEvent>(event);
+    DTO::EventDTO event_dto;
+    std::string username = username_event->get_username();
+    uint8_t username_size = static_cast<uint8_t>(username.size());
+
+    std::vector<char> data;
+    data.push_back(static_cast<char>(Model::EventType::USERNAME));
+    data.push_back(username_size);
+    for (char& c : username) data.push_back(c);
+
+    event_dto.size = username_size + 2;
+    event_dto.data = std::move(data);
+
+    return event_dto;
+}
 
 DTO::EventDTO DTO::EventDTOCreator::create_quit_event() const {
     DTO::EventDTO event_dto;
@@ -32,7 +51,7 @@ DTO::EventDTO DTO::EventDTOCreator::create_new_match_event() const {
     uint8_t map_name_size = static_cast<uint8_t>(map_name.size());
 
     std::vector<char> data;
-    data.push_back(static_cast<char>(Model::EventType::MATCH_CREATION));
+    data.push_back(static_cast<char>(Model::EventType::CREATE_GAME));
     data.push_back(party_name_size);
     data.push_back(map_name_size);
     for (char& c : party_name) data.push_back(c);
@@ -44,7 +63,7 @@ DTO::EventDTO DTO::EventDTOCreator::create_new_match_event() const {
     return event_dto;
 }
 
-DTO::EventDTO DTO::EventDTOCreator::create_join_match_event() const {
+DTO::EventDTO DTO::EventDTOCreator::create_join_game_event() const {
     DTO::EventDTO event_dto;
 
     uint8_t event_dto_size = 2;
@@ -101,13 +120,16 @@ DTO::EventDTO DTO::EventDTOCreator::to_dto() const {
             return create_movement_event();
         case Model::EventType::ROTATION:
             return create_rotation_event();
-        case Model::EventType::MATCH_CREATION:
+        case Model::EventType::CREATE_GAME:
             return create_new_match_event();
         case Model::EventType::QUIT:
             return create_quit_event();
-        case Model::EventType::JOIN_MATCH:
-            return create_join_match_event();
+        case Model::EventType::JOIN_GAME:
+            return create_join_game_event();
+        case Model::EventType::USERNAME:
+            return create_username_event();
         default:
+            std::cout << type;
             throw std::runtime_error("Unknown event type");
     }
 }

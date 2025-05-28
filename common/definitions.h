@@ -1,6 +1,14 @@
 #ifndef COMMON_DEFINITIONS_H
 #define COMMON_DEFINITIONS_H
 
+#ifndef SUCCESS
+#define SUCCESS 0
+#endif // SUCCESS
+
+#ifndef ERROR
+#define ERROR 1
+#endif // ERROR
+
 #include <memory>
 #include <chrono>
 

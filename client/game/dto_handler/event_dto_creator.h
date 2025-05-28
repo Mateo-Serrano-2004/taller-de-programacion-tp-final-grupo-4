@@ -4,7 +4,7 @@
 #include "common/definitions.h"
 #include "common/DTO/event_dto.h"
 
-#include "event/event.h"
+#include "common/event/event.h"
 
 
 namespace DTO {
@@ -12,9 +12,10 @@ namespace DTO {
     private:
         Shared<Model::Event> event;
 
+        EventDTO create_username_event() const;
         EventDTO create_quit_event() const;
         EventDTO create_new_match_event() const;
-        EventDTO create_join_match_event() const;
+        EventDTO create_join_game_event() const;
         EventDTO create_movement_event() const;
         EventDTO create_rotation_event() const;
 
