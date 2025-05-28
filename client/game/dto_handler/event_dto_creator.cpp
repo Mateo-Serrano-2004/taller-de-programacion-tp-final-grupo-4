@@ -1,11 +1,11 @@
 #include "event_dto_creator.h"
 
-#include "common/event/event_type.h"
-#include "common/event/username_event.h"
-#include "common/event/movement_event.h"
-#include "common/event/rotation_event.h"
-#include "common/event/create_game_event.h"
-#include "common/event/quit_event.h"
+#include "common/event_type.h"
+#include "event/username_event.h"
+#include "event/movement_event.h"
+#include "event/rotation_event.h"
+#include "event/create_game_event.h"
+#include "event/quit_event.h"
 
 #include <cstdint>
 #include <vector>

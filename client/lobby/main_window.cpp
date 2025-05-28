@@ -3,7 +3,7 @@
 
 #include "common/definitions.h"
 #include "client/game/dto_handler/event_dto_creator.h"
-#include "common/event/username_event.h"
+#include "client/game/event/username_event.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)

@@ -4,7 +4,7 @@
 #include "common/definitions.h"
 #include "common/DTO/event_dto.h"
 
-#include "common/event/event.h"
+#include "event/event.h"
 
 
 namespace DTO {

@@ -6,7 +6,7 @@
 #include "render/sdl_renderer.h"
 #include "texture/texture_storage.h"
 #include "client/app.h"
-#include "common/model/game_state.h"
+#include "model/game_state.h"
 
 namespace Net {
     class ClientProtocol;

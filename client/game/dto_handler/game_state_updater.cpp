@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "common/definitions.h"
-#include "common/model/game_state.h"
+#include "model/game_state.h"
 #include "exception/closed_window.h"
 
 DTO::GameStateUpdater::GameStateUpdater(Model::GameState* game_state)

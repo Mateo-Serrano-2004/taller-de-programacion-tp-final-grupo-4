@@ -42,10 +42,10 @@ void Game::handle_leave_game(const uint8_t& player_id){
     client_queues.erase(queue_it);
 }
 
-void Game::handle_movement(const uint8_t& player_id, const Model::MovementEvent& event){
+void Game::handle_movement(const uint8_t& player_id, const MovementEvent& event){
     auto it = players.find(player_id);
     if (it != players.end() && it->second.alive()) {
-        it->second.set_direction(Vector2D((event.get_x_direction()),(event.get_y_direction())));
+        it->second.set_direction(Vector2D((event.get_x()),(event.get_y())));
     }
 }
 
@@ -54,22 +54,18 @@ void Game::tick() { //agregar current_tick
     if (game_queue.try_pop(event_info)) {
         uint8_t player_id = event_info.first;
         GameEventVariant event = event_info.second;
-        // std::visit(overloaded{
-        //     [player_id, this](const MovementEvent& e) { handle_movement(player_id, e); },
-        //     [player_id, this](const LeaveGameEvent&) { handle_leave_game(player_id); },
-        //     [this](const RotationEvent&) {},
-        //     [this](const DropWeaponEvent&) {},
-        //     [this](const UseWeaponEvent&) {},
-        //     [this](const DefuseBombEvent&) {},
-        //     [this](const SwitchWeaponEvent&) {},
-        //     [this](const ReloadWeaponEvent&) {},
-        //     [this](const BuyEvent&) {},
-        //     [this](const BuyAmmoEvent&) {}
-        // }, event);
         std::visit(overloaded{
-            [player_id, this](const Model::MovementEvent& e) { handle_movement(player_id, e); },
-            [player_id, this](const Model::QuitEvent&) { handle_leave_game(player_id); },
-            [this](const RotationEvent&) {}
+            [player_id, this](const MovementEvent& e) { handle_movement(player_id, e); },
+            [player_id, this](const LeaveGameEvent&) { handle_leave_game(player_id); },
+            [this](const RotationEvent&) {},
+            [this](const DropWeaponEvent&) {},
+            [this](const UseWeaponEvent&) {},
+            [this](const DefuseBombEvent&) {},
+            [this](const SwitchWeaponEvent&) {},
+            [this](const ReloadWeaponEvent&) {},
+            [this](const BuyEvent&) {},
+            [this](const BuyAmmoEvent&) {},
+            [this](const QuitEvent&) {}
         }, event);
     }
 

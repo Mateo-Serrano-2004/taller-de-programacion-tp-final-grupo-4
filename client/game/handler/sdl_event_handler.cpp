@@ -3,8 +3,8 @@
 #include <atomic>
 #include <iostream>
 
-#include "common/event/event.h"
-#include "common/event/quit_event.h"
+#include "event/event.h"
+#include "event/quit_event.h"
 
 #include "exception/closed_window.h"
 

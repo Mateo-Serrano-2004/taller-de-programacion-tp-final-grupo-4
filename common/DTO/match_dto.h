@@ -1,7 +1,6 @@
 #ifndef COMMON_DTO_MATCH_DTO_H
 #define COMMON_DTO_MATCH_DTO_H
 
-#include "common/model/player.h"
 #include "drop_weapon_dto.h"
 #include "player_dto.h"
 

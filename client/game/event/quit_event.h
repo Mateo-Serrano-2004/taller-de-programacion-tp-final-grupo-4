@@ -1,5 +1,5 @@
-#ifndef COMMON_EVENT_QUIT_EVENT_H
-#define COMMON_EVENT_QUIT_EVENT_H
+#ifndef CLIENT_EVENT_QUIT_EVENT_H
+#define CLIENT_EVENT_QUIT_EVENT_H
 
 #include "event.h"
 
@@ -11,4 +11,4 @@ namespace Model {
     };
 };
 
-#endif // COMMON_EVENT_QUIT_EVENT_H
+#endif // CLIENT_EVENT_QUIT_EVENT_H

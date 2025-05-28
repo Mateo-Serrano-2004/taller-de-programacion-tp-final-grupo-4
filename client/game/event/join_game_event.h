@@ -1,11 +1,11 @@
-#ifndef COMMON_EVENT_JOIN_GAME_EVENT_H
-#define COMMON_EVENT_JOIN_GAME_EVENT_H
+#ifndef CLIENT_EVENT_JOIN_GAME_EVENT_H
+#define CLIENT_EVENT_JOIN_GAME_EVENT_H
 
 #include <string>
 #include <cstdint>
 
 #include "event.h"
-#include "event_type.h"
+#include "common/event_type.h"
 
 namespace Model {
     class JoinGameEvent : public Event {
@@ -21,4 +21,4 @@ namespace Model {
     };
 }
 
-#endif // COMMON_EVENT_JOIN_GAME_EVENT_H
+#endif // CLIENT_EVENT_JOIN_GAME_EVENT_H

@@ -1,5 +1,5 @@
-#ifndef COMMON_EVENT_MOVEMENT_EVENT_H
-#define COMMON_EVENT_MOVEMENT_EVENT_H
+#ifndef CLIENT_EVENT_MOVEMENT_EVENT_H
+#define CLIENT_EVENT_MOVEMENT_EVENT_H
 
 #include <cstdint>
 
@@ -23,4 +23,4 @@ namespace Model {
     };
 };
 
-#endif // COMMON_EVENT_MOVEMENT_EVENT_H
+#endif // CLIENT_EVENT_MOVEMENT_EVENT_H

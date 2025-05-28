@@ -5,7 +5,7 @@
 #include <iostream>
 
 #include "common/dto/match_dto.h"
-#include "common/event/event_type.h"
+#include "common/event_type.h"
 
 EventVariant ServerProtocol::receive_event() {
     uint8_t size;
@@ -18,38 +18,37 @@ EventVariant ServerProtocol::receive_event() {
 
     switch (event) {
         case Model::EventType::MOVEMENT: {
-            int8_t x, y;
-            memcpy(&x, data.data() + 1, sizeof(x));
-            memcpy(&y, data.data() + 1 + sizeof(x), sizeof(y));
-            return Model::MovementEvent(x, y);
+            int8_t x = int8_t(data[1]);
+            int8_t y = int8_t(data[2]);
+            uint8_t speed = uint8_t(data[3]);
+            return MovementEvent(x, y, speed);
         }
         case Model::EventType::ROTATION: {
-            int16_t angle_in_degrees;
-            memcpy(&angle_in_degrees, data.data() + 1, sizeof(angle_in_degrees));
-            return Model::RotationEvent(angle_in_degrees);
+            int16_t angle_in_degrees = int16_t(data[1]) << 8 | int16_t(data[2]);
+            return RotationEvent(angle_in_degrees);
         }
-        // case Model::EventType::USE_WEAPON: {
-        //     return UseWeaponEvent(uint8_t(data[1]));
-        // }
-        // case Model::EventType::RELOAD_WEAPON: {
-        //     return ReloadWeaponEvent(uint8_t(data[1]));
-        // }
-        // case Model::EventType::DROP_WEAPON: {
-        //     return DropWeaponEvent(uint8_t(data[1]));
-        // }
-        // case Model::EventType::SWITCH_WEAPON: {
-        //     return SwitchWeaponEvent(uint8_t(data[1]));
-        // }
-        // case Model::EventType::BUY_AMMO: {
-        //     return BuyAmmoEvent(uint8_t(data[1]));
-        // }
-        // case Model::EventType::BUY: {
-        //     return BuyEvent(uint8_t(data[1]));
-        // }
+        case Model::EventType::USE_WEAPON: {
+            return UseWeaponEvent(uint8_t(data[1]));
+        }
+        case Model::EventType::RELOAD_WEAPON: {
+            return ReloadWeaponEvent(uint8_t(data[1]));
+        }
+        case Model::EventType::DROP_WEAPON: {
+            return DropWeaponEvent(uint8_t(data[1]));
+        }
+        case Model::EventType::SWITCH_WEAPON: {
+            return SwitchWeaponEvent(uint8_t(data[1]));
+        }
+        case Model::EventType::BUY_AMMO: {
+            return BuyAmmoEvent(uint8_t(data[1]));
+        }
+        case Model::EventType::BUY_WEAPON: {
+            return BuyEvent(uint8_t(data[1]));
+        }
         case Model::EventType::USERNAME: {
             uint8_t username_size = uint8_t(data[1]);
             std::string username(data.data() + 2, username_size);
-            return Model::UsernameEvent(username);
+            return UsernameEvent(username);
         }
         case Model::EventType::CREATE_GAME: {
             uint8_t party_name_size = uint8_t(data[1]);
@@ -58,22 +57,22 @@ EventVariant ServerProtocol::receive_event() {
             std::string party_name(data.data() + 2, party_name_size);
             std::string map_name(data.data() + 2 + party_name_size, map_name_size);
 
-            return Model::CreateGameEvent(party_name, map_name);
+            return CreateGameEvent(party_name, map_name);
         }
         case Model::EventType::JOIN_GAME: {
-            return Model::JoinGameEvent(uint8_t(data[1]));
+            return JoinGameEvent(uint8_t(data[1]));
         }
-        // case Model::EventType::DEFUSE_BOMB: {
-        //     return DefuseBombEvent(uint8_t(data[1]));
-        // }
-        // case Model::EventType::LIST_GAMES: {
-        //     return ListGamesEvent();
-        // }
-        // case Model::EventType::MAP_REQUEST: {
-        //     return MapRequestEvent();
-        // }
+        case Model::EventType::DEFUSE_BOMB: {
+            return DefuseBombEvent(uint8_t(data[1]));
+        }
+        case Model::EventType::LIST_GAMES: {
+            return ListGamesEvent();
+        }
+        case Model::EventType::GET_MAPS: {
+            return MapRequestEvent();
+        }
         case Model::EventType::LEAVE_GAME: {
-            return Model::QuitEvent();
+            return QuitEvent();
         }
         default:
             throw std::invalid_argument("Invalid event code");

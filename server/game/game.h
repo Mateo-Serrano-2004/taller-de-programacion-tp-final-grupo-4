@@ -46,7 +46,7 @@ private:
     void broadcast_game_state();
     
     void handle_leave_game(const uint8_t& player_id);
-    void handle_movement(const uint8_t& player_id, const Model::MovementEvent& event);
+    void handle_movement(const uint8_t& player_id, const MovementEvent& event);
 
     Game(const Game&) = delete;
     Game& operator=(const Game&) = delete;

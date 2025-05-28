@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "event_type.h"
+#include "common/event_type.h"
 
 namespace Model {
     class Event {

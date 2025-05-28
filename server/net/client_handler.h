@@ -25,9 +25,9 @@ private:
     ClientHandlerSender* sender;
     uint8_t player_id = 0;
 
-    void handle_create_game(const Model::CreateGameEvent& event);
-    void handle_join_game(const Model::JoinGameEvent& event);
-    void handle_username(const Model::UsernameEvent& event);
+    void handle_create_game(const CreateGameEvent& event);
+    void handle_join_game(const JoinGameEvent& event);
+    void handle_username(const UsernameEvent& event);
     void handle_list_games();
     void handle_map_request();
     void handle_game_event(const GameEventVariant& event);

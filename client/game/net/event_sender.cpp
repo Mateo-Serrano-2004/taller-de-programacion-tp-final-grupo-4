@@ -3,7 +3,7 @@
 #include <utility>
 #include <iostream>
 
-#include "common/event/event.h"
+#include "event/event.h"
 #include "client/net/client_protocol.h"
 #include "dto_handler/event_dto_creator.h"
 

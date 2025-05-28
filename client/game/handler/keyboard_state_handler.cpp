@@ -2,8 +2,8 @@
 
 #include <SDL2/SDL.h>
 
-#include "common/event/event.h"
-#include "common/event/movement_event.h"
+#include "event/event.h"
+#include "event/movement_event.h"
 
 void Controller::KeyboardStateHanlder::handle_movement() {
     int8_t x_movement = 0;

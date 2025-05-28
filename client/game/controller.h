@@ -6,7 +6,7 @@
 #include "common/definitions.h"
 
 #include "common/thread.h"
-#include "common/event/event.h"
+#include "event/event.h"
 
 namespace Model {
     class Event;

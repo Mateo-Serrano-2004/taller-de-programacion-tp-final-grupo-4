@@ -7,7 +7,7 @@
 #include <SDL2pp/SDL2pp.hh>
 #include <SDL2/SDL.h>
 
-#include "common/model/game_state.h"
+#include "model/game_state.h"
 #include "texture/texture_storage.h"
 
 View::SDLRenderer::SDLRenderer(
