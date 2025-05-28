@@ -6,7 +6,9 @@
 #include <QLineEdit>
 #include <QPushButton>
 
-class GameCreationScene : public QGraphicsScene {
+#include "background_scene.h"
+
+class GameCreationScene : public BackgroundScene {
     Q_OBJECT
 
 public:

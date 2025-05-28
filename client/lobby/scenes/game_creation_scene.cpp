@@ -9,10 +9,10 @@
 #include <QDir>
 #include <QFile>
 
-#include "styled_button.h"
+#include "../widgets/styled_button.h"
 
 GameCreationScene::GameCreationScene(QObject *parent)
-    : QGraphicsScene(parent),
+    : BackgroundScene(parent),
     mapListWidget(new QListWidget),
     gameNameInput(new QLineEdit)
 {
@@ -33,8 +33,6 @@ void GameCreationScene::centerWidget(QGraphicsProxyWidget* proxy) {
 }
 
 void GameCreationScene::setUpGameCreation() {
-    QGraphicsPixmapItem* backround = new QGraphicsPixmapItem(QPixmap("client/lobby/assets/welcome.jpg").scaled(640, 400));
-    addItem(backround);
     QLabel *mapLabel = new QLabel("Seleccioná un mapa:");
     mapLabel->setStyleSheet("color: white; font-weight: bold; font-size: 14px;");
 

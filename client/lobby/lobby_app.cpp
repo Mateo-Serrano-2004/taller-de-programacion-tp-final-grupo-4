@@ -1,9 +1,5 @@
 #include "lobby_app.h"
 
-#include "main_window.h"
-
-#include <QApplication>
-
 App::LobbyApp::LobbyApp(int argc, char* argv[])
 : app(argc, argv) {
     run();

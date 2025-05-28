@@ -4,10 +4,10 @@
 #include <QLabel>
 #include <QWidget>
 
-#include "styled_button.h"
+#include "../widgets/styled_button.h"
 
 JoinGameScene::JoinGameScene(QObject *parent)
-    : QGraphicsScene(parent), mainWidgetProxy(nullptr)
+    : BackgroundScene(parent), mainWidgetProxy(nullptr)
 {
     setUpJoin();
 }
@@ -26,15 +26,14 @@ void JoinGameScene::resizeScene(const QSizeF& size) {
 }
 
 void JoinGameScene::setUpJoin() {
-    QGraphicsPixmapItem* backround = new QGraphicsPixmapItem(QPixmap("client/lobby/assets/welcome.jpg").scaled(640, 400));
-    addItem(backround);
     QLabel* title = new QLabel("Partidas disponibles:");
     title->setStyleSheet("color: white; font-size: 16px; font-weight: bold;");
 
     gameListWidget = new QListWidget();
     StyledButton* joinButton = new StyledButton("Unirse");
     StyledButton* refreshButton = new StyledButton("Refresh");
-    refreshButton->setFixedWidth(80);
+    joinButton->setFixedWidth(100);
+    refreshButton->setFixedWidth(100);
 
     QWidget* buttonRow = new QWidget();
     QHBoxLayout* buttonLayout = new QHBoxLayout();

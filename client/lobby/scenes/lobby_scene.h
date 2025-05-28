@@ -1,9 +1,9 @@
 #ifndef LOBBY_SCENE_H
 #define LOBBY_SCENE_H
 
-#include <QGraphicsScene>
+#include "background_scene.h"
 
-class LobbyScene : public QGraphicsScene {
+class LobbyScene : public BackgroundScene {
     Q_OBJECT
 
 public:

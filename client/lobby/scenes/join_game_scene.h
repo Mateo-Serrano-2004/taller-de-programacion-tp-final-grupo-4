@@ -6,7 +6,9 @@
 #include <QPushButton>
 #include <QGraphicsProxyWidget>
 
-class JoinGameScene : public QGraphicsScene {
+#include "background_scene.h"
+
+class JoinGameScene : public BackgroundScene {
     Q_OBJECT
 
 public:

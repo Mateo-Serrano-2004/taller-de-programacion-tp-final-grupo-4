@@ -3,10 +3,11 @@
 
 #include <QMainWindow>
 
-#include "lobby_scene.h"
-#include "welcome_scene.h"
-#include "game_creation_scene.h"
-#include "join_game_scene.h"
+#include "ui_main_window.h"
+#include "scenes/lobby_scene.h"
+#include "scenes/welcome_scene.h"
+#include "scenes/game_creation_scene.h"
+#include "scenes/join_game_scene.h"
 #include "client/net/client_protocol.h"
 
 QT_BEGIN_NAMESPACE

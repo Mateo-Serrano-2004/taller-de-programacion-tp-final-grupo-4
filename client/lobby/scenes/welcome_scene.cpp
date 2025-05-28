@@ -5,16 +5,16 @@
 #include <QGraphicsPixmapItem>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QMessageBox>
+#include <QGraphicsView>
 
-#include "styled_button.h"
+#include "../widgets/styled_button.h"
 
-WelcomeScene::WelcomeScene(QObject *parent) : QGraphicsScene(parent) {
+WelcomeScene::WelcomeScene(QObject *parent) : BackgroundScene(parent) {
     setUpWelcome();
 }
 
 void WelcomeScene::setUpWelcome() {
-    QGraphicsPixmapItem* backround = new QGraphicsPixmapItem(QPixmap("client/lobby/assets/welcome.jpg").scaled(640, 400));
-    addItem(backround);
     QPixmap logo("client/lobby/assets/logo.png");
     logo = logo.scaledToHeight(100, Qt::SmoothTransformation);
     QGraphicsPixmapItem* logoItem = addPixmap(logo);
@@ -76,13 +76,63 @@ void WelcomeScene::setUpWelcome() {
 
     QGraphicsProxyWidget *proxy = addWidget(container);
     proxy->setPos(15, 200);
-    connect(startButton, &QPushButton::clicked, this, [this]() {
-        emit startClicked(nameInput->text(), ipInput->text(), portInput->text());
+
+    auto showError = [this](const QString& message) {
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("Error");
+        msgBox.setText(message);
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setStyleSheet(R"(
+            QMessageBox {
+                background-color: white;
+                border: 1px solid #cccccc;
+                border-radius: 6px;
+            }
+            QMessageBox QLabel {
+                color: black;
+                font-size: 12px;
+            }
+            QPushButton {
+                background-color: #f0f0f0;
+                border: 1px solid #cccccc;
+                border-radius: 4px;
+                padding: 5px 15px;
+            }
+            QPushButton:hover {
+                background-color: #e0e0e0;
+            }
+        )");
+
+        if (!views().isEmpty()) {
+            QGraphicsView* view = views().first();
+            QPoint center = view->mapToGlobal(view->viewport()->rect().center());
+            msgBox.move(center.x() - msgBox.width()/2, center.y() - msgBox.height()/2);
+        }
+
+        msgBox.exec();
+    };
+
+    connect(startButton, &QPushButton::clicked, this, [this, showError]() {
+        QString username = nameInput->text().trimmed();
+        QString ip = ipInput->text().trimmed();
+        QString port = portInput->text().trimmed();
+
+        if (username.isEmpty() || ip.isEmpty() || port.isEmpty()) {
+            showError("Por favor, complete todos los campos.");
+            return;
+        }
+
+        bool ok;
+        int portNumber = port.toInt(&ok);
+        if (!ok || portNumber <= 0 || portNumber > 65535) {
+            showError("El puerto debe ser un número válido entre 1 y 65535.");
+            return;
+        }
+
+        emit startClicked(username, ip, port);
     });
 
-    connect(this, &QGraphicsScene::sceneRectChanged, this, [this, backround, logoItem, proxy](const QRectF &rect) {
-        backround->setPixmap(QPixmap("client/lobby/assets/welcome.jpg").scaled(rect.width(), rect.height()));
-        
+    connect(this, &QGraphicsScene::sceneRectChanged, this, [this, logoItem, proxy](const QRectF &rect) {
         qreal scale = rect.width() / 640.0;
         logoItem->setPos(120 * scale, 70 * scale);
         

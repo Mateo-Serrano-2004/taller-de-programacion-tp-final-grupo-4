@@ -1,7 +1,5 @@
 #include "main_window.h"
-#include "ui_main_window.h"
 
-#include "common/definitions.h"
 #include "client/game/dto_handler/event_dto_creator.h"
 #include "client/game/event/username_event.h"
 

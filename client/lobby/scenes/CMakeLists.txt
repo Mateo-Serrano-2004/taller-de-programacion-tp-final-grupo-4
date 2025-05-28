@@ -11,6 +11,3 @@ target_sources(cs2d_client
     PRIVATE ${CPP_SOURCES}
     PUBLIC ${H_SOURCES}
     )
-
-add_subdirectory(scenes/)
-add_subdirectory(widgets/)
