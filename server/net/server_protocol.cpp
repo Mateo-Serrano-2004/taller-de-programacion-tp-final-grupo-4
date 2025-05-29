@@ -65,7 +65,7 @@ EventVariant ServerProtocol::receive_event() {
         case Model::EventType::DEFUSE_BOMB: {
             return DefuseBombEvent(uint8_t(data[1]));
         }
-        case Model::EventType::LIST_GAMES: {
+        case Model::EventType::REQUEST_GAMES_LIST: {
             return ListGamesEvent();
         }
         case Model::EventType::REQUEST_MAPS: {
