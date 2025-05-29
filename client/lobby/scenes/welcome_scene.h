@@ -6,11 +6,11 @@
 
 #include "background_scene.h"
 
-class WelcomeScene : public BackgroundScene {
+class WelcomeScene: public BackgroundScene {
     Q_OBJECT
 
 public:
-    explicit WelcomeScene(QObject *parent = nullptr);
+    explicit WelcomeScene(QObject* parent = nullptr);
 
 signals:
     void startClicked(const QString& username, const QString& ip, const QString& port);
@@ -22,4 +22,4 @@ private:
     QLineEdit* portInput;
 };
 
-#endif // WELCOME_SCENE_H 
+#endif  // WELCOME_SCENE_H

@@ -8,9 +8,9 @@
 
 #include "common/queue.h"
 #include "common/thread.h"
+#include "server/events/events.h"
 #include "server/game/game.h"
 #include "server/game/game_manager.h"
-#include "server/events/events.h"
 
 #include "client_handler_sender.h"
 #include "server_protocol.h"

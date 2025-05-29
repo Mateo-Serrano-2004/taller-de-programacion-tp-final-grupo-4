@@ -6,19 +6,17 @@
 #include "common/event_type.h"
 
 namespace Model {
-    class Event {
-    private:
-        const EventType type;
+class Event {
+private:
+    const EventType type;
 
-    public:
-        Event(const EventType type) : type(type) {}
+public:
+    explicit Event(const EventType type): type(type) {}
 
-        EventType get_type() const {
-            return type;
-        }
+    EventType get_type() const { return type; }
 
-        virtual ~Event() = default;
-    };
-}
+    virtual ~Event() = default;
+};
+}  // namespace Model
 
-#endif // COMMON_EVENT_EVENT_H
+#endif  // COMMON_EVENT_EVENT_H

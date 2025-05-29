@@ -1,7 +1,6 @@
 #include "client_protocol.h"
 
 #include <vector>
-#include <iostream>
 
 #include <arpa/inet.h>
 

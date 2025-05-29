@@ -4,17 +4,17 @@
 #include "event.h"
 
 namespace Model {
-    class StopMovementEvent : public Event {
-    private:
-        bool horizontal_movement;
+class StopMovementEvent: public Event {
+private:
+    bool horizontal_movement;
 
-    public:
-        StopMovementEvent(bool horizontal_movement);
+public:
+    explicit StopMovementEvent(bool horizontal_movement);
 
-        bool is_horizontal_movement();
+    bool is_horizontal_movement();
 
-        ~StopMovementEvent() override = default;
-    };
+    ~StopMovementEvent() override = default;
 };
+};  // namespace Model
 
-#endif // CLIENT_GAME_EVENT_STOP_MOVEMENT_EVENT_H
+#endif  // CLIENT_GAME_EVENT_STOP_MOVEMENT_EVENT_H

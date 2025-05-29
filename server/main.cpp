@@ -1,11 +1,11 @@
 #include <iostream>
 
-#include "net/server.h"
 #include "common/definitions.h"
+#include "net/server.h"
 
 #define NUM_ARGS 3
 
-int main(int argc, char* argv[]) try{
+int main(int argc, char* argv[]) try {
 
     if (argc != NUM_ARGS) {
         std::cerr << "Please use: " << argv[0] << " <port> <game_config_path>" << std::endl;

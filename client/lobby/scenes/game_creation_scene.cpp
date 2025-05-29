@@ -1,21 +1,18 @@
 #include "game_creation_scene.h"
 
-#include <QGraphicsProxyWidget>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QWidget>
 #include <QDebug>
 #include <QDir>
 #include <QFile>
+#include <QGraphicsProxyWidget>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QVBoxLayout>
+#include <QWidget>
 
 #include "../widgets/styled_button.h"
 
-GameCreationScene::GameCreationScene(QObject *parent)
-    : BackgroundScene(parent),
-    mapListWidget(new QListWidget),
-    gameNameInput(new QLineEdit)
-{
+GameCreationScene::GameCreationScene(QObject* parent):
+        BackgroundScene(parent), mapListWidget(new QListWidget), gameNameInput(new QLineEdit) {
     setUpGameCreation();
 }
 
@@ -35,15 +32,27 @@ void GameCreationScene::centerWidget(QGraphicsProxyWidget* proxy) {
     proxy->setPos(centerPos);
 }
 
+GameCreationScene::~GameCreationScene() {
+    if (mapListWidget) {
+        delete mapListWidget;
+    }
+    if (gameNameInput) {
+        delete gameNameInput;
+    }
+    if (createButton) {
+        delete createButton;
+    }
+}
+
 void GameCreationScene::setUpGameCreation() {
-    QLabel *mapLabel = new QLabel("Seleccioná un mapa:");
+    QLabel* mapLabel = new QLabel("Seleccioná un mapa:");
     mapLabel->setStyleSheet("color: white; font-weight: bold; font-size: 14px;");
 
-    QLabel *nameLabel = new QLabel("Partida:");
+    QLabel* nameLabel = new QLabel("Partida:");
     nameLabel->setStyleSheet("color: white; font-weight: bold; font-size: 14px;");
 
     gameNameInput->setPlaceholderText("Inserte el nombre");
-    StyledButton* createButton = new StyledButton("Crear");
+    createButton = new StyledButton("Crear");
     createButton->setEnabled(false);
 
     QPushButton* backButton = new StyledButton("Volver");
@@ -59,8 +68,8 @@ void GameCreationScene::setUpGameCreation() {
     backProxy->setPos(10, 10);
     connect(backButton, &QPushButton::clicked, this, &GameCreationScene::backClicked);
 
-    QWidget *container = new QWidget;
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    QWidget* container = new QWidget;
+    QVBoxLayout* mainLayout = new QVBoxLayout;
 
     mainLayout->addWidget(mapLabel);
     mainLayout->addWidget(mapListWidget);
@@ -73,7 +82,7 @@ void GameCreationScene::setUpGameCreation() {
     container->setStyleSheet("background: transparent; color: white;");
     container->setFixedWidth(400);
 
-    QGraphicsProxyWidget *proxy = addWidget(container);
+    QGraphicsProxyWidget* proxy = addWidget(container);
     centerWidget(proxy);
 
     connect(gameNameInput, &QLineEdit::textChanged, this, [createButton, this]() {
@@ -90,7 +99,7 @@ void GameCreationScene::setUpGameCreation() {
 
     connect(createButton, &QPushButton::clicked, this, [this]() {
         QString gameName = gameNameInput->text();
-        QListWidgetItem *selectedItem = mapListWidget->currentItem();
+        QListWidgetItem* selectedItem = mapListWidget->currentItem();
         if (!gameName.isEmpty() && selectedItem) {
             emit createGameRequested(gameName, selectedItem->text());
         }

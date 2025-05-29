@@ -12,8 +12,8 @@
 #include "common/queue.h"
 #include "server/events/events.h"
 
-#include "match_creator.h"
 #include "game.h"
+#include "match_creator.h"
 
 using GameMap = std::map<uint8_t, std::unique_ptr<Game>>;
 

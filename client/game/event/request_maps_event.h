@@ -2,14 +2,15 @@
 #define CLIENT_GAME_EVENT_REQUEST_MAPS_EVENT_H
 
 #include "common/event_type.h"
+
 #include "event.h"
 
 namespace Model {
-    class RequestMapsEvent : public Event {
-    public:
-        RequestMapsEvent() : Event(EventType::REQUEST_MAPS) {}
-        ~RequestMapsEvent() override = default;
-    };
+class RequestMapsEvent: public Event {
+public:
+    RequestMapsEvent(): Event(EventType::REQUEST_MAPS) {}
+    ~RequestMapsEvent() override = default;
 };
+};  // namespace Model
 
-#endif // CLIENT_GAME_EVENT_REQUEST_MAPS_EVENT_H
+#endif  // CLIENT_GAME_EVENT_REQUEST_MAPS_EVENT_H

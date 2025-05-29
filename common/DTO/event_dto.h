@@ -5,11 +5,11 @@
 #include <vector>
 
 namespace DTO {
-    struct EventDTO {
-    public:
-        uint8_t size;
-        std::vector<char> data;
-    };
-}
+struct EventDTO {
+public:
+    uint8_t size;
+    std::vector<char> data;
+};
+}  // namespace DTO
 
-#endif // COMMON_DTO_EVENT_DTO_H
+#endif  // COMMON_DTO_EVENT_DTO_H

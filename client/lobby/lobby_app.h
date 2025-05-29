@@ -3,22 +3,23 @@
 
 #include <QApplication>
 
-#include "main_window.h"
 #include "client/app.h"
 
+#include "main_window.h"
+
 namespace App {
-    class LobbyApp : public App {
-    private:
-        QApplication app;
-        MainWindow w;
+class LobbyApp: public App {
+private:
+    QApplication app;
+    MainWindow w;
 
-    public:
-        LobbyApp(int argc, char* argv[]);
+public:
+    LobbyApp(int argc, char* argv[]);
 
-        void run() override;
+    void run() override;
 
-        ~LobbyApp() override = default;
-    };
+    ~LobbyApp() override = default;
 };
+};  // namespace App
 
-#endif // CLIENT_LOBBY_LOBBY_APP_H
+#endif  // CLIENT_LOBBY_LOBBY_APP_H

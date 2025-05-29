@@ -6,17 +6,17 @@
 #include "event.h"
 
 namespace Model {
-    class RotationEvent : public Event {
-    private:
-        int16_t angle_in_degrees;
-    
-    public:
-        RotationEvent(int16_t angle_in_degrees);
+class RotationEvent: public Event {
+private:
+    int16_t angle_in_degrees;
 
-        int16_t get_angle_in_degrees() const;
+public:
+    explicit RotationEvent(int16_t angle_in_degrees);
 
-        ~RotationEvent() override = default;
-    };
+    int16_t get_angle_in_degrees() const;
+
+    ~RotationEvent() override = default;
 };
+};  // namespace Model
 
-#endif // CLIENT_EVENT_ROTATION_EVENT_H
+#endif  // CLIENT_EVENT_ROTATION_EVENT_H

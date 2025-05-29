@@ -1,22 +1,22 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <chrono>
+#include <cmath>
 #include <cstdint>
 #include <map>
 #include <string>
+#include <thread>
 #include <utility>
 #include <vector>
-#include <chrono>
-#include <thread>
-#include <cmath>
 
 #include "common/DTO/game_info_dto.h"
 #include "common/DTO/match_dto.h"
 #include "common/queue.h"
 #include "common/thread.h"
 #include "server/events/events.h"
-#include "match_creator.h"
 
+#include "match_creator.h"
 #include "player.h"
 
 using GameQueue = Queue<std::pair<uint8_t, GameEventVariant>>;
@@ -42,9 +42,9 @@ private:
     uint8_t max_players = 12;
     bool is_not_finished = true;
 
-    void tick(); //agregar current_tick
+    void tick();  // agregar current_tick
     void broadcast_game_state();
-    
+
     void handle_leave_game(const uint8_t& player_id);
     void handle_movement(const uint8_t& player_id, const MovementEvent& event);
 
@@ -72,10 +72,9 @@ public:
     Game& operator=(Game&&) = default;
 
     ~Game() override {
-        stop();
+        is_not_finished = false;
         join();
     }
-    
 };
 
 #endif  // GAME_H

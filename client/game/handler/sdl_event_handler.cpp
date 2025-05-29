@@ -1,19 +1,18 @@
 #include "sdl_event_handler.h"
 
 #include <atomic>
-#include <iostream>
+#include <memory>
 
+#include "common/definitions.h"
 #include "event/event.h"
-#include "event/quit_event.h"
 #include "event/movement_event.h"
+#include "event/quit_event.h"
 #include "event/stop_movement_event.h"
-
 #include "exception/closed_window.h"
 
 void Controller::SDLEventHandler::handle_quit_event() {
-    auto quit_event = make_shared<Model::QuitEvent>();
     try {
-        event_queue.try_push(quit_event);
+        event_queue.close();
     } catch (ClosedQueue& error) {
         throw App::ClosedWindowException("Received a QUIT event");
     }

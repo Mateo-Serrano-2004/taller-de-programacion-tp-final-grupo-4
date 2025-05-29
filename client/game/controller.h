@@ -4,24 +4,23 @@
 #include <memory>
 
 #include "common/definitions.h"
-
 #include "common/thread.h"
 #include "event/event.h"
 
 namespace Model {
-    class Event;
+class Event;
 }
 
 namespace Controller {
-    class Controller {
-    protected:
-        SharedQueue<Model::Event> dispatched_events_queue;
+class Controller {
+protected:
+    SharedQueue<Model::Event> dispatched_events_queue;
 
-    public:
-        virtual void dispatch_events() = 0;
+public:
+    virtual void dispatch_events() = 0;
 
-        virtual ~Controller() = default;
-    };
+    virtual ~Controller() = default;
 };
+};  // namespace Controller
 
-#endif // CLIENT_GAME_CONTROLLER_H
+#endif  // CLIENT_GAME_CONTROLLER_H

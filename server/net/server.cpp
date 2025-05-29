@@ -2,15 +2,14 @@
 
 #include <utility>
 
-#include "acceptor.h"
 #include "server/game/game_manager.h"
+
+#include "acceptor.h"
 
 #define EXIT "q"
 
-Controller::Server::Server(
-    const std::string& port,
-    const std::string& game_config_path
-) : port(port), game_config_path(game_config_path) {
+Controller::Server::Server(const std::string& port, const std::string& game_config_path):
+        port(port), game_config_path(game_config_path) {
     run();
 }
 

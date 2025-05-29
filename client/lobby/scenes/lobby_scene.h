@@ -3,11 +3,11 @@
 
 #include "background_scene.h"
 
-class LobbyScene : public BackgroundScene {
+class LobbyScene: public BackgroundScene {
     Q_OBJECT
 
 public:
-    explicit LobbyScene(QObject *parent = nullptr);
+    explicit LobbyScene(QObject* parent = nullptr);
 signals:
     void createClicked();
     void joinClicked();

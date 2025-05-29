@@ -2,12 +2,12 @@
 #define CLIENT_APP_H
 
 namespace App {
-    class App {
-    public:
-        virtual void run() = 0;
+class App {
+public:
+    virtual void run() = 0;
 
-        virtual ~App() = default;
-    };
+    virtual ~App() = default;
 };
+};  // namespace App
 
-#endif // CLIENT_APP_H
+#endif  // CLIENT_APP_H

@@ -23,7 +23,7 @@ private:
     int16_t angle_in_degrees;
 
 public:
-    RotationEvent(int16_t angle_in_degrees): angle_in_degrees(angle_in_degrees) {}
+    explicit RotationEvent(int16_t angle_in_degrees): angle_in_degrees(angle_in_degrees) {}
     int16_t get_angle_in_degrees() const { return angle_in_degrees; }
 };
 
@@ -151,16 +151,11 @@ public:
     QuitEvent() {}
 };
 
-using GameEventVariant = std::variant<
-    LeaveGameEvent, MovementEvent, RotationEvent,
-    DropWeaponEvent, UseWeaponEvent, DefuseBombEvent,
-    SwitchWeaponEvent, ReloadWeaponEvent, BuyEvent, 
-    BuyAmmoEvent, QuitEvent
->;
+using GameEventVariant = std::variant<LeaveGameEvent, MovementEvent, RotationEvent, DropWeaponEvent,
+                                      UseWeaponEvent, DefuseBombEvent, SwitchWeaponEvent,
+                                      ReloadWeaponEvent, BuyEvent, BuyAmmoEvent, QuitEvent>;
 
-using EventVariant = std::variant<
-    GameEventVariant, UsernameEvent, CreateGameEvent,
-    MapRequestEvent, JoinGameEvent, ListGamesEvent
->;
+using EventVariant = std::variant<GameEventVariant, UsernameEvent, CreateGameEvent, MapRequestEvent,
+                                  JoinGameEvent, ListGamesEvent>;
 
 #endif  // EVENTS_H

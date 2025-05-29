@@ -1,19 +1,21 @@
 #ifndef JOIN_GAME_SCENE_H
 #define JOIN_GAME_SCENE_H
 
-#include <QGraphicsScene>
-#include <QTableWidget>
-#include <QPushButton>
 #include <QGraphicsProxyWidget>
+#include <QGraphicsScene>
+#include <QPushButton>
+#include <QTableWidget>
+#include <list>
 
-#include "background_scene.h"
 #include "common/DTO/game_info_dto.h"
 
-class JoinGameScene : public BackgroundScene {
+#include "background_scene.h"
+
+class JoinGameScene: public BackgroundScene {
     Q_OBJECT
 
 public:
-    explicit JoinGameScene(QObject *parent = nullptr);
+    explicit JoinGameScene(QObject* parent = nullptr);
     void setAvailableGames(const std::list<GameInfoDTO>& games);
     int selectedGameId() const;
 
@@ -30,4 +32,4 @@ private:
     void setUpJoin();
 };
 
-#endif // JOIN_GAME_SCENE_H
+#endif  // JOIN_GAME_SCENE_H

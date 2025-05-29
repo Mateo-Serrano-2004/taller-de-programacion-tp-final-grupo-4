@@ -1,7 +1,8 @@
 #include "client_handler.h"
 
-#include <variant>
 #include <iostream>
+#include <utility>
+#include <variant>
 
 #include "server/events/overloaded.h"
 #include "server/game/match_creator.h"
@@ -28,9 +29,7 @@ void ClientHandler::handle_join_game(const JoinGameEvent& event) {
     // protocol.send_map(game_manager.get_game_map(event.get_game_id()));
 }
 
-void ClientHandler::handle_username(const UsernameEvent& event) {
-    username = event.get_username();
-}
+void ClientHandler::handle_username(const UsernameEvent& event) { username = event.get_username(); }
 
 void ClientHandler::handle_list_games() { protocol.send_games(game_manager.get_games()); }
 

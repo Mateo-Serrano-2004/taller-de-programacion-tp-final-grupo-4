@@ -8,8 +8,8 @@
 
 #include "common/DTO/game_info_dto.h"
 #include "common/socket.h"
-#include "server/game/match_creator.h"
 #include "server/events/events.h"
+#include "server/game/match_creator.h"
 
 class ServerProtocol {
 private:

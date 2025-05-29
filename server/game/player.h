@@ -4,8 +4,9 @@
 #include <string>
 
 #include "common/dto/player_dto.h"
-#include "vector2d.h"
+
 #include "enums.h"
+#include "vector2d.h"
 
 class Player {
 private:
@@ -18,7 +19,7 @@ private:
     Team team;
     int health;
     int money;
-    
+
     bool is_alive;
     bool has_bomb;
 

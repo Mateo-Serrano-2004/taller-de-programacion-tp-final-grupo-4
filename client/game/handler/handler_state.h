@@ -2,22 +2,22 @@
 #define CLIENT_GAME_HANDLER_HANDLER_STATE_H
 
 namespace Controller {
-    class SDLEventHandler;
+class SDLEventHandler;
 };
 
 namespace Model {
-    class HandlerState {
+class HandlerState {
     friend class Controller::SDLEventHandler;
 
-    private:
-        bool moving_vertically;
-        bool moving_horizontally;
+private:
+    bool moving_vertically;
+    bool moving_horizontally;
 
-    public:
-        HandlerState();
+public:
+    HandlerState();
 
-        ~HandlerState() = default;
-    };
+    ~HandlerState() = default;
 };
+};  // namespace Model
 
-#endif // CLIENT_GAME_HANDLER_HANDLER_STATE_H
+#endif  // CLIENT_GAME_HANDLER_HANDLER_STATE_H

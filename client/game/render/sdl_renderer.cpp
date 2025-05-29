@@ -4,25 +4,23 @@
 #include <string>
 #include <utility>
 
-#include <SDL2pp/SDL2pp.hh>
 #include <SDL2/SDL.h>
+#include <SDL2pp/SDL2pp.hh>
 
 #include "model/game_state.h"
 #include "texture/texture_storage.h"
 
-View::SDLRenderer::SDLRenderer(
-    App::SDLWindow* sdl_window,
-    Model::GameState* game_state,
-    Model::TextureStorage* texture_storage
-) : window(sdl_window),
-    game_state(game_state),
-    texture_storage(texture_storage),
-    renderer(sdl_window->get_window(), -1, SDL_RENDERER_ACCELERATED) {}
+View::SDLRenderer::SDLRenderer(App::SDLWindow* sdl_window, Model::GameState* game_state,
+                               Model::TextureStorage* texture_storage):
+        window(sdl_window),
+        game_state(game_state),
+        texture_storage(texture_storage),
+        renderer(sdl_window->get_window(), -1, SDL_RENDERER_ACCELERATED) {}
 
 std::pair<int16_t, int16_t> View::SDLRenderer::get_skin_piece(const Model::Player& player) {
     uint8_t skin_piece = player.get_skin_piece();
 
-    uint8_t skin_row = (uint8_t) ((skin_piece - 1) / 2);
+    uint8_t skin_row = (uint8_t)((skin_piece - 1) / 2);
     uint8_t skin_column = skin_piece % 2;
 
     uint16_t skin_piece_x = skin_column * 32;
@@ -48,40 +46,25 @@ void View::SDLRenderer::render_player(const Model::Player& player) {
 
     if (id == reference_id) {
         renderer.Copy(
-            texture_storage->get_texture(skin_id),
-            SDL2pp::Rect(
-                skin_piece.first, skin_piece.second,
-                32, 32
-            ),
-            SDL2pp::Point((window->get_width() / 2) - 15, (window->get_height() / 2) - 15),
-            player.get_angle(),
-            SDL2pp::NullOpt,
-            0
-        );
+                texture_storage->get_texture(skin_id),
+                SDL2pp::Rect(skin_piece.first, skin_piece.second, 32, 32),
+                SDL2pp::Point((window->get_width() / 2) - 15, (window->get_height() / 2) - 15),
+                player.get_angle(), SDL2pp::NullOpt, 0);
     } else {
-        renderer.Copy(
-            texture_storage->get_texture(skin_id),
-            SDL2pp::Rect(
-                skin_piece.first, skin_piece.second,
-                32, 32
-            ),
-            SDL2pp::Point(x - reference_x, y - reference_y),
-            player.get_angle(),
-            SDL2pp::NullOpt,
-            0
-        );
+        renderer.Copy(texture_storage->get_texture(skin_id),
+                      SDL2pp::Rect(skin_piece.first, skin_piece.second, 32, 32),
+                      SDL2pp::Point(x - reference_x, y - reference_y), player.get_angle(),
+                      SDL2pp::NullOpt, 0);
     }
 }
 
 void View::SDLRenderer::render() {
     renderer.Clear();
     const auto& players = game_state->get_players();
-    for (auto& player : players) {
+    for (const auto& player: players) {
         render_player(player.second);
     }
     renderer.Present();
 }
 
-SDL2pp::Renderer* View::SDLRenderer::get_renderer() {
-    return &renderer;
-}
+SDL2pp::Renderer* View::SDLRenderer::get_renderer() { return &renderer; }

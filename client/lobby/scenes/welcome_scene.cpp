@@ -1,19 +1,17 @@
 #include "welcome_scene.h"
 
-#include <QGraphicsProxyWidget>
-#include <QPixmap>
 #include <QGraphicsPixmapItem>
-#include <QLabel>
-#include <QVBoxLayout>
-#include <QMessageBox>
+#include <QGraphicsProxyWidget>
 #include <QGraphicsView>
+#include <QLabel>
+#include <QMessageBox>
+#include <QPixmap>
+#include <QVBoxLayout>
 
 #include "../widgets/styled_button.h"
 #include "../widgets/styled_line_edit.h"
 
-WelcomeScene::WelcomeScene(QObject *parent) : BackgroundScene(parent) {
-    setUpWelcome();
-}
+WelcomeScene::WelcomeScene(QObject* parent): BackgroundScene(parent) { setUpWelcome(); }
 
 void WelcomeScene::setUpWelcome() {
     QPixmap logo("client/lobby/assets/logo.png");
@@ -21,7 +19,7 @@ void WelcomeScene::setUpWelcome() {
     QGraphicsPixmapItem* logoItem = addPixmap(logo);
     logoItem->setPos(120, 70);
 
-    QLabel *textLabel = new QLabel("¡Bienvenido!");
+    QLabel* textLabel = new QLabel("¡Bienvenido!");
     textLabel->setStyleSheet("QLabel { color: white; font-size: 16px; font-weight: bold; }");
 
     nameInput = new StyledLineEdit();
@@ -35,8 +33,8 @@ void WelcomeScene::setUpWelcome() {
 
     StyledButton* startButton = new StyledButton("Ingresar");
 
-    QWidget *container = new QWidget();
-    QVBoxLayout *vLayout = new QVBoxLayout();
+    QWidget* container = new QWidget();
+    QVBoxLayout* vLayout = new QVBoxLayout();
     vLayout->addWidget(textLabel);
     vLayout->addWidget(nameInput);
     vLayout->addWidget(ipInput);
@@ -45,7 +43,7 @@ void WelcomeScene::setUpWelcome() {
     container->setLayout(vLayout);
     container->setStyleSheet("background: transparent;");
 
-    QGraphicsProxyWidget *proxy = addWidget(container);
+    QGraphicsProxyWidget* proxy = addWidget(container);
     proxy->setPos(15, 200);
 
     auto showError = [this](const QString& message) {
@@ -77,7 +75,7 @@ void WelcomeScene::setUpWelcome() {
         if (!views().isEmpty()) {
             QGraphicsView* view = views().first();
             QPoint center = view->mapToGlobal(view->viewport()->rect().center());
-            msgBox.move(center.x() - msgBox.width()/2, center.y() - msgBox.height()/2);
+            msgBox.move(center.x() - msgBox.width() / 2, center.y() - msgBox.height() / 2);
         }
 
         msgBox.exec();
@@ -103,10 +101,11 @@ void WelcomeScene::setUpWelcome() {
         emit startClicked(username, ip, port);
     });
 
-    connect(this, &QGraphicsScene::sceneRectChanged, this, [this, logoItem, proxy](const QRectF &rect) {
-        qreal scale = rect.width() / 640.0;
-        logoItem->setPos(120 * scale, 70 * scale);
-        
-        proxy->setPos(15 * scale, 200 * scale);
-    });
+    connect(this, &QGraphicsScene::sceneRectChanged, this,
+            [this, logoItem, proxy](const QRectF& rect) {
+                qreal scale = rect.width() / 640.0;
+                logoItem->setPos(120 * scale, 70 * scale);
+
+                proxy->setPos(15 * scale, 200 * scale);
+            });
 }

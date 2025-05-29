@@ -1,8 +1,9 @@
 #include "server_protocol.h"
 
+#include <iostream>
+
 #include <arpa/inet.h>
 #include <string.h>
-#include <iostream>
 
 #include "common/dto/match_dto.h"
 #include "common/event_type.h"
@@ -65,7 +66,7 @@ EventVariant ServerProtocol::receive_event() {
         case Model::EventType::DEFUSE_BOMB: {
             return DefuseBombEvent(uint8_t(data[1]));
         }
-        case Model::EventType::REQUEST_GAMES: {
+        case Model::EventType::REQUEST_GAMES_LIST: {
             return ListGamesEvent();
         }
         case Model::EventType::REQUEST_MAPS: {

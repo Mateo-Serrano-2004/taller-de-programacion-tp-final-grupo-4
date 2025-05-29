@@ -7,21 +7,21 @@
 #include <SDL2pp/Window.hh>
 
 namespace App {
-    class SDLWindow {
-    private:
-        SDL2pp::SDL sdl;
-        SDL2pp::Window window;
+class SDLWindow {
+private:
+    SDL2pp::SDL sdl;
+    SDL2pp::Window window;
 
-    public:
-        SDLWindow();
+public:
+    SDLWindow();
 
-        SDL2pp::Window& get_window();
+    SDL2pp::Window& get_window();
 
-        uint16_t get_width() const;
-        uint16_t get_height() const;
+    uint16_t get_width() const;
+    uint16_t get_height() const;
 
-        ~SDLWindow() = default;
-    };
+    ~SDLWindow() = default;
 };
+};  // namespace App
 
-#endif // CLIENT_GAME_SDL_WINDOW_H
+#endif  // CLIENT_GAME_SDL_WINDOW_H

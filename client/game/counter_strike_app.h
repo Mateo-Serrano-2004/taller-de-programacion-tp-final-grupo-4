@@ -1,34 +1,35 @@
 #ifndef CLIENT_GAME_COUNTER_STRIKE_APP_H
 #define CLIENT_GAME_COUNTER_STRIKE_APP_H
 
-#include "sdl_controller.h"
-#include "window/sdl_window.h"
-#include "render/sdl_renderer.h"
-#include "texture/texture_storage.h"
 #include "client/app.h"
 #include "model/game_state.h"
+#include "render/sdl_renderer.h"
+#include "texture/texture_storage.h"
+#include "window/sdl_window.h"
+
+#include "sdl_controller.h"
 
 namespace Net {
-    class ClientProtocol;
+class ClientProtocol;
 }
 
 namespace App {
-    class CounterStrikeApp : public App {
-    private:
-        Net::ClientProtocol& protocol;
-        SDLWindow sdl_window;
-        Model::GameState game_state;
-        Controller::SDLController sdl_controller;
-        View::SDLRenderer sdl_renderer;
-        Model::TextureStorage texture_storage;
+class CounterStrikeApp: public App {
+private:
+    Net::ClientProtocol& protocol;
+    SDLWindow sdl_window;
+    Model::GameState game_state;
+    Controller::SDLController sdl_controller;
+    View::SDLRenderer sdl_renderer;
+    Model::TextureStorage texture_storage;
 
-    public:
-        CounterStrikeApp(Net::ClientProtocol& protocol);
+public:
+    explicit CounterStrikeApp(Net::ClientProtocol& protocol);
 
-        void run() override;
+    void run() override;
 
-        ~CounterStrikeApp() override = default;
-    };
+    ~CounterStrikeApp() override = default;
 };
+};  // namespace App
 
-#endif // CLIENT_GAME_COUNTER_STRIKE_APP_H
+#endif  // CLIENT_GAME_COUNTER_STRIKE_APP_H

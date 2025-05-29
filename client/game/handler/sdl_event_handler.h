@@ -6,32 +6,31 @@
 #include <SDL2/SDL.h>
 
 #include "common/definitions.h"
+
 #include "handler_state.h"
 
 namespace Model {
-    class Event;
+class Event;
 };
 
 namespace Controller {
-    class SDLEventHandler {
-    private:
-        SharedQueue<Model::Event>& event_queue;
-        Model::HandlerState handler_state;
-        SDL_Event placeholder;
+class SDLEventHandler {
+private:
+    SharedQueue<Model::Event>& event_queue;
+    Model::HandlerState handler_state;
+    SDL_Event placeholder;
 
-        void handle_quit_event();
-        void handle_keydown_event();
-        void handle_keyup_event();
+    void handle_quit_event();
+    void handle_keydown_event();
+    void handle_keyup_event();
 
-    public:
-        SDLEventHandler(
-            SharedQueue<Model::Event>& queue
-        );
+public:
+    explicit SDLEventHandler(SharedQueue<Model::Event>& queue);
 
-        void handle();
+    void handle();
 
-        ~SDLEventHandler() = default;
-    };
+    ~SDLEventHandler() = default;
 };
+};  // namespace Controller
 
-#endif // CLIENT_GAME_HANDLER_SDL_EVENT_HANDLER_H
+#endif  // CLIENT_GAME_HANDLER_SDL_EVENT_HANDLER_H

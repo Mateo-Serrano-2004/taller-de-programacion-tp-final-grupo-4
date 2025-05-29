@@ -19,4 +19,4 @@
 std::string get_texture_path(const std::string& texture_name);
 std::string get_sound_path(const std::string& texture_name);
 
-#endif // CLIENT_ASSETS_H
+#endif  // CLIENT_ASSETS_H

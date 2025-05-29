@@ -6,41 +6,38 @@
 #include "common/definitions.h"
 
 namespace Model {
-    class Clock {
+class Clock {
+
+public:
+    class Time {
+        friend Clock;
+
+    protected:
+        time_point time;
+
+        explicit Time(time_point time): time(time) {}
 
     public:
-        class Time {
-            friend Clock;
+        Time() = default;
 
-            protected:
-                time_point time;
+        int64_t operator-(const Time& other) const {
+            return static_cast<int64_t>(std::chrono::duration_cast<ms>(time - other.time).count());
+        }
 
-                explicit Time(time_point time) : time(time) {}
+        Time& operator+=(int64_t amount) {
+            time += ms(amount);
+            return *this;
+        }
 
-            public:
-                Time() = default;
-
-                int64_t operator -(const Time& other) const {
-                    return static_cast<int64_t>(
-                        std::chrono::duration_cast<ms>(time - other.time)
-                        .count()
-                    );
-                }
-
-                Time& operator +=(int64_t amount) {
-                    time += ms(amount);
-                    return *this;
-                }
-
-                ~Time() = default;
-            };
-
-        Clock() = default;
-
-        Time now();
-
-        ~Clock() = default;
+        ~Time() = default;
     };
-};
 
-#endif // CLIENT_GAME_CLOCK_H
+    Clock() = default;
+
+    Time now();
+
+    ~Clock() = default;
+};
+};  // namespace Model
+
+#endif  // CLIENT_GAME_CLOCK_H

@@ -3,14 +3,14 @@
 
 #ifndef SUCCESS
 #define SUCCESS 0
-#endif // SUCCESS
+#endif  // SUCCESS
 
 #ifndef ERROR
 #define ERROR 1
-#endif // ERROR
+#endif  // ERROR
 
-#include <memory>
 #include <chrono>
+#include <memory>
 
 #include "queue.h"
 
@@ -25,4 +25,4 @@ using std::make_shared;
 template <typename T>
 using SharedQueue = Queue<Shared<T>>;
 
-#endif // COMMON_DEFINITIONS_H
+#endif  // COMMON_DEFINITIONS_H

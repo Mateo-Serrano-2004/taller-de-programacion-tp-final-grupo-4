@@ -2,18 +2,16 @@
 #define CLIENT_PROTOCOL_H
 
 #include <cstdint>
-#include <iostream>
 #include <list>
 #include <string>
 #include <utility>
 #include <vector>
 
+#include "client/game/dto_handler/event_dto_creator.h"
 #include "common/DTO/event_dto.h"
 #include "common/DTO/game_info_dto.h"
 #include "common/DTO/match_dto.h"
 #include "common/socket.h"
-
-#include "client/game/dto_handler/event_dto_creator.h"
 
 namespace Net {
 
@@ -29,12 +27,9 @@ private:
 
 public:
     ClientProtocol(const std::string& host, const std::string& port):
-            skt(host.c_str(), port.c_str()) {
-            }
+            skt(host.c_str(), port.c_str()) {}
 
-    explicit ClientProtocol(Socket& socket): skt(std::move(socket)) {
-        std::cout << "Protocol\n";
-    }
+    explicit ClientProtocol(Socket& socket): skt(std::move(socket)) {}
 
     void send_event(const DTO::EventDTOCreator& event_dto_creator);
     DTO::MatchDTO receive_match_state();
@@ -49,6 +44,6 @@ public:
     ~ClientProtocol() = default;
 };
 
-};
+};  // namespace Net
 
 #endif  // CLIENT_PROTOCOL_H

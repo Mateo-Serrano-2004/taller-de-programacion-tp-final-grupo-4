@@ -1,26 +1,26 @@
 #include "join_game_scene.h"
 
-#include <QVBoxLayout>
+#include <QHeaderView>
 #include <QLabel>
-#include <QWidget>
 #include <QTableWidget>
 #include <QTableWidgetItem>
-#include <QHeaderView>
+#include <QVBoxLayout>
+#include <QWidget>
+#include <list>
 
 #include "../widgets/styled_button.h"
 
-JoinGameScene::JoinGameScene(QObject *parent)
-    : BackgroundScene(parent), mainWidgetProxy(nullptr)
-{
+JoinGameScene::JoinGameScene(QObject* parent): BackgroundScene(parent), mainWidgetProxy(nullptr) {
     setUpJoin();
 }
 
 void JoinGameScene::setAvailableGames(const std::list<GameInfoDTO>& games) {
     gameTableWidget->setRowCount(static_cast<int>(games.size()));
     int row = 0;
-    for (const auto& game : games) {
+    for (const auto& game: games) {
         QTableWidgetItem* nameItem = new QTableWidgetItem(QString::fromStdString(game.name));
-        QTableWidgetItem* playersItem = new QTableWidgetItem(QString("%1/%2").arg(game.current_players).arg(game.max_players));
+        QTableWidgetItem* playersItem = new QTableWidgetItem(
+                QString("%1/%2").arg(game.current_players).arg(game.max_players));
         QTableWidgetItem* mapItem = new QTableWidgetItem(QString::fromStdString(game.map_name));
         nameItem->setData(Qt::UserRole, static_cast<int>(game.id));
         gameTableWidget->setItem(row, 0, nameItem);
@@ -62,7 +62,8 @@ void JoinGameScene::setUpJoin() {
     gameTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     gameTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     gameTableWidget->setShowGrid(false);
-    gameTableWidget->setStyleSheet("QTableWidget { background: transparent; color: white; font-family: monospace; }");
+    gameTableWidget->setStyleSheet(
+            "QTableWidget { background: transparent; color: white; font-family: monospace; }");
     gameTableWidget->verticalHeader()->setVisible(false);
     gameTableWidget->horizontalHeader()->setHighlightSections(false);
 
@@ -93,9 +94,8 @@ void JoinGameScene::setUpJoin() {
     mainWidgetProxy = addWidget(container);
     resizeScene(sceneRect().size());
 
-    connect(gameTableWidget, &QTableWidget::itemSelectionChanged, this, [this]() {
-        joinButton->setEnabled(gameTableWidget->currentRow() >= 0);
-    });
+    connect(gameTableWidget, &QTableWidget::itemSelectionChanged, this,
+            [this]() { joinButton->setEnabled(gameTableWidget->currentRow() >= 0); });
 
     connect(joinButton, &QPushButton::clicked, this, [this]() {
         int row = gameTableWidget->currentRow();

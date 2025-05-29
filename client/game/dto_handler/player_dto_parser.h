@@ -5,15 +5,15 @@
 #include "model/player.h"
 
 namespace DTO {
-    class PlayerDTOParser {
-    private:
-    public:
-        PlayerDTOParser() = default;
+class PlayerDTOParser {
+private:
+public:
+    PlayerDTOParser() = default;
 
-        Model::Player parse(PlayerDTO& player_dto);
+    Model::Player parse(PlayerDTO& player_dto);
 
-        ~PlayerDTOParser() = default;
-    };
+    ~PlayerDTOParser() = default;
 };
+};  // namespace DTO
 
-#endif // CLIENT_GAME_DTO_HANDLER_PLAYER_DTO_PARSER_H
+#endif  // CLIENT_GAME_DTO_HANDLER_PLAYER_DTO_PARSER_H

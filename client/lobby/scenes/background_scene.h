@@ -1,17 +1,17 @@
 #ifndef BACKGROUND_SCENE_H
 #define BACKGROUND_SCENE_H
 
-#include <QGraphicsScene>
 #include <QGraphicsPixmapItem>
+#include <QGraphicsScene>
 
-class BackgroundScene : public QGraphicsScene {
+class BackgroundScene: public QGraphicsScene {
     Q_OBJECT
 public:
-    explicit BackgroundScene(QObject* parent = nullptr)
-        : QGraphicsScene(parent) {
-        QGraphicsPixmapItem* background = new QGraphicsPixmapItem(QPixmap("client/lobby/assets/welcome.jpg").scaled(640, 400));
+    explicit BackgroundScene(QObject* parent = nullptr): QGraphicsScene(parent) {
+        QGraphicsPixmapItem* background = new QGraphicsPixmapItem(
+                QPixmap("client/lobby/assets/welcome.jpg").scaled(640, 400));
         addItem(background);
     }
 };
 
-#endif // BACKGROUND_SCENE_H 
+#endif  // BACKGROUND_SCENE_H

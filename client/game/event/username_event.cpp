@@ -2,9 +2,7 @@
 
 #include <string>
 
-Model::UsernameEvent::UsernameEvent(const std::string& username)
-: Model::Event(Model::EventType::USERNAME), username(username) {}
+Model::UsernameEvent::UsernameEvent(const std::string& username):
+        Model::Event(Model::EventType::USERNAME), username(username) {}
 
-std::string Model::UsernameEvent::get_username() const {
-    return username;
-}
+std::string Model::UsernameEvent::get_username() const { return username; }

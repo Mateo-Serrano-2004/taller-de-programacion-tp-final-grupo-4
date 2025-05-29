@@ -46,7 +46,8 @@ std::vector<GameInfoDTO> GameManager::get_games() {
 }
 
 std::vector<std::string> GameManager::get_name_maps() {
-    std::vector<std::string> maps = {"de_dust2", "de_mirage", "de_inferno", "de_nuke", "de_overpass", "de_train"};
+    std::vector<std::string> maps = {"de_dust2", "de_mirage",   "de_inferno",
+                                     "de_nuke",  "de_overpass", "de_train"};
     return maps;
 }
 

@@ -5,11 +5,9 @@ struct Vector2D {
     int x;
     int y;
 
-    Vector2D(int x = 0, int y = 0) : x(x), y(y) {}
+    explicit Vector2D(int x = 0, int y = 0): x(x), y(y) {}
 
-    Vector2D operator+(const Vector2D& other) const {
-        return {x + other.x, y + other.y};
-    }
+    Vector2D operator+(const Vector2D& other) const { return {x + other.x, y + other.y}; }
 
     Vector2D& operator+=(const Vector2D& other) {
         x += other.x;
@@ -17,13 +15,9 @@ struct Vector2D {
         return *this;
     }
 
-    bool operator==(const Vector2D& other) const {
-        return x == other.x && y == other.y;
-    }
+    bool operator==(const Vector2D& other) const { return x == other.x && y == other.y; }
 
-    bool operator!=(const Vector2D& other) const {
-        return !(*this == other);
-    }
+    bool operator!=(const Vector2D& other) const { return !(*this == other); }
 };
 
-#endif // VECTOR2D_H
+#endif  // VECTOR2D_H

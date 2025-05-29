@@ -3,11 +3,12 @@
 
 #include <QPushButton>
 
-class StyledButton : public QPushButton {
+class StyledButton: public QPushButton {
     Q_OBJECT
 
 public:
-    explicit StyledButton(const QString& text, QWidget* parent = nullptr) : QPushButton(text, parent) {
+    explicit StyledButton(const QString& text, QWidget* parent = nullptr):
+            QPushButton(text, parent) {
         setStyleSheet(R"(
             QPushButton {
                 background-color: #4CAF50;
@@ -28,4 +29,4 @@ public:
     }
 };
 
-#endif // STYLED_BUTTON_H 
+#endif  // STYLED_BUTTON_H

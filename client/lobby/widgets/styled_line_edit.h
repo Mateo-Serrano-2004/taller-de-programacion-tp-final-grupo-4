@@ -3,10 +3,10 @@
 
 #include <QLineEdit>
 
-class StyledLineEdit : public QLineEdit {
+class StyledLineEdit: public QLineEdit {
     Q_OBJECT
 public:
-    explicit StyledLineEdit(QWidget* parent = nullptr) : QLineEdit(parent) {
+    explicit StyledLineEdit(QWidget* parent = nullptr): QLineEdit(parent) {
         setStyleSheet(R"(
             QLineEdit {
                 background-color: rgba(255, 255, 255, 0.9);
@@ -19,4 +19,4 @@ public:
     }
 };
 
-#endif // STYLED_LINE_EDIT_H 
+#endif  // STYLED_LINE_EDIT_H

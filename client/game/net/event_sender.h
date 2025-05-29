@@ -5,31 +5,28 @@
 #include "common/thread.h"
 
 namespace Model {
-    class Event;
+class Event;
 }
 
 namespace Net {
-    class ClientProtocol;
+class ClientProtocol;
 };
 
 namespace Controller {
-    class EventSender : public Thread {
-    private:
-        std::atomic<bool>& keep_running;
-        SharedQueue<Model::Event>& event_queue;
-        Net::ClientProtocol& protocol;
+class EventSender: public Thread {
+private:
+    std::atomic<bool>& keep_running;
+    SharedQueue<Model::Event>& event_queue;
+    Net::ClientProtocol& protocol;
 
-    public:
-        EventSender(
-            std::atomic<bool>& keep_running,
-            SharedQueue<Model::Event>& queue,
-            Net::ClientProtocol& protocol
-        );
+public:
+    EventSender(std::atomic<bool>& keep_running, SharedQueue<Model::Event>& queue,
+                Net::ClientProtocol& protocol);
 
-        void run() override;
+    void run() override;
 
-        ~EventSender() override;
-    };
+    ~EventSender() override;
 };
+};  // namespace Controller
 
-#endif // CLIENT_GAME_NET_EVENT_SENDER_H
+#endif  // CLIENT_GAME_NET_EVENT_SENDER_H

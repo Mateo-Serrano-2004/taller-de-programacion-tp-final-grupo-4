@@ -1,17 +1,25 @@
 #include "player.h"
 
+#include <algorithm>
 #include <iostream>
 
-Player::Player(uint8_t id, const std::string& username, Team team, int money)
-    : id(id), username(username), position({0, 0}), direction({0, 0}), angle(0),
-      team(team), health(100), money(money), is_alive(true), has_bomb(false) {}
+Player::Player(uint8_t id, const std::string& username, Team team, int money):
+        id(id),
+        username(username),
+        position({0, 0}),
+        direction({0, 0}),
+        angle(0),
+        team(team),
+        health(100),
+        money(money),
+        is_alive(true),
+        has_bomb(false) {}
 
-void Player::set_direction(const Vector2D& dir) {
-    direction = dir;
-}
+void Player::set_direction(const Vector2D& dir) { direction = dir; }
 
 void Player::update_position() {
-    if (!is_alive) return;
+    if (!is_alive)
+        return;
     position += direction;
     // por ahora depues chequeo con cosas y mapa
     position.x = std::max(0, position.x);
@@ -19,7 +27,8 @@ void Player::update_position() {
 }
 
 void Player::take_damage(int damage) {
-    if (!is_alive) return;
+    if (!is_alive)
+        return;
 
     health -= damage;
     if (health <= 0) {
@@ -28,15 +37,13 @@ void Player::take_damage(int damage) {
     }
 }
 
-bool Player::alive() const {
-    return is_alive;
-}
+bool Player::alive() const { return is_alive; }
 
 PlayerDTO Player::to_dto() const {
     PlayerDTO dto;
     dto.player_id = id;
     dto.name = username;
-    dto.skin_id = 0; // TODO: skin_id real 
+    dto.skin_id = 0;  // TODO: skin_id real
     dto.current_weapon = WeaponDTO{};
     dto.has_bomb = has_bomb ? 1 : 0;
     dto.health = health;

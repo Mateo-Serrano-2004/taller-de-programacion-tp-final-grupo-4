@@ -1,17 +1,20 @@
 #include "event_dto_creator.h"
 
-#include "common/event_type.h"
-#include "event/username_event.h"
-#include "event/movement_event.h"
-#include "event/stop_movement_event.h"
-#include "event/rotation_event.h"
-#include "event/create_game_event.h"
-#include "event/request_maps_event.h"
-#include "event/quit_event.h"
-
 #include <cstdint>
+#include <string>
+#include <utility>
 #include <vector>
+
 #include <arpa/inet.h>
+
+#include "common/event_type.h"
+#include "event/create_game_event.h"
+#include "event/movement_event.h"
+#include "event/quit_event.h"
+#include "event/request_maps_event.h"
+#include "event/rotation_event.h"
+#include "event/stop_movement_event.h"
+#include "event/username_event.h"
 
 DTO::EventDTO DTO::EventDTOCreator::create_request_maps_event() const {
     DTO::EventDTO event_dto;
@@ -24,10 +27,10 @@ DTO::EventDTO DTO::EventDTOCreator::create_request_maps_event() const {
     return event_dto;
 }
 
-DTO::EventDTO DTO::EventDTOCreator::create_request_games_event() const {
+DTO::EventDTO DTO::EventDTOCreator::create_request_games_list_event() const {
     DTO::EventDTO event_dto;
     std::vector<char> data;
-    data.push_back(static_cast<char>(Model::EventType::REQUEST_GAMES));
+    data.push_back(static_cast<char>(Model::EventType::REQUEST_GAMES_LIST));
 
     event_dto.size = 1;
     event_dto.data = std::move(data);
@@ -44,7 +47,7 @@ DTO::EventDTO DTO::EventDTOCreator::create_username_event() const {
     std::vector<char> data;
     data.push_back(static_cast<char>(Model::EventType::USERNAME));
     data.push_back(username_size);
-    for (char& c : username) data.push_back(c);
+    data.insert(data.end(), username.begin(), username.end());
 
     event_dto.size = username_size + 2;
     event_dto.data = std::move(data);
@@ -77,8 +80,8 @@ DTO::EventDTO DTO::EventDTOCreator::create_new_match_event() const {
     data.push_back(static_cast<char>(Model::EventType::CREATE_GAME));
     data.push_back(party_name_size);
     data.push_back(map_name_size);
-    for (char& c : party_name) data.push_back(c);
-    for (char& c : map_name) data.push_back(c);
+    data.insert(data.end(), party_name.begin(), party_name.end());
+    data.insert(data.end(), map_name.begin(), map_name.end());
 
     event_dto.size = party_name_size + map_name_size + 3;
     event_dto.data = std::move(data);
@@ -170,8 +173,8 @@ DTO::EventDTO DTO::EventDTOCreator::to_dto() const {
             return create_username_event();
         case Model::EventType::REQUEST_MAPS:
             return create_request_maps_event();
-        case Model::EventType::REQUEST_GAMES:
-            return create_request_games_event();
+        case Model::EventType::REQUEST_GAMES_LIST:
+            return create_request_games_list_event();
         default:
             throw std::runtime_error("Unknown event type");
     }
