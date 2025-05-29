@@ -53,30 +53,25 @@ endif()
 # Program section
 # ---------------
 if(CS2D_CLIENT)
-    find_package(QT NAMES Qt5 REQUIRED COMPONENTS Widgets)
-    find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
-
     set(CMAKE_AUTOUIC ON)
     set(CMAKE_AUTOMOC ON)
-    set(CMAKE_AUTORCC ON)
 
     add_executable(cs2d_client)
+    add_dependencies(cs2d_client cs2d_common SDL2pp::SDL2pp)
+    add_subdirectory(client/)
 
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         target_compile_definitions(cs2d_client PRIVATE DEBUG_MODE)
     endif()
 
-    add_dependencies(cs2d_client cs2d_common SDL2pp::SDL2pp)
-
-    add_subdirectory(client/)
-
+    find_package(Qt5 COMPONENTS Widgets REQUIRED)
     set_project_warnings(cs2d_client ${CS2D_MAKE_WARNINGS_AS_ERRORS} FALSE)
 
     target_include_directories(cs2d_client PRIVATE ${CMAKE_SOURCE_DIR})
     target_include_directories(cs2d_client PRIVATE ${libSDL2pp_SOURCE_DIR})
-    target_include_directories(cs2d_client PRIVATE ${Qt${QT_VERSION_MAJOR}_INCLUDE_DIRS})
+    target_include_directories(cs2d_client PRIVATE ${Qt5_INCLUDE_DIRS})
 
-    target_link_libraries(cs2d_client cs2d_common SDL2pp::SDL2pp Qt${QT_VERSION_MAJOR}::Widgets)
+    target_link_libraries(cs2d_client cs2d_common SDL2pp::SDL2pp Qt5::Widgets)
 endif()
 
 if(CS2D_SERVER)
@@ -90,14 +85,15 @@ if(CS2D_SERVER)
 endif()
 
 if(CS2D_EDITOR)
+    set(CMAKE_AUTOUIC ON)
+    set(CMAKE_AUTOMOC ON)
+
     add_executable(cs2d_editor)
     add_dependencies(cs2d_editor)
     add_subdirectory(editor/)
 
     find_package(Qt5 COMPONENTS Widgets REQUIRED)
     set_project_warnings(cs2d_editor ${CS2D_MAKE_WARNINGS_AS_ERRORS} FALSE)
-
-    #target_include_directories(cs2d_editor PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     target_link_libraries(cs2d_editor cs2d_common Qt5::Widgets)
 endif()
@@ -119,10 +115,9 @@ if(CS2D_TESTS)
 
     add_executable(cs2d_tests)
     add_dependencies(cs2d_tests cs2d_common)
+    add_subdirectory(tests/)
 
     target_include_directories(cs2d_tests PUBLIC .)
-
-    add_subdirectory(tests/)
 
     set_project_warnings(cs2d_tests ${CS2D_MAKE_WARNINGS_AS_ERRORS} TRUE)
 
