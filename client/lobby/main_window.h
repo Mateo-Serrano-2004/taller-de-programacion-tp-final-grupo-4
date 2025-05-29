@@ -31,6 +31,7 @@ protected:
 private slots:
     void onPushButtonClicked();
     void receiveAvailableGames(const QStringList& partidas);
+    void receiveAvailableMaps(const QStringList& maps);
 
 private:
     Ui::MainWindow *ui;

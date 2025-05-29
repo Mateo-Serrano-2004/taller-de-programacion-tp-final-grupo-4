@@ -8,7 +8,6 @@
 #include "common/definitions.h"
 
 #include "controller.h"
-#include "handler/state_handler.h"
 #include "handler/sdl_event_handler.h"
 #include "net/event_sender.h"
 #include "net/game_state_receiver.h"
@@ -33,7 +32,6 @@ namespace Controller {
         App::SDLWindow* window;
         Model::GameState* game_state;
         SDLEventHandler sdl_event_handler;
-        StateHandler state_handler;
         EventSender event_sender;
         GameStateReceiver game_state_receiver;
 

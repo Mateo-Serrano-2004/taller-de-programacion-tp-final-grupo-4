@@ -15,13 +15,14 @@ namespace Model {
         BUY_WEAPON = 0x08,
         BUY_AMMO = 0x09,
         LEAVE_GAME = 0x0A,
+        STOP_MOVEMENT = 0x0B,
 
         // Lobby events
         USERNAME = 0x10,
         CREATE_GAME = 0x11,
         JOIN_GAME = 0x12,
         LIST_GAMES = 0x13,
-        GET_MAPS = 0x14,
+        REQUEST_MAPS = 0x14,
 
         // System events
         QUIT = 0x20

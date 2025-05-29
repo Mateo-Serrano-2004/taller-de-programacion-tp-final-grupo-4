@@ -25,8 +25,7 @@ Controller::SDLController::SDLController(
     window(window),
     game_state(game_state),
     sdl_event_handler(dispatched_events_queue),
-    state_handler(window, game_state, dispatched_events_queue),
-    event_sender(dispatched_events_queue, protocol),
+    event_sender(keep_running, dispatched_events_queue, protocol),
     game_state_receiver(keep_running, game_state, protocol) {}
 
 void Controller::SDLController::dispatch_events() {
@@ -35,7 +34,6 @@ void Controller::SDLController::dispatch_events() {
     }
     try {
         sdl_event_handler.handle();
-        state_handler.handle();
     } catch (...) {
         throw App::ClosedWindowException("Received a QUIT event");
     }

@@ -6,6 +6,7 @@
 #include <SDL2/SDL.h>
 
 #include "common/definitions.h"
+#include "handler_state.h"
 
 namespace Model {
     class Event;
@@ -15,7 +16,12 @@ namespace Controller {
     class SDLEventHandler {
     private:
         SharedQueue<Model::Event>& event_queue;
+        Model::HandlerState handler_state;
         SDL_Event placeholder;
+
+        void handle_quit_event();
+        void handle_keydown_event();
+        void handle_keyup_event();
 
     public:
         SDLEventHandler(

@@ -68,7 +68,7 @@ EventVariant ServerProtocol::receive_event() {
         case Model::EventType::LIST_GAMES: {
             return ListGamesEvent();
         }
-        case Model::EventType::GET_MAPS: {
+        case Model::EventType::REQUEST_MAPS: {
             return MapRequestEvent();
         }
         case Model::EventType::LEAVE_GAME: {

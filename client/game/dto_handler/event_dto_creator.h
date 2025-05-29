@@ -12,11 +12,13 @@ namespace DTO {
     private:
         Shared<Model::Event> event;
 
+        EventDTO create_request_maps_event() const;
         EventDTO create_username_event() const;
         EventDTO create_quit_event() const;
         EventDTO create_new_match_event() const;
         EventDTO create_join_game_event() const;
         EventDTO create_movement_event() const;
+        EventDTO create_stop_movement_event() const;
         EventDTO create_rotation_event() const;
 
     public:

@@ -15,11 +15,13 @@ namespace Net {
 namespace Controller {
     class EventSender : public Thread {
     private:
+        std::atomic<bool>& keep_running;
         SharedQueue<Model::Event>& event_queue;
         Net::ClientProtocol& protocol;
 
     public:
         EventSender(
+            std::atomic<bool>& keep_running,
             SharedQueue<Model::Event>& queue,
             Net::ClientProtocol& protocol
         );

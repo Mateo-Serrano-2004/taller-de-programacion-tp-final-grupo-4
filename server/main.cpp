@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) try{
     Controller::Server server(port, game_config_path);
 
     return SUCCESS;
-} catch (...) {
-    std::cerr << "Internal server error" << std::endl;
+} catch (const std::exception& e) {
+    std::cerr << "Internal server error: " << e.what() << std::endl;
     return ERROR;
 }

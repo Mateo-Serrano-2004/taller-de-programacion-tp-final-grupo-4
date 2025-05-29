@@ -1,7 +1,14 @@
 #include "main_window.h"
 
+#include <list>
+
 #include "client/game/dto_handler/event_dto_creator.h"
 #include "client/game/event/username_event.h"
+#include "client/game/event/join_game_event.h"
+#include "client/game/event/create_game_event.h"
+#include "client/game/event/request_maps_event.h"
+
+#include "client/game/counter_strike_app.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -39,6 +46,8 @@ void MainWindow::showWelcomeScene() {
         auto usernameEvent = std::make_shared<Model::UsernameEvent>(username.toStdString());
         DTO::EventDTOCreator creator(usernameEvent);
         protocol->send_event(creator);
+        
+        
         showLobbyScene();
     }, Qt::QueuedConnection);
 }
@@ -56,6 +65,27 @@ void MainWindow::showGameCreationScene() {
     gameCreationScene = new GameCreationScene(this);
     ui->mainView->setScene(gameCreationScene);
     connect(gameCreationScene, &GameCreationScene::backClicked, this, &MainWindow::showLobbyScene, Qt::QueuedConnection);
+    connect(gameCreationScene, &GameCreationScene::createGameRequested, this, [this](const QString& gameName, const QString& selectedMap) {
+        auto createGameEvent = std::make_shared<Model::CreateGameEvent>(gameName.toStdString(), selectedMap.toStdString());
+        DTO::EventDTOCreator creator(createGameEvent);
+        protocol->send_event(creator);
+        
+        this->hide();
+        App::CounterStrikeApp game(*protocol);
+        this->show();
+        showLobbyScene();
+    }, Qt::QueuedConnection);
+
+    auto requestMapsEvent = std::make_shared<Model::RequestMapsEvent>();
+    DTO::EventDTOCreator creator(requestMapsEvent);
+    protocol->send_event(creator);
+
+    std::list<std::string> maps = protocol->receive_map_list();
+    QStringList qMaps;
+    for (const auto& map : maps) {
+        qMaps << QString::fromStdString(map);
+    }
+    gameCreationScene->setAvailableMaps(qMaps);
 }
 
 void MainWindow::showJoinGameScene() {
@@ -63,6 +93,10 @@ void MainWindow::showJoinGameScene() {
     joinGameScene = new JoinGameScene(this);
     ui->mainView->setScene(joinGameScene);
     connect(joinGameScene, &JoinGameScene::backClicked, this, &MainWindow::showLobbyScene, Qt::QueuedConnection);
+
+    // auto joinGameEvent = std::make_shared<Model::JoinGameEvent>();
+    // DTO::EventDTOCreator creator(joinGameEvent);
+    // protocol->send_event(creator);
 }
 
 void MainWindow::onPushButtonClicked() {
@@ -75,6 +109,12 @@ void MainWindow::receiveAvailableGames(const QStringList& partidas) {
     }
     joinGameScene->setAvailableGames(partidas);
     ui->mainView->setScene(joinGameScene);
+}
+
+void MainWindow::receiveAvailableMaps(const QStringList& maps) {
+    if (gameCreationScene) {
+        gameCreationScene->setAvailableMaps(maps);
+    }
 }
 
 void MainWindow::setUpWindow() {

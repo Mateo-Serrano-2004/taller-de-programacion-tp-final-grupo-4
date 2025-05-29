@@ -22,6 +22,9 @@ GameCreationScene::GameCreationScene(QObject *parent)
 void GameCreationScene::setAvailableMaps(const QStringList& maps) {
     mapListWidget->clear();
     mapListWidget->addItems(maps);
+    if (!maps.isEmpty()) {
+        mapListWidget->setCurrentRow(0);
+    }
 }
 
 void GameCreationScene::centerWidget(QGraphicsProxyWidget* proxy) {
@@ -41,6 +44,7 @@ void GameCreationScene::setUpGameCreation() {
 
     gameNameInput->setPlaceholderText("Inserte el nombre");
     StyledButton* createButton = new StyledButton("Crear");
+    createButton->setEnabled(false);
 
     QPushButton* backButton = new StyledButton("Volver");
     backButton->setFixedWidth(80);
@@ -71,6 +75,18 @@ void GameCreationScene::setUpGameCreation() {
 
     QGraphicsProxyWidget *proxy = addWidget(container);
     centerWidget(proxy);
+
+    connect(gameNameInput, &QLineEdit::textChanged, this, [createButton, this]() {
+        bool hasName = !gameNameInput->text().isEmpty();
+        bool hasMap = mapListWidget->currentItem() != nullptr;
+        createButton->setEnabled(hasName && hasMap);
+    });
+
+    connect(mapListWidget, &QListWidget::itemSelectionChanged, this, [createButton, this]() {
+        bool hasName = !gameNameInput->text().isEmpty();
+        bool hasMap = mapListWidget->currentItem() != nullptr;
+        createButton->setEnabled(hasName && hasMap);
+    });
 
     connect(createButton, &QPushButton::clicked, this, [this]() {
         QString gameName = gameNameInput->text();

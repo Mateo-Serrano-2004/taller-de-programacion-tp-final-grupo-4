@@ -3,14 +3,27 @@
 #include "common/event_type.h"
 #include "event/username_event.h"
 #include "event/movement_event.h"
+#include "event/stop_movement_event.h"
 #include "event/rotation_event.h"
 #include "event/create_game_event.h"
+#include "event/request_maps_event.h"
 #include "event/quit_event.h"
 
 #include <cstdint>
 #include <vector>
 #include <iostream>
 #include <arpa/inet.h>
+
+DTO::EventDTO DTO::EventDTOCreator::create_request_maps_event() const {
+    DTO::EventDTO event_dto;
+    std::vector<char> data;
+    data.push_back(static_cast<char>(Model::EventType::REQUEST_MAPS));
+
+    event_dto.size = 1;
+    event_dto.data = std::move(data);
+
+    return event_dto;
+}
 
 DTO::EventDTO DTO::EventDTOCreator::create_username_event() const {
     auto username_event = std::static_pointer_cast<Model::UsernameEvent>(event);
@@ -83,9 +96,24 @@ DTO::EventDTO DTO::EventDTOCreator::create_movement_event() const {
 
     uint8_t event_dto_size = 3;
     std::vector<char> data;
-    data.push_back(static_cast<char>(0x00));
+    data.push_back(static_cast<char>(Model::EventType::MOVEMENT));
     data.push_back(static_cast<char>(movement_event->get_x_direction()));
     data.push_back(static_cast<char>(movement_event->get_x_direction()));
+
+    event_dto.size = event_dto_size;
+    event_dto.data = std::move(data);
+
+    return event_dto;
+}
+
+DTO::EventDTO DTO::EventDTOCreator::create_stop_movement_event() const {
+    auto movement_event = std::static_pointer_cast<Model::StopMovementEvent>(event);
+    DTO::EventDTO event_dto;
+
+    uint8_t event_dto_size = 2;
+    std::vector<char> data;
+    data.push_back(static_cast<char>(Model::EventType::STOP_MOVEMENT));
+    data.push_back(static_cast<char>(movement_event->is_horizontal_movement()));
 
     event_dto.size = event_dto_size;
     event_dto.data = std::move(data);
@@ -118,6 +146,8 @@ DTO::EventDTO DTO::EventDTOCreator::to_dto() const {
     switch (type) {
         case Model::EventType::MOVEMENT:
             return create_movement_event();
+        case Model::EventType::STOP_MOVEMENT:
+            return create_stop_movement_event();
         case Model::EventType::ROTATION:
             return create_rotation_event();
         case Model::EventType::CREATE_GAME:
@@ -128,6 +158,8 @@ DTO::EventDTO DTO::EventDTOCreator::to_dto() const {
             return create_join_game_event();
         case Model::EventType::USERNAME:
             return create_username_event();
+        case Model::EventType::REQUEST_MAPS:
+            return create_request_maps_event();
         default:
             std::cout << type;
             throw std::runtime_error("Unknown event type");
