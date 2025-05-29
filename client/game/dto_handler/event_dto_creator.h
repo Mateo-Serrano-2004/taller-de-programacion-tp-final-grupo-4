@@ -13,7 +13,7 @@ namespace DTO {
         Shared<Model::Event> event;
 
         EventDTO create_request_maps_event() const;
-        EventDTO create_request_games_list_event() const;
+        EventDTO create_request_games_event() const;
         EventDTO create_username_event() const;
         EventDTO create_quit_event() const;
         EventDTO create_new_match_event() const;

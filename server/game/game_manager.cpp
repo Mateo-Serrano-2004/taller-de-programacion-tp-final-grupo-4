@@ -36,6 +36,12 @@ std::vector<GameInfoDTO> GameManager::get_games() {
                                  game.second->get_num_players(), game.second->get_map_name()};
         games_info.push_back(game_info);
     }
+    games_info.push_back(GameInfoDTO(0, "Partida 1", 15, "de_dust2"));
+    games_info.push_back(GameInfoDTO(1, "Partida 2", 0, "de_mirage"));
+    games_info.push_back(GameInfoDTO(2, "Partida de prueba", 2, "de_inferno"));
+    games_info.push_back(GameInfoDTO(3, "Partida de prueba de nombre largo", 0, "de_nuke"));
+    games_info.push_back(GameInfoDTO(4, "Partida 3", 0, "de_overpass"));
+    games_info.push_back(GameInfoDTO(5, "Partida 4", 3, "de_train"));
     return games_info;
 }
 

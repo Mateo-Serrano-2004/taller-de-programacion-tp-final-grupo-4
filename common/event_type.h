@@ -21,7 +21,7 @@ namespace Model {
         USERNAME = 0x10,
         CREATE_GAME = 0x11,
         JOIN_GAME = 0x12,
-        REQUEST_GAMES_LIST = 0x13,
+        REQUEST_GAMES = 0x13,
         REQUEST_MAPS = 0x14,
 
         // System events

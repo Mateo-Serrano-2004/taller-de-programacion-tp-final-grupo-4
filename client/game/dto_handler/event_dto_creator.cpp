@@ -24,10 +24,10 @@ DTO::EventDTO DTO::EventDTOCreator::create_request_maps_event() const {
     return event_dto;
 }
 
-EventDTO DTO::EventDTOCreator::create_request_games_list_event() const {
+DTO::EventDTO DTO::EventDTOCreator::create_request_games_event() const {
     DTO::EventDTO event_dto;
     std::vector<char> data;
-    data.push_back(static_cast<char>(Model::EventType::REQUEST_GAMES_LIST));
+    data.push_back(static_cast<char>(Model::EventType::REQUEST_GAMES));
 
     event_dto.size = 1;
     event_dto.data = std::move(data);
@@ -170,8 +170,8 @@ DTO::EventDTO DTO::EventDTOCreator::to_dto() const {
             return create_username_event();
         case Model::EventType::REQUEST_MAPS:
             return create_request_maps_event();
-        case Model::EventType::REQUEST_GAMES_LIST:
-            return create_request_games_list_event();
+        case Model::EventType::REQUEST_GAMES:
+            return create_request_games_event();
         default:
             throw std::runtime_error("Unknown event type");
     }

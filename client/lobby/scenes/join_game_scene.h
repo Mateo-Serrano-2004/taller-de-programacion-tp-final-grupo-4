@@ -2,18 +2,20 @@
 #define JOIN_GAME_SCENE_H
 
 #include <QGraphicsScene>
-#include <QListWidget>
+#include <QTableWidget>
 #include <QPushButton>
 #include <QGraphicsProxyWidget>
 
 #include "background_scene.h"
+#include "common/DTO/game_info_dto.h"
 
 class JoinGameScene : public BackgroundScene {
     Q_OBJECT
 
 public:
     explicit JoinGameScene(QObject *parent = nullptr);
-    void setAvailableGames(const QStringList& games);
+    void setAvailableGames(const std::list<GameInfoDTO>& games);
+    int selectedGameId() const;
 
 signals:
     void joinRequestedGame(const QString& gameName);
@@ -21,7 +23,7 @@ signals:
     void refreshClicked();
 
 private:
-    QListWidget* gameListWidget;
+    QTableWidget* gameTableWidget;
     QPushButton* joinButton;
     QGraphicsProxyWidget* mainWidgetProxy;
     void resizeScene(const QSizeF& size);

@@ -7,8 +7,10 @@
 #include "client/game/event/join_game_event.h"
 #include "client/game/event/create_game_event.h"
 #include "client/game/event/request_maps_event.h"
-
+#include "client/game/event/request_games_event.h"
+#include "common/DTO/game_info_dto.h"
 #include "client/game/counter_strike_app.h"
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -22,6 +24,22 @@ MainWindow::~MainWindow()
     if (protocol) {
         delete protocol;
     }
+}
+
+void MainWindow::runGame() {
+    this->hide();
+    App::CounterStrikeApp game(*protocol);
+    this->show();
+    showLobbyScene();
+}
+
+void MainWindow::loadGames() {
+    auto requestGamesEvent = std::make_shared<Model::RequestGamesEvent>();
+    DTO::EventDTOCreator creator(requestGamesEvent);
+    protocol->send_event(creator);
+
+    std::list<GameInfoDTO> games = protocol->receive_game_list();
+    joinGameScene->setAvailableGames(games);
 }
 
 void MainWindow::clearCurrentScene() {
@@ -69,11 +87,8 @@ void MainWindow::showGameCreationScene() {
         auto createGameEvent = std::make_shared<Model::CreateGameEvent>(gameName.toStdString(), selectedMap.toStdString());
         DTO::EventDTOCreator creator(createGameEvent);
         protocol->send_event(creator);
-        
-        this->hide();
-        App::CounterStrikeApp game(*protocol);
-        this->show();
-        showLobbyScene();
+
+        runGame();
     }, Qt::QueuedConnection);
 
     auto requestMapsEvent = std::make_shared<Model::RequestMapsEvent>();
@@ -93,22 +108,24 @@ void MainWindow::showJoinGameScene() {
     joinGameScene = new JoinGameScene(this);
     ui->mainView->setScene(joinGameScene);
     connect(joinGameScene, &JoinGameScene::backClicked, this, &MainWindow::showLobbyScene, Qt::QueuedConnection);
+    connect(joinGameScene, &JoinGameScene::joinRequestedGame, this, [this](const QString&) {
+        int partida_id = joinGameScene->selectedGameId();
+        if (partida_id != -1) {
+            auto joinGameEvent = std::make_shared<Model::JoinGameEvent>(partida_id);
+            DTO::EventDTOCreator creator(joinGameEvent);
+            protocol->send_event(creator);
+            runGame();
+        }
+    }, Qt::QueuedConnection);
+    connect(joinGameScene, &JoinGameScene::refreshClicked, this, [this]() {
+        loadGames();
+    }, Qt::QueuedConnection);
 
-    // auto joinGameEvent = std::make_shared<Model::JoinGameEvent>();
-    // DTO::EventDTOCreator creator(joinGameEvent);
-    // protocol->send_event(creator);
+    loadGames();
 }
 
 void MainWindow::onPushButtonClicked() {
     showLobbyScene();
-}
-
-void MainWindow::receiveAvailableGames(const QStringList& partidas) {
-    if (!joinGameScene) {
-        showJoinGameScene();
-    }
-    joinGameScene->setAvailableGames(partidas);
-    ui->mainView->setScene(joinGameScene);
 }
 
 void MainWindow::receiveAvailableMaps(const QStringList& maps) {

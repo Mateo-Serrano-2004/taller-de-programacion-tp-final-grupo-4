@@ -101,7 +101,6 @@ std::list<GameInfoDTO> Net::ClientProtocol::receive_game_list() {
     skt.recvall(&games_info_size, sizeof(games_info_size));
 
     std::list<GameInfoDTO> games_info;
-    games_info.resize(games_info_size);
 
     for (uint8_t i = 0; i < games_info_size; i++) {
         GameInfoDTO dto = GameInfoDTO();
@@ -135,7 +134,6 @@ std::list<std::string> Net::ClientProtocol::receive_map_list() {
     skt.recvall(&maps_size, sizeof(maps_size));
 
     std::list<std::string> maps;
-    maps.resize(maps_size);
 
     for (uint8_t i = 0; i < maps_size; i++) {
         uint8_t map_name_size;

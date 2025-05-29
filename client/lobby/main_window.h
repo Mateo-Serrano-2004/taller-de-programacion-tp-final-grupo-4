@@ -30,7 +30,6 @@ protected:
 
 private slots:
     void onPushButtonClicked();
-    void receiveAvailableGames(const QStringList& partidas);
     void receiveAvailableMaps(const QStringList& maps);
 
 private:
@@ -47,5 +46,7 @@ private:
     void showWelcomeScene();
     void showGameCreationScene();
     void showJoinGameScene();
+    void loadGames();
+    void runGame();
 };
 #endif // MAIN_WINDOW_H
