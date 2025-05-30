@@ -9,16 +9,14 @@
 #include "common/DTO/game_info_dto.h"
 #include "common/socket.h"
 #include "server/events/events.h"
-#include "server/game/match_creator.h"
+#include "common/DTO/game_state_dto.h"
+#include "common/DTO/player_dto.h"
 
 class ServerProtocol {
 private:
     Socket peer;
 
-    void send_weapon(const WeaponDTO& weapon);
-    void send_player_list(const std::vector<PlayerDTO>& players);
-    void send_dropped_weapons(const std::vector<DropWeaponDTO>& dropped_weapons);
-    void send_game_list(const std::vector<uint8_t>& games);
+    void send_player_list(const std::vector<DTO::PlayerDTO>& players);
 
     ServerProtocol(const ServerProtocol&) = delete;
     ServerProtocol& operator=(const ServerProtocol&) = delete;
@@ -28,7 +26,7 @@ public:
 
     EventVariant receive_event();
     void send_player_id(uint8_t player_id);
-    void send_match_state(const MatchCreator& mc);
+    void send_match_state(const DTO::GameStateDTO& game_state);
     void send_all_maps_names(const std::vector<std::string>& maps);
     void send_games(const std::vector<GameInfoDTO>& games);
     void send_map(const std::string& map);

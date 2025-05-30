@@ -6,8 +6,8 @@
 // Defined when setting CMAKE_BUILD_TYPE to Debug
 #ifdef DEBUG_MODE
 
-#define TEXTURES_ROOT "../assets/gfx/"
-#define SOUNDS_ROOT "../assets/sfx/"
+#define TEXTURES_ROOT "assets/gfx/"
+#define SOUNDS_ROOT "assets/sfx/"
 
 #else
 

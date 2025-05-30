@@ -6,11 +6,10 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "common/definitions.h"
+#include "event/event.h"
 #include "handler/sdl_event_handler.h"
 #include "net/event_sender.h"
 #include "net/game_state_receiver.h"
-
-#include "controller.h"
 
 namespace Net {
 class ClientProtocol;
@@ -25,23 +24,24 @@ class GameState;
 class Event;
 };  // namespace Model
 namespace Controller {
-class SDLController: public Controller {
+class SDLController {
 private:
-    std::atomic<bool> keep_running;
-    Net::ClientProtocol& protocol;
+    Net::ClientProtocol* protocol;
     App::SDLWindow* window;
     Model::GameState* game_state;
+    SharedQueue<Model::Event> dispatched_events_queue;
     SDLEventHandler sdl_event_handler;
     EventSender event_sender;
     GameStateReceiver game_state_receiver;
+    std::atomic<bool> keep_running;
 
 public:
-    SDLController(Net::ClientProtocol& protocol, App::SDLWindow* window,
+    SDLController(Net::ClientProtocol* protocol, App::SDLWindow* window,
                   Model::GameState* game_state);
 
-    void dispatch_events() override;
+    void dispatch_events();
 
-    ~SDLController() override = default;
+    ~SDLController() = default;
 };
 };  // namespace Controller
 

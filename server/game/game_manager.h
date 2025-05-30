@@ -8,12 +8,12 @@
 #include <utility>
 #include <vector>
 
-#include "common/dto/game_info_dto.h"
+#include "common/DTO/game_info_dto.h"
+#include "common/DTO/game_state_dto.h"
 #include "common/queue.h"
 #include "server/events/events.h"
 
 #include "game.h"
-#include "match_creator.h"
 
 using GameMap = std::map<uint8_t, std::unique_ptr<Game>>;
 
@@ -31,9 +31,9 @@ public:
     explicit GameManager(const std::string& game_config_path): game_config_path(game_config_path) {}
 
     uint8_t create_game(const std::string& party_name, const std::string& map_name,
-                        const std::string& username, Queue<MatchCreator>& client_queue);
+                        const std::string& username, Queue<DTO::GameStateDTO>& client_queue);
     uint8_t join_game(const uint8_t& game_id, const std::string& username,
-                      Queue<MatchCreator>& client_queue);
+                      Queue<DTO::GameStateDTO>& client_queue);
 
     GameQueue* get_game_queue(const uint8_t& game_id);
     std::vector<GameInfoDTO> get_games();

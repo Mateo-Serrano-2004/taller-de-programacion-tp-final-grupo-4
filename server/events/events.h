@@ -12,10 +12,18 @@ private:
     uint8_t speed;
 
 public:
-    MovementEvent(int8_t x, int8_t y, uint8_t speed): x(x), y(y), speed(speed) {}
+    MovementEvent(int8_t x, int8_t y): x(x), y(y) {}
     int8_t get_x() const { return x; }
     int8_t get_y() const { return y; }
-    uint8_t get_speed() const { return speed; }
+};
+
+class StopMovementEvent {
+private:
+    bool is_horizontal;
+
+public:
+    StopMovementEvent(bool is_horizontal): is_horizontal(is_horizontal) {}
+    bool is_movement_horizontal() const { return is_horizontal; }
 };
 
 class RotationEvent {
@@ -151,9 +159,10 @@ public:
     QuitEvent() {}
 };
 
-using GameEventVariant = std::variant<LeaveGameEvent, MovementEvent, RotationEvent, DropWeaponEvent,
-                                      UseWeaponEvent, DefuseBombEvent, SwitchWeaponEvent,
-                                      ReloadWeaponEvent, BuyEvent, BuyAmmoEvent, QuitEvent>;
+using GameEventVariant = std::variant<LeaveGameEvent, MovementEvent, StopMovementEvent,
+                                      RotationEvent, DropWeaponEvent, UseWeaponEvent,
+                                      DefuseBombEvent, SwitchWeaponEvent, ReloadWeaponEvent,
+                                      BuyEvent, BuyAmmoEvent, QuitEvent>;
 
 using EventVariant = std::variant<GameEventVariant, UsernameEvent, CreateGameEvent, MapRequestEvent,
                                   JoinGameEvent, ListGamesEvent>;

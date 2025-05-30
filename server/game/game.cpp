@@ -2,9 +2,8 @@
 
 #include <iostream>
 
+#include "common/model/vector_2d.h"
 #include "server/events/overloaded.h"
-
-#include "vector2d.h"
 
 void Game::run() {
     using Clock = std::chrono::steady_clock;
@@ -46,8 +45,8 @@ void Game::handle_leave_game(const uint8_t& player_id) {
 
 void Game::handle_movement(const uint8_t& player_id, const MovementEvent& event) {
     auto it = players.find(player_id);
-    if (it != players.end() && it->second.alive()) {
-        it->second.set_direction(Vector2D((event.get_x()), (event.get_y())));
+    if (it != players.end()) {
+        it->second.update_movement_direction_by_merge(Physics::Vector2D((event.get_x()), (event.get_y())));
     }
 }
 
@@ -59,6 +58,16 @@ void Game::tick() {  // agregar current_tick
         std::visit(overloaded{[player_id, this](const MovementEvent& e) {
                                   handle_movement(player_id, e);
                               },
+                              [player_id, this](const StopMovementEvent& e) {
+                                  auto it = players.find(player_id);
+                                  if (it != players.end()) {
+                                    if (e.is_movement_horizontal()) {
+                                        it->second.stop_horizontal_movement();
+                                    } else {
+                                        it->second.stop_vertical_movement();
+                                    }
+                                  }
+                              },
                               [player_id, this](const LeaveGameEvent&) {
                                   handle_leave_game(player_id);
                               },
@@ -66,7 +75,7 @@ void Game::tick() {  // agregar current_tick
                               [this](const UseWeaponEvent&) {}, [this](const DefuseBombEvent&) {},
                               [this](const SwitchWeaponEvent&) {},
                               [this](const ReloadWeaponEvent&) {}, [this](const BuyEvent&) {},
-                              [this](const BuyAmmoEvent&) {}, [this](const QuitEvent&) {}},
+                              [this](const BuyAmmoEvent&) {}, [player_id, this](const QuitEvent&) {handle_leave_game(player_id);}},
                    event);
     }
 
@@ -79,12 +88,12 @@ void Game::tick() {  // agregar current_tick
 }
 
 void Game::broadcast_game_state() {
-    std::vector<PlayerDTO> player_dtos;
+    std::vector<DTO::PlayerDTO> player_dtos;
     for (const auto& [id, player]: players) {
         player_dtos.push_back(player.to_dto());
     }
 
-    MatchCreator game_snapshot(true, 0, 0, 0, 0, player_dtos, {}, 0, 0, 0, 0);
+    DTO::GameStateDTO game_snapshot(true, player_dtos);
 
     for (auto& [id, queue]: client_queues) {
         queue->push(game_snapshot);
@@ -92,8 +101,8 @@ void Game::broadcast_game_state() {
 }
 
 uint8_t Game::add_player(const std::string& username, ClientQueue& client_queue) {
-    uint8_t new_id = next_player_id++;
-    players.emplace(new_id, Player(new_id, username, Team::CT, 800));  // ojo bando
+    const uint8_t new_id = next_player_id++;
+    players.insert(std::make_pair(new_id, Model::MovablePlayer(new_id, username)));
     client_queues[new_id] = &client_queue;
     return new_id;
 }

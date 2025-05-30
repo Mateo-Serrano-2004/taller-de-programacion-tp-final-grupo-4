@@ -9,19 +9,19 @@
 #include "event/event.h"
 #include "exception/closed_window.h"
 
-Controller::EventSender::EventSender(std::atomic<bool>& keep_running,
-                                     SharedQueue<Model::Event>& queue,
-                                     Net::ClientProtocol& protocol):
-        keep_running(keep_running), event_queue(queue), protocol(protocol) {
+Controller::EventSender::EventSender(SharedQueue<Model::Event>* queue,
+                                     Net::ClientProtocol* protocol,
+                                     std::atomic<bool>& keep_running):
+        event_queue(queue), protocol(protocol), keep_running(keep_running) {
     start();
 }
 
 void Controller::EventSender::run() {
     while (keep_running) {
         try {
-            Shared<Model::Event> event = event_queue.pop();
+            Shared<Model::Event> event = event_queue->pop();
             DTO::EventDTOCreator event_dto_creator(event);
-            protocol.send_event(event_dto_creator);
+            protocol->send_event(event_dto_creator);
         } catch (...) {
             keep_running = false;
             throw App::ClosedWindowException("Received a QUIT event");
@@ -30,8 +30,6 @@ void Controller::EventSender::run() {
 }
 
 Controller::EventSender::~EventSender() {
-    std::cout << "Destroying EventSender\n";
-
     stop();
     join();
 }

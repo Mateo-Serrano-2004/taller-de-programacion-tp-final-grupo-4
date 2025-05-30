@@ -21,7 +21,7 @@ private:
     Model::TextureStorage* texture_storage;
     SDL2pp::Renderer renderer;
 
-    std::pair<int16_t, int16_t> get_skin_piece(const Model::Player& player);
+    std::pair<uint16_t, uint16_t> get_skin_piece(const Model::Player& player);
     void render_player(const Model::Player& player);
 
 public:

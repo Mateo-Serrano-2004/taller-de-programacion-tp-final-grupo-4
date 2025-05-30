@@ -2,7 +2,7 @@
 #define CLIENT_GAME_DTO_HANDLER_PLAYER_DTO_PARSER_H
 
 #include "common/DTO/player_dto.h"
-#include "model/player.h"
+#include "common/model/player.h"
 
 namespace DTO {
 class PlayerDTOParser {

@@ -7,6 +7,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
+#include "common/definitions.h"
+#include "common/model/player.h"
 #include "model/game_state.h"
 #include "texture/texture_storage.h"
 
@@ -17,11 +19,11 @@ View::SDLRenderer::SDLRenderer(App::SDLWindow* sdl_window, Model::GameState* gam
         texture_storage(texture_storage),
         renderer(sdl_window->get_window(), -1, SDL_RENDERER_ACCELERATED) {}
 
-std::pair<int16_t, int16_t> View::SDLRenderer::get_skin_piece(const Model::Player& player) {
-    uint8_t skin_piece = player.get_skin_piece();
+std::pair<uint16_t, uint16_t> View::SDLRenderer::get_skin_piece(const Model::Player& player) {
+    short_id_t skin_piece = player.get_skin_piece();
 
-    uint8_t skin_row = (uint8_t)((skin_piece - 1) / 2);
-    uint8_t skin_column = skin_piece % 2;
+    uint16_t skin_row = skin_piece ? (uint16_t) ((skin_piece - 1) / 2) : 0;
+    uint16_t skin_column = (uint16_t) (skin_piece % 2);
 
     uint16_t skin_piece_x = skin_column * 32;
     uint16_t skin_piece_y = skin_row * 32;
@@ -32,17 +34,19 @@ std::pair<int16_t, int16_t> View::SDLRenderer::get_skin_piece(const Model::Playe
 }
 
 void View::SDLRenderer::render_player(const Model::Player& player) {
-    auto& reference_player = game_state->get_reference_player();
+    Model::Player& reference_player = game_state->get_reference_player();
     auto skin_piece = get_skin_piece(player);
 
-    uint16_t reference_id = reference_player.get_id();
-    int32_t reference_x = reference_player.get_x();
-    int32_t reference_y = reference_player.get_y();
+    short_id_t reference_id = reference_player.get_id();
+    Physics::Vector2D reference_position = reference_player.get_position();
+    coord_t reference_x = reference_position.get_x();
+    coord_t reference_y = reference_position.get_y();
 
-    uint16_t id = player.get_id();
-    uint16_t skin_id = player.get_skin_id();
-    int32_t x = player.get_x();
-    int32_t y = player.get_y();
+    short_id_t id = player.get_id();
+    short_id_t skin_id = player.get_skin_id();
+    Physics::Vector2D position = player.get_position();
+    coord_t x = position.get_x();
+    coord_t y = position.get_y();
 
     if (id == reference_id) {
         renderer.Copy(
@@ -53,7 +57,10 @@ void View::SDLRenderer::render_player(const Model::Player& player) {
     } else {
         renderer.Copy(texture_storage->get_texture(skin_id),
                       SDL2pp::Rect(skin_piece.first, skin_piece.second, 32, 32),
-                      SDL2pp::Point(x - reference_x, y - reference_y), player.get_angle(),
+                      SDL2pp::Point(
+                        x + (window->get_width() / 2) - 15 - reference_x,
+                        y + (window->get_height() / 2) - 15 - reference_y),
+                      player.get_angle(),
                       SDL2pp::NullOpt, 0);
     }
 }

@@ -5,7 +5,7 @@ enum class Team { CT, TT };
 
 enum class WeaponSlot { PRIMARY, SECONDARY, MELEE, BOMB };
 
-// dfeberia ser un weapontype deberia ser lo deweapon slot?
+// deberia ser un weapontype deberia ser lo deweapon slot?
 
 enum class WeaponType { GLOCK, AK47, M3, AWP, KNIFE, BOMB };
 

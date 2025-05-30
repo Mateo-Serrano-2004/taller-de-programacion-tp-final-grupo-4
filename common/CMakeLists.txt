@@ -12,3 +12,4 @@ target_sources(cs2d_common
     )
 
 add_subdirectory(DTO/)
+add_subdirectory(model/)

@@ -85,13 +85,13 @@ void GameCreationScene::setUpGameCreation() {
     QGraphicsProxyWidget* proxy = addWidget(container);
     centerWidget(proxy);
 
-    connect(gameNameInput, &QLineEdit::textChanged, this, [createButton, this]() {
+    connect(gameNameInput, &QLineEdit::textChanged, this, [this]() {
         bool hasName = !gameNameInput->text().isEmpty();
         bool hasMap = mapListWidget->currentItem() != nullptr;
         createButton->setEnabled(hasName && hasMap);
     });
 
-    connect(mapListWidget, &QListWidget::itemSelectionChanged, this, [createButton, this]() {
+    connect(mapListWidget, &QListWidget::itemSelectionChanged, this, [this]() {
         bool hasName = !gameNameInput->text().isEmpty();
         bool hasMap = mapListWidget->currentItem() != nullptr;
         createButton->setEnabled(hasName && hasMap);

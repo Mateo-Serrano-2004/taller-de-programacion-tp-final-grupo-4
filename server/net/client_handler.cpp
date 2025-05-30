@@ -5,7 +5,6 @@
 #include <variant>
 
 #include "server/events/overloaded.h"
-#include "server/game/match_creator.h"
 
 void ClientHandler::handle_map_request() {
     protocol.send_all_maps_names(game_manager.get_name_maps());
@@ -35,7 +34,7 @@ void ClientHandler::handle_list_games() { protocol.send_games(game_manager.get_g
 
 void ClientHandler::handle_game_event(const GameEventVariant& event) {
     if (std::holds_alternative<QuitEvent>(event)) {
-        protocol.send_match_state(MatchCreator());
+        protocol.send_match_state(DTO::GameStateDTO());
         delete sender;
     } else {
         game_queue->push(std::make_pair(player_id, event));

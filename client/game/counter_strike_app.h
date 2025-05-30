@@ -16,15 +16,17 @@ class ClientProtocol;
 namespace App {
 class CounterStrikeApp: public App {
 private:
-    Net::ClientProtocol& protocol;
+    Net::ClientProtocol* protocol;
     SDLWindow sdl_window;
     Model::GameState game_state;
     Controller::SDLController sdl_controller;
     View::SDLRenderer sdl_renderer;
     Model::TextureStorage texture_storage;
 
+    void update();
+
 public:
-    explicit CounterStrikeApp(Net::ClientProtocol& protocol);
+    explicit CounterStrikeApp(Net::ClientProtocol* protocol);
 
     void run() override;
 

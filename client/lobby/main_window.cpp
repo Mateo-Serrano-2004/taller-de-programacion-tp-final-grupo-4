@@ -28,13 +28,14 @@ MainWindow::~MainWindow() {
 
 void MainWindow::runGame() {
     this->hide();
-    App::CounterStrikeApp game(*protocol);
+    App::CounterStrikeApp game(protocol);
+    game.run();
     this->show();
     showLobbyScene();
 }
 
 void MainWindow::loadGames() {
-    auto requestGamesListEvent = std::make_shared<Model::RequestGamesListEvent>();
+    auto requestGamesListEvent = make_shared<Model::RequestGamesListEvent>();
     DTO::EventDTOCreator creator(requestGamesListEvent);
     protocol->send_event(creator);
 
@@ -63,10 +64,9 @@ void MainWindow::showWelcomeScene() {
             welcomeScene, &WelcomeScene::startClicked, this,
             [this](QString username, QString ip, QString port) {
                 protocol = new Net::ClientProtocol(ip.toStdString(), port.toStdString());
-                auto usernameEvent = std::make_shared<Model::UsernameEvent>(username.toStdString());
+                auto usernameEvent = make_shared<Model::UsernameEvent>(username.toStdString());
                 DTO::EventDTOCreator creator(usernameEvent);
                 protocol->send_event(creator);
-
 
                 showLobbyScene();
             },

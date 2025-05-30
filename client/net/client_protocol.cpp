@@ -12,85 +12,57 @@ void Net::ClientProtocol::send_event(const DTO::EventDTOCreator& event_dto_creat
     skt.sendall(event_dto.data.data(), event_dto.size);
 }
 
-void Net::ClientProtocol::receive_dropped_weapons(std::vector<DropWeaponDTO>& dropped_weapons) {
-    uint8_t dropped_weapons_size;
-    skt.recvall(&dropped_weapons_size, sizeof(dropped_weapons_size));
-
-    dropped_weapons.resize(dropped_weapons_size);
-
-    for (uint8_t i = 0; i < dropped_weapons_size; i++) {
-        DropWeaponDTO dropped_weapon = DropWeaponDTO();
-        skt.recvall(&dropped_weapon, sizeof(dropped_weapon));
-
-        dropped_weapon.weapon.total_ammo = ntohs(dropped_weapon.weapon.total_ammo);
-        dropped_weapon.position_x = ntohs(dropped_weapon.position_x);
-        dropped_weapon.position_y = ntohs(dropped_weapon.position_y);
-
-        dropped_weapons[i] = dropped_weapon;
-    }
-}
-
-void Net::ClientProtocol::receive_player_list(std::vector<PlayerDTO>& players) {
+void Net::ClientProtocol::receive_player_list(std::vector<DTO::PlayerDTO>& players) {
     uint8_t players_size;
     skt.recvall(&players_size, sizeof(players_size));
 
-    players.resize(players_size);
-
     for (uint8_t i = 0; i < players_size; i++) {
-        PlayerDTO player;
+        uint8_t name_size;
+        std::vector<char> name;
+        short_id_t player_id;
+        short_id_t skin_id;
+        short_id_t skin_piece;
+        angle_t angle;
+        coord_t position_x;
+        coord_t position_y;
 
-        uint8_t name_size = 0;
         skt.recvall(&name_size, sizeof(name_size));
 
-        std::vector<char> name(name_size);
+        name.resize(name_size);
         skt.recvall(name.data(), name_size);
-        player.name = std::string(name.begin(), name.end());
 
-        skt.recvall(&player.player_id, sizeof(player.player_id));
+        skt.recvall(&player_id, sizeof(player_id));
 
-        skt.recvall(&player.skin_id, sizeof(player.skin_id));
+        skt.recvall(&skin_id, sizeof(skin_id));
 
-        WeaponDTO current_weapon = WeaponDTO();
-        skt.recvall(&current_weapon, sizeof(current_weapon));
-        player.current_weapon = current_weapon;
+        skt.recvall(&skin_piece, sizeof(skin_piece));
 
-        player.current_weapon.total_ammo = ntohs(player.current_weapon.total_ammo);
+        skt.recvall(&position_x, sizeof(position_x));
+        position_x = ntohs(position_x);
 
-        skt.recvall(&player.has_bomb, sizeof(player.has_bomb));
-        skt.recvall(&player.health, sizeof(player.health));
+        skt.recvall(&position_y, sizeof(position_y));
+        position_y = ntohs(position_y);
 
-        skt.recvall(&player.money, sizeof(player.money));
-        player.money = ntohs(player.money);
+        skt.recvall(&angle, sizeof(angle));
+        angle = ntohs(angle);
 
-        skt.recvall(&player.position_x, sizeof(player.position_x));
-        player.position_x = ntohs(player.position_x);
-
-        skt.recvall(&player.position_y, sizeof(player.position_y));
-        player.position_y = ntohs(player.position_y);
-
-        skt.recvall(&player.angle, sizeof(player.angle));
-        player.angle = ntohs(player.angle);
-
-        players[i] = player;
+        players.emplace_back(
+            player_id,
+            skin_id,
+            skin_piece,
+            angle,
+            position_x,
+            position_y,
+            std::string(name.begin(), name.end())
+        );
     }
 }
 
-DTO::MatchDTO Net::ClientProtocol::receive_match_state() {
-    DTO::MatchDTO match;
+DTO::GameStateDTO Net::ClientProtocol::receive_match_state() {
+    DTO::GameStateDTO match;
 
     skt.recvall(&match.is_valid, sizeof(match.is_valid));
-    skt.recvall(&match.time_remaining, sizeof(match.time_remaining));
-    skt.recvall(&match.round_number, sizeof(match.round_number));
-    skt.recvall(&match.ct_wins, sizeof(match.ct_wins));
-    skt.recvall(&match.tt_wins, sizeof(match.tt_wins));
-
     receive_player_list(match.players);
-    receive_dropped_weapons(match.dropped_weapons);
-
-    skt.recvall(&match.bomb_planted, sizeof(match.bomb_planted));
-    skt.recvall(&match.bomb_defused, sizeof(match.bomb_defused));
-    skt.recvall(&match.bomb_exploded, sizeof(match.bomb_exploded));
-    skt.recvall(&match.winning_team, sizeof(match.winning_team));
 
     return match;
 }

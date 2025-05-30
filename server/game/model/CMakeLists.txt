@@ -10,5 +10,3 @@ target_sources(cs2d_server
     PRIVATE ${CPP_SRC}
     PUBLIC ${H_SRC}
     )
-
-add_subdirectory(model/)

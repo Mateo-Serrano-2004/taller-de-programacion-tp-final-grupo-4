@@ -19,11 +19,11 @@ class GameStateReceiver: public Thread {
 private:
     std::atomic<bool>& keep_running;
     DTO::GameStateUpdater game_state_updater;
-    Net::ClientProtocol& protocol;
+    Net::ClientProtocol* protocol;
 
 public:
     GameStateReceiver(std::atomic<bool>& keep_running, Model::GameState* game_state,
-                      Net::ClientProtocol& protocol);
+                      Net::ClientProtocol* protocol);
 
     void run() override;
 

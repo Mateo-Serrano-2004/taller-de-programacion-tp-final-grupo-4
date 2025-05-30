@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "common/DTO/match_dto.h"
+#include "common/DTO/game_state_dto.h"
 #include "common/definitions.h"
 
 #include "player_dto_parser.h"
@@ -22,7 +22,7 @@ private:
 public:
     explicit GameStateUpdater(Model::GameState* game_state);
 
-    void update(DTO::MatchDTO&& match_dto);
+    void update(DTO::GameStateDTO& match_dto);
 
     ~GameStateUpdater() = default;
 };

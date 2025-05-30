@@ -11,16 +11,15 @@
 #include <vector>
 
 #include "common/DTO/game_info_dto.h"
-#include "common/DTO/match_dto.h"
+#include "common/DTO/game_state_dto.h"
 #include "common/queue.h"
 #include "common/thread.h"
 #include "server/events/events.h"
 
-#include "match_creator.h"
-#include "player.h"
+#include "model/movable_player.h"
 
 using GameQueue = Queue<std::pair<uint8_t, GameEventVariant>>;
-using ClientQueue = Queue<MatchCreator>;
+using ClientQueue = Queue<DTO::GameStateDTO>;
 
 class Game: public Thread {
 private:
@@ -29,7 +28,7 @@ private:
     std::string map_name;
     GameQueue game_queue;
 
-    std::map<uint8_t, Player> players;
+    std::map<uint8_t, Model::MovablePlayer> players;
     std::map<uint8_t, ClientQueue*> client_queues;
 
     std::vector<uint8_t> dropped_weapons;

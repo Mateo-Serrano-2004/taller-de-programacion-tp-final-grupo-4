@@ -5,7 +5,8 @@
 #include <arpa/inet.h>
 #include <string.h>
 
-#include "common/dto/match_dto.h"
+#include "common/DTO/game_state_dto.h"
+#include "common/definitions.h"
 #include "common/event_type.h"
 
 EventVariant ServerProtocol::receive_event() {
@@ -21,8 +22,11 @@ EventVariant ServerProtocol::receive_event() {
         case Model::EventType::MOVEMENT: {
             int8_t x = int8_t(data[1]);
             int8_t y = int8_t(data[2]);
-            uint8_t speed = uint8_t(data[3]);
-            return MovementEvent(x, y, speed);
+            return MovementEvent(x, y);
+        }
+        case Model::EventType::STOP_MOVEMENT: {
+            bool is_horizontal = int8_t(data[1]);
+            return StopMovementEvent(is_horizontal);
         }
         case Model::EventType::ROTATION: {
             int16_t angle_in_degrees = int16_t(data[1]) << 8 | int16_t(data[2]);
@@ -73,81 +77,37 @@ EventVariant ServerProtocol::receive_event() {
             return MapRequestEvent();
         }
         case Model::EventType::LEAVE_GAME: {
-            return QuitEvent();
+            return LeaveGameEvent();
         }
         default:
             throw std::invalid_argument("Invalid event code");
     }
 }
 
-void ServerProtocol::send_weapon(const WeaponDTO& weapon) {
-    uint16_t total_ammo = htons(weapon.total_ammo);
-
-    peer.sendall(&weapon.id, sizeof(weapon.id));
-    peer.sendall(&weapon.is_shooting, sizeof(weapon.is_shooting));
-    peer.sendall(&weapon.is_reloading, sizeof(weapon.is_reloading));
-    peer.sendall(&weapon.loaded_ammo, sizeof(weapon.loaded_ammo));
-    peer.sendall(&total_ammo, sizeof(total_ammo));
-}
-
-void ServerProtocol::send_player_list(const std::vector<PlayerDTO>& players) {
+void ServerProtocol::send_player_list(const std::vector<DTO::PlayerDTO>& players) {
     uint8_t players_size = players.size();
     peer.sendall(&players_size, sizeof(players_size));
 
     for (const auto& p: players) {
-        uint8_t name_size = p.name.size();
-        uint8_t player_id = p.player_id;
-        uint16_t money = htons(p.money);
-        uint16_t position_x = htons(p.position_x);
-        uint16_t position_y = htons(p.position_y);
-        uint16_t angle = htons(p.angle);
+        uint8_t name_size = static_cast<uint8_t>(p.name.size());
+        coord_t position_x = htons(p.position_x);
+        coord_t position_y = htons(p.position_y);
+        angle_t angle = htons(p.angle);
 
         peer.sendall(&name_size, sizeof(name_size));
         peer.sendall(p.name.c_str(), name_size);
-        peer.sendall(&player_id, sizeof(player_id));
+        peer.sendall(&p.player_id, sizeof(p.player_id));
         peer.sendall(&p.skin_id, sizeof(p.skin_id));
-
-        send_weapon(p.current_weapon);
-
-        peer.sendall(&p.has_bomb, sizeof(p.has_bomb));
-        peer.sendall(&p.health, sizeof(p.health));
-        peer.sendall(&money, sizeof(money));
+        peer.sendall(&p.skin_piece, sizeof(p.skin_piece));
         peer.sendall(&position_x, sizeof(position_x));
         peer.sendall(&position_y, sizeof(position_y));
         peer.sendall(&angle, sizeof(angle));
     }
 }
 
-void ServerProtocol::send_dropped_weapons(const std::vector<DropWeaponDTO>& dropped_weapons) {
-    uint8_t dropped_weapons_size = dropped_weapons.size();
-    peer.sendall(&dropped_weapons_size, sizeof(dropped_weapons_size));
-
-    for (const auto& dw: dropped_weapons) {
-        send_weapon(dw.weapon);
-
-        uint16_t position_x = htons(dw.position_x);
-        uint16_t position_y = htons(dw.position_y);
-
-        peer.sendall(&position_x, sizeof(position_x));
-        peer.sendall(&position_y, sizeof(position_y));
-    }
-}
-
-void ServerProtocol::send_match_state(const MatchCreator& mc) {
-    DTO::MatchDTO match = mc.to_dto();
-    peer.sendall(&match.is_valid, sizeof(match.is_valid));
-    peer.sendall(&match.time_remaining, sizeof(match.time_remaining));
-    peer.sendall(&match.round_number, sizeof(match.round_number));
-    peer.sendall(&match.ct_wins, sizeof(match.ct_wins));
-    peer.sendall(&match.tt_wins, sizeof(match.tt_wins));
-
-    send_player_list(match.players);
-    send_dropped_weapons(match.dropped_weapons);
-
-    peer.sendall(&match.bomb_planted, sizeof(match.bomb_planted));
-    peer.sendall(&match.bomb_defused, sizeof(match.bomb_defused));
-    peer.sendall(&match.bomb_exploded, sizeof(match.bomb_exploded));
-    peer.sendall(&match.winning_team, sizeof(match.winning_team));
+void ServerProtocol::send_match_state(const DTO::GameStateDTO& game_state_dto) {
+    peer.sendall(&game_state_dto.is_valid, sizeof(game_state_dto.is_valid));
+    send_player_list(game_state_dto.players);
 }
 
 void ServerProtocol::send_all_maps_names(const std::vector<std::string>& maps) {

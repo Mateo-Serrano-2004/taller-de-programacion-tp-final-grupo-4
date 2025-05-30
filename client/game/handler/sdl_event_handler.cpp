@@ -11,8 +11,9 @@
 #include "exception/closed_window.h"
 
 void Controller::SDLEventHandler::handle_quit_event() {
+    Shared<Model::QuitEvent> quit_event = make_shared<Model::QuitEvent>();
     try {
-        event_queue.close();
+        event_queue->close();
     } catch (ClosedQueue& error) {
         throw App::ClosedWindowException("Received a QUIT event");
     }
@@ -25,16 +26,16 @@ void Controller::SDLEventHandler::handle_keydown_event() {
     int8_t y_direction = 0;
 
     switch (key_symbol) {
-        case SDLK_LEFT:
+        case SDLK_a:
             x_direction = -1;
             break;
-        case SDLK_RIGHT:
+        case SDLK_d:
             x_direction = 1;
             break;
-        case SDLK_UP:
+        case SDLK_w:
             y_direction = -1;
             break;
-        case SDLK_DOWN:
+        case SDLK_s:
             y_direction = 1;
             break;
         default:
@@ -54,7 +55,7 @@ void Controller::SDLEventHandler::handle_keydown_event() {
     }
 
     try {
-        event_queue.try_push(movement_event);
+        event_queue->try_push(movement_event);
     } catch (ClosedQueue& error) {
         throw App::ClosedWindowException("Received a QUIT event");
     }
@@ -65,9 +66,9 @@ void Controller::SDLEventHandler::handle_keyup_event() {
     auto key_symbol = placeholder.key.keysym.sym;
     bool is_horizontal = false;
 
-    if (key_symbol == SDLK_LEFT || key_symbol == SDLK_RIGHT) {
+    if (key_symbol == SDLK_a || key_symbol == SDLK_d) {
         is_horizontal = true;
-    } else if (key_symbol == SDLK_UP || key_symbol == SDLK_DOWN) {
+    } else if (key_symbol == SDLK_w || key_symbol == SDLK_s) {
         is_horizontal = false;
     } else {
         return;
@@ -84,13 +85,13 @@ void Controller::SDLEventHandler::handle_keyup_event() {
     stop_movement_event = make_shared<Model::StopMovementEvent>(is_horizontal);
 
     try {
-        event_queue.try_push(stop_movement_event);
+        event_queue->try_push(stop_movement_event);
     } catch (ClosedQueue& error) {
         throw App::ClosedWindowException("Received a QUIT event");
     }
 }
 
-Controller::SDLEventHandler::SDLEventHandler(SharedQueue<Model::Event>& queue):
+Controller::SDLEventHandler::SDLEventHandler(SharedQueue<Model::Event>* queue):
         event_queue(queue) {}
 
 void Controller::SDLEventHandler::handle() {

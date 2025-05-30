@@ -9,8 +9,9 @@
 
 #include "client/game/dto_handler/event_dto_creator.h"
 #include "common/DTO/event_dto.h"
+#include "common/DTO/player_dto.h"
 #include "common/DTO/game_info_dto.h"
-#include "common/DTO/match_dto.h"
+#include "common/DTO/game_state_dto.h"
 #include "common/socket.h"
 
 namespace Net {
@@ -19,8 +20,7 @@ class ClientProtocol {
 private:
     Socket skt;
 
-    void receive_player_list(std::vector<PlayerDTO>& players);
-    void receive_dropped_weapons(std::vector<DropWeaponDTO>& dropped_weapons);
+    void receive_player_list(std::vector<DTO::PlayerDTO>& players);
 
     ClientProtocol(const ClientProtocol&) = delete;
     ClientProtocol& operator=(const ClientProtocol&) = delete;
@@ -32,7 +32,7 @@ public:
     explicit ClientProtocol(Socket& socket): skt(std::move(socket)) {}
 
     void send_event(const DTO::EventDTOCreator& event_dto_creator);
-    DTO::MatchDTO receive_match_state();
+    DTO::GameStateDTO receive_match_state();
     std::list<GameInfoDTO> receive_game_list();
     std::list<std::string> receive_map_list();
     std::string receive_map();

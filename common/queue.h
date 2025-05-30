@@ -28,7 +28,7 @@ public:
     Queue(): max_size(UINT_MAX - 1), closed(false) {}
     explicit Queue(const unsigned int max_size): max_size(max_size), closed(false) {}
 
-    virtual bool try_push(T const& val) {
+    bool try_push(T const& val) {
         std::unique_lock<std::mutex> lck(mtx);
 
         if (closed) {
@@ -47,7 +47,7 @@ public:
         return true;
     }
 
-    virtual bool try_pop(T& val) {
+    bool try_pop(T& val) {
         std::unique_lock<std::mutex> lck(mtx);
 
         if (q.empty()) {
@@ -66,7 +66,7 @@ public:
         return true;
     }
 
-    virtual void push(T const& val) {
+    void push(T const& val) {
         std::unique_lock<std::mutex> lck(mtx);
 
         if (closed) {
@@ -85,7 +85,7 @@ public:
     }
 
 
-    virtual T pop() {
+    T pop() {
         std::unique_lock<std::mutex> lck(mtx);
 
         while (q.empty()) {
@@ -105,7 +105,7 @@ public:
         return val;
     }
 
-    virtual void close() {
+    void close() {
         std::unique_lock<std::mutex> lck(mtx);
 
         if (closed) {
@@ -137,7 +137,7 @@ public:
     explicit Queue(const unsigned int max_size): max_size(max_size), closed(false) {}
 
 
-    virtual bool try_push(void* const& val) override {
+    bool try_push(void* const& val) {
         std::unique_lock<std::mutex> lck(mtx);
 
         if (closed) {
@@ -156,7 +156,7 @@ public:
         return true;
     }
 
-    virtual bool try_pop(void*& val) override {
+    bool try_pop(void*& val) {
         std::unique_lock<std::mutex> lck(mtx);
 
         if (q.empty()) {
@@ -175,7 +175,7 @@ public:
         return true;
     }
 
-    virtual void push(void* const& val) override {
+    void push(void* const& val) {
         std::unique_lock<std::mutex> lck(mtx);
 
         if (closed) {
@@ -194,7 +194,7 @@ public:
     }
 
 
-    virtual void* pop() override {
+    void* pop() {
         std::unique_lock<std::mutex> lck(mtx);
 
         while (q.empty()) {
@@ -214,7 +214,7 @@ public:
         return val;
     }
 
-    virtual void close() override {
+    void close() {
         std::unique_lock<std::mutex> lck(mtx);
 
         if (closed) {
@@ -237,16 +237,16 @@ public:
     explicit Queue(const unsigned int max_size): Queue<void*>(max_size) {}
 
 
-    bool try_push(T* const& val) override { return Queue<void*>::try_push(val); }
+    bool try_push(T* const& val) { return Queue<void*>::try_push(val); }
 
-    bool try_pop(T*& val) override { return Queue<void*>::try_pop((void*&)val); }
+    bool try_pop(T*& val) { return Queue<void*>::try_pop((void*&)val); }
 
-    void push(T* const& val) override { return Queue<void*>::push(val); }
+    void push(T* const& val) { return Queue<void*>::push(val); }
 
 
-    T* pop() override { return (T*)Queue<void*>::pop(); }
+    T* pop() { return (T*)Queue<void*>::pop(); }
 
-    void close() override { return Queue<void*>::close(); }
+    void close() { return Queue<void*>::close(); }
 
 private:
     Queue(const Queue&) = delete;

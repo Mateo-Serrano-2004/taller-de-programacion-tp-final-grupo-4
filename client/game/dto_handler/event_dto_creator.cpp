@@ -60,7 +60,7 @@ DTO::EventDTO DTO::EventDTOCreator::create_quit_event() const {
 
     uint8_t event_dto_size = 1;
     std::vector<char> data;
-    data.push_back(static_cast<char>(0x20));
+    data.push_back(static_cast<char>(Model::EventType::LEAVE_GAME));
 
     event_dto.size = event_dto_size;
     event_dto.data = std::move(data);
@@ -94,7 +94,7 @@ DTO::EventDTO DTO::EventDTOCreator::create_join_game_event() const {
 
     uint8_t event_dto_size = 2;
     std::vector<char> data;
-    data.push_back(static_cast<char>(0x0C));
+    data.push_back(static_cast<char>(Model::EventType::JOIN_GAME));
     data.push_back(static_cast<char>(0));
 
     event_dto.size = event_dto_size;
@@ -144,7 +144,7 @@ DTO::EventDTO DTO::EventDTOCreator::create_rotation_event() const {
     int16_t angle = htons(rotation_event->get_angle_in_degrees());
     char* ptr = reinterpret_cast<char*>(&angle);
 
-    data.push_back(static_cast<char>(0x01));
+    data.push_back(static_cast<char>(Model::EventType::ROTATION));
     data.push_back(ptr[0]);
     data.push_back(ptr[1]);
 

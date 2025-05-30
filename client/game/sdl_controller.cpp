@@ -1,5 +1,6 @@
 #include "sdl_controller.h"
 
+#include <iostream>
 #include <cstdint>
 
 #include <SDL2/SDL.h>
@@ -12,18 +13,17 @@
 #include "event/rotation_event.h"
 #include "exception/closed_window.h"
 #include "model/game_state.h"
-#include "model/player.h"
 #include "window/sdl_window.h"
 
-Controller::SDLController::SDLController(Net::ClientProtocol& protocol, App::SDLWindow* window,
+Controller::SDLController::SDLController(Net::ClientProtocol* protocol, App::SDLWindow* window,
                                          Model::GameState* game_state):
-        keep_running(true),
         protocol(protocol),
         window(window),
         game_state(game_state),
-        sdl_event_handler(dispatched_events_queue),
-        event_sender(keep_running, dispatched_events_queue, protocol),
-        game_state_receiver(keep_running, game_state, protocol) {}
+        sdl_event_handler(&dispatched_events_queue),
+        event_sender(&dispatched_events_queue, protocol, keep_running),
+        game_state_receiver(keep_running, game_state, protocol),
+        keep_running(true) {}
 
 void Controller::SDLController::dispatch_events() {
     if (!keep_running) {

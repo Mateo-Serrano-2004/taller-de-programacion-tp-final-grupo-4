@@ -16,7 +16,7 @@ class Event;
 namespace Controller {
 class SDLEventHandler {
 private:
-    SharedQueue<Model::Event>& event_queue;
+    SharedQueue<Model::Event>* event_queue;
     Model::HandlerState handler_state;
     SDL_Event placeholder;
 
@@ -25,7 +25,7 @@ private:
     void handle_keyup_event();
 
 public:
-    explicit SDLEventHandler(SharedQueue<Model::Event>& queue);
+    explicit SDLEventHandler(SharedQueue<Model::Event>* queue);
 
     void handle();
 

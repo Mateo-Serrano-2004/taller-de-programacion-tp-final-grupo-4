@@ -15,13 +15,16 @@ class ClientProtocol;
 namespace Controller {
 class EventSender: public Thread {
 private:
+    SharedQueue<Model::Event>* event_queue;
+    Net::ClientProtocol* protocol;
     std::atomic<bool>& keep_running;
-    SharedQueue<Model::Event>& event_queue;
-    Net::ClientProtocol& protocol;
 
 public:
-    EventSender(std::atomic<bool>& keep_running, SharedQueue<Model::Event>& queue,
-                Net::ClientProtocol& protocol);
+    EventSender(
+        SharedQueue<Model::Event>* queue,
+        Net::ClientProtocol* protocol,
+        std::atomic<bool>& keep_running
+    );
 
     void run() override;
 

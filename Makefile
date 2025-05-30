@@ -2,7 +2,7 @@
 
 NAME := cs2d
 
-compile-debug:
+debug:
 	mkdir -p build/
 	cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Debug
 	cmake --build  build/
