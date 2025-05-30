@@ -13,7 +13,7 @@ private:
     Physics::Vector2D movement_direction;
 
 public:
-    MovablePlayer(short_id_t id, std::string& name);
+    MovablePlayer(short_id_t id, const std::string& name);
 
     MovablePlayer(short_id_t id, short_id_t skin_id, short_id_t skin_piece, angle_t angle,
                   std::string name, Physics::Vector2D position,

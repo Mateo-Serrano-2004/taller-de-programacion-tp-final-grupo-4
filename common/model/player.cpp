@@ -4,7 +4,7 @@
 #include <utility>
 
 Model::Player::Player(short_id_t id, const std::string& name):
-        id(id), skin_id(0), skin_piece(0), angle(0), name(), position(0, 0) {}
+        id(id), skin_id(0), skin_piece(0), angle(0), name(name), position(0, 0) {}
 
 Model::Player::Player(short_id_t id, short_id_t skin_id, short_id_t skin_piece, angle_t angle,
                       const std::string& name, const Physics::Vector2D& position):

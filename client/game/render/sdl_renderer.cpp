@@ -57,8 +57,8 @@ void View::SDLRenderer::render_player(const Model::Player& player) {
     } else {
         renderer.Copy(texture_storage->get_texture(skin_id),
                       SDL2pp::Rect(skin_piece.first, skin_piece.second, 32, 32),
-                      SDL2pp::Point(x + (window->get_width() / 2) - 15 - reference_x,
-                                    y + (window->get_height() / 2) - 15 - reference_y),
+                      SDL2pp::Point(x + (window->get_width() / 2) - reference_x,
+                                    y + (window->get_height() / 2) - reference_y),
                       player.get_angle(), SDL2pp::NullOpt, 0);
     }
 }

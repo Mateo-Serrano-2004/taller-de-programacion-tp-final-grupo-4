@@ -3,7 +3,8 @@
 #include <string>
 #include <utility>
 
-Model::MovablePlayer::MovablePlayer(short_id_t id, std::string& name): Model::Player(id, name) {}
+Model::MovablePlayer::MovablePlayer(short_id_t id, const std::string& name):
+        Model::Player(id, name) {}
 
 Model::MovablePlayer::MovablePlayer(short_id_t id, short_id_t skin_id, short_id_t skin_piece,
                                     angle_t angle, std::string name, Physics::Vector2D position,
