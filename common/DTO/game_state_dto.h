@@ -14,6 +14,6 @@ public:
     GameStateDTO();
     GameStateDTO(bool is_valid, const std::vector<PlayerDTO>& players);
 };
-};
+};  // namespace DTO
 
 #endif  // COMMON_DTO_GAME_STATE_DTO_H

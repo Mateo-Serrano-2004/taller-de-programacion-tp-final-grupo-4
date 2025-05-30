@@ -1,9 +1,7 @@
 #include "movement_event.h"
 
 Model::MovementEvent::MovementEvent(int8_t x, int8_t y):
-        Model::Event(Model::EventType::MOVEMENT),
-        x_direction(x),
-        y_direction(y) {}
+        Model::Event(Model::EventType::MOVEMENT), x_direction(x), y_direction(y) {}
 
 int8_t Model::MovementEvent::get_x_direction() const { return x_direction; }
 

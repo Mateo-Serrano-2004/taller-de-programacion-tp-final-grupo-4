@@ -5,6 +5,7 @@
 
 #include "common/DTO/player_dto.h"
 #include "common/definitions.h"
+
 #include "vector_2d.h"
 
 namespace Model {
@@ -21,19 +22,10 @@ protected:
     Player& operator=(const Player&) = delete;
 
 public:
-    Player(
-        short_id_t id,
-        std::string name
-    );
+    Player(short_id_t id, const std::string& name);
 
-    Player(
-        short_id_t id,
-        short_id_t skin_id,
-        short_id_t skin_piece,
-        angle_t angle,
-        std::string name,
-        Physics::Vector2D position
-    );
+    Player(short_id_t id, short_id_t skin_id, short_id_t skin_piece, angle_t angle,
+           const std::string& name, const Physics::Vector2D& position);
 
     Player(Player&&) = default;
     Player& operator=(Player&&) = default;

@@ -20,11 +20,8 @@ private:
     std::atomic<bool>& keep_running;
 
 public:
-    EventSender(
-        SharedQueue<Model::Event>* queue,
-        Net::ClientProtocol* protocol,
-        std::atomic<bool>& keep_running
-    );
+    EventSender(SharedQueue<Model::Event>* queue, Net::ClientProtocol* protocol,
+                std::atomic<bool>& keep_running);
 
     void run() override;
 

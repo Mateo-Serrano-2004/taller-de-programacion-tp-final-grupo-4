@@ -1,7 +1,7 @@
 #include "sdl_controller.h"
 
-#include <iostream>
 #include <cstdint>
+#include <iostream>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>

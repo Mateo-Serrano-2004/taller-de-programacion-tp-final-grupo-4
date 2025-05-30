@@ -46,15 +46,8 @@ void Net::ClientProtocol::receive_player_list(std::vector<DTO::PlayerDTO>& playe
         skt.recvall(&angle, sizeof(angle));
         angle = ntohs(angle);
 
-        players.emplace_back(
-            player_id,
-            skin_id,
-            skin_piece,
-            angle,
-            position_x,
-            position_y,
-            std::string(name.begin(), name.end())
-        );
+        players.emplace_back(player_id, skin_id, skin_piece, angle, position_x, position_y,
+                             std::string(name.begin(), name.end()));
     }
 }
 

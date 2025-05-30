@@ -2,11 +2,11 @@
 #define COMMON_MODEL_GAME_STATE_H
 
 #include <map>
-#include <vector>
 #include <mutex>
+#include <vector>
 
-#include "common/model/player.h"
 #include "common/definitions.h"
+#include "common/model/player.h"
 
 
 namespace DTO {

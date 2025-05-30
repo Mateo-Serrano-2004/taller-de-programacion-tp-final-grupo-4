@@ -9,7 +9,6 @@ class MovementEvent {
 private:
     int8_t x;
     int8_t y;
-    uint8_t speed;
 
 public:
     MovementEvent(int8_t x, int8_t y): x(x), y(y) {}
@@ -22,7 +21,7 @@ private:
     bool is_horizontal;
 
 public:
-    StopMovementEvent(bool is_horizontal): is_horizontal(is_horizontal) {}
+    explicit StopMovementEvent(bool is_horizontal): is_horizontal(is_horizontal) {}
     bool is_movement_horizontal() const { return is_horizontal; }
 };
 
@@ -159,10 +158,10 @@ public:
     QuitEvent() {}
 };
 
-using GameEventVariant = std::variant<LeaveGameEvent, MovementEvent, StopMovementEvent,
-                                      RotationEvent, DropWeaponEvent, UseWeaponEvent,
-                                      DefuseBombEvent, SwitchWeaponEvent, ReloadWeaponEvent,
-                                      BuyEvent, BuyAmmoEvent, QuitEvent>;
+using GameEventVariant =
+        std::variant<LeaveGameEvent, MovementEvent, StopMovementEvent, RotationEvent,
+                     DropWeaponEvent, UseWeaponEvent, DefuseBombEvent, SwitchWeaponEvent,
+                     ReloadWeaponEvent, BuyEvent, BuyAmmoEvent, QuitEvent>;
 
 using EventVariant = std::variant<GameEventVariant, UsernameEvent, CreateGameEvent, MapRequestEvent,
                                   JoinGameEvent, ListGamesEvent>;

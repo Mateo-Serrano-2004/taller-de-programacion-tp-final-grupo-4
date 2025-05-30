@@ -1,7 +1,7 @@
 #include "game_state_receiver.h"
 
-#include <iostream>
 #include <atomic>
+#include <iostream>
 #include <utility>
 
 #include "client/net/client_protocol.h"

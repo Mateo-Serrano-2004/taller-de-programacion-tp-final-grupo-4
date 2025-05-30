@@ -46,7 +46,8 @@ void Game::handle_leave_game(const uint8_t& player_id) {
 void Game::handle_movement(const uint8_t& player_id, const MovementEvent& event) {
     auto it = players.find(player_id);
     if (it != players.end()) {
-        it->second.update_movement_direction_by_merge(Physics::Vector2D((event.get_x()), (event.get_y())));
+        it->second.update_movement_direction_by_merge(
+                Physics::Vector2D((event.get_x()), (event.get_y())));
     }
 }
 
@@ -55,28 +56,28 @@ void Game::tick() {  // agregar current_tick
     if (game_queue.try_pop(event_info)) {
         uint8_t player_id = event_info.first;
         GameEventVariant event = event_info.second;
-        std::visit(overloaded{[player_id, this](const MovementEvent& e) {
-                                  handle_movement(player_id, e);
-                              },
-                              [player_id, this](const StopMovementEvent& e) {
-                                  auto it = players.find(player_id);
-                                  if (it != players.end()) {
-                                    if (e.is_movement_horizontal()) {
-                                        it->second.stop_horizontal_movement();
-                                    } else {
-                                        it->second.stop_vertical_movement();
-                                    }
-                                  }
-                              },
-                              [player_id, this](const LeaveGameEvent&) {
-                                  handle_leave_game(player_id);
-                              },
-                              [this](const RotationEvent&) {}, [this](const DropWeaponEvent&) {},
-                              [this](const UseWeaponEvent&) {}, [this](const DefuseBombEvent&) {},
-                              [this](const SwitchWeaponEvent&) {},
-                              [this](const ReloadWeaponEvent&) {}, [this](const BuyEvent&) {},
-                              [this](const BuyAmmoEvent&) {}, [player_id, this](const QuitEvent&) {handle_leave_game(player_id);}},
-                   event);
+        std::visit(
+                overloaded{
+                        [player_id, this](const MovementEvent& e) {
+                            handle_movement(player_id, e);
+                        },
+                        [player_id, this](const StopMovementEvent& e) {
+                            auto it = players.find(player_id);
+                            if (it != players.end()) {
+                                if (e.is_movement_horizontal()) {
+                                    it->second.stop_horizontal_movement();
+                                } else {
+                                    it->second.stop_vertical_movement();
+                                }
+                            }
+                        },
+                        [player_id, this](const LeaveGameEvent&) { handle_leave_game(player_id); },
+                        [this](const RotationEvent&) {}, [this](const DropWeaponEvent&) {},
+                        [this](const UseWeaponEvent&) {}, [this](const DefuseBombEvent&) {},
+                        [this](const SwitchWeaponEvent&) {}, [this](const ReloadWeaponEvent&) {},
+                        [this](const BuyEvent&) {}, [this](const BuyAmmoEvent&) {},
+                        [player_id, this](const QuitEvent&) { handle_leave_game(player_id); }},
+                event);
     }
 
     // aca deberia loopear por la cantidad de ticks perdidos? teniendo registro aca mismo?

@@ -1,8 +1,8 @@
 #include "vector_2d.h"
 
-Physics::Vector2D::Vector2D() : x(0), y(0) {}
+Physics::Vector2D::Vector2D(): x(0), y(0) {}
 
-Physics::Vector2D::Vector2D(coord_t x, coord_t y) : x(x), y(y) {}
+Physics::Vector2D::Vector2D(coord_t x, coord_t y): x(x), y(y) {}
 
 coord_t Physics::Vector2D::get_x() const { return x; }
 

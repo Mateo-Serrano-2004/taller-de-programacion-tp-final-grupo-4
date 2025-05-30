@@ -14,9 +14,8 @@
 #include "common/DTO/game_state_dto.h"
 #include "common/queue.h"
 #include "common/thread.h"
-#include "server/events/events.h"
-
 #include "model/movable_player.h"
+#include "server/events/events.h"
 
 using GameQueue = Queue<std::pair<uint8_t, GameEventVariant>>;
 using ClientQueue = Queue<DTO::GameStateDTO>;

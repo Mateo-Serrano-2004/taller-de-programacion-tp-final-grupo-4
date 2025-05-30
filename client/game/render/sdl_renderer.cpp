@@ -22,8 +22,8 @@ View::SDLRenderer::SDLRenderer(App::SDLWindow* sdl_window, Model::GameState* gam
 std::pair<uint16_t, uint16_t> View::SDLRenderer::get_skin_piece(const Model::Player& player) {
     short_id_t skin_piece = player.get_skin_piece();
 
-    uint16_t skin_row = skin_piece ? (uint16_t) ((skin_piece - 1) / 2) : 0;
-    uint16_t skin_column = (uint16_t) (skin_piece % 2);
+    uint16_t skin_row = skin_piece ? (uint16_t)((skin_piece - 1) / 2) : 0;
+    uint16_t skin_column = (uint16_t)(skin_piece % 2);
 
     uint16_t skin_piece_x = skin_column * 32;
     uint16_t skin_piece_y = skin_row * 32;
@@ -57,11 +57,9 @@ void View::SDLRenderer::render_player(const Model::Player& player) {
     } else {
         renderer.Copy(texture_storage->get_texture(skin_id),
                       SDL2pp::Rect(skin_piece.first, skin_piece.second, 32, 32),
-                      SDL2pp::Point(
-                        x + (window->get_width() / 2) - 15 - reference_x,
-                        y + (window->get_height() / 2) - 15 - reference_y),
-                      player.get_angle(),
-                      SDL2pp::NullOpt, 0);
+                      SDL2pp::Point(x + (window->get_width() / 2) - 15 - reference_x,
+                                    y + (window->get_height() / 2) - 15 - reference_y),
+                      player.get_angle(), SDL2pp::NullOpt, 0);
     }
 }
 

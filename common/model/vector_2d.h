@@ -26,6 +26,6 @@ public:
 
     ~Vector2D() = default;
 };
-};
+};  // namespace Physics
 
 #endif  // SERVER_GAME_VECTOR_2D_H

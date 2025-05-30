@@ -10,8 +10,8 @@
 #endif  // ERROR
 
 #include <chrono>
-#include <memory>
 #include <cstdint>
+#include <memory>
 
 #include "queue.h"
 

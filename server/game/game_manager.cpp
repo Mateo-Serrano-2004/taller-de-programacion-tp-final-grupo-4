@@ -5,7 +5,8 @@
 #include <bits/algorithmfwd.h>
 
 uint8_t GameManager::create_game(const std::string& party_name, const std::string& map_name,
-                                 const std::string& username, Queue<DTO::GameStateDTO>& client_queue) {
+                                 const std::string& username,
+                                 Queue<DTO::GameStateDTO>& client_queue) {
     std::lock_guard<std::mutex> lock(mtx);
     games[game_counter] = std::move(std::make_unique<Game>(party_name, map_name));
     games[game_counter]->add_player(username, client_queue);

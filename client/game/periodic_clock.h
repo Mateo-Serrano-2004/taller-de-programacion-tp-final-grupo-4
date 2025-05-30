@@ -11,4 +11,4 @@ public:
     ~PeriodicClock() = default;
 };
 
-#endif // CLIENT_GAME_PERIODIC_CLOCK_H
+#endif  // CLIENT_GAME_PERIODIC_CLOCK_H

@@ -36,11 +36,8 @@ App::CounterStrikeApp::CounterStrikeApp(Net::ClientProtocol* protocol):
 
 void App::CounterStrikeApp::run() {
     try {
-        PeriodicClock clock(
-            40,
-            [this] () { this->update(); }
-        );
-    } catch (std::exception& e) {
+        PeriodicClock clock(40, [this]() { this->update(); });
+    } catch (std::exception&) {
         std::cerr << "Exception during initialization";
     }
 }

@@ -12,6 +12,18 @@ struct ClosedQueue: public std::runtime_error {
     ClosedQueue(): std::runtime_error("The queue is closed") {}
 };
 
+/*
+ * Multiproducer/Multiconsumer Blocking Queue (MPMC)
+ *
+ * Queue is a generic MPMC queue with blocking operations
+ * push() and pop().
+ *
+ * Two additional methods, try_push() and try_pop() allow
+ * non-blocking operations.
+ *
+ * On a closed queue, any method will raise ClosedQueue.
+ *
+ * */
 template <typename T, class C = std::deque<T> >
 class Queue {
 private:
@@ -27,6 +39,7 @@ private:
 public:
     Queue(): max_size(UINT_MAX - 1), closed(false) {}
     explicit Queue(const unsigned int max_size): max_size(max_size), closed(false) {}
+
 
     bool try_push(T const& val) {
         std::unique_lock<std::mutex> lck(mtx);
@@ -239,7 +252,7 @@ public:
 
     bool try_push(T* const& val) { return Queue<void*>::try_push(val); }
 
-    bool try_pop(T*& val) { return Queue<void*>::try_pop((void*&)val); }
+    bool try_pop(T*& val) { return Queue<void*>::try_pop(static_cast<void*&>(val)); }
 
     void push(T* const& val) { return Queue<void*>::push(val); }
 
