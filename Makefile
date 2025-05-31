@@ -36,5 +36,20 @@ install-qt5:
 
 install: install-compile-tools install-sdl2 install-qt5
 
+test_round_end:
+	mkdir -p build
+	g++ -std=c++20 -I. \
+	    tests/test_round_end.cpp \
+	    common/DTO/game_state_dto.cpp \
+	    common/DTO/player_dto.cpp \
+	    common/model/vector_2d.cpp \
+	    common/model/player.cpp \
+	    common/periodic_clock.cpp \
+	    server/game/model/movable_player.cpp \
+	    server/game/game.cpp \
+	    server/game/round.cpp \
+	    -o build/test_round_end \
+	    -lpthread
+
 clean:
 	rm -Rf ./build
