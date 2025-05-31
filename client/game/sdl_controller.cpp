@@ -13,6 +13,7 @@
 #include "event/rotation_event.h"
 #include "exception/closed_window.h"
 #include "handler/game_state_manager.h"
+#include "handler/in_game_event_handler_strategy.h"
 #include "window/sdl_window.h"
 
 Controller::SDLController::SDLController(Net::ClientProtocol* protocol, App::SDLWindow* window,
@@ -20,18 +21,18 @@ Controller::SDLController::SDLController(Net::ClientProtocol* protocol, App::SDL
         protocol(protocol),
         window(window),
         game_state_manager(game_state_manager),
-        sdl_event_handler(&dispatched_events_queue),
+        sdl_event_handler(&dispatched_events_queue, make_shared<Controller::InGameEventHandlerStrategy>(&dispatched_events_queue)),
         event_sender(&dispatched_events_queue, protocol, keep_running),
         game_state_receiver(keep_running, game_state_manager, protocol),
         keep_running(true) {}
 
 void Controller::SDLController::dispatch_events() {
     if (!keep_running) {
-        throw App::ClosedWindowException("Received a QUIT event");
+        throw App::ClosedWindowException("Finished running");
     }
     try {
         sdl_event_handler.handle();
     } catch (...) {
-        throw App::ClosedWindowException("Received a QUIT event");
+        throw App::ClosedWindowException("Finished running");
     }
 }

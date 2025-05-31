@@ -1,109 +1,60 @@
 #include "sdl_event_handler.h"
 
-#include <atomic>
-#include <iostream>
 #include <memory>
 
 #include "common/definitions.h"
+
 #include "event/event.h"
-#include "event/movement_event.h"
 #include "event/quit_event.h"
-#include "event/stop_movement_event.h"
+#include "event/movement_event.h"
 #include "exception/closed_window.h"
 
 void Controller::SDLEventHandler::handle_quit_event() {
     Shared<Model::QuitEvent> quit_event = make_shared<Model::QuitEvent>();
     try {
-        event_queue->close();
+        processor_event_queue->push(quit_event);
+        processor_event_queue->close();
+        handler_strategy_queue->close();
     } catch (ClosedQueue& error) {
-        throw App::ClosedWindowException("Received a QUIT event");
+        throw App::ClosedWindowException("End of queue communication");
     }
 }
 
-void Controller::SDLEventHandler::handle_keydown_event() {
-    Shared<Model::MovementEvent> movement_event;
-    auto key_symbol = placeholder.key.keysym.sym;
-    int8_t x_direction = 0;
-    int8_t y_direction = 0;
-
-    switch (key_symbol) {
-        case SDLK_a:
-            x_direction = -1;
-            break;
-        case SDLK_d:
-            x_direction = 1;
-            break;
-        case SDLK_w:
-            y_direction = -1;
-            break;
-        case SDLK_s:
-            y_direction = 1;
-            break;
-        default:
-            return;
-    }
-
-    if (x_direction && !handler_state.moving_horizontally) {
-        handler_state.moving_horizontally = true;
-        movement_event = make_shared<Model::MovementEvent>(x_direction, 0);
-    } else if (y_direction && !handler_state.moving_vertically) {
-        handler_state.moving_vertically = true;
-        movement_event = make_shared<Model::MovementEvent>(0, y_direction);
-    }
-
-    if (!movement_event) {
-        return;
-    }
-
-    try {
-        event_queue->try_push(movement_event);
-    } catch (ClosedQueue& error) {
-        throw App::ClosedWindowException("Received a QUIT event");
-    }
+Controller::SDLEventHandler::SDLEventHandler(
+    SharedQueue<Model::Event>* queue,
+    Shared<Controller::SDLEventHandlerStrategy> strategy
+): processor_event_queue(queue),
+   handler_strategy(strategy),
+   handler_strategy_queue(strategy->get_communication_queue()) {
+    start();
 }
-
-void Controller::SDLEventHandler::handle_keyup_event() {
-    Shared<Model::StopMovementEvent> stop_movement_event;
-    auto key_symbol = placeholder.key.keysym.sym;
-    bool is_horizontal = false;
-
-    if (key_symbol == SDLK_a || key_symbol == SDLK_d) {
-        is_horizontal = true;
-    } else if (key_symbol == SDLK_w || key_symbol == SDLK_s) {
-        is_horizontal = false;
-    } else {
-        return;
-    }
-
-    if (is_horizontal && handler_state.moving_horizontally) {
-        handler_state.moving_horizontally = false;
-    } else if (!is_horizontal && handler_state.moving_vertically) {
-        handler_state.moving_vertically = false;
-    } else {
-        return;
-    }
-
-    stop_movement_event = make_shared<Model::StopMovementEvent>(is_horizontal);
-
-    try {
-        event_queue->try_push(stop_movement_event);
-    } catch (ClosedQueue& error) {
-        throw App::ClosedWindowException("Received a QUIT event");
-    }
-}
-
-Controller::SDLEventHandler::SDLEventHandler(SharedQueue<Model::Event>* queue):
-        event_queue(queue) {}
 
 void Controller::SDLEventHandler::handle() {
     while (SDL_PollEvent(&placeholder)) {
-        auto event_type = placeholder.type;
-        if (event_type == SDL_QUIT) {
+        if (placeholder.type == SDL_QUIT) {
             handle_quit_event();
-        } else if (event_type == SDL_KEYDOWN) {
-            handle_keydown_event();
-        } else if (event_type == SDL_KEYUP) {
-            handle_keyup_event();
+        } else {
+            handler_strategy_queue->push(make_shared<SDL_Event>(placeholder));
         }
     }
+}
+
+void Controller::SDLEventHandler::run() {
+    bool running = true;
+    while (running) {
+        try {
+            auto event = handler_strategy_queue->pop();
+            auto new_strategy = handler_strategy->handle(event);
+            if (new_strategy) {
+                handler_strategy = new_strategy;
+            }
+        } catch (...) {
+            running = false;
+        }
+    }
+}
+
+Controller::SDLEventHandler::~SDLEventHandler() {
+    stop();
+    join();
 }

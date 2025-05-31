@@ -111,8 +111,10 @@ DTO::EventDTO DTO::EventDTOCreator::create_movement_event() const {
     uint8_t event_dto_size = 3;
     std::vector<char> data;
     data.push_back(static_cast<char>(Model::EventType::MOVEMENT));
-    data.push_back(static_cast<char>(movement_event->get_x_direction()));
-    data.push_back(static_cast<char>(movement_event->get_y_direction()));
+
+    auto direction = movement_event->get_direction();
+    data.push_back(static_cast<char>(direction.get_x()));
+    data.push_back(static_cast<char>(direction.get_y()));
 
     event_dto.size = event_dto_size;
     event_dto.data = std::move(data);

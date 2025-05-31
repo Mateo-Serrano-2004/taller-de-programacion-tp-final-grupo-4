@@ -3,19 +3,19 @@
 
 #include <cstdint>
 
+#include "common/model/vector_2d.h"
+#include "common/definitions.h"
 #include "event.h"
 
 namespace Model {
 class MovementEvent: public Event {
 private:
-    int8_t x_direction;
-    int8_t y_direction;
+    Physics::Vector2D direction;
 
 public:
-    MovementEvent(int8_t x, int8_t y);
+    MovementEvent(coord_t x, coord_t y);
 
-    int8_t get_x_direction() const;
-    int8_t get_y_direction() const;
+    Physics::Vector2D get_direction() const;
 
     ~MovementEvent() override = default;
 };

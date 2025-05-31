@@ -1,8 +1,6 @@
 #include "movement_event.h"
 
-Model::MovementEvent::MovementEvent(int8_t x, int8_t y):
-        Model::Event(Model::EventType::MOVEMENT), x_direction(x), y_direction(y) {}
+Model::MovementEvent::MovementEvent(coord_t x, coord_t y):
+        Model::Event(Model::EventType::MOVEMENT), direction(x, y) {}
 
-int8_t Model::MovementEvent::get_x_direction() const { return x_direction; }
-
-int8_t Model::MovementEvent::get_y_direction() const { return y_direction; }
+Physics::Vector2D Model::MovementEvent::get_direction() const { return direction; }

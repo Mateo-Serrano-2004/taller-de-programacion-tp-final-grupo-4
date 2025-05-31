@@ -4,16 +4,17 @@
 #include <cstdint>
 
 #include "event.h"
+#include "common/definitions.h"
 
 namespace Model {
 class RotationEvent: public Event {
 private:
-    int16_t angle_in_degrees;
+    angle_t angle_in_degrees;
 
 public:
-    explicit RotationEvent(int16_t angle_in_degrees);
+    explicit RotationEvent(angle_t angle_in_degrees);
 
-    int16_t get_angle_in_degrees() const;
+    angle_t get_angle_in_degrees() const;
 
     ~RotationEvent() override = default;
 };
