@@ -96,7 +96,6 @@ void MainWindow::showGameCreationScene() {
                         gameName.toStdString(), selectedMap.toStdString());
                 DTO::EventDTOCreator creator(createGameEvent);
                 protocol->send_event(creator);
-
                 runGame();
             },
             Qt::QueuedConnection);

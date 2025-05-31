@@ -19,11 +19,11 @@ void Game::handle(uint8_t player_id, const GameEventVariant& event) {
                            handle_stop_movement(player_id, e);
                        },
                        [player_id, this](const LeaveGameEvent&) { handle_leave_game(player_id); },
+                       [player_id, this](const QuitEvent&) { handle_leave_game(player_id); },
                        [this](const RotationEvent&) {}, [this](const DropWeaponEvent&) {},
                        [this](const UseWeaponEvent&) {}, [this](const DefuseBombEvent&) {},
                        [this](const SwitchWeaponEvent&) {}, [this](const ReloadWeaponEvent&) {},
-                       [this](const BuyEvent&) {}, [this](const BuyAmmoEvent&) {},
-                       [player_id, this](const QuitEvent&) { handle_leave_game(player_id); }},
+                       [this](const BuyEvent&) {}, [this](const BuyAmmoEvent&) {}},
             event);
 }
 

@@ -5,8 +5,9 @@ void ClientHandlerSender::run() {
         try {
             DTO::GameStateDTO game = sender_queue.pop();
             protocol.send_game_state(game);
-        } catch (const ClosedQueue&) {
-            break;
+        } catch (const std::exception& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+            kill();
         }
     }
 }
