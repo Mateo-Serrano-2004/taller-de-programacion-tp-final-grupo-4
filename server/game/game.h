@@ -16,6 +16,7 @@
 #include "common/thread.h"
 #include "model/movable_player.h"
 #include "server/events/events.h"
+#include "round.h"
 
 using GameQueue = Queue<std::pair<uint8_t, GameEventVariant>>;
 using ClientQueue = Queue<DTO::GameStateDTO>;
@@ -33,8 +34,9 @@ private:
     std::vector<uint8_t> dropped_weapons;
     uint8_t max_players = 10;
     bool is_not_finished = true;
+    Round current_round;
 
-    void tick();  // agregar current_tick
+    void tick(uint64_t frames_to_process);  // agregar current_tick
     void broadcast_game_state();
 
     void handle(uint8_t player_id, const GameEventVariant& event);
