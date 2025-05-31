@@ -13,6 +13,11 @@ public:
 
     GameStateDTO();
     GameStateDTO(bool is_valid, const std::vector<PlayerDTO>& players);
+
+    GameStateDTO(const GameStateDTO&) = default;
+    GameStateDTO(GameStateDTO&&) = default;
+    GameStateDTO& operator =(const GameStateDTO&) = default;
+    GameStateDTO& operator =(GameStateDTO&&) = default;
 };
 };  // namespace DTO
 

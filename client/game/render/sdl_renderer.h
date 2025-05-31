@@ -7,8 +7,11 @@
 
 #include "window/sdl_window.h"
 
+namespace Controller {
+class GameStateManager;
+};
+
 namespace Model {
-class GameState;
 class Player;
 class TextureStorage;
 };  // namespace Model
@@ -17,7 +20,7 @@ namespace View {
 class SDLRenderer {
 private:
     App::SDLWindow* window;
-    Model::GameState* game_state;
+    Controller::GameStateManager* game_state_manager;
     Model::TextureStorage* texture_storage;
     SDL2pp::Renderer renderer;
 
@@ -25,7 +28,7 @@ private:
     void render_player(const Model::Player& player);
 
 public:
-    SDLRenderer(App::SDLWindow* sdl_window, Model::GameState* game_state,
+    SDLRenderer(App::SDLWindow* sdl_window, Controller::GameStateManager* game_state_manager,
                 Model::TextureStorage* texture_storage);
 
     void render();

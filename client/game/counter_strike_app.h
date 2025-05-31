@@ -2,7 +2,7 @@
 #define CLIENT_GAME_COUNTER_STRIKE_APP_H
 
 #include "client/app.h"
-#include "model/game_state.h"
+    #include "handler/game_state_manager.h"
 #include "render/sdl_renderer.h"
 #include "texture/texture_storage.h"
 #include "window/sdl_window.h"
@@ -18,7 +18,7 @@ class CounterStrikeApp: public App {
 private:
     Net::ClientProtocol* protocol;
     SDLWindow sdl_window;
-    Model::GameState game_state;
+    Controller::GameStateManager game_state_manager;
     Controller::SDLController sdl_controller;
     View::SDLRenderer sdl_renderer;
     Model::TextureStorage texture_storage;

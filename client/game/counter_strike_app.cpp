@@ -25,9 +25,9 @@ void App::CounterStrikeApp::update() {
 
 App::CounterStrikeApp::CounterStrikeApp(Net::ClientProtocol* protocol):
         protocol(protocol),
-        game_state(protocol->receive_player_id()),
-        sdl_controller(protocol, &sdl_window, &game_state),
-        sdl_renderer(&sdl_window, &game_state, &texture_storage),
+        game_state_manager(protocol->receive_player_id()),
+        sdl_controller(protocol, &sdl_window, &game_state_manager),
+        sdl_renderer(&sdl_window, &game_state_manager, &texture_storage),
         texture_storage(&sdl_renderer) {
     for (size_t i = 0; i < paths.size(); i++) {
         texture_storage.load_texture(i, paths[i]);

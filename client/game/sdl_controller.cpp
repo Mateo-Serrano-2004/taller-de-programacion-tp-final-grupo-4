@@ -12,17 +12,17 @@
 #include "event/quit_event.h"
 #include "event/rotation_event.h"
 #include "exception/closed_window.h"
-#include "model/game_state.h"
+#include "handler/game_state_manager.h"
 #include "window/sdl_window.h"
 
 Controller::SDLController::SDLController(Net::ClientProtocol* protocol, App::SDLWindow* window,
-                                         Model::GameState* game_state):
+                                         Controller::GameStateManager* game_state_manager):
         protocol(protocol),
         window(window),
-        game_state(game_state),
+        game_state_manager(game_state_manager),
         sdl_event_handler(&dispatched_events_queue),
         event_sender(&dispatched_events_queue, protocol, keep_running),
-        game_state_receiver(keep_running, game_state, protocol),
+        game_state_receiver(keep_running, game_state_manager, protocol),
         keep_running(true) {}
 
 void Controller::SDLController::dispatch_events() {

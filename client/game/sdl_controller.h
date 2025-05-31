@@ -20,15 +20,16 @@ class SDLWindow;
 }
 
 namespace Model {
-class GameState;
 class Event;
 };  // namespace Model
 namespace Controller {
+class GameStateManager;
+
 class SDLController {
 private:
     Net::ClientProtocol* protocol;
     App::SDLWindow* window;
-    Model::GameState* game_state;
+    GameStateManager* game_state_manager;
     SharedQueue<Model::Event> dispatched_events_queue;
     SDLEventHandler sdl_event_handler;
     EventSender event_sender;
@@ -37,7 +38,7 @@ private:
 
 public:
     SDLController(Net::ClientProtocol* protocol, App::SDLWindow* window,
-                  Model::GameState* game_state);
+                  GameStateManager* game_state_manager);
 
     void dispatch_events();
 

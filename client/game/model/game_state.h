@@ -2,41 +2,21 @@
 #define COMMON_MODEL_GAME_STATE_H
 
 #include <map>
-#include <mutex>
-#include <vector>
-#include <functional>
 
 #include "common/definitions.h"
 #include "common/model/player.h"
 
 
-namespace DTO {
-class GameStateUpdater;
-}
-
 namespace Model {
 class GameState {
-    friend DTO::GameStateUpdater;
-
 private:
-    std::mutex mutex;
-    std::map<uint8_t, Player> players;
-    uint8_t reference_player_id;
+    std::map<short_id_t, Player> players;
 
 public:
-    explicit GameState(const uint8_t reference_player_id):
-            reference_player_id(reference_player_id) {}
+    GameState() = default;
 
-    std::map<uint8_t, Player>& get_players();
-
-    uint8_t get_reference_player_id() const;
-    Player& get_reference_player();
-
-    void map_function_on_players(std::function<void(Player&)> func);
-
+    std::map<short_id_t, Player>& get_players();
     void register_player(Player&& player);
-
-    void update(Shared<GameState> new_game_state);
 
     ~GameState() = default;
 };

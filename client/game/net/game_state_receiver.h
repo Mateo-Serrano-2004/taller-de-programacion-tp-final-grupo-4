@@ -4,25 +4,22 @@
 #include <atomic>
 
 #include "common/thread.h"
-#include "dto_handler/game_state_updater.h"
-
-namespace Model {
-class GameState;
-};
 
 namespace Net {
 class ClientProtocol;
 };
 
 namespace Controller {
+class GameStateManager;
+
 class GameStateReceiver: public Thread {
 private:
     std::atomic<bool>& keep_running;
-    DTO::GameStateUpdater game_state_updater;
+    GameStateManager* game_state_manager;
     Net::ClientProtocol* protocol;
 
 public:
-    GameStateReceiver(std::atomic<bool>& keep_running, Model::GameState* game_state,
+    GameStateReceiver(std::atomic<bool>& keep_running, GameStateManager* game_state_manager,
                       Net::ClientProtocol* protocol);
 
     void run() override;

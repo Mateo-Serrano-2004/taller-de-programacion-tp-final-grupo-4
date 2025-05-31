@@ -9,13 +9,13 @@
 
 #include "common/definitions.h"
 #include "common/model/player.h"
-#include "model/game_state.h"
+#include "handler/game_state_manager.h"
 #include "texture/texture_storage.h"
 
-View::SDLRenderer::SDLRenderer(App::SDLWindow* sdl_window, Model::GameState* game_state,
+View::SDLRenderer::SDLRenderer(App::SDLWindow* sdl_window, Controller::GameStateManager* game_state_manager,
                                Model::TextureStorage* texture_storage):
         window(sdl_window),
-        game_state(game_state),
+        game_state_manager(game_state_manager),
         texture_storage(texture_storage),
         renderer(sdl_window->get_window(), -1, SDL_RENDERER_ACCELERATED) {}
 
@@ -34,7 +34,7 @@ std::pair<uint16_t, uint16_t> View::SDLRenderer::get_skin_piece(const Model::Pla
 }
 
 void View::SDLRenderer::render_player(const Model::Player& player) {
-    Model::Player& reference_player = game_state->get_reference_player();
+    Model::Player& reference_player = game_state_manager->get_reference_player();
     auto skin_piece = get_skin_piece(player);
 
     short_id_t reference_id = reference_player.get_id();
@@ -65,7 +65,7 @@ void View::SDLRenderer::render_player(const Model::Player& player) {
 
 void View::SDLRenderer::render() {
     renderer.Clear();
-    game_state->map_function_on_players([this](Model::Player& player) {
+    game_state_manager->map_function_on_players([this](const Model::Player& player) {
         render_player(player);
     });
     renderer.Present();
