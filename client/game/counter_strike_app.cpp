@@ -10,9 +10,9 @@
 
 #include "client/net/client_protocol.h"
 #include "common/definitions.h"
+#include "common/periodic_clock.h"
 #include "exception/closed_window.h"
 
-#include "periodic_clock.h"
 
 const std::vector<std::string> paths = {"player/ct1.bmp", "player/ct2.bmp", "player/ct3.bmp",
                                         "player/ct4.bmp", "player/t1.bmp",  "player/t2.bmp",

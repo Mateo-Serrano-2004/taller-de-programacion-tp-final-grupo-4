@@ -17,7 +17,6 @@ void ClientHandler::handle_create_game(const CreateGameEvent& event) {
     player_id = 0;
     game_queue = game_manager.get_game_queue(game_id);
     protocol.send_player_id(player_id);
-    // protocol.send_map(game_manager.get_game_map(game_id));
 }
 
 void ClientHandler::handle_join_game(const JoinGameEvent& event) {
@@ -25,7 +24,6 @@ void ClientHandler::handle_join_game(const JoinGameEvent& event) {
     player_id = game_manager.join_game(event.get_game_id(), username, sender->get_queue());
     game_queue = game_manager.get_game_queue(event.get_game_id());
     protocol.send_player_id(player_id);
-    // protocol.send_map(game_manager.get_game_map(event.get_game_id()));
 }
 
 void ClientHandler::handle_username(const UsernameEvent& event) { username = event.get_username(); }
@@ -34,7 +32,7 @@ void ClientHandler::handle_list_games() { protocol.send_games(game_manager.get_g
 
 void ClientHandler::handle_game_event(const GameEventVariant& event) {
     if (std::holds_alternative<QuitEvent>(event)) {
-        protocol.send_match_state(DTO::GameStateDTO());
+        protocol.send_game_state(DTO::GameStateDTO());
         delete sender;
     } else {
         game_queue->push(std::make_pair(player_id, event));

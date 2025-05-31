@@ -31,20 +31,16 @@ private:
     std::map<uint8_t, ClientQueue*> client_queues;
 
     std::vector<uint8_t> dropped_weapons;
-    uint8_t time_remaining = 0;
-    uint8_t bomb_planted = 0;
-    uint8_t bomb_defused = 0;
-    uint8_t bomb_exploded = 0;
-    uint8_t ct_rounds_won = 0;
-    uint8_t t_rounds_won = 0;
-    uint8_t max_players = 12;
+    uint8_t max_players = 10;
     bool is_not_finished = true;
 
     void tick();  // agregar current_tick
     void broadcast_game_state();
 
+    void handle(uint8_t player_id, const GameEventVariant& event);
     void handle_leave_game(const uint8_t& player_id);
     void handle_movement(const uint8_t& player_id, const MovementEvent& event);
+    void handle_stop_movement(const uint8_t& player_id, const StopMovementEvent& event);
 
     Game(const Game&) = delete;
     Game& operator=(const Game&) = delete;

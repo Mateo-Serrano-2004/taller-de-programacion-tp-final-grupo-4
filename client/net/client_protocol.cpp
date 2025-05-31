@@ -111,16 +111,6 @@ std::list<std::string> Net::ClientProtocol::receive_map_list() {
     return maps;
 }
 
-std::string Net::ClientProtocol::receive_map() {
-    uint8_t map_name_size;
-    skt.recvall(&map_name_size, sizeof(map_name_size));
-
-    std::vector<char> map_name(map_name_size);
-    skt.recvall(map_name.data(), map_name_size);
-
-    return std::string(map_name.begin(), map_name.end());
-}
-
 uint8_t Net::ClientProtocol::receive_player_id() {
     uint8_t player_id;
     skt.recvall(&player_id, sizeof(player_id));

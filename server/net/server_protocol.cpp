@@ -28,28 +28,6 @@ EventVariant ServerProtocol::receive_event() {
             bool is_horizontal = int8_t(data[1]);
             return StopMovementEvent(is_horizontal);
         }
-        case Model::EventType::ROTATION: {
-            int16_t angle_in_degrees = int16_t(data[1]) << 8 | int16_t(data[2]);
-            return RotationEvent(angle_in_degrees);
-        }
-        case Model::EventType::USE_WEAPON: {
-            return UseWeaponEvent(uint8_t(data[1]));
-        }
-        case Model::EventType::RELOAD_WEAPON: {
-            return ReloadWeaponEvent(uint8_t(data[1]));
-        }
-        case Model::EventType::DROP_WEAPON: {
-            return DropWeaponEvent(uint8_t(data[1]));
-        }
-        case Model::EventType::SWITCH_WEAPON: {
-            return SwitchWeaponEvent(uint8_t(data[1]));
-        }
-        case Model::EventType::BUY_AMMO: {
-            return BuyAmmoEvent(uint8_t(data[1]));
-        }
-        case Model::EventType::BUY_WEAPON: {
-            return BuyEvent(uint8_t(data[1]));
-        }
         case Model::EventType::USERNAME: {
             uint8_t username_size = uint8_t(data[1]);
             std::string username(data.data() + 2, username_size);
@@ -66,9 +44,6 @@ EventVariant ServerProtocol::receive_event() {
         }
         case Model::EventType::JOIN_GAME: {
             return JoinGameEvent(uint8_t(data[1]));
-        }
-        case Model::EventType::DEFUSE_BOMB: {
-            return DefuseBombEvent(uint8_t(data[1]));
         }
         case Model::EventType::REQUEST_GAMES_LIST: {
             return ListGamesEvent();
@@ -105,7 +80,7 @@ void ServerProtocol::send_player_list(const std::vector<DTO::PlayerDTO>& players
     }
 }
 
-void ServerProtocol::send_match_state(const DTO::GameStateDTO& game_state_dto) {
+void ServerProtocol::send_game_state(const DTO::GameStateDTO& game_state_dto) {
     peer.sendall(&game_state_dto.is_valid, sizeof(game_state_dto.is_valid));
     send_player_list(game_state_dto.players);
 }
@@ -141,12 +116,6 @@ void ServerProtocol::send_games(const std::vector<GameInfoDTO>& games) {
         peer.sendall(&map_name_size, sizeof(map_name_size));
         peer.sendall(game.map_name.c_str(), map_name_size);
     }
-}
-
-void ServerProtocol::send_map(const std::string& map) {
-    uint8_t map_name_size = map.size();
-    peer.sendall(&map_name_size, sizeof(map_name_size));
-    peer.sendall(map.c_str(), map_name_size);
 }
 
 void ServerProtocol::send_player_id(uint8_t player_id) {

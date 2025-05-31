@@ -26,10 +26,9 @@ public:
 
     EventVariant receive_event();
     void send_player_id(uint8_t player_id);
-    void send_match_state(const DTO::GameStateDTO& game_state);
+    void send_game_state(const DTO::GameStateDTO& game_state);
     void send_all_maps_names(const std::vector<std::string>& maps);
     void send_games(const std::vector<GameInfoDTO>& games);
-    void send_map(const std::string& map);
 
     ServerProtocol(ServerProtocol&&) = default;
     ServerProtocol& operator=(ServerProtocol&&) = default;

@@ -22,7 +22,7 @@ private:
 public:
     explicit GameStateUpdater(Model::GameState* game_state);
 
-    void update(DTO::GameStateDTO& match_dto);
+    void update(DTO::GameStateDTO& game_state_dto);
 
     ~GameStateUpdater() = default;
 };

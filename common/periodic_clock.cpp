@@ -5,7 +5,7 @@
 #include <functional>
 #include <thread>
 
-#include "common/definitions.h"
+#include "definitions.h"
 
 PeriodicClock::PeriodicClock(uint16_t fps, std::function<void()> on_tick) {
     bool running = true;
