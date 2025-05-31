@@ -10,9 +10,10 @@ struct GameStateDTO {
 public:
     bool is_valid;
     std::vector<PlayerDTO> players;
+    bool ended;
 
     GameStateDTO();
-    GameStateDTO(bool is_valid, const std::vector<PlayerDTO>& players);
+    GameStateDTO(bool is_valid, const std::vector<PlayerDTO>& players, bool ended);
 };
 };  // namespace DTO
 
