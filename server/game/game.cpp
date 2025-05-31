@@ -9,7 +9,7 @@
 void Game::run() {
     PeriodicClock clock(60, [this]() {
         this->tick(); /* falta número de tick */
-    });               // 60 FPS, llamar a tick() cada frame
+    });
 }
 
 void Game::handle(uint8_t player_id, const GameEventVariant& event) {
