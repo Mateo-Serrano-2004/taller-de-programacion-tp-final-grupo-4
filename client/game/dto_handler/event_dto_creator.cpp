@@ -1,5 +1,6 @@
 #include "event_dto_creator.h"
 
+#include <iostream>
 #include <cstdint>
 #include <string>
 #include <utility>
@@ -111,7 +112,7 @@ DTO::EventDTO DTO::EventDTOCreator::create_movement_event() const {
     std::vector<char> data;
     data.push_back(static_cast<char>(Model::EventType::MOVEMENT));
     data.push_back(static_cast<char>(movement_event->get_x_direction()));
-    data.push_back(static_cast<char>(movement_event->get_x_direction()));
+    data.push_back(static_cast<char>(movement_event->get_y_direction()));
 
     event_dto.size = event_dto_size;
     event_dto.data = std::move(data);

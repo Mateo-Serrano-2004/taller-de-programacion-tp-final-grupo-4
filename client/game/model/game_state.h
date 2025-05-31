@@ -4,6 +4,7 @@
 #include <map>
 #include <mutex>
 #include <vector>
+#include <functional>
 
 #include "common/definitions.h"
 #include "common/model/player.h"
@@ -30,6 +31,8 @@ public:
 
     uint8_t get_reference_player_id() const;
     Player& get_reference_player();
+
+    void map_function_on_players(std::function<void(Player&)> func);
 
     void register_player(Player&& player);
 

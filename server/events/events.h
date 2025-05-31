@@ -5,15 +5,15 @@
 #include <string>
 #include <variant>
 
+#include "common/model/vector_2d.h"
+
 class MovementEvent {
 private:
-    int8_t x;
-    int8_t y;
+    Physics::Vector2D direction;
 
 public:
-    MovementEvent(int8_t x, int8_t y): x(x), y(y) {}
-    int8_t get_x() const { return x; }
-    int8_t get_y() const { return y; }
+    MovementEvent(int8_t x, int8_t y): direction(x, y) {}
+    Physics::Vector2D get_direction() const { return direction; }
 };
 
 class StopMovementEvent {

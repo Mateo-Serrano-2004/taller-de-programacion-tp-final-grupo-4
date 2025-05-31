@@ -37,8 +37,7 @@ void Game::handle_leave_game(const uint8_t& player_id) {
 void Game::handle_movement(const uint8_t& player_id, const MovementEvent& event) {
     auto it = players.find(player_id);
     if (it != players.end()) {
-        it->second.update_movement_direction_by_merge(
-                Physics::Vector2D((event.get_x()), (event.get_y())));
+        it->second.update_movement_direction_by_merge(event.get_direction());
     }
 }
 

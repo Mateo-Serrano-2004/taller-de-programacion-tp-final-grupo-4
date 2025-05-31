@@ -65,10 +65,9 @@ void View::SDLRenderer::render_player(const Model::Player& player) {
 
 void View::SDLRenderer::render() {
     renderer.Clear();
-    const auto& players = game_state->get_players();
-    for (const auto& player: players) {
-        render_player(player.second);
-    }
+    game_state->map_function_on_players([this](Model::Player& player) {
+        render_player(player);
+    });
     renderer.Present();
 }
 

@@ -2,8 +2,6 @@
 
 #include <algorithm>
 
-#include <bits/algorithmfwd.h>
-
 uint8_t GameManager::create_game(const std::string& party_name, const std::string& map_name,
                                  const std::string& username,
                                  Queue<DTO::GameStateDTO>& client_queue) {

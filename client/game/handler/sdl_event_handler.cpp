@@ -1,6 +1,7 @@
 #include "sdl_event_handler.h"
 
 #include <atomic>
+#include <iostream>
 #include <memory>
 
 #include "common/definitions.h"
