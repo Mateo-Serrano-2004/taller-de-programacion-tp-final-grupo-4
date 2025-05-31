@@ -9,14 +9,14 @@
 #include "exception/closed_window.h"
 #include "model/game_state.h"
 
-Controller::GameStateReceiver::GameStateReceiver(std::atomic<bool>& keep_running,
-                                                 Controller::GameStateManager* game_state_manager,
+Controller::GameStateReceiver::GameStateReceiver(Controller::GameStateManager* game_state_manager,
                                                  Net::ClientProtocol* protocol):
-        keep_running(keep_running), game_state_manager(game_state_manager), protocol(protocol) {
+        game_state_manager(game_state_manager), protocol(protocol) {
     start();
 }
 
 void Controller::GameStateReceiver::run() {
+    bool keep_running = true;
     while (keep_running) {
         try {
             DTO::GameStateDTO game_state_dto = protocol->receive_match_state();

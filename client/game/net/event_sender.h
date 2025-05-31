@@ -17,11 +17,9 @@ class EventSender: public Thread {
 private:
     SharedQueue<Model::Event>* event_queue;
     Net::ClientProtocol* protocol;
-    std::atomic<bool>& keep_running;
 
 public:
-    EventSender(SharedQueue<Model::Event>* queue, Net::ClientProtocol* protocol,
-                std::atomic<bool>& keep_running);
+    EventSender(SharedQueue<Model::Event>* queue, Net::ClientProtocol* protocol);
 
     void run() override;
 

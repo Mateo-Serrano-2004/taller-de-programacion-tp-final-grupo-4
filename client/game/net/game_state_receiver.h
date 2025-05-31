@@ -14,12 +14,11 @@ class GameStateManager;
 
 class GameStateReceiver: public Thread {
 private:
-    std::atomic<bool>& keep_running;
     GameStateManager* game_state_manager;
     Net::ClientProtocol* protocol;
 
 public:
-    GameStateReceiver(std::atomic<bool>& keep_running, GameStateManager* game_state_manager,
+    GameStateReceiver(GameStateManager* game_state_manager,
                       Net::ClientProtocol* protocol);
 
     void run() override;

@@ -10,13 +10,13 @@
 #include "exception/closed_window.h"
 
 Controller::EventSender::EventSender(SharedQueue<Model::Event>* queue,
-                                     Net::ClientProtocol* protocol,
-                                     std::atomic<bool>& keep_running):
-        event_queue(queue), protocol(protocol), keep_running(keep_running) {
+                                     Net::ClientProtocol* protocol):
+        event_queue(queue), protocol(protocol) {
     start();
 }
 
 void Controller::EventSender::run() {
+    bool keep_running = true;
     while (keep_running) {
         try {
             Shared<Model::Event> event = event_queue->pop();

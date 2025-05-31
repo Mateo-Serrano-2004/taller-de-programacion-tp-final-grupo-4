@@ -34,7 +34,6 @@ private:
     SDLEventHandler sdl_event_handler;
     EventSender event_sender;
     GameStateReceiver game_state_receiver;
-    std::atomic<bool> keep_running;
 
 public:
     SDLController(Net::ClientProtocol* protocol, App::SDLWindow* window,
