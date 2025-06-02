@@ -1,0 +1,30 @@
+#include "context_manager.h"
+
+#include <mutex>
+#include <utility>
+#include <string>
+#include <iostream>
+
+#include <SDL2pp/Window.hh>
+#include <SDL2pp/Renderer.hh>
+
+#include "base_context.h"
+#include "texture/texture_storage.h"
+
+void Context::ContextManager::add_context(Shared<Context::BaseContext> context) {
+    std::lock_guard<std::mutex> lock(mutex);
+    contexts.insert({ context->get_name(), context });
+}
+
+void Context::ContextManager::set_current_context(const std::string& context_name) {
+    std::lock_guard<std::mutex> lock(mutex);
+    current_context_name = context_name;
+}
+
+void Context::ContextManager::update_current_context() {
+    std::lock_guard<std::mutex> lock(mutex);
+    if (current_context_name.empty()) {
+        return;
+    }
+    contexts.at(current_context_name)->update();
+}

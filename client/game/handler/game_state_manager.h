@@ -5,40 +5,44 @@
 #include <mutex>
 
 #include "common/definitions.h"
-#include "model/game_state.h"
+
 #include "dto_handler/player_dto_parser.h"
+#include "render/camera.h"
+
+namespace SDL2pp {
+class Window;
+};
 
 namespace DTO {
 class GameStateDTO;
 };
 
 namespace Model {
+class GameState;
 class Player;
-};
-
-namespace View {
-class SDLRenderer;
 };
 
 namespace Controller {
 class GameStateManager {
-friend class View::SDLRenderer;
 
 private:
     std::mutex mutex;
-    short_id_t reference_player_id;
     Shared<Model::GameState> game_state;
     DTO::PlayerDTOParser player_dto_parser;
-
-protected:
-    // Unsafe functions, only used by friend classes
-    short_id_t get_reference_player_id();
-    Model::Player& get_reference_player();
+    short_id_t reference_player_id;
+    Weak<SDL2pp::Window> window;
+    View::Camera camera;
 
 public:
-    GameStateManager(short_id_t reference_player_id);
+    GameStateManager(
+        short_id_t reference_player_id,
+        Weak<SDL2pp::Window> window
+    );
 
-    void map_function_on_players(std::function<void(const Model::Player&)> function);
+    View::Camera get_camera();
+
+    void map_function_on_players(const std::function<void(Model::Player&)>& func);
+
     void update(DTO::GameStateDTO&& game_state_dto);
 
     ~GameStateManager() = default;

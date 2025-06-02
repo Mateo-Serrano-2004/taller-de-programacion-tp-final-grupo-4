@@ -12,6 +12,7 @@ target_sources(cs2d_client
     )
 
 target_include_directories(cs2d_client PRIVATE ${CMAKE_SOURCE_DIR}/client/game)
+target_include_directories(cs2d_client PRIVATE ${CMAKE_SOURCE_DIR}/client/net)
 
 add_subdirectory(game/)
 add_subdirectory(lobby/)

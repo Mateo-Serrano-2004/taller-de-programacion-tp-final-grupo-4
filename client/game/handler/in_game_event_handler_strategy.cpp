@@ -1,10 +1,17 @@
 #include "in_game_event_handler_strategy.h"
 
+#include "controller/game_controller.h"
+#include "event/quit_event.h"
 #include "event/movement_event.h"
 #include "event/stop_movement_event.h"
 #include "exception/closed_window.h"
 
-Shared<Controller::SDLEventHandlerStrategy> Controller::InGameEventHandlerStrategy::handle_keydown_event(Shared<SDL_Event> event) {
+void Controller::InGameEventHandlerStrategy::handle_quit_event() {
+    auto quit_event = make_shared<Model::QuitEvent>();
+    controller.lock()->handle_event(quit_event);
+}
+
+void Controller::InGameEventHandlerStrategy::handle_keydown_event(Shared<SDL_Event> event) {
     Shared<Model::MovementEvent> movement_event;
     auto key_symbol = event->key.keysym.sym;
     coord_t x_direction = 0;
@@ -24,7 +31,7 @@ Shared<Controller::SDLEventHandlerStrategy> Controller::InGameEventHandlerStrate
             y_direction = 1;
             break;
         default:
-            return nullptr;
+            return;
     }
 
     if (x_direction && !handler_state.moving_horizontally) {
@@ -36,19 +43,13 @@ Shared<Controller::SDLEventHandlerStrategy> Controller::InGameEventHandlerStrate
     }
 
     if (!movement_event) {
-        return nullptr;
+        return;
     }
 
-    try {
-        dispatched_events_queue->try_push(movement_event);
-    } catch (ClosedQueue& error) {
-        throw App::ClosedWindowException("Closed communication queue");
-    }
-
-    return nullptr;
+    controller.lock()->handle_event(movement_event);
 }
 
-Shared<Controller::SDLEventHandlerStrategy> Controller::InGameEventHandlerStrategy::handle_keyup_event(Shared<SDL_Event> event) {
+void Controller::InGameEventHandlerStrategy::handle_keyup_event(Shared<SDL_Event> event) {
     Shared<Model::StopMovementEvent> stop_movement_event;
     auto key_symbol = event->key.keysym.sym;
     bool is_horizontal = false;
@@ -58,7 +59,7 @@ Shared<Controller::SDLEventHandlerStrategy> Controller::InGameEventHandlerStrate
     } else if (key_symbol == SDLK_w || key_symbol == SDLK_s) {
         is_horizontal = false;
     } else {
-        return nullptr;
+        return;
     }
 
     if (is_horizontal && handler_state.moving_horizontally) {
@@ -66,30 +67,24 @@ Shared<Controller::SDLEventHandlerStrategy> Controller::InGameEventHandlerStrate
     } else if (!is_horizontal && handler_state.moving_vertically) {
         handler_state.moving_vertically = false;
     } else {
-        return nullptr;
+        return;
     }
 
     stop_movement_event = make_shared<Model::StopMovementEvent>(is_horizontal);
 
-    try {
-        dispatched_events_queue->try_push(stop_movement_event);
-    } catch (ClosedQueue& error) {
-        throw App::ClosedWindowException("Closed communication queue");
-    }
-
-    return nullptr;
+    controller.lock()->handle_event(stop_movement_event);
 }
 
-Controller::InGameEventHandlerStrategy::InGameEventHandlerStrategy(
-    SharedQueue<Model::Event>* dispatched_events_queue
-) : Controller::SDLEventHandlerStrategy(dispatched_events_queue) {}
+Controller::InGameEventHandlerStrategy::InGameEventHandlerStrategy(Weak<Controller::GameController> controller)
+: Controller::EventHandlerStrategy(), controller(controller) {}
 
-Shared<Controller::SDLEventHandlerStrategy> Controller::InGameEventHandlerStrategy::handle(Shared<SDL_Event> event) {
+void Controller::InGameEventHandlerStrategy::handle(Shared<SDL_Event> event) {
     auto event_type = event->type;
-    if (event_type == SDL_KEYDOWN) {
-        return handle_keydown_event(event);
+    if (event_type == SDL_QUIT) {
+        handle_quit_event();
+    } else if (event_type == SDL_KEYDOWN) {
+        handle_keydown_event(event);
     } else if (event_type == SDL_KEYUP) {
-        return handle_keyup_event(event);
+        handle_keyup_event(event);
     }
-    return nullptr;
 }

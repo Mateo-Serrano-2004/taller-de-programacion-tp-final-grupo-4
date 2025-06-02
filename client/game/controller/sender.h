@@ -1,0 +1,37 @@
+#ifndef CLIENT_GAME_CONTROLLER_SENDER_H
+#define CLIENT_GAME_CONTROLLER_SENDER_H
+
+#include "common/definitions.h"
+#include "common/thread.h"
+#include "common/queue.h"
+
+namespace Net {
+class ClientProtocol;
+};
+
+namespace Model {
+class Event;
+};
+
+namespace Controller {
+class Sender: public Thread {
+protected:
+    SharedQueue<Model::Event>* sender_queue;
+    Net::ClientProtocol* protocol;
+
+    Sender(const Sender&) = delete;
+    Sender& operator=(const Sender&) = delete;
+
+public:
+    Sender(
+        SharedQueue<Model::Event>* sender_queue,
+        Net::ClientProtocol* protocol
+    );
+
+    void run() override;
+
+    ~Sender() override;
+};
+};
+
+#endif // CLIENT_GAME_CONTROLLER_SENDER_H

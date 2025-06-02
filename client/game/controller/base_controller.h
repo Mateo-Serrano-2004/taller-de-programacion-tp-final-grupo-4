@@ -1,0 +1,60 @@
+#ifndef CLIENT_GAME_CONTROLLER_BASE_CONTROLLER_H
+#define CLIENT_GAME_CONTROLLER_BASE_CONTROLLER_H
+
+#include "common/definitions.h"
+#include "common/queue.h"
+#include "common/thread.h"
+
+namespace SDL2pp {
+class Window;
+class Renderer;
+};
+
+namespace Context {
+class ContextManager;
+};
+
+namespace Model {
+class Event;
+class TextureStorage;
+};
+
+namespace Controller {
+class BaseController: public Thread {
+protected:
+    SharedQueue<Model::Event> processor_event_queue;
+    Shared<SDL2pp::Window> window;
+    Shared<SDL2pp::Renderer> renderer;
+    Shared<Model::TextureStorage> texture_storage;
+    Shared<Context::ContextManager> context_manager;
+
+    BaseController(const BaseController&) = delete;
+    BaseController& operator=(const BaseController&) = delete;
+
+    virtual void process_event(Shared<Model::Event> event) = 0;
+
+public:
+    BaseController(
+        Shared<SDL2pp::Window> window,
+        Shared<SDL2pp::Renderer> renderer,
+        Shared<Model::TextureStorage> texture_storage,
+        Shared<Context::ContextManager> context_manager
+    );
+
+    Weak<SDL2pp::Window> get_window();
+    Weak<SDL2pp::Renderer> get_renderer();
+    Weak<Model::TextureStorage> get_texture_storage();
+    Weak<Context::ContextManager> get_context_manager();
+
+    void handle_event(Shared<Model::Event> event);
+
+    void run() override;
+
+    BaseController(BaseController&&) = default;
+    BaseController& operator=(BaseController&&) = default;
+
+    virtual ~BaseController() override;
+};
+};
+
+#endif // CLIENT_GAME_CONTROLLER_BASE_CONTROLLER_H

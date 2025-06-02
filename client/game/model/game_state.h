@@ -16,6 +16,7 @@ public:
     GameState() = default;
 
     std::map<short_id_t, Player>& get_players();
+    Player& get_player_by_id(short_id_t id);
     void register_player(Player&& player);
 
     ~GameState() = default;

@@ -3,8 +3,9 @@
 #include <list>
 #include <memory>
 #include <string>
+#include <iostream>
 
-#include "client/game/counter_strike_app.h"
+#include "client/game/cs2d_app.h"
 #include "client/game/dto_handler/event_dto_creator.h"
 #include "client/game/event/create_game_event.h"
 #include "client/game/event/join_game_event.h"
@@ -28,8 +29,8 @@ MainWindow::~MainWindow() {
 
 void MainWindow::runGame() {
     this->hide();
-    App::CounterStrikeApp game(protocol);
-    game.run();
+    App::CS2DApp game(protocol);
+    game.launch();
     this->show();
     showLobbyScene();
 }

@@ -11,12 +11,15 @@ target_sources(cs2d_client
     PUBLIC ${H_SRC}
     )
 
+target_include_directories(cs2d_client PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} .)
+
 add_subdirectory(handler/)
-add_subdirectory(net/)
 add_subdirectory(dto_handler/)
 add_subdirectory(exception/)
 add_subdirectory(render/)
 add_subdirectory(texture/)
-add_subdirectory(window/)
 add_subdirectory(event/)
 add_subdirectory(model/)
+add_subdirectory(entity/)
+add_subdirectory(controller/)
+add_subdirectory(context/)

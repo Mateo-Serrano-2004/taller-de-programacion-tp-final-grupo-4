@@ -3,23 +3,25 @@
 
 #include <SDL2/SDL.h>
 
-#include "sdl_event_handler_strategy.h"
+#include "event_handler_strategy.h"
 #include "handler_state.h"
 
 namespace Controller {
-class InGameEventHandlerStrategy: public SDLEventHandlerStrategy {
+class GameController;
+
+class InGameEventHandlerStrategy: public EventHandlerStrategy {
 private:
     Model::HandlerState handler_state;
+    Weak<GameController> controller;
 
-    Shared<SDLEventHandlerStrategy> handle_keydown_event(Shared<SDL_Event> event);
-    Shared<SDLEventHandlerStrategy> handle_keyup_event(Shared<SDL_Event> event);
+    void handle_quit_event();
+    void handle_keydown_event(Shared<SDL_Event> event);
+    void handle_keyup_event(Shared<SDL_Event> event);
 
 public:
-    InGameEventHandlerStrategy(
-        SharedQueue<Model::Event>* dispatched_events_queue
-    );
+    InGameEventHandlerStrategy(Weak<GameController> controller);
 
-    Shared<SDLEventHandlerStrategy> handle(Shared<SDL_Event> event) override;
+    void handle(Shared<SDL_Event> event) override;
 
     ~InGameEventHandlerStrategy() override = default;
 };

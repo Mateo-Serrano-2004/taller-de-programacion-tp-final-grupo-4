@@ -5,24 +5,33 @@
 #include <memory>
 #include <utility>
 
+#include <SDL2pp/Window.hh>
+#include <SDL2pp/Point.hh>
+
 #include "common/model/player.h"
 #include "common/DTO/game_state_dto.h"
 
-short_id_t Controller::GameStateManager::get_reference_player_id() {
-    return reference_player_id;
+#include "model/game_state.h"
+
+Controller::GameStateManager::GameStateManager(
+    short_id_t reference_player_id,
+    Weak<SDL2pp::Window> window
+): reference_player_id(reference_player_id),
+   window(window) {
+    SDL2pp::Point viewport_size = window.lock()->GetSize();
+    camera.set_viewport_size(viewport_size.GetX(), viewport_size.GetY());
 }
 
-Model::Player& Controller::GameStateManager::get_reference_player() {
-    return game_state->get_players().at(reference_player_id);
-}
-
-Controller::GameStateManager::GameStateManager(short_id_t reference_player_id) : reference_player_id(reference_player_id) {}
-
-void Controller::GameStateManager::map_function_on_players(std::function<void(const Model::Player&)> function) {
+View::Camera Controller::GameStateManager::get_camera() {
     std::lock_guard<std::mutex> lock(mutex);
-    auto& players = game_state->get_players();
-    for (const auto& player : players) {
-        function(player.second);
+    return camera;
+}
+
+void Controller::GameStateManager::map_function_on_players(
+        const std::function<void(Model::Player&)>& func) {
+    std::lock_guard<std::mutex> lock(mutex);
+    for (auto& [id, player]: game_state->get_players()) {
+        func(player);
     }
 }
 
@@ -36,4 +45,9 @@ void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
 
     std::lock_guard<std::mutex> lock(mutex);
     game_state = new_game_state;
+    auto reference_player_position = game_state->get_player_by_id(reference_player_id).get_position();
+    camera.set_center(
+        reference_player_position.get_x(),
+        reference_player_position.get_y()
+    );
 }
