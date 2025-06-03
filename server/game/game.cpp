@@ -15,12 +15,11 @@ void Game::run() {
 void Game::handle(uint8_t player_id, const GameEventVariant& event) {
     std::visit(
             overloaded{[player_id, this](const MovementEvent& e) { handle_movement(player_id, e); },
-                       [player_id, this](const StopMovementEvent& e) {
-                           handle_stop_movement(player_id, e);
-                       },
+                       [player_id, this](const StopMovementEvent& e) { handle_stop_movement(player_id, e); },
                        [player_id, this](const LeaveGameEvent&) { handle_leave_game(player_id); },
                        [player_id, this](const QuitEvent&) { handle_leave_game(player_id); },
-                       [this](const RotationEvent&) {}, [this](const DropWeaponEvent&) {},
+                       [player_id, this](const RotationEvent& e) { handle_rotation(player_id, e); },
+                       [this](const DropWeaponEvent&) {},
                        [this](const UseWeaponEvent&) {}, [this](const DefuseBombEvent&) {},
                        [this](const SwitchWeaponEvent&) {}, [this](const ReloadWeaponEvent&) {},
                        [this](const BuyEvent&) {}, [this](const BuyAmmoEvent&) {}},
@@ -49,6 +48,13 @@ void Game::handle_stop_movement(const uint8_t& player_id, const StopMovementEven
         } else {
             it->second.stop_vertical_movement();
         }
+    }
+}
+
+void Game::handle_rotation(const uint8_t& player_id, const RotationEvent& event) {
+    auto it = players.find(player_id);
+    if (it != players.end()) {
+        it->second.set_angle(event.get_angle_in_degrees());
     }
 }
 

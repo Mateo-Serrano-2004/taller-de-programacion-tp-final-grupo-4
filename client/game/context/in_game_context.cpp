@@ -43,6 +43,8 @@ void Context::InGameContext::dispatch_events() {
             throw App::ClosedWindowException("Received a QUIT event");
         }
     }
+
+    // event_handler_strategy.handle_current_game_state(game_state_manager);
 }
 
 Context::InGameContext::InGameContext(Weak<Controller::GameController> controller)

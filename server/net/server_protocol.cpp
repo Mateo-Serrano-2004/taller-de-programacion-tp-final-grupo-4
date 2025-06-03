@@ -28,6 +28,12 @@ EventVariant ServerProtocol::receive_event() {
             bool is_horizontal = int8_t(data[1]);
             return StopMovementEvent(is_horizontal);
         }
+        case Model::EventType::ROTATION: {
+            angle_t big_endian_angle;
+            memcpy(&big_endian_angle, data.data() + 1, 2);
+            angle_t angle = ntohs(big_endian_angle);
+            return RotationEvent(angle);
+        }
         case Model::EventType::USERNAME: {
             uint8_t username_size = uint8_t(data[1]);
             std::string username(data.data() + 2, username_size);

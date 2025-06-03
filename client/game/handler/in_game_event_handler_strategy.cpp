@@ -1,9 +1,19 @@
 #include "in_game_event_handler_strategy.h"
 
+#include <utility>
+#include <cmath>
+#include <iostream>
+
+#include <SDL2/SDL.h>
+#include <SDL2pp/Point.hh>
+
+#include "game_state_manager.h"
+
 #include "controller/game_controller.h"
 #include "event/quit_event.h"
 #include "event/movement_event.h"
 #include "event/stop_movement_event.h"
+#include "event/rotation_event.h"
 #include "exception/closed_window.h"
 
 void Controller::InGameEventHandlerStrategy::handle_quit_event() {
@@ -46,7 +56,7 @@ void Controller::InGameEventHandlerStrategy::handle_keydown_event(Shared<SDL_Eve
         return;
     }
 
-    controller.lock()->handle_event(movement_event);
+    controller.lock()->handle_event(std::move(movement_event));
 }
 
 void Controller::InGameEventHandlerStrategy::handle_keyup_event(Shared<SDL_Event> event) {
@@ -72,7 +82,7 @@ void Controller::InGameEventHandlerStrategy::handle_keyup_event(Shared<SDL_Event
 
     stop_movement_event = make_shared<Model::StopMovementEvent>(is_horizontal);
 
-    controller.lock()->handle_event(stop_movement_event);
+    controller.lock()->handle_event(std::move(stop_movement_event));
 }
 
 Controller::InGameEventHandlerStrategy::InGameEventHandlerStrategy(Weak<Controller::GameController> controller)
@@ -87,4 +97,29 @@ void Controller::InGameEventHandlerStrategy::handle(Shared<SDL_Event> event) {
     } else if (event_type == SDL_KEYUP) {
         handle_keyup_event(event);
     }
+}
+
+void Controller::InGameEventHandlerStrategy::handle_current_game_state(
+    Shared<Controller::GameStateManager> game_state_manager
+) {
+    int mouse_x, mouse_y;
+    (void) SDL_GetMouseState(&mouse_x, &mouse_y);
+    SDL2pp::Point viewport = game_state_manager->get_camera().get_viewport();
+
+    coord_t dy = mouse_y - (viewport.GetY() / 2);
+    coord_t dx = mouse_x - (viewport.GetX() / 2);
+
+    double angle_rad = std::atan2(dy, dx);
+    double angle_deg = angle_rad * 180.0 / M_PI;
+
+    angle_deg += 90;
+
+    if (angle_deg < 0) angle_deg += 360;
+    if (angle_deg >= 360) angle_deg -= 360;
+
+    angle_t angle = static_cast<angle_t>(angle_deg);
+
+    auto rotation_event = make_shared<Model::RotationEvent>(angle);
+
+    controller.lock()->handle_event(std::move(rotation_event));
 }

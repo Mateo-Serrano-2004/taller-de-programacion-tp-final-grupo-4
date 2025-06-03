@@ -40,6 +40,7 @@ void View::Player::render(RenderContext& render_context) {
     View::Camera& camera = player_render_context.camera;
     SDL2pp::Texture& texture = texture_storage.get_texture(player.get_skin_id());
     std::pair<uint16_t, uint16_t> skin_piece_coords = get_skin_piece();
+    angle_t angle = player.get_angle();
 
     // Get the view from the camera
     length_t viewport_width = camera.get_viewport_width();
@@ -79,6 +80,8 @@ void View::Player::render(RenderContext& render_context) {
     renderer.Copy(
         texture,
         skin_rect,
-        top_left_corner
+        top_left_corner,
+        angle,
+        SDL2pp::NullOpt
     );
 }

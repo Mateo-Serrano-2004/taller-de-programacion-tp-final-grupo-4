@@ -18,14 +18,14 @@ protected:
     std::string name;
     Physics::Vector2D position;
 
-    Player(const Player&) = delete;
-    Player& operator=(const Player&) = delete;
-
 public:
     Player(short_id_t id, const std::string& name);
 
     Player(short_id_t id, short_id_t skin_id, short_id_t skin_piece, angle_t angle,
            const std::string& name, const Physics::Vector2D& position);
+
+    Player(const Player&) = delete;
+    Player& operator=(const Player&) = delete;
 
     Player(Player&&) = default;
     Player& operator=(Player&&) = default;

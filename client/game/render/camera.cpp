@@ -8,7 +8,7 @@ View::Camera::Camera(length_t viewport_width, length_t viewport_height):
         viewport_width(viewport_width), viewport_height(viewport_height) {}
 
 SDL2pp::Point View::Camera::get_viewport() const {
-    return SDL2pp::Point(get_viewport_width(), get_viewport_height());
+    return SDL2pp::Point(viewport_width, viewport_height);
 }
 
 length_t View::Camera::get_viewport_width() const { return viewport_width; }

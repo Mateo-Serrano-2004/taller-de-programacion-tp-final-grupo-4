@@ -3,11 +3,14 @@
 
 #include <SDL2/SDL.h>
 
+#include "common/definitions.h"
+
 #include "event_handler_strategy.h"
 #include "handler_state.h"
 
 namespace Controller {
 class GameController;
+class GameStateManager;
 
 class InGameEventHandlerStrategy: public EventHandlerStrategy {
 private:
@@ -22,6 +25,7 @@ public:
     InGameEventHandlerStrategy(Weak<GameController> controller);
 
     void handle(Shared<SDL_Event> event) override;
+    void handle_current_game_state(Shared<Controller::GameStateManager> game_state_manager);
 
     ~InGameEventHandlerStrategy() override = default;
 };
