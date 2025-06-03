@@ -43,6 +43,8 @@ public:
 
     void map_function_on_players(const std::function<void(Model::Player&)>& func);
 
+    void update_camera();
+
     void update(DTO::GameStateDTO&& game_state_dto);
 
     ~GameStateManager() = default;

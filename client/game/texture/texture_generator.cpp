@@ -51,8 +51,8 @@ SDL2pp::Texture View::TextureGenerator::draw_field_of_view() {
         *renderer,
         SDL_PIXELFORMAT_RGBA8888,
         SDL_TEXTUREACCESS_TARGET,
-        max_fov_size, // should be 2 * max_fov_size, but in debug mode screen is 640 x 480
-        max_fov_size
+        2 * max_fov_size, // should be 2 * max_fov_size, but in debug mode screen is 640 x 480
+        2 * max_fov_size
     );
     // Allow blend
     fov_texture.SetBlendMode(SDL_BLENDMODE_BLEND);
@@ -66,8 +66,8 @@ SDL2pp::Texture View::TextureGenerator::draw_field_of_view() {
     renderer->Clear();
     renderer->SetDrawBlendMode(SDL_BLENDMODE_NONE); // Override the black transparency
     renderer->SetDrawColor(0, 0, 0, 0); // Transparent
-    draw_disk(max_fov_size / 2, 30);
-    draw_triangle(max_fov_size / 2, 30); // 30deg
+    draw_disk(max_fov_size, 30);
+    draw_triangle(max_fov_size, 30); // 30deg
 
     // Restore
     renderer->SetDrawColor(color);

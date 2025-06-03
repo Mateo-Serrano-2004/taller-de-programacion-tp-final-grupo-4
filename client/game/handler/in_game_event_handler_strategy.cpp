@@ -6,6 +6,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/Point.hh>
+#include <SDL2pp/Window.hh>
 
 #include "game_state_manager.h"
 
@@ -14,6 +15,7 @@
 #include "event/movement_event.h"
 #include "event/stop_movement_event.h"
 #include "event/rotation_event.h"
+#include "event/window_resize_event.h"
 #include "event/switch_context_event.h"
 #include "exception/closed_window.h"
 
@@ -51,6 +53,13 @@ void Controller::InGameEventHandlerStrategy::handle_movement_event(Shared<SDL_Ev
     }
 
     controller.lock()->handle_event(std::move(movement_event));
+}
+
+void Controller::InGameEventHandlerStrategy::handle_window_event(Shared<SDL_Event> event) {
+    if (event->window.event == SDL_WINDOWEVENT_RESIZED) {
+        auto window_resize_event = make_shared<Model::WindowResizeEvent>();
+        controller.lock()->handle_event(std::move(window_resize_event));
+    }
 }
 
 void Controller::InGameEventHandlerStrategy::handle_menu_switch_event() {
@@ -114,6 +123,8 @@ void Controller::InGameEventHandlerStrategy::handle(Shared<SDL_Event> event) {
         handle_keydown_event(event);
     } else if (event_type == SDL_KEYUP) {
         handle_keyup_event(event);
+    } else if (event_type == SDL_WINDOWEVENT) {
+        handle_window_event(event);
     }
 }
 

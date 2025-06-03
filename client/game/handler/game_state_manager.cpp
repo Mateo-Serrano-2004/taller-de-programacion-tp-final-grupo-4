@@ -35,6 +35,11 @@ void Controller::GameStateManager::map_function_on_players(
     }
 }
 
+void Controller::GameStateManager::update_camera() {
+    auto new_viewport_size = window.lock()->GetSize();
+    camera.set_viewport_size(new_viewport_size.GetX(), new_viewport_size.GetY());
+}
+
 void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
     auto new_game_state = make_shared<Model::GameState>();
 

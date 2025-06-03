@@ -48,6 +48,8 @@ public:
         Net::ClientProtocol* protocol
     );
 
+    void handle_event(Shared<Model::Event> event) override;
+
     Shared<GameStateManager> get_game_state_manager();
 
     GameController(GameController&&) = default;

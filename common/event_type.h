@@ -28,7 +28,8 @@ enum EventType {
     QUIT = 0x20,
 
     // Internal client events
-    SWITCH_CONTEXT = 0xA0
+    SWITCH_CONTEXT = 0xA0,
+    WINDOW_RESIZE = 0xA1,
 };
 };
 

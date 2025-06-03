@@ -16,7 +16,6 @@ void Context::ContextManager::add_context(Shared<Context::BaseContext> context) 
 }
 
 void Context::ContextManager::set_current_context(const std::string& context_name) {
-    std::cout << "Current context: " << context_name << std::endl;
     current_context_name = context_name;
 }
 

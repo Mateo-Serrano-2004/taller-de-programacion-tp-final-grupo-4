@@ -46,7 +46,7 @@ public:
     Shared<Model::TextureStorage> get_texture_storage();
     Weak<Context::ContextManager> get_context_manager();
 
-    void handle_event(Shared<Model::Event> event);
+    virtual void handle_event(Shared<Model::Event> event);
 
     void run() override;
 

@@ -18,6 +18,7 @@ private:
     Weak<GameController> controller;
 
     void handle_movement_event(Shared<SDL_Event> event);
+    void handle_window_event(Shared<SDL_Event> event);
     void handle_menu_switch_event();
 
     void handle_quit_event();
