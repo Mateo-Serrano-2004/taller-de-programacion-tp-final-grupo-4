@@ -3,9 +3,6 @@
 
 #include <SDL2/SDL.h>
 
-#include "common/thread.h"
-#include "common/queue.h"
-
 #include "base_context.h"
 
 #include "handler/in_game_event_handler_strategy.h"
@@ -16,11 +13,9 @@ class GameController;
 }
 
 namespace Context {
-class InGameContext : public BaseContext, public Thread {
+class InGameContext : public BaseContext {
 protected:
-    SharedQueue<SDL_Event> processor_event_queue;
     SDL_Event placeholder;
-    bool running;
     Controller::InGameEventHandlerStrategy event_handler_strategy;
     Shared<Controller::GameStateManager> game_state_manager;
 
@@ -33,12 +28,10 @@ protected:
 public:
     InGameContext(Weak<Controller::GameController> controller);
 
-    void run() override;
-
     InGameContext(InGameContext&&) = default;
     InGameContext& operator=(InGameContext&&) = default;
 
-    ~InGameContext() override;
+    ~InGameContext() override = default;
 };
 };
 

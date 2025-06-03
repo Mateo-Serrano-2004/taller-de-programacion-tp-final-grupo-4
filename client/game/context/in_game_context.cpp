@@ -37,7 +37,7 @@ void Context::InGameContext::render() {
 
 void Context::InGameContext::dispatch_events() {
     while (SDL_PollEvent(&placeholder)) {
-        processor_event_queue.push(make_shared<SDL_Event>(placeholder));
+        event_handler_strategy.handle(make_shared<SDL_Event>(placeholder));
 
         if (placeholder.type == SDL_QUIT) {
             throw App::ClosedWindowException("Received a QUIT event");
@@ -47,27 +47,6 @@ void Context::InGameContext::dispatch_events() {
 
 Context::InGameContext::InGameContext(Weak<Controller::GameController> controller)
 : Context::BaseContext("in-game", controller),
-  running(true),
   event_handler_strategy(controller) {
     this->game_state_manager = controller.lock()->get_game_state_manager();
-    start();
-}
-
-void Context::InGameContext::run() {
-    bool running = true;
-    while (running) {
-        // Nor the main thread nor the event processor
-        // closes the queue, so we can safely
-        // call pop() without checking if the queue is closed.
-        Shared<SDL_Event> event = processor_event_queue.pop();
-        if (event->type == SDL_QUIT) {
-            running = false;
-        }
-        event_handler_strategy.handle(event);
-    }
-}
-
-Context::InGameContext::~InGameContext() {
-    stop();
-    join();
 }

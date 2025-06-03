@@ -30,6 +30,8 @@ App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
         SDL_WINDOW_SHOWN
     );
     auto renderer = make_shared<SDL2pp::Renderer>(*window, -1, SDL_RENDERER_ACCELERATED);
+    renderer->SetDrawColor(255, 255, 255, 255);
+
     auto texture_storage = make_shared<Model::TextureStorage>(Weak<SDL2pp::Renderer>(renderer));
     for (size_t i = 0; i < paths.size(); ++i) {
         texture_storage->load_texture(i, paths[i]);
