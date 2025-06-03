@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <utility>
 #include <iostream>
 
 #include <SDL2pp/SDL2pp.hh>
@@ -15,6 +16,7 @@
 #include "context/in_game_context.h"
 #include "context/menu_context.h"
 #include "texture/texture_storage.h"
+#include "texture/texture_generator.h"
 #include "controller/game_controller.h"
 
 #include "client/net/client_protocol.h"
@@ -32,11 +34,16 @@ App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
     );
     auto renderer = make_shared<SDL2pp::Renderer>(*window, -1, SDL_RENDERER_ACCELERATED);
     renderer->SetDrawColor(255, 255, 255, 255);
+    renderer->SetDrawBlendMode(SDL_BLENDMODE_BLEND);
 
+    
     auto texture_storage = make_shared<Model::TextureStorage>(Weak<SDL2pp::Renderer>(renderer));
     for (size_t i = 0; i < paths.size(); ++i) {
         texture_storage->load_texture(i, paths[i]);
     }
+
+    View::TextureGenerator texture_generator(renderer);
+    texture_storage->load_texture(10, std::move(texture_generator.draw_field_of_view()));
 
     context_manager = make_shared<Context::ContextManager>();
     controller = make_shared<Controller::GameController>(

@@ -19,7 +19,7 @@ View::MenuRenderer::MenuRenderer(
 
 void View::MenuRenderer::render_menu() {
     SDL2pp::Color current_fill_color = renderer->GetDrawColor();
-    renderer->SetDrawColor(55, 55, 55, 55);
+    renderer->SetDrawColor(55, 55, 55, 255);
     renderer->FillRect(
         60, 60,
         300, 300

@@ -20,6 +20,7 @@ public:
     explicit TextureStorage(Weak<SDL2pp::Renderer> renderer);
 
     void load_texture(size_t id, const std::string& pathname);
+    void load_texture(size_t id, SDL2pp::Texture&& texture);
     SDL2pp::Texture& get_texture(size_t id);
 
     ~TextureStorage() = default;

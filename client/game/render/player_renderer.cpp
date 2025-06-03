@@ -1,8 +1,12 @@
 #include "player_renderer.h"
 
+#include <iostream>
+
+#include <SDL2pp/SDL2pp.hh>
 #include <SDL2pp/Window.hh>
 #include <SDL2pp/Renderer.hh>
 #include <SDL2pp/Point.hh>
+#include <SDL2pp/Rect.hh>
 
 #include "common/model/player.h"
 
@@ -72,6 +76,29 @@ void View::PlayerRenderer::render_player(View::Camera& camera, Model::Player& pl
     );
 }
 
+void View::PlayerRenderer::render_fov() {
+    auto viewport = game_state_manager->get_camera().get_viewport();
+    int viewport_width = viewport.GetX();
+    int viewport_height = viewport.GetY();
+
+    // Id del fov_texture
+    auto& fov_texture = texture_storage->get_texture(10);
+
+    // Squared texture
+    int fov_texture_size = fov_texture.GetWidth();
+
+    renderer->Copy(
+        fov_texture,
+        SDL2pp::Rect(
+            (fov_texture_size - viewport_width) / 2,
+            (fov_texture_size - viewport_height) / 2,
+            viewport_width,
+            viewport_height
+        ),
+        SDL2pp::NullOpt
+    );
+}
+
 View::PlayerRenderer::PlayerRenderer(
     Weak<Controller::GameController> controller
 ) {
@@ -90,4 +117,6 @@ void View::PlayerRenderer::render() {
             render_player(camera, player);
         }
     );
+
+    render_fov();
 };

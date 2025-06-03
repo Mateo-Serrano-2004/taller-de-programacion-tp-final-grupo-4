@@ -32,6 +32,7 @@ protected:
 
     SDL2pp::Point get_skin_top_left_corner(short_id_t skin_piece);
     void render_player(Camera& camera, Model::Player& player);
+    void render_fov();
 
 public:
     PlayerRenderer(Weak<Controller::GameController> controller);
