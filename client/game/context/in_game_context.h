@@ -6,6 +6,7 @@
 #include "base_context.h"
 
 #include "handler/in_game_event_handler_strategy.h"
+#include "render/player_renderer.h"
 
 namespace Controller {
 class GameStateManager;
@@ -16,8 +17,8 @@ namespace Context {
 class InGameContext : public BaseContext {
 protected:
     SDL_Event placeholder;
+    View::PlayerRenderer player_renderer;
     Controller::InGameEventHandlerStrategy event_handler_strategy;
-    Shared<Controller::GameStateManager> game_state_manager;
 
     void render() override;
     void dispatch_events() override;

@@ -12,17 +12,15 @@
 #include "texture/texture_storage.h"
 
 void Context::ContextManager::add_context(Shared<Context::BaseContext> context) {
-    std::lock_guard<std::mutex> lock(mutex);
     contexts.insert({ context->get_name(), context });
 }
 
 void Context::ContextManager::set_current_context(const std::string& context_name) {
-    std::lock_guard<std::mutex> lock(mutex);
+    std::cout << "Current context: " << context_name << std::endl;
     current_context_name = context_name;
 }
 
 void Context::ContextManager::update_current_context() {
-    std::lock_guard<std::mutex> lock(mutex);
     if (current_context_name.empty()) {
         return;
     }

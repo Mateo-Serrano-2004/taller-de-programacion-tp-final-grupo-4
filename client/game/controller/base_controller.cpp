@@ -11,6 +11,7 @@
 
 #include "texture/texture_storage.h"
 #include "event/event.h"
+#include "event/switch_context_event.h"
 #include "context/context_manager.h"
 
 Controller::BaseController::BaseController(
@@ -22,16 +23,16 @@ Controller::BaseController::BaseController(
     start();
 }
 
-Weak<SDL2pp::Window> Controller::BaseController::get_window() {
-    return Weak<SDL2pp::Window>(window);
+Shared<SDL2pp::Window> Controller::BaseController::get_window() {
+    return window;
 }
 
-Weak<SDL2pp::Renderer> Controller::BaseController::get_renderer() {
-    return Weak<SDL2pp::Renderer>(renderer);
+Shared<SDL2pp::Renderer> Controller::BaseController::get_renderer() {
+    return renderer;
 }
 
-Weak<Model::TextureStorage> Controller::BaseController::get_texture_storage() {
-    return Weak<Model::TextureStorage>(texture_storage);
+Shared<Model::TextureStorage> Controller::BaseController::get_texture_storage() {
+    return texture_storage;
 }
 
 Weak<Context::ContextManager> Controller::BaseController::get_context_manager() {
@@ -39,7 +40,12 @@ Weak<Context::ContextManager> Controller::BaseController::get_context_manager() 
 }
 
 void Controller::BaseController::handle_event(Shared<Model::Event> event) {
-    processor_event_queue.push(event);
+    if (event->get_type() == Model::EventType::SWITCH_CONTEXT) {
+        auto switch_context_event = std::static_pointer_cast<Model::SwitchContextEvent>(event);
+        context_manager->set_current_context(switch_context_event->get_new_context_name());
+    } else {
+        processor_event_queue.push(event);
+    }
 }
 
 void Controller::BaseController::run() {

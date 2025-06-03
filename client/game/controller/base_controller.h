@@ -41,9 +41,9 @@ public:
         Shared<Context::ContextManager> context_manager
     );
 
-    Weak<SDL2pp::Window> get_window();
-    Weak<SDL2pp::Renderer> get_renderer();
-    Weak<Model::TextureStorage> get_texture_storage();
+    Shared<SDL2pp::Window> get_window();
+    Shared<SDL2pp::Renderer> get_renderer();
+    Shared<Model::TextureStorage> get_texture_storage();
     Weak<Context::ContextManager> get_context_manager();
 
     void handle_event(Shared<Model::Event> event);

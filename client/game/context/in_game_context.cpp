@@ -15,24 +15,7 @@
 #include "exception/closed_window.h"
 
 void Context::InGameContext::render() {
-    auto controller_locked = controller.lock();
-    auto camera = game_state_manager->get_camera();
-
-    View::PlayerRenderContext player_render_context(
-        *(controller_locked->get_window().lock()),
-        *(controller_locked->get_renderer().lock()),
-        *(controller_locked->get_texture_storage().lock()),
-        camera
-    );
-
-    game_state_manager->map_function_on_players(
-        std::function<void(Model::Player&)>(
-            [&](Model::Player& player) {
-                View::Player view_player(player);
-                view_player.render(player_render_context);
-            }
-        )
-    );
+    player_renderer.render();
 }
 
 void Context::InGameContext::dispatch_events() {
@@ -49,6 +32,5 @@ void Context::InGameContext::dispatch_events() {
 
 Context::InGameContext::InGameContext(Weak<Controller::GameController> controller)
 : Context::BaseContext("in-game", controller),
-  event_handler_strategy(controller) {
-    this->game_state_manager = controller.lock()->get_game_state_manager();
-}
+  player_renderer(controller),
+  event_handler_strategy(controller) {}

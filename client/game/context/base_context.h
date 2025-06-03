@@ -21,7 +21,7 @@ class BaseContext {
 protected:
     std::string name;
     Weak<Controller::BaseController> controller;
-    Weak<SDL2pp::Renderer> renderer;
+    Shared<SDL2pp::Renderer> renderer;
 
     virtual void render() = 0;
     virtual void dispatch_events() = 0;

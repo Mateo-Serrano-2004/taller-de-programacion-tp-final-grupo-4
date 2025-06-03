@@ -14,14 +14,10 @@
 #include "event/movement_event.h"
 #include "event/stop_movement_event.h"
 #include "event/rotation_event.h"
+#include "event/switch_context_event.h"
 #include "exception/closed_window.h"
 
-void Controller::InGameEventHandlerStrategy::handle_quit_event() {
-    auto quit_event = make_shared<Model::QuitEvent>();
-    controller.lock()->handle_event(quit_event);
-}
-
-void Controller::InGameEventHandlerStrategy::handle_keydown_event(Shared<SDL_Event> event) {
+void Controller::InGameEventHandlerStrategy::handle_movement_event(Shared<SDL_Event> event) {
     Shared<Model::MovementEvent> movement_event;
     auto key_symbol = event->key.keysym.sym;
     coord_t x_direction = 0;
@@ -40,8 +36,6 @@ void Controller::InGameEventHandlerStrategy::handle_keydown_event(Shared<SDL_Eve
         case SDLK_s:
             y_direction = 1;
             break;
-        default:
-            return;
     }
 
     if (x_direction && !handler_state.moving_horizontally) {
@@ -57,6 +51,30 @@ void Controller::InGameEventHandlerStrategy::handle_keydown_event(Shared<SDL_Eve
     }
 
     controller.lock()->handle_event(std::move(movement_event));
+}
+
+void Controller::InGameEventHandlerStrategy::handle_menu_switch_event() {
+    auto switch_context_event = make_shared<Model::SwitchContextEvent>("menu");
+    controller.lock()->handle_event(std::move(switch_context_event));
+}
+
+void Controller::InGameEventHandlerStrategy::handle_quit_event() {
+    auto quit_event = make_shared<Model::QuitEvent>();
+    controller.lock()->handle_event(quit_event);
+}
+
+void Controller::InGameEventHandlerStrategy::handle_keydown_event(Shared<SDL_Event> event) {
+    auto key_symbol = event->key.keysym.sym;
+    if (key_symbol == SDLK_ESCAPE) {
+        handle_menu_switch_event();
+    } else if (
+        key_symbol == SDLK_w ||
+        key_symbol == SDLK_a ||
+        key_symbol == SDLK_s ||
+        key_symbol == SDLK_d
+    ) {
+        handle_movement_event(std::move(event));
+    }
 }
 
 void Controller::InGameEventHandlerStrategy::handle_keyup_event(Shared<SDL_Event> event) {

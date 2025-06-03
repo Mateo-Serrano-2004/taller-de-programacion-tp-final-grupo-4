@@ -17,8 +17,8 @@ const std::string& Context::BaseContext::get_name() const {
 }
 
 void Context::BaseContext::update() {
-    renderer.lock()->Clear();
+    renderer->Clear();
     dispatch_events();
     render();
-    renderer.lock()->Present();
+    renderer->Present();
 }

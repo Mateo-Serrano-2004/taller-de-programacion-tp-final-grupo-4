@@ -25,7 +25,10 @@ enum EventType {
     REQUEST_MAPS = 0x14,
 
     // System events
-    QUIT = 0x20
+    QUIT = 0x20,
+
+    // Internal client events
+    SWITCH_CONTEXT = 0xA0
 };
 };
 

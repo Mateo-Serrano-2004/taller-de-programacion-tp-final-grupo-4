@@ -13,6 +13,7 @@
 
 #include "context/context_manager.h"
 #include "context/in_game_context.h"
+#include "context/menu_context.h"
 #include "texture/texture_storage.h"
 #include "controller/game_controller.h"
 
@@ -48,8 +49,14 @@ App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
         )
     );
 
+    auto menu_context = make_shared<Context::MenuContext>(
+        Weak<Controller::GameController>(
+            std::static_pointer_cast<Controller::GameController>(controller)
+        )
+    );
+
     context_manager->add_context(in_game_context);
+    context_manager->add_context(menu_context);
 
-    context_manager->set_current_context("in-game");
-
+    context_manager->set_current_context("menu");
 }

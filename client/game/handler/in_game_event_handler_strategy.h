@@ -17,6 +17,9 @@ private:
     Model::HandlerState handler_state;
     Weak<GameController> controller;
 
+    void handle_movement_event(Shared<SDL_Event> event);
+    void handle_menu_switch_event();
+
     void handle_quit_event();
     void handle_keydown_event(Shared<SDL_Event> event);
     void handle_keyup_event(Shared<SDL_Event> event);
