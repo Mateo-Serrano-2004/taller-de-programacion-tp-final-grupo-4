@@ -13,12 +13,12 @@ enum class RoundState {
 class Round {
 private:
     RoundState state;
-    uint64_t ticks_remaining;
+    int ticks_remaining;
 
 public:
-    explicit Round(uint64_t duration_in_ticks = 3600);  // default: 60s @ 60FPS
+    explicit Round(int duration_in_ticks = 3600);  // default: 60s @ 60FPS
 
-    void update();
+    void update(int frames_to_process);
     bool has_ended() const;
     RoundState get_state() const;
 };
