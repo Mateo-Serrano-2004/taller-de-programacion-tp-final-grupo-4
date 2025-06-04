@@ -19,6 +19,7 @@ protected:
     SDL_Event placeholder;
     View::PlayerRenderer player_renderer;
     Controller::InGameEventHandlerStrategy event_handler_strategy;
+    Shared<Controller::GameStateManager> game_state_manager;
 
     void render() override;
     void dispatch_events() override;

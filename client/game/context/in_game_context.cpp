@@ -22,10 +22,11 @@ void Context::InGameContext::dispatch_events() {
         event_handler_strategy.handle(make_shared<SDL_Event>(placeholder));
     }
 
-    // event_handler_strategy.handle_current_game_state(game_state_manager);
+    event_handler_strategy.handle_current_game_state(game_state_manager);
 }
 
 Context::InGameContext::InGameContext(Weak<Controller::GameController> controller)
 : Context::BaseContext("in-game", controller),
   player_renderer(controller),
-  event_handler_strategy(controller) {}
+  event_handler_strategy(controller),
+  game_state_manager(controller.lock()->get_game_state_manager()) {}

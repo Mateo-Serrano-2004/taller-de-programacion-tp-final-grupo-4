@@ -9,14 +9,14 @@ App::Application::Application()
 
 void App::Application::launch() {
     bool keep_running = true;
-    PeriodicClock clock(60);
+    PeriodicClock clock(40);
 
     while (keep_running) {
         try {
             (void) clock.sleep_and_get_frames();
             context_manager->update_current_context();
         } catch (...) {
-            keep_running = true;
+            keep_running = false;
         }
     }
 }

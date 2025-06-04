@@ -33,11 +33,6 @@ void ClientHandler::handle_list_games() { protocol.send_games(game_manager.get_g
 void ClientHandler::handle_game_event(const GameEventVariant& event) {
     game_queue->push(std::make_pair(player_id, event));
 
-    if (std::holds_alternative<QuitEvent>(event)) {
-        delete sender;
-        kill();
-    }
-
     if (std::holds_alternative<LeaveGameEvent>(event)) {
         protocol.send_game_state(DTO::GameStateDTO());
         delete sender;
