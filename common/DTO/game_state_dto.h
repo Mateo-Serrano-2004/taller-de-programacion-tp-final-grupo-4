@@ -11,9 +11,10 @@ public:
     bool is_valid;
     std::vector<PlayerDTO> players;
     bool ended;
+    uint16_t time_left;
 
     GameStateDTO();
-    GameStateDTO(bool is_valid, const std::vector<PlayerDTO>& players, bool ended);
+    GameStateDTO(bool is_valid, const std::vector<PlayerDTO>& players, bool ended, uint16_t time_left);
 };
 };  // namespace DTO
 
