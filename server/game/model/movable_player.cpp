@@ -25,6 +25,8 @@ void Model::MovablePlayer::stop_vertical_movement() { movement_direction.set_y(0
 
 void Model::MovablePlayer::stop_horizontal_movement() { movement_direction.set_x(0); }
 
+Physics::Vector2D Model::MovablePlayer::get_direction() const { return movement_direction; }
+
 void Model::MovablePlayer::update_position() {
     position += movement_direction;
     if (position.get_x() < 0)
