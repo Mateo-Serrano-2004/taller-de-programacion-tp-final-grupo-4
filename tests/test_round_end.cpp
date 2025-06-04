@@ -32,6 +32,7 @@ void test_round_end() {
         }else{
             no_termiando++;
         }
+        std::cout << "[TEST - ROUND END] DTO: "<< i << " TIEMPO EN SEGUNDOS: "<< dto.time_left << std::endl;
     }
     std::cout << "[TEST - ROUND END] CANTIDAD DE DTOs DONDE NO HABIA TERMIANADO: "<< no_termiando << std::endl;
     std::cout << "[TEST - ROUND END] TERMINÓ RONDA LLEGÓ EN EL DTO NÚMERO: "<< i << std::endl;
