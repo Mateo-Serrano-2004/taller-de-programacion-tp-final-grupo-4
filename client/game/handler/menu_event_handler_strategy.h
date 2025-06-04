@@ -11,9 +11,9 @@ class GameController;
 class MenuEventHandlerStrategy: public EventHandlerStrategy {
 protected:
     SDL_Event placeholder;
-    Weak<GameController> controller;
 
-    void handle_quit_event();
+    void handle_switch_context_event(Shared<SDL_Event> event) override;
+
     void handle_keydown_event(Shared<SDL_Event> event);
 
 public:

@@ -1,7 +1,5 @@
 #include "base_context.h"
 
-#include <iostream>
-
 #include <SDL2pp/Renderer.hh>
 
 #include "context_manager.h"

@@ -62,20 +62,15 @@ void Controller::InGameEventHandlerStrategy::handle_window_event(Shared<SDL_Even
     }
 }
 
-void Controller::InGameEventHandlerStrategy::handle_menu_switch_event() {
+void Controller::InGameEventHandlerStrategy::handle_switch_context_event(Shared<SDL_Event>) {
     auto switch_context_event = make_shared<Model::SwitchContextEvent>("menu");
     controller.lock()->handle_event(std::move(switch_context_event));
-}
-
-void Controller::InGameEventHandlerStrategy::handle_quit_event() {
-    auto quit_event = make_shared<Model::QuitEvent>();
-    controller.lock()->handle_event(quit_event);
 }
 
 void Controller::InGameEventHandlerStrategy::handle_keydown_event(Shared<SDL_Event> event) {
     auto key_symbol = event->key.keysym.sym;
     if (key_symbol == SDLK_ESCAPE) {
-        handle_menu_switch_event();
+        handle_switch_context_event(nullptr);
     } else if (
         key_symbol == SDLK_w ||
         key_symbol == SDLK_a ||
@@ -113,13 +108,15 @@ void Controller::InGameEventHandlerStrategy::handle_keyup_event(Shared<SDL_Event
 }
 
 Controller::InGameEventHandlerStrategy::InGameEventHandlerStrategy(Weak<Controller::GameController> controller)
-: Controller::EventHandlerStrategy(), controller(controller) {}
+: Controller::EventHandlerStrategy(controller) {}
 
 void Controller::InGameEventHandlerStrategy::handle(Shared<SDL_Event> event) {
+    Controller::EventHandlerStrategy::handle(event);
     auto event_type = event->type;
-    if (event_type == SDL_QUIT) {
-        handle_quit_event();
-    } else if (event_type == SDL_KEYDOWN) {
+
+    if (event_type == SDL_QUIT) return;
+
+    if (event_type == SDL_KEYDOWN) {
         handle_keydown_event(event);
     } else if (event_type == SDL_KEYUP) {
         handle_keyup_event(event);

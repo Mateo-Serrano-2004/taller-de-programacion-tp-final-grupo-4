@@ -8,9 +8,9 @@
 #include "event/quit_event.h"
 #include "event/switch_context_event.h"
 
-void Controller::MenuEventHandlerStrategy::handle_quit_event() {
-    auto quit_event = make_shared<Model::QuitEvent>();
-    controller.lock()->handle_event(std::move(quit_event));
+void Controller::MenuEventHandlerStrategy::handle_switch_context_event(Shared<SDL_Event>) {
+    auto switch_context_event = make_shared<Model::SwitchContextEvent>("in-game");
+    controller.lock()->handle_event(std::move(switch_context_event));
 }
 
 void Controller::MenuEventHandlerStrategy::handle_keydown_event(Shared<SDL_Event> event) {
@@ -19,19 +19,21 @@ void Controller::MenuEventHandlerStrategy::handle_keydown_event(Shared<SDL_Event
         return;
     }
 
-    auto switch_context_event = make_shared<Model::SwitchContextEvent>("in-game");
-    controller.lock()->handle_event(std::move(switch_context_event));
+    handle_switch_context_event(nullptr);
 }
 
 Controller::MenuEventHandlerStrategy::MenuEventHandlerStrategy(
     Weak<Controller::GameController> controller
-): controller(controller) {}
+): Controller::EventHandlerStrategy(controller) {}
 
 void Controller::MenuEventHandlerStrategy::handle(Shared<SDL_Event> event) {
+    Controller::EventHandlerStrategy::handle(event);
+
     auto event_type = event->type;
-    if (event_type == SDL_QUIT) {
-        handle_quit_event();
-    } else if (event_type == SDL_KEYDOWN) {
+
+    if (event_type == SDL_QUIT) return;
+
+    if (event_type == SDL_KEYDOWN) {
         handle_keydown_event(std::move(event));
     }
 }
