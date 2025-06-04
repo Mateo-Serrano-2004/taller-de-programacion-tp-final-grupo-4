@@ -16,10 +16,19 @@
 #include "common/thread.h"
 #include "model/movable_player.h"
 #include "server/events/events.h"
+
+#include "movement_system.h" 
 #include "round.h"
 
 using GameQueue = Queue<std::pair<uint8_t, GameEventVariant>>;
 using ClientQueue = Queue<DTO::GameStateDTO>;
+
+enum class GameState {
+    WaitingPlayers,
+    WaitingStart,
+    Playing,
+    Finished
+};
 
 class Game: public Thread {
 private:
@@ -33,16 +42,21 @@ private:
 
     std::vector<uint8_t> dropped_weapons;
     uint8_t max_players = 10;
+    uint8_t min_players_to_start = 2;
     bool is_not_finished = true;
     Round current_round;
+    MovementSystem movement_system;
+    GameState state = GameState::WaitingPlayers;
 
-    void tick(uint64_t frames_to_process);  // agregar current_tick
+    void tick(uint16_t frames_to_process);  // agregar current_tick
     void broadcast_game_state();
 
     void handle(uint8_t player_id, const GameEventVariant& event);
     void handle_leave_game(const uint8_t& player_id);
     void handle_movement(const uint8_t& player_id, const MovementEvent& event);
     void handle_stop_movement(const uint8_t& player_id, const StopMovementEvent& event);
+    void handle_start_game();
+    void clear_game_queue();
 
     Game(const Game&) = delete;
     Game& operator=(const Game&) = delete;
