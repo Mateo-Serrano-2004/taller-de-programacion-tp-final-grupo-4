@@ -17,9 +17,9 @@ project(counter_strike_2d
     )
 
 option(CS2D_TESTS "Enable / disable tests." OFF)
-option(CS2D_CLIENT "Enable / disable client program." ON)
-option(CS2D_SERVER "Enable / disable server program." ON)
-option(CS2D_EDITOR "Enable / disable editor program." OFF)
+option(CS2D_CLIENT "Enable / disable client program." OFF)
+option(CS2D_SERVER "Enable / disable server program." OFF)
+option(CS2D_EDITOR "Enable / disable editor program." ON)
 option(CS2D_MAKE_WARNINGS_AS_ERRORS "Enable / disable warnings as errors." OFF)
 
 message(CMAKE_CXX_COMPILER_ID="${CMAKE_CXX_COMPILER_ID}")
@@ -34,7 +34,7 @@ set_project_warnings(cs2d_common ${CS2D_MAKE_WARNINGS_AS_ERRORS} FALSE)
 
 target_include_directories(cs2d_common PUBLIC .)
 
-if(CS2D_CLIENT OR CS2D_EDITOR)
+if(CS2D_CLIENT)
     set(SDL2PP_WITH_IMAGE YES)
     set(SDL2PP_WITH_MIXER YES)
     set(SDL2PP_WITH_TTF YES)
@@ -89,13 +89,13 @@ if(CS2D_EDITOR)
     set(CMAKE_AUTOMOC ON)
 
     add_executable(cs2d_editor)
-    add_dependencies(cs2d_editor)
+    #add_dependencies(cs2d_editor)
     add_subdirectory(editor/)
 
     find_package(Qt5 COMPONENTS Widgets REQUIRED)
     set_project_warnings(cs2d_editor ${CS2D_MAKE_WARNINGS_AS_ERRORS} FALSE)
 
-    target_link_libraries(cs2d_editor cs2d_common Qt5::Widgets)
+    target_link_libraries(cs2d_editor Qt5::Widgets)
 endif()
 
 
