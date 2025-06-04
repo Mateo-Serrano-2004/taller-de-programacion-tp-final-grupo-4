@@ -43,6 +43,14 @@ void View::Pane::set_full_texture() {
     texture_slice = SDL2pp::NullOpt;
 }
 
+void View::Pane::set_texture_slice_to_match_position() {
+    texture_slice = position;
+}
+
+void View::Pane::set_parent(View::Pane* new_parent) {
+    parent = new_parent;
+}
+
 SDL2pp::Rect View::Pane::get_absolute_position() const {
     if (!parent) return position ? *position : SDL2pp::Rect();
 
@@ -55,6 +63,10 @@ SDL2pp::Rect View::Pane::get_absolute_position() const {
         displacement.GetW(),
         displacement.GetH()
     );
+}
+
+SDL2pp::Rect View::Pane::get_parent_position() const {
+    return parent ? parent->get_position() : renderer->GetViewport();
 }
 
 void View::Pane::render() {

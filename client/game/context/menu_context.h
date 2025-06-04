@@ -28,6 +28,9 @@ protected:
     MenuContext(const MenuContext&) = delete;
     MenuContext& operator=(const MenuContext&) = delete;
 
+    void size_pane_relatively_to_parent(View::Pane& pane, double portion_x, double portion_y);
+    void place_pane_relatively_to_parent(View::Pane& pane, double portion_x, double portion_y);
+
 public:
     MenuContext(Weak<Controller::GameController> controller);
 

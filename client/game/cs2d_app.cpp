@@ -36,7 +36,7 @@ App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
     );
     auto renderer = make_shared<SDL2pp::Renderer>(*window, -1, SDL_RENDERER_ACCELERATED);
 
-    renderer->SetDrawColor(0, 0, 255, 255);
+    renderer->SetDrawColor(0, 0, 0, 255);
     renderer->SetDrawBlendMode(SDL_BLENDMODE_BLEND);
 
     
@@ -47,12 +47,14 @@ App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
 
     SDL2pp::Color white(255, 255, 255, 255);
     SDL2pp::Color black(0, 0, 0, 255);
-    SDL2pp::Point button_size(60, 30);
+
+    SDL2pp::Color dark_green(33, 42, 34, 255);
+    SDL2pp::Color smooth_green(110, 120, 112, 255);
 
     View::TextureGenerator texture_generator(renderer);
     texture_storage->load_texture(10, std::move(texture_generator.generate_fov()));
-    texture_storage->load_texture(11, std::move(texture_generator.generate_background(white)));
-    texture_storage->load_texture(12, std::move(texture_generator.generate_background(button_size, black)));
+    texture_storage->load_texture(11, std::move(texture_generator.generate_background(dark_green)));
+    texture_storage->load_texture(12, std::move(texture_generator.generate_background(smooth_green)));
 
     context_manager = make_shared<Context::ContextManager>();
     controller = make_shared<Controller::GameController>(
@@ -74,5 +76,5 @@ App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
     context_manager->add_context(in_game_context);
     context_manager->add_context(menu_context);
 
-    context_manager->set_current_context("menu");
+    context_manager->set_current_context("in-game");
 }

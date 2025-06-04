@@ -40,8 +40,13 @@ public:
     SDL2pp::Rect get_texture_slice() const;
     void set_texture_slice(const SDL2pp::Rect& new_slice);
     void set_full_texture();
+    void set_texture_slice_to_match_position();
+
+    void set_parent(Pane* new_parent);
 
     SDL2pp::Rect get_absolute_position() const;
+
+    SDL2pp::Rect get_parent_position() const;
 
     virtual void render() override;
 
