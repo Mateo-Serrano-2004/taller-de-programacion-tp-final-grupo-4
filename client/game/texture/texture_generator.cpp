@@ -7,6 +7,7 @@
 #include <SDL2pp/Renderer.hh>
 #include <SDL2pp/Texture.hh>
 #include <SDL2pp/Color.hh>
+#include <SDL2pp/Point.hh>
 
 SDL_Rect View::TextureGenerator::get_bounds() {
     SDL_Rect bounds;
@@ -86,27 +87,33 @@ SDL2pp::Texture View::TextureGenerator::generate_fov() {
     return fov_texture;
 }
 
-SDL2pp::Texture View::TextureGenerator::generate_white_background() {
-    SDL_Rect bounds = get_bounds();
-
+SDL2pp::Texture View::TextureGenerator::generate_background(
+    const SDL2pp::Point& size,
+    const SDL2pp::Color& color
+) {
     SDL2pp::Texture texture(
         *renderer,
         SDL_PIXELFORMAT_RGBA8888,
         SDL_TEXTUREACCESS_TARGET,
-        bounds.w,
-        bounds.h
+        size.GetX(),
+        size.GetY()
     );
 
-    SDL2pp::Color color = renderer->GetDrawColor();
+    SDL2pp::Color prev_color = renderer->GetDrawColor();
     SDL_BlendMode blend_mode = renderer->GetDrawBlendMode();
 
     renderer->SetTarget(texture);
-    renderer->SetDrawColor(255, 255, 255, 255);
+    renderer->SetDrawColor(color);
     renderer->Clear();
 
-    renderer->SetDrawColor(color);
+    renderer->SetDrawColor(prev_color);
     renderer->SetDrawBlendMode(blend_mode);
     renderer->SetTarget();
 
     return texture;
+}
+
+SDL2pp::Texture View::TextureGenerator::generate_background(const SDL2pp::Color& color) {
+    SDL_Rect bounds = get_bounds();
+    return generate_background(SDL2pp::Point(bounds.w, bounds.h), color);
 }

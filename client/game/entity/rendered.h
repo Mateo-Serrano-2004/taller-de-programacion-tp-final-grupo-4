@@ -27,6 +27,8 @@ protected:
 public:
     Rendered(short_id_t texture_id, Weak<Controller::BaseController> controller);
 
+    void set_new_texture_id(short_id_t new_texture_id);
+
     virtual void render() = 0;
 
     virtual ~Rendered() = default;

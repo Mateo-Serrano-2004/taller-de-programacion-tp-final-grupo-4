@@ -25,7 +25,8 @@ public:
 
     // FOV = Field of view
     SDL2pp::Texture generate_fov();
-    SDL2pp::Texture generate_white_background();
+    SDL2pp::Texture generate_background(const SDL2pp::Point& size, const SDL2pp::Color& color);
+    SDL2pp::Texture generate_background(const SDL2pp::Color& color);
 
     ~TextureGenerator() = default;
 };

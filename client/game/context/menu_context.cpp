@@ -8,7 +8,8 @@
 #include "exception/closed_window.h"
 
 void Context::MenuContext::render() {
-    menu_renderer.render();
+    background.render();
+    button.render();
 }
 
 void Context::MenuContext::dispatch_events() {
@@ -23,7 +24,6 @@ void Context::MenuContext::dispatch_events() {
 
 Context::MenuContext::MenuContext(Weak<Controller::GameController> controller)
 : Context::BaseContext("menu", controller),
-  menu_renderer(controller),
-  event_handler_strategy(controller) {
-    menu_renderer.add_to_render(make_shared<View::Background>(11, controller));
-}
+  event_handler_strategy(controller),
+  background(11, controller),
+  button(SDL2pp::Rect(30, 30, 60, 30), 12, controller) {}

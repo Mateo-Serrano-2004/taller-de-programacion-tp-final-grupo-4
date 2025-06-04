@@ -6,9 +6,9 @@
 #include "base_context.h"
 
 #include "handler/menu_event_handler_strategy.h"
-#include "render/menu_renderer.h"
 
 #include "entity/background.h"
+#include "entity/button.h"
 
 namespace Controller {
 class GameController;
@@ -18,8 +18,9 @@ namespace Context {
 class MenuContext: public BaseContext {
 protected:
     SDL_Event placeholder;
-    View::MenuRenderer menu_renderer;
     Controller::MenuEventHandlerStrategy event_handler_strategy;
+    View::Background background;
+    View::Button button;
 
     void render() override;
     void dispatch_events() override;

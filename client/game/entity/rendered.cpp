@@ -16,3 +16,7 @@ View::Rendered::Rendered(
     renderer = controller_locked->get_renderer();
     texture_storage = controller_locked->get_texture_storage();
 }
+
+void View::Rendered::set_new_texture_id(short_id_t new_texture_id) {
+    texture_id = new_texture_id;
+}

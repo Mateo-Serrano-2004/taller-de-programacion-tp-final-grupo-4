@@ -9,6 +9,8 @@
 #include <SDL2pp/SDL2pp.hh>
 #include <SDL2pp/Window.hh>
 #include <SDL2pp/Renderer.hh>
+#include <SDL2pp/Color.hh>
+#include <SDL2pp/Point.hh>
 
 #include "common/definitions.h"
 
@@ -43,9 +45,14 @@ App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
         texture_storage->load_texture(i, paths[i]);
     }
 
+    SDL2pp::Color white(255, 255, 255, 255);
+    SDL2pp::Color black(0, 0, 0, 255);
+    SDL2pp::Point button_size(60, 30);
+
     View::TextureGenerator texture_generator(renderer);
     texture_storage->load_texture(10, std::move(texture_generator.generate_fov()));
-    texture_storage->load_texture(11, std::move(texture_generator.generate_white_background()));
+    texture_storage->load_texture(11, std::move(texture_generator.generate_background(white)));
+    texture_storage->load_texture(12, std::move(texture_generator.generate_background(button_size, black)));
 
     context_manager = make_shared<Context::ContextManager>();
     controller = make_shared<Controller::GameController>(
