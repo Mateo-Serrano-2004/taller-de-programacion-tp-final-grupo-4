@@ -8,6 +8,8 @@
 #include "handler/menu_event_handler_strategy.h"
 #include "render/menu_renderer.h"
 
+#include "entity/background.h"
+
 namespace Controller {
 class GameController;
 };

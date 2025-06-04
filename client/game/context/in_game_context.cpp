@@ -10,7 +10,6 @@
 
 #include "handler/game_state_manager.h"
 #include "controller/game_controller.h"
-#include "entity/player.h"
 #include "render/player_render_context.h"
 #include "exception/closed_window.h"
 

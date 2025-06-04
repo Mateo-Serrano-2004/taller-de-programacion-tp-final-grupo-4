@@ -33,7 +33,8 @@ App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
         SDL_WINDOW_SHOWN
     );
     auto renderer = make_shared<SDL2pp::Renderer>(*window, -1, SDL_RENDERER_ACCELERATED);
-    renderer->SetDrawColor(255, 255, 255, 255);
+
+    renderer->SetDrawColor(0, 0, 255, 255);
     renderer->SetDrawBlendMode(SDL_BLENDMODE_BLEND);
 
     
@@ -43,7 +44,8 @@ App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
     }
 
     View::TextureGenerator texture_generator(renderer);
-    texture_storage->load_texture(10, std::move(texture_generator.draw_field_of_view()));
+    texture_storage->load_texture(10, std::move(texture_generator.generate_fov()));
+    texture_storage->load_texture(11, std::move(texture_generator.generate_white_background()));
 
     context_manager = make_shared<Context::ContextManager>();
     controller = make_shared<Controller::GameController>(

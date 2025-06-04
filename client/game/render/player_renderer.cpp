@@ -32,8 +32,8 @@ void View::PlayerRenderer::render_player(View::Camera& camera, Model::Player& pl
     angle_t angle = player.get_angle();
 
     // Get the view from the camera
-    length_t viewport_width = camera.get_viewport_width();
-    length_t viewport_height = camera.get_viewport_height();
+    coord_t viewport_width = camera.get_viewport_width();
+    coord_t viewport_height = camera.get_viewport_height();
 
     SDL2pp::Point camera_view = camera.get_camera_view(player.get_position());
     int camera_view_x = camera_view.GetX();

@@ -36,7 +36,6 @@ using SharedQueue = Queue<Shared<T>>;
 
 // Integer datatypes
 using coord_t = int32_t;
-using length_t = int32_t;
 using angle_t = int16_t;
 using short_id_t = uint8_t;
 using signed_id_t = int8_t;

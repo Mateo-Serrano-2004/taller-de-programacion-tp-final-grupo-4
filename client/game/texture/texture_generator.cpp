@@ -8,6 +8,14 @@
 #include <SDL2pp/Texture.hh>
 #include <SDL2pp/Color.hh>
 
+SDL_Rect View::TextureGenerator::get_bounds() {
+    SDL_Rect bounds;
+    if (SDL_GetDisplayBounds(0, &bounds) != 0) {
+        throw std::runtime_error(std::string(SDL_GetError()));
+    }
+    return bounds;
+}
+
 void View::TextureGenerator::draw_disk(int half_size, int radius) {
     for (int y = -radius; y <= radius; y++) {
         for (int x = -radius; x <= radius; x++) {
@@ -32,11 +40,8 @@ View::TextureGenerator::TextureGenerator(
     Shared<SDL2pp::Renderer> renderer
 ): renderer(renderer) {}
 
-SDL2pp::Texture View::TextureGenerator::draw_field_of_view() {
-    SDL_Rect bounds;
-    if (SDL_GetDisplayBounds(0, &bounds) != 0) {
-        throw std::runtime_error(std::string(SDL_GetError()));
-    }
+SDL2pp::Texture View::TextureGenerator::generate_fov() {
+    SDL_Rect bounds = get_bounds();
 
     // The size of the fov must be enough to cover
     // the whole screen even when rotated
@@ -46,33 +51,62 @@ SDL2pp::Texture View::TextureGenerator::draw_field_of_view() {
         ) / 2.0
     );
 
-
     SDL2pp::Texture fov_texture(
         *renderer,
         SDL_PIXELFORMAT_RGBA8888,
         SDL_TEXTUREACCESS_TARGET,
-        2 * max_fov_size, // should be 2 * max_fov_size, but in debug mode screen is 640 x 480
+        2 * max_fov_size,
         2 * max_fov_size
     );
+
     // Allow blend
     fov_texture.SetBlendMode(SDL_BLENDMODE_BLEND);
+
+    SDL2pp::Color color = renderer->GetDrawColor();
+    SDL_BlendMode blend_mode = renderer->GetDrawBlendMode();
 
     // Set blend for the current target
     renderer->SetTarget(fov_texture);
     renderer->SetDrawBlendMode(SDL_BLENDMODE_BLEND);
-
-    SDL2pp::Color color = renderer->GetDrawColor(); // To restore it later
     renderer->SetDrawColor(0, 0, 0, 128); // Semi-transparent black
+
     renderer->Clear();
+
     renderer->SetDrawBlendMode(SDL_BLENDMODE_NONE); // Override the black transparency
     renderer->SetDrawColor(0, 0, 0, 0); // Transparent
+
     draw_disk(max_fov_size, 30);
     draw_triangle(max_fov_size, 30); // 30deg
 
     // Restore
     renderer->SetDrawColor(color);
-    renderer->SetDrawBlendMode(SDL_BLENDMODE_BLEND);
+    renderer->SetDrawBlendMode(blend_mode);
     renderer->SetTarget();
 
     return fov_texture;
+}
+
+SDL2pp::Texture View::TextureGenerator::generate_white_background() {
+    SDL_Rect bounds = get_bounds();
+
+    SDL2pp::Texture texture(
+        *renderer,
+        SDL_PIXELFORMAT_RGBA8888,
+        SDL_TEXTUREACCESS_TARGET,
+        bounds.w,
+        bounds.h
+    );
+
+    SDL2pp::Color color = renderer->GetDrawColor();
+    SDL_BlendMode blend_mode = renderer->GetDrawBlendMode();
+
+    renderer->SetTarget(texture);
+    renderer->SetDrawColor(255, 255, 255, 255);
+    renderer->Clear();
+
+    renderer->SetDrawColor(color);
+    renderer->SetDrawBlendMode(blend_mode);
+    renderer->SetTarget();
+
+    return texture;
 }

@@ -8,6 +8,8 @@
 #include "event/quit_event.h"
 #include "event/switch_context_event.h"
 
+#include "entity/rendered.h"
+
 void Controller::MenuEventHandlerStrategy::handle_switch_context_event(Shared<SDL_Event>) {
     auto switch_context_event = make_shared<Model::SwitchContextEvent>("in-game");
     controller.lock()->handle_event(std::move(switch_context_event));

@@ -3,7 +3,13 @@
 
 #include <SDL2/SDL.h>
 
+#include "common/definitions.h"
+
 #include "event_handler_strategy.h"
+
+namespace View {
+class Rendered;
+};
 
 namespace Controller {
 class GameController;

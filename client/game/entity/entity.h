@@ -1,39 +1,32 @@
 #ifndef CLIENT_GAME_ENTITY_ENTITY_H
 #define CLIENT_GAME_ENTITY_ENTITY_H
 
-#include <functional>
+#include <SDL2pp/Point.hh>
 
 #include "common/definitions.h"
 #include "common/model/vector_2d.h"
 
 #include "render/render_context.h"
 
-namespace Context {
-class BaseContext;
-};
-
 namespace View {
 class Entity {
 protected:
-    Physics::Vector2D position;
-    Callback on_click;
-
-    Entity(const Entity&) = delete;
-    Entity& operator=(const Entity&) = delete;
+    SDL2pp::Point position;
 
 public:
+    Entity();
     Entity(coord_t x, coord_t y);
-    Entity(coord_t x, coord_t y, Callback on_click);
+    Entity(const SDL2pp::Point& point);
 
-    Physics::Vector2D get_position() const;
+    coord_t get_x() const;
+    coord_t get_y() const;
+    SDL2pp::Point get_position() const;
+
     void set_position(coord_t x, coord_t y);
+    void set_position(const SDL2pp::Point& point);
 
-    void set_callback(Callback new_callback);
-
-    void trigger_callback();
-
-    virtual void render(RenderContext& render_context) = 0;
-
+    Entity(const Entity&) = default;
+    Entity& operator=(const Entity&) = default;
     Entity(Entity&&) = default;
     Entity& operator=(Entity&&) = default;
 
