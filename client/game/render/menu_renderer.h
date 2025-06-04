@@ -3,34 +3,18 @@
 
 #include "common/definitions.h"
 
-namespace SDL2pp {
-class Window;
-class Renderer;
-};
-
-namespace Model {
-class TextureStorage;
-};
-
-namespace Controller {
-class GameController;
-};
+#include "renderer.h"
 
 namespace Controller {
 class GameController;
 };
 
 namespace View {
-class MenuRenderer {
-protected:
-    Shared<SDL2pp::Window> window;
-    Shared<SDL2pp::Renderer> renderer;
-    Shared<Model::TextureStorage> texture_storage;
-
+class MenuRenderer: public Renderer {
 public:
     MenuRenderer(Weak<Controller::GameController> controller);
 
-    void render_menu();
+    void render() override;
 
     ~MenuRenderer() = default;
 };

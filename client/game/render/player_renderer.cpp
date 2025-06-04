@@ -101,11 +101,8 @@ void View::PlayerRenderer::render_fov() {
 
 View::PlayerRenderer::PlayerRenderer(
     Weak<Controller::GameController> controller
-) {
+): View::Renderer(controller) {
     auto controller_locked = controller.lock();
-    window = controller_locked->get_window();
-    renderer = controller_locked->get_renderer();
-    texture_storage = controller_locked->get_texture_storage();
     game_state_manager = controller_locked->get_game_state_manager();
 }
 

@@ -5,14 +5,10 @@
 
 #include "common/definitions.h"
 
-namespace SDL2pp {
-class Window;
-class Renderer;
-};
+#include "renderer.h"
 
 namespace Model {
 class Player;
-class TextureStorage;
 };
 
 namespace Controller {
@@ -23,11 +19,8 @@ class GameStateManager;
 namespace View {
 class Camera;
 
-class PlayerRenderer {
+class PlayerRenderer: public Renderer {
 protected:
-    Shared<SDL2pp::Window> window;
-    Shared<SDL2pp::Renderer> renderer;
-    Shared<Model::TextureStorage> texture_storage;
     Shared<Controller::GameStateManager> game_state_manager;
 
     SDL2pp::Point get_skin_top_left_corner(short_id_t skin_piece);
@@ -37,7 +30,7 @@ protected:
 public:
     PlayerRenderer(Weak<Controller::GameController> controller);
 
-    void render();
+    void render() override;
 
     ~PlayerRenderer() = default;
 };

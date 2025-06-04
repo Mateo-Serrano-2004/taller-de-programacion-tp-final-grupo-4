@@ -8,7 +8,7 @@
 #include "exception/closed_window.h"
 
 void Context::MenuContext::render() {
-    menu_renderer.render_menu();
+    menu_renderer.render();
 }
 
 void Context::MenuContext::dispatch_events() {

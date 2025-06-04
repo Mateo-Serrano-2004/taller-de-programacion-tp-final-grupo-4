@@ -10,14 +10,9 @@
 
 View::MenuRenderer::MenuRenderer(
     Weak<Controller::GameController> controller
-) {
-    auto controller_locked = controller.lock();
-    window = controller_locked->get_window();
-    renderer = controller_locked->get_renderer();
-    texture_storage = controller_locked->get_texture_storage();
-}
+): View::Renderer(controller) {}
 
-void View::MenuRenderer::render_menu() {
+void View::MenuRenderer::render() {
     SDL2pp::Color current_fill_color = renderer->GetDrawColor();
     renderer->SetDrawColor(55, 55, 55, 255);
     renderer->FillRect(
