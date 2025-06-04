@@ -32,6 +32,7 @@ enum class GameState {
 
 class Game: public Thread {
 private:
+    static constexpr int GAME_FPS = 60;
     uint8_t next_player_id = 0;
     std::string party_name;
     std::string map_name;

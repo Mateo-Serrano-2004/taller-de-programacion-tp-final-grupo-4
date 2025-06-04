@@ -8,7 +8,7 @@
 
 void Game::run() {
     current_round = Round(180);
-    PeriodicClock clock(60); 
+    PeriodicClock clock(GAME_FPS); 
 
     while (is_not_finished) {
         uint16_t frames_to_process = clock.sleep_and_get_frames();
@@ -36,9 +36,7 @@ void Game::handle(uint8_t player_id, const GameEventVariant& event) {
 void Game::handle_start_game() {
     if (state != GameState::WaitingStart) return;
 
-    // Limpio eventos viejos
-    std::pair<uint8_t, GameEventVariant> event_info;
-    while (game_queue.try_pop(event_info));  
+    clear_game_queue();  
 
     current_round = Round(180);
     state = GameState::Playing;
@@ -132,8 +130,10 @@ void Game::broadcast_game_state() {
     for (const auto& [id, player]: players) {
         player_dtos.push_back(player.to_dto());
     }
-    
-    DTO::GameStateDTO game_snapshot(true, player_dtos, current_round.has_ended());
+
+    uint16_t round_seconds_left = current_round.get_ticks_remaining() / GAME_FPS;
+
+    DTO::GameStateDTO game_snapshot(true, player_dtos, current_round.has_ended(), round_seconds_left);
 
     for (auto& [id, queue]: client_queues) {
         queue->push(game_snapshot);
