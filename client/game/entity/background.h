@@ -3,22 +3,28 @@
 
 #include "common/definitions.h"
 
-#include "rect_entity.h"
-#include "rendered.h"
+#include "pane.h"
 
 namespace Controller {
 class BaseController;
 };
 
 namespace View {
-class Background: public Rendered, public RectEntity {
+class Background: public Pane {
 public:
-    Background(short_id_t texture_id, Weak<Controller::BaseController> controller);
+    Background(
+        short_id_t texture_id,
+        Weak<Controller::BaseController> controller,
+        Pane* parent
+    );
 
-    void render() override;
+    Background(
+        short_id_t texture_id,
+        Weak<Controller::BaseController> controller
+    );
 
     ~Background() override = default;
 };
 };
 
-#endif //CLIENT_GAME_ENTITY_BACKGROUND_H
+#endif // CLIENT_GAME_ENTITY_BACKGROUND_H

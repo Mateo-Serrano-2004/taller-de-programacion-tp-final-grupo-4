@@ -3,27 +3,25 @@
 
 #include "common/definitions.h"
 
-#include "rendered.h"
-#include "rect_entity.h"
-
-namespace SDL2pp {
-class Rect;
-};
+#include "pane.h"
 
 namespace Controller {
 class BaseController;
 };
 
 namespace View {
-class Button: public Rendered, public RectEntity {
+class Button: public Pane {
 public:
     Button(
-        const SDL2pp::Rect& rect,
+        short_id_t texture_id,
+        Weak<Controller::BaseController> controller,
+        Pane* parent
+    );
+
+    Button(
         short_id_t texture_id,
         Weak<Controller::BaseController> controller
     );
-
-    void render() override;
 
     ~Button() override = default;
 };

@@ -26,4 +26,7 @@ Context::MenuContext::MenuContext(Weak<Controller::GameController> controller)
 : Context::BaseContext("menu", controller),
   event_handler_strategy(controller),
   background(11, controller),
-  button(SDL2pp::Rect(30, 30, 60, 30), 12, controller) {}
+  button(12, controller, &background) {
+    background.set_position(SDL2pp::Rect(0, 0, 100, 100));
+    button.set_position(SDL2pp::Rect(0, 0, 60, 30));
+}
