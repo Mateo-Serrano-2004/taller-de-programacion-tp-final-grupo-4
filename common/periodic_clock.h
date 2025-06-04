@@ -2,13 +2,18 @@
 #define CLIENT_GAME_PERIODIC_CLOCK_H
 
 #include <cstdint>
-#include <functional>
+
+#include "definitions.h"
 
 class PeriodicClock {
-public:
-    PeriodicClock(uint16_t fps, std::function<void()> on_tick);
+private:
+    uint64_t rate;
+    time_point start;
 
-    ~PeriodicClock() = default;
+public:
+    explicit PeriodicClock(uint16_t fps);
+
+    uint64_t sleep_and_get_frames();
 };
 
 #endif  // CLIENT_GAME_PERIODIC_CLOCK_H

@@ -7,9 +7,13 @@
 #include "server/events/overloaded.h"
 
 void Game::run() {
-    PeriodicClock clock(60, [this]() {
-        this->tick(); /* falta número de tick */
-    });
+    current_round = Round(180);
+    PeriodicClock clock(GAME_FPS); 
+
+    while (is_not_finished) {
+        uint16_t frames_to_process = clock.sleep_and_get_frames();
+        this->tick(frames_to_process);
+    }
 }
 
 void Game::handle(uint8_t player_id, const GameEventVariant& event) {
@@ -58,17 +62,56 @@ void Game::handle_rotation(const uint8_t& player_id, const RotationEvent& event)
     }
 }
 
-void Game::tick() {  // agregar current_tick
+void Game::tick(uint16_t frames_to_process) {
+
+    // compenso lo perdido (si hay)
+    if(frames_to_process > 1) {
+        uint16_t lost_frames = frames_to_process - 1;
+        movement_system.process_movements(players, lost_frames);
+        current_round.update(lost_frames);
+
+        if (current_round.has_ended()) {
+
+            clear_game_queue();
+
+            //esto ya es lógica pero ver lo de jugadores y ronda
+            //preguntar quien gano, sumarle uno al contador de partida de ronda ganda de ese equipo
+                
+            broadcast_game_state();
+
+            //OJO ACA QUE EN LA SIGUIENTE EL RELOJ TE PUEDE PASAR VARIOS FRAMES Y RECIEN ARRANCAS
+            //current_round = Round(180);
+            return;  // nuevo round    
+        }
+    }
+
+    // ejecuto el tick actual
     std::pair<uint8_t, GameEventVariant> event_info;
-    if (game_queue.try_pop(event_info)) {
+    while (game_queue.try_pop(event_info)) { //ojo acá
         uint8_t player_id = event_info.first;
         GameEventVariant event = event_info.second;
         handle(player_id, event);
     }
 
-    // aca deberia loopear por la cantidad de ticks perdidos? teniendo registro aca mismo?
-    for (auto& [id, player]: players) {
+    /*for (auto& [id, player]: players) {
         player.update_position();
+    }*/
+    movement_system.process_movements(players, 1);
+
+    current_round.update(1);
+            
+    if (current_round.has_ended()) {
+        
+        clear_game_queue();
+
+        //esto ya es lógica pero ver lo de jugadores y ronda
+        //preguntar quien gano, sumarle uno al contador de partida de ronda ganda de ese equipo
+
+        broadcast_game_state();
+
+        //OJO ACA QUE EN LA SIGUIENTE EL RELOJ TE PUEDE PASAR VARIOS FRAMES Y RECIEN ARRANCAS
+        //current_round = Round(180);
+        return;  // nuevo round    
     }
 
     broadcast_game_state();
@@ -80,18 +123,34 @@ void Game::broadcast_game_state() {
         player_dtos.push_back(player.to_dto());
     }
 
-    DTO::GameStateDTO game_snapshot(true, player_dtos);
+    uint16_t round_seconds_left = current_round.get_ticks_remaining() / GAME_FPS;
+
+    DTO::GameStateDTO game_snapshot(true, player_dtos, current_round.has_ended(), round_seconds_left);
 
     for (auto& [id, queue]: client_queues) {
         queue->push(game_snapshot);
     }
 }
 
+//ojo que informo error ahora si la partida ya empezó o terminó
 uint8_t Game::add_player(const std::string& username, ClientQueue& client_queue) {
+    if(state == GameState::Playing || state == GameState::Finished){
+        return -1;
+    }
     const uint8_t new_id = next_player_id++;
-    players.insert(std::make_pair(new_id, Model::MovablePlayer(new_id, username)));
+    players.emplace(new_id, Model::MovablePlayer(new_id, username));
     client_queues[new_id] = &client_queue;
+
+    if (state == GameState::WaitingPlayers && players.size() >= min_players_to_start) {
+        state = GameState::WaitingStart;
+    }
+
     return new_id;
+}
+
+void Game::clear_game_queue() {
+    std::pair<uint8_t, GameEventVariant> event_info;
+    while(game_queue.try_pop(event_info));
 }
 
 uint8_t Game::get_num_players() const { return players.size(); }

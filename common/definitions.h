@@ -20,7 +20,6 @@
 using ms = std::chrono::milliseconds;
 using steady_clock = std::chrono::steady_clock;
 using time_point = steady_clock::time_point;
-using std::chrono::duration_cast;
 
 // Memory
 template <typename T>

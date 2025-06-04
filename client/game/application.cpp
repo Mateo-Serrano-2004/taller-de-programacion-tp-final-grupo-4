@@ -8,8 +8,15 @@ App::Application::Application()
 : sdl(SDL_INIT_VIDEO) {}
 
 void App::Application::launch() {
-    PeriodicClock clock(
-        60,
-        [this] () { context_manager->update_current_context(); }
-    );
+    bool keep_running = true;
+    PeriodicClock clock(60);
+
+    while (keep_running) {
+        try {
+            (void) clock.sleep_and_get_frames();
+            context_manager->update_current_context();
+        } catch (...) {
+            keep_running = true;
+        }
+    }
 }

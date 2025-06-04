@@ -25,6 +25,7 @@ public:
     void stop_vertical_movement();
     void stop_horizontal_movement();
     void update_position();
+    Physics::Vector2D get_direction() const;
 
     ~MovablePlayer() override = default;
 };
