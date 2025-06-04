@@ -21,6 +21,7 @@ public:
     void update(int frames_to_process);
     bool has_ended() const;
     RoundState get_state() const;
+    uint16_t get_ticks_remaining() const;
 };
 
 #endif // ROUND_H

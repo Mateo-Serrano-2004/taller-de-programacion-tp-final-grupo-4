@@ -18,6 +18,13 @@ bool Round::has_ended() const {
     return state == RoundState::Ended;
 }
 
+uint16_t Round::get_ticks_remaining() const {
+    if(state == RoundState::Ended){
+        return 0;
+    }
+    return ticks_remaining;
+}
+
 RoundState Round::get_state() const {
     return state;
 }
