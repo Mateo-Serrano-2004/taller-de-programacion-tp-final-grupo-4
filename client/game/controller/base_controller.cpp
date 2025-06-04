@@ -13,6 +13,7 @@
 #include "event/event.h"
 #include "event/switch_context_event.h"
 #include "context/context_manager.h"
+#include "exception/closed_window.h"
 
 Controller::BaseController::BaseController(
     Shared<SDL2pp::Window> window,
@@ -45,6 +46,10 @@ void Controller::BaseController::handle_event(Shared<Model::Event> event) {
         context_manager->set_current_context(switch_context_event->get_new_context_name());
     } else {
         processor_event_queue.push(event);
+
+        if (event->get_type() == Model::EventType::QUIT) {
+            throw App::ClosedWindowException("Received a QUIT event");
+        }
     }
 }
 

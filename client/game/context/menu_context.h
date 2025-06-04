@@ -7,8 +7,8 @@
 
 #include "handler/menu_event_handler_strategy.h"
 
-#include "entity/background.h"
-#include "entity/button.h"
+#include "entity/pane.h"
+#include "entity/exit_button.h"
 
 namespace Controller {
 class GameController;
@@ -19,8 +19,8 @@ class MenuContext: public BaseContext {
 protected:
     SDL_Event placeholder;
     Controller::MenuEventHandlerStrategy event_handler_strategy;
-    View::Background background;
-    View::Button button;
+    View::Pane background;
+    View::ExitButton exit_button;
 
     void render() override;
     void dispatch_events() override;

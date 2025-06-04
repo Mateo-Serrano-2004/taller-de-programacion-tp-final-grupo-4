@@ -9,14 +9,6 @@
 #include "controller/base_controller.h"
 #include "texture/texture_storage.h"
 
-SDL2pp::Rect View::Pane::get_parent_position() {
-    return parent ? parent->get_position() : renderer->GetViewport();
-}
-
-SDL2pp::Rect View::Pane::get_displacement_within_parent() {
-    return position ? *position : SDL2pp::Rect();
-}
-
 View::Pane::Pane(short_id_t texture_id, Weak<Controller::BaseController> controller, Pane* parent):
         View::Rendered(texture_id, controller), parent(parent) {}
 
@@ -25,7 +17,9 @@ View::Pane::Pane(short_id_t texture_id, Weak<Controller::BaseController> control
 
 bool View::Pane::has_position() const { return (bool) position; }
 
-SDL2pp::Rect View::Pane::get_position() const { return *position; }
+SDL2pp::Rect View::Pane::get_position() const {
+    return position ? *position : SDL2pp::Rect();
+}
 
 void View::Pane::set_position(const SDL2pp::Rect& new_position) {
     position = new_position;
@@ -36,7 +30,7 @@ void View::Pane::set_auto_fit() {
 }
 
 SDL2pp::Rect View::Pane::get_texture_slice() const {
-    return *texture_slice;
+    return texture_slice ? *texture_slice : SDL2pp::Rect();
 }
 
 bool View::Pane::has_texture_slice() const { return (bool) texture_slice; }
@@ -49,18 +43,24 @@ void View::Pane::set_full_texture() {
     texture_slice = SDL2pp::NullOpt;
 }
 
-void View::Pane::render() {
-    SDL2pp::Texture& texture = texture_storage->get_texture(texture_id);
+SDL2pp::Rect View::Pane::get_absolute_position() const {
+    if (!parent) return position ? *position : SDL2pp::Rect();
 
-    SDL2pp::Rect parent_position = get_parent_position();
-    SDL2pp::Rect displacement = get_displacement_within_parent();
+    SDL2pp::Rect parent_position = parent->get_absolute_position();
+    SDL2pp::Rect displacement = get_position();
 
-    SDL2pp::Rect absolute_position(
+    return SDL2pp::Rect(
         parent_position.GetX() + displacement.GetX(),
         parent_position.GetY() + displacement.GetY(),
         displacement.GetW(),
         displacement.GetH()
     );
+}
+
+void View::Pane::render() {
+    SDL2pp::Texture& texture = texture_storage->get_texture(texture_id);
+
+    SDL2pp::Rect absolute_position = get_absolute_position();
 
     renderer->Copy(
         texture,

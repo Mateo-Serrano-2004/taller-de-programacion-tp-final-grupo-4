@@ -1,9 +1,13 @@
 #ifndef CLIENT_GAME_ENTITY_BUTTON_H
 #define CLIENT_GAME_ENTITY_BUTTON_H
 
+#include <SDL2/SDL.h>
+
 #include "common/definitions.h"
 
 #include "pane.h"
+
+#include "handler/callback.h"
 
 namespace Controller {
 class BaseController;
@@ -11,6 +15,11 @@ class BaseController;
 
 namespace View {
 class Button: public Pane {
+protected:
+    Controller::Callback callback;
+
+    bool check_click(Shared<SDL_Event> event) const;
+
 public:
     Button(
         short_id_t texture_id,
@@ -23,7 +32,10 @@ public:
         Weak<Controller::BaseController> controller
     );
 
-    ~Button() override = default;
+    void on_click(std::function<void(Weak<Controller::BaseController>)> callback);
+    void trigger(Shared<SDL_Event> event);
+
+    virtual ~Button() override = default;
 };
 };
 

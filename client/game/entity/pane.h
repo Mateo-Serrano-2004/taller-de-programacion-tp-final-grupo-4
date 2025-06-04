@@ -19,9 +19,6 @@ protected:
     SDL2pp::Optional<SDL2pp::Rect> position;
     SDL2pp::Optional<SDL2pp::Rect> texture_slice;
 
-    SDL2pp::Rect get_parent_position();
-    SDL2pp::Rect get_displacement_within_parent();
-
 public:
     Pane(
         short_id_t texture_id,
@@ -43,6 +40,8 @@ public:
     SDL2pp::Rect get_texture_slice() const;
     void set_texture_slice(const SDL2pp::Rect& new_slice);
     void set_full_texture();
+
+    SDL2pp::Rect get_absolute_position() const;
 
     virtual void render() override;
 

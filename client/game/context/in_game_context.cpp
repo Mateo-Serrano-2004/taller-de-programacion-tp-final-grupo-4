@@ -20,10 +20,6 @@ void Context::InGameContext::render() {
 void Context::InGameContext::dispatch_events() {
     while (SDL_PollEvent(&placeholder)) {
         event_handler_strategy.handle(make_shared<SDL_Event>(placeholder));
-
-        if (placeholder.type == SDL_QUIT) {
-            throw App::ClosedWindowException("Received a QUIT event");
-        }
     }
 
     // event_handler_strategy.handle_current_game_state(game_state_manager);
