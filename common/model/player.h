@@ -17,6 +17,7 @@ protected:
     angle_t angle;
     std::string name;
     Physics::Vector2D position;
+    bool alive;
 
     Player(const Player&) = delete;
     Player& operator=(const Player&) = delete;
@@ -36,6 +37,7 @@ public:
     angle_t get_angle() const;
     std::string get_name() const;
     Physics::Vector2D get_position() const;
+    bool is_alive() const;
 
     void set_skin_id(short_id_t new_skin_id);
     void set_skin_piece(short_id_t new_skin_piece);
