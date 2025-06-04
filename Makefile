@@ -48,6 +48,7 @@ test_round_end:
 	    server/game/model/movable_player.cpp \
 	    server/game/game.cpp \
 	    server/game/round.cpp \
+		server/game/movement_system.cpp \
 	    -o build/test_round_end \
 	    -lpthread
 
