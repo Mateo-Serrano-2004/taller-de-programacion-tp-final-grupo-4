@@ -26,6 +26,8 @@ protected:
     Shared<Controller::GameStateManager> game_state_manager;
 
     SDL2pp::Point get_skin_top_left_corner(short_id_t skin_piece);
+
+    void render_name(const SDL2pp::Point& player_center, const std::string& player);
     void render_player(Camera& camera, Model::Player& player);
     void render_fov(angle_t angle);
 

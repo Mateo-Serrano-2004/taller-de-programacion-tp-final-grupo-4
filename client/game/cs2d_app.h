@@ -17,7 +17,8 @@ protected:
     CS2DApp(CS2DApp&&) = delete;
     CS2DApp& operator=(CS2DApp&&) = delete;
 
-    void load_sprites(Shared<Model::AssetManager> asset_manager, Shared<SDL2pp::Renderer>);
+    void load_sprites(Shared<Model::AssetManager> asset_manager, Shared<SDL2pp::Renderer> renderer);
+    void load_fonts(Shared<Model::AssetManager> asset_manager);
 
 public:
     CS2DApp(Net::ClientProtocol* protocol);

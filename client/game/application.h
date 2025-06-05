@@ -2,6 +2,7 @@
 #define CLIENT_GAME_APPLICATION_H
 
 #include <SDL2pp/SDL.hh>
+#include <SDL2pp/SDLTTF.hh>
 
 #include "common/definitions.h"
 
@@ -12,6 +13,7 @@ namespace App {
 class Application {
 protected:
     SDL2pp::SDL sdl;
+    SDL2pp::SDLTTF ttf;
 
     Shared<Context::ContextManager> context_manager;
     Shared<Controller::BaseController> controller;

@@ -22,6 +22,7 @@
 #include "asset/asset_manager.h"
 #include "asset/asset_generator.h"
 #include "asset/asset_addresser.h"
+#include "asset/font_id.h"
 
 #include "controller/game_controller.h"
 
@@ -52,6 +53,15 @@ void App::CS2DApp::load_sprites(Shared<Model::AssetManager> asset_manager, Share
     asset_manager->load_texture(Model::TextureID::BG_SMOOTH_GREEN, asset_generator.generate_plain_texture(smooth_green));
 }
 
+void App::CS2DApp::load_fonts(Shared<Model::AssetManager> asset_manager) {
+    Model::AssetAddresser asset_addresser;
+    asset_manager->load_font(
+        Model::FontID::STANDARD,
+        asset_addresser.get_font_path("liberationsans.ttf"),
+        20
+    );
+}
+
 App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
     auto window = make_shared<SDL2pp::Window>(
         "In Game",
@@ -66,6 +76,7 @@ App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
     
     auto asset_manager = make_shared<Model::AssetManager>(renderer);
     load_sprites(asset_manager, renderer);
+    load_fonts(asset_manager);
 
     context_manager = make_shared<Context::ContextManager>();
     controller = make_shared<Controller::GameController>(

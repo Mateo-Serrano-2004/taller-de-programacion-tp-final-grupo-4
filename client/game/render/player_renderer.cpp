@@ -8,6 +8,7 @@
 #include <SDL2pp/Renderer.hh>
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Rect.hh>
+#include <SDL2pp/Color.hh>
 
 #include "common/model/player.h"
 #include "common/texture_id.h"
@@ -16,6 +17,7 @@
 
 #include "controller/game_controller.h"
 #include "asset/asset_manager.h"
+#include "asset/font_id.h"
 #include "common/texture_id.h"
 #include "handler/game_state_manager.h"
 
@@ -27,6 +29,23 @@ SDL2pp::Point View::PlayerRenderer::get_skin_top_left_corner(short_id_t skin_pie
     uint16_t skin_piece_y = skin_row * 32;
 
     return SDL2pp::Point(skin_piece_x, skin_piece_y);
+}
+
+void View::PlayerRenderer::render_name(const SDL2pp::Point& player_center, const std::string& player) {
+    Shared<SDL2pp::Texture> text = asset_manager->apply_font_to_text(
+            Model::FontID::STANDARD,
+            "HOLA",
+            SDL2pp::Color(255, 0, 0, 255)
+        );
+    renderer->Copy(
+        *text,
+        SDL2pp::NullOpt,
+        SDL2pp::Rect(
+            player_center.GetX() - (text->GetWidth()) / 2,
+            player_center.GetY() - 17 - text->GetHeight(),
+            text->GetWidth(), text->GetHeight()
+        )
+    );
 }
 
 void View::PlayerRenderer::render_player(View::Camera& camera, Model::Player& player) {
@@ -77,6 +96,8 @@ void View::PlayerRenderer::render_player(View::Camera& camera, Model::Player& pl
         angle,
         SDL2pp::NullOpt
     );
+
+    render_name(camera_view, "HOLA");
 }
 
 void View::PlayerRenderer::render_fov(angle_t angle) {
