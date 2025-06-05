@@ -44,22 +44,22 @@ void App::CS2DApp::load_weapon_sprites(Shared<Model::AssetManager> asset_manager
     Model::AssetAddresser asset_addresser;
 
     asset_manager->load_texture(
-        Model::TextureID::SPRITE_GLOCK, asset_addresser.get_weapon_sprite_path(weapon_sprites[0])
+        Model::TextureID::SPRITE_AK47, asset_addresser.get_weapon_sprite_path(weapon_sprites[0])
     );
     asset_manager->load_texture(
         Model::TextureID::SPRITE_AWP, asset_addresser.get_weapon_sprite_path(weapon_sprites[1])
     );
     asset_manager->load_texture(
-        Model::TextureID::SPRITE_AK47, asset_addresser.get_weapon_sprite_path(weapon_sprites[2])
+        Model::TextureID::SPRITE_BOMB, asset_addresser.get_weapon_sprite_path(weapon_sprites[2])
     );
     asset_manager->load_texture(
-        Model::TextureID::SPRITE_M3, asset_addresser.get_weapon_sprite_path(weapon_sprites[3])
+        Model::TextureID::SPRITE_GLOCK, asset_addresser.get_weapon_sprite_path(weapon_sprites[3])
     );
     asset_manager->load_texture(
-        Model::TextureID::SPRITE_BOMB, asset_addresser.get_weapon_sprite_path(weapon_sprites[4])
+        Model::TextureID::SPRITE_KNIFE, asset_addresser.get_weapon_sprite_path(weapon_sprites[4])
     );
     asset_manager->load_texture(
-        Model::TextureID::SPRITE_KNIFE, asset_addresser.get_weapon_sprite_path(weapon_sprites[5])
+        Model::TextureID::SPRITE_M3, asset_addresser.get_weapon_sprite_path(weapon_sprites[5])
     );
 }
 

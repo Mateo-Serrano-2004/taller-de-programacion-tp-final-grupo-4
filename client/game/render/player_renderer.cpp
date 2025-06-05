@@ -2,6 +2,7 @@
 
 #include <map>
 #include <cmath>
+#include <iostream>
 
 #include <SDL2pp/SDL2pp.hh>
 #include <SDL2pp/Window.hh>
@@ -31,7 +32,19 @@ SDL2pp::Point View::PlayerRenderer::get_skin_top_left_corner(short_id_t skin_pie
     return SDL2pp::Point(skin_piece_x, skin_piece_y);
 }
 
-void View::PlayerRenderer::render_name(const SDL2pp::Point& player_center, const std::string& player) {
+void View::PlayerRenderer::render_weapon(const SDL2pp::Point& player_center,
+                                         angle_t player_angle,
+                                         Model::TextureID texture_id) {
+    Shared<SDL2pp::Texture> weapon_texture = asset_manager->get_texture(texture_id);
+
+    SDL2pp::Rect weapon_coords(player_center.GetX() - 16, player_center.GetY() - 32, 32, 32);
+    SDL2pp::Point point_to_rotate(16, 32);
+
+    renderer->Copy(*weapon_texture, SDL2pp::NullOpt, weapon_coords, player_angle, point_to_rotate);
+}
+
+void View::PlayerRenderer::render_name(const SDL2pp::Point& player_center,
+                                       const std::string& player) {
     Shared<SDL2pp::Texture> text = asset_manager->apply_font_to_text(
             Model::FontID::STANDARD,
             player,
@@ -97,6 +110,7 @@ void View::PlayerRenderer::render_player(View::Camera& camera, Model::Player& pl
         SDL2pp::NullOpt
     );
 
+    render_weapon(camera_view, angle, (Model::TextureID) (player.get_current_weapon().get_sprite_id()));
     render_name(camera_view, "HOLA");
 }
 

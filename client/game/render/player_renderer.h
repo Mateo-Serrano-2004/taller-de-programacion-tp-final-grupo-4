@@ -6,6 +6,7 @@
 #include <SDL2pp/Point.hh>
 
 #include "common/definitions.h"
+#include "common/texture_id.h"
 
 #include "renderer.h"
 
@@ -27,6 +28,7 @@ protected:
 
     SDL2pp::Point get_skin_top_left_corner(short_id_t skin_piece);
 
+    void render_weapon(const SDL2pp::Point& player_center, angle_t player_angle, Model::TextureID texture_id);
     void render_name(const SDL2pp::Point& player_center, const std::string& player);
     void render_player(Camera& camera, Model::Player& player);
     void render_fov(angle_t angle);
