@@ -6,6 +6,8 @@
 #include <string.h>
 
 #include "common/DTO/game_state_dto.h"
+#include "common/DTO/player_dto.h"
+#include "common/DTO/weapon_dto.h"
 #include "common/definitions.h"
 #include "common/event_type.h"
 
@@ -87,7 +89,18 @@ void ServerProtocol::send_player_list(const std::vector<DTO::PlayerDTO>& players
         peer.sendall(&position_x, sizeof(position_x));
         peer.sendall(&position_y, sizeof(position_y));
         peer.sendall(&angle, sizeof(angle));
+
+        send_weapon(p);
     }
+}
+
+void ServerProtocol::send_weapon(const DTO::PlayerDTO& player_dto) {
+    DTO::WeaponDTO weapon_dto = player_dto.weapon_dto;
+    uint16_t total_ammo = htons(weapon_dto.total_ammo);
+
+    peer.sendall(&weapon_dto.sprite_id, sizeof(weapon_dto.sprite_id));
+    peer.sendall(&weapon_dto.loaded_ammo, sizeof(weapon_dto.loaded_ammo));
+    peer.sendall(&total_ammo, sizeof(total_ammo));
 }
 
 void ServerProtocol::send_game_state(const DTO::GameStateDTO& game_state_dto) {

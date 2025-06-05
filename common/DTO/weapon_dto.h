@@ -2,14 +2,20 @@
 #define WEAPON_DTO_H
 
 #include <cstdint>
-#include <string>
 
+namespace DTO {
 struct WeaponDTO {
-    uint8_t id;
-    uint8_t is_shooting;
-    uint8_t is_reloading;
+public:
+    uint8_t sprite_id;
     uint8_t loaded_ammo;
     uint16_t total_ammo;
+
+    WeaponDTO(
+        uint8_t sprite_id,
+        uint8_t loaded_ammo,
+        uint16_t total_ammo
+    );
 };
+}
 
 #endif  // WEAPON_DTO_H

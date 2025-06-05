@@ -12,6 +12,7 @@
 #include "common/DTO/game_info_dto.h"
 #include "common/DTO/game_state_dto.h"
 #include "common/DTO/player_dto.h"
+#include "common/DTO/weapon_dto.h"
 #include "common/socket.h"
 
 namespace Net {
@@ -21,6 +22,7 @@ private:
     Socket skt;
 
     void receive_player_list(std::vector<DTO::PlayerDTO>& players);
+    DTO::WeaponDTO receive_weapon();
 
     ClientProtocol(const ClientProtocol&) = delete;
     ClientProtocol& operator=(const ClientProtocol&) = delete;

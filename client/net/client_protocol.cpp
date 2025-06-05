@@ -46,9 +46,24 @@ void Net::ClientProtocol::receive_player_list(std::vector<DTO::PlayerDTO>& playe
         skt.recvall(&angle, sizeof(angle));
         angle = ntohs(angle);
 
+        DTO::WeaponDTO weapon_dto = receive_weapon();
+
         players.emplace_back(player_id, skin_id, skin_piece, angle, position_x, position_y,
-                             std::string(name.begin(), name.end()));
+                             std::string(name.begin(), name.end()), weapon_dto);
     }
+}
+
+DTO::WeaponDTO Net::ClientProtocol::receive_weapon() {
+    uint8_t sprite_id = 0;
+    uint8_t loaded_ammo = 0;
+    uint16_t total_ammo = 0;
+
+    skt.recvall(&sprite_id, sizeof(sprite_id));
+    skt.recvall(&loaded_ammo, sizeof(loaded_ammo));
+    skt.recvall(&total_ammo, sizeof(total_ammo));
+    total_ammo = ntohs(total_ammo);
+
+    return DTO::WeaponDTO(sprite_id, loaded_ammo, total_ammo);
 }
 
 DTO::GameStateDTO Net::ClientProtocol::receive_match_state() {

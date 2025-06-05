@@ -8,8 +8,8 @@ Model::MovablePlayer::MovablePlayer(short_id_t id, const std::string& name):
 
 Model::MovablePlayer::MovablePlayer(short_id_t id, short_id_t skin_id, short_id_t skin_piece,
                                     angle_t angle, std::string name, Physics::Vector2D position,
-                                    Physics::Vector2D direction):
-        Model::Player(id, skin_id, skin_piece, angle, name, position),
+                                    Physics::Vector2D direction, Model::Weapon weapon):
+        Model::Player(id, skin_id, skin_piece, angle, name, position, weapon),
         movement_direction(std::move(direction)) {}
 
 void Model::MovablePlayer::update_movement_direction_by_merge(const Physics::Vector2D& direction) {
