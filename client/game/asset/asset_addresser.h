@@ -11,7 +11,8 @@ private:
 public:
     AssetAddresser();
 
-    std::string get_sprite_path(const std::string& partial_path);
+    std::string get_weapon_sprite_path(const std::string& partial_path);
+    std::string get_player_sprite_path(const std::string& partial_path);
     std::string get_font_path(const std::string& partial_path);
 };
 };

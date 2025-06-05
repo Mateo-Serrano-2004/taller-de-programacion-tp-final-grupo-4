@@ -29,22 +29,71 @@
 
 #include "client/net/client_protocol.h"
 
-const std::vector<std::string> paths = {"ct1.bmp", "ct2.bmp", "ct3.bmp",
-                                        "ct4.bmp", "t1.bmp",  "t2.bmp",
-                                        "t3.bmp",  "t4.bmp"};
+const std::vector<std::string> player_sprites = {
+    "ct1.bmp", "ct2.bmp", "ct3.bmp",
+    "ct4.bmp", "t1.bmp",  "t2.bmp",
+    "t3.bmp",  "t4.bmp"
+};
 
-void App::CS2DApp::load_sprites(Shared<Model::AssetManager> asset_manager, Shared<SDL2pp::Renderer> renderer) {
+const std::vector<std::string> weapon_sprites = {
+    "ak47.bmp", "awp.bmp", "bomb_d.bmp",
+    "glock.bmp", "knife.bmp", "m3.bmp"
+};
+
+void App::CS2DApp::load_weapon_sprites(Shared<Model::AssetManager> asset_manager) {
     Model::AssetAddresser asset_addresser;
 
-    asset_manager->load_texture(Model::TextureID::SPRITE_CT1, asset_addresser.get_sprite_path(paths[0]));
-    asset_manager->load_texture(Model::TextureID::SPRITE_CT2, asset_addresser.get_sprite_path(paths[1]));
-    asset_manager->load_texture(Model::TextureID::SPRITE_CT3, asset_addresser.get_sprite_path(paths[2]));
-    asset_manager->load_texture(Model::TextureID::SPRITE_CT4, asset_addresser.get_sprite_path(paths[3]));
-    asset_manager->load_texture(Model::TextureID::SPRITE_T1, asset_addresser.get_sprite_path(paths[4]));
-    asset_manager->load_texture(Model::TextureID::SPRITE_T2, asset_addresser.get_sprite_path(paths[5]));
-    asset_manager->load_texture(Model::TextureID::SPRITE_T3, asset_addresser.get_sprite_path(paths[6]));
-    asset_manager->load_texture(Model::TextureID::SPRITE_T4, asset_addresser.get_sprite_path(paths[7]));
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_GLOCK, asset_addresser.get_weapon_sprite_path(weapon_sprites[0])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_AWP, asset_addresser.get_weapon_sprite_path(weapon_sprites[1])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_AK47, asset_addresser.get_weapon_sprite_path(weapon_sprites[2])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_M3, asset_addresser.get_weapon_sprite_path(weapon_sprites[3])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_BOMB, asset_addresser.get_weapon_sprite_path(weapon_sprites[4])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_KNIFE, asset_addresser.get_weapon_sprite_path(weapon_sprites[5])
+    );
+}
 
+void App::CS2DApp::load_player_sprites(Shared<Model::AssetManager> asset_manager) {
+    Model::AssetAddresser asset_addresser;
+
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_CT1, asset_addresser.get_player_sprite_path(player_sprites[0])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_CT2, asset_addresser.get_player_sprite_path(player_sprites[1])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_CT3, asset_addresser.get_player_sprite_path(player_sprites[2])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_CT4, asset_addresser.get_player_sprite_path(player_sprites[3])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_T1, asset_addresser.get_player_sprite_path(player_sprites[4])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_T2, asset_addresser.get_player_sprite_path(player_sprites[5])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_T3, asset_addresser.get_player_sprite_path(player_sprites[6])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_T4, asset_addresser.get_player_sprite_path(player_sprites[7])
+    );
+}
+
+void App::CS2DApp::load_backgrounds(Shared<Model::AssetManager> asset_manager,
+                                    Shared<SDL2pp::Renderer> renderer) {
     SDL2pp::Color dark_green(33, 42, 34, 255);
     SDL2pp::Color smooth_green(110, 120, 112, 255);
 
@@ -76,7 +125,9 @@ App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
     renderer->SetDrawBlendMode(SDL_BLENDMODE_BLEND);
     
     auto asset_manager = make_shared<Model::AssetManager>(renderer);
-    load_sprites(asset_manager, renderer);
+    load_weapon_sprites(asset_manager);
+    load_player_sprites(asset_manager);
+    load_backgrounds(asset_manager, renderer);
     load_fonts(asset_manager);
 
     context_manager = make_shared<Context::ContextManager>();

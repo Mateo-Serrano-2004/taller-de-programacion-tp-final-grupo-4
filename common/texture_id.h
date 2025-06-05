@@ -13,13 +13,19 @@ enum TextureID {
     SPRITE_T3 = 0x05,
     SPRITE_T4 = 0x06,
 
-    // Weapons from 0x20
+    // Weapons from 0x10
+    SPRITE_GLOCK,
+    SPRITE_AWP,
+    SPRITE_AK47,
+    SPRITE_M3,
+    SPRITE_BOMB,
+    SPRITE_KNIFE,
 
-    // Backgrounds from 0x40
+    // Backgrounds from 0x50
     BG_DARK_GREEN = 0x10,
     BG_SMOOTH_GREEN = 0x11,
 
-    // Custom backgrounds from 0x60
+    // Custom backgrounds from 0x70
 
     // Special textures
     FOV = 0xC0

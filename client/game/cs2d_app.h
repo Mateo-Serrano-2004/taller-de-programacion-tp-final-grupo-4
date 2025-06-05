@@ -17,7 +17,9 @@ protected:
     CS2DApp(CS2DApp&&) = delete;
     CS2DApp& operator=(CS2DApp&&) = delete;
 
-    void load_sprites(Shared<Model::AssetManager> asset_manager, Shared<SDL2pp::Renderer> renderer);
+    void load_weapon_sprites(Shared<Model::AssetManager> asset_manager);
+    void load_player_sprites(Shared<Model::AssetManager> asset_manager);
+    void load_backgrounds(Shared<Model::AssetManager> asset_manager, Shared<SDL2pp::Renderer> renderer);
     void load_fonts(Shared<Model::AssetManager> asset_manager);
 
 public:

@@ -10,7 +10,11 @@ Model::AssetAddresser::AssetAddresser() {
     #endif
 }
 
-std::string Model::AssetAddresser::get_sprite_path(const std::string& partial_path) {
+std::string Model::AssetAddresser::get_weapon_sprite_path(const std::string& partial_path) {
+    return assets_main_path + "gfx/weapons/" + partial_path;
+}
+
+std::string Model::AssetAddresser::get_player_sprite_path(const std::string& partial_path) {
     return assets_main_path + "gfx/player/" + partial_path;
 }
 
