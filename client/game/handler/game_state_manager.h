@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <mutex>
+#include <map>
 
 #include "common/definitions.h"
 
@@ -41,7 +42,10 @@ public:
 
     View::Camera get_camera();
 
+    short_id_t get_reference_player_id() const;
+
     void map_function_on_players(const std::function<void(Model::Player&)>& func);
+    void call_function_on_players(const std::function<void(std::map<short_id_t, Model::Player>&)>& func);
 
     void update_camera();
 

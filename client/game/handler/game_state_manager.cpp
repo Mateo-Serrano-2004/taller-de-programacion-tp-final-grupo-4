@@ -4,6 +4,7 @@
 #include <functional>
 #include <memory>
 #include <utility>
+#include <map>
 
 #include <SDL2pp/Window.hh>
 #include <SDL2pp/Point.hh>
@@ -27,12 +28,20 @@ View::Camera Controller::GameStateManager::get_camera() {
     return camera;
 }
 
+short_id_t Controller::GameStateManager::get_reference_player_id() const { return reference_player_id; }
+
 void Controller::GameStateManager::map_function_on_players(
         const std::function<void(Model::Player&)>& func) {
     std::lock_guard<std::mutex> lock(mutex);
     for (auto& [id, player]: game_state->get_players()) {
         func(player);
     }
+}
+
+void Controller::GameStateManager::call_function_on_players(
+    const std::function<void(std::map<short_id_t, Model::Player>&)>& func
+) {
+    func(game_state->get_players());
 }
 
 void Controller::GameStateManager::update_camera() {

@@ -14,11 +14,10 @@ void MovementSystem::process_movements(std::map<uint8_t, Model::MovablePlayer>& 
             Physics::Vector2D pos = player.get_position();
             Physics::Vector2D next = pos + dir;
 
-            // Algo como un mapa muy basico donde en (10,0) y en (0,10) hay un collidable.
             int x = static_cast<int>(next.get_x());
             int y = static_cast<int>(next.get_y());
 
-            if (x < 0 || x >= 30 || y < 0 || y >= 30 || (x == 10 && y == 0) || (x == 0 && y == 10)) {
+            if (x < 0 || y < 0) {
                 player.stop_horizontal_movement();
                 player.stop_vertical_movement();
                 i = frames_to_process; // ya chocó ya deengo el for

@@ -11,6 +11,8 @@
 #include "event/quit_event.h"
 
 void Context::MenuContext::render() {
+    player_renderer.render();
+
     size_pane_relatively_to_parent(background, 0.6, 0.6);
     place_pane_relatively_to_parent(background, 0.5, 0.5);
 
@@ -64,5 +66,6 @@ void Context::MenuContext::place_pane_relatively_to_parent(View::Pane& pane, dou
 Context::MenuContext::MenuContext(Weak<Controller::GameController> controller):
 Context::BaseContext("menu", controller),
 event_handler_strategy(controller),
+player_renderer(controller),
 background(11, controller),
 exit_button(12, controller, &background) {}

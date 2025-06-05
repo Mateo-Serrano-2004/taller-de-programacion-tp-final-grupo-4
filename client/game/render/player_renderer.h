@@ -1,6 +1,8 @@
 #ifndef CLIENT_GAME_RENDER_PLAYER_RENDERER_H
 #define CLIENT_GAME_RENDER_PLAYER_RENDERER_H
 
+#include <map>
+
 #include <SDL2pp/Point.hh>
 
 #include "common/definitions.h"
@@ -25,7 +27,7 @@ protected:
 
     SDL2pp::Point get_skin_top_left_corner(short_id_t skin_piece);
     void render_player(Camera& camera, Model::Player& player);
-    void render_fov();
+    void render_fov(angle_t angle);
 
 public:
     PlayerRenderer(Weak<Controller::GameController> controller);

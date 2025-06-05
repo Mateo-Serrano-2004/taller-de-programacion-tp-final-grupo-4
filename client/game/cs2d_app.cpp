@@ -36,7 +36,7 @@ App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
     );
     auto renderer = make_shared<SDL2pp::Renderer>(*window, -1, SDL_RENDERER_ACCELERATED);
 
-    renderer->SetDrawColor(0, 0, 0, 255);
+    renderer->SetDrawColor(255, 255, 255, 255);
     renderer->SetDrawBlendMode(SDL_BLENDMODE_BLEND);
 
     

@@ -1,6 +1,7 @@
 #include "player_renderer.h"
 
-#include <iostream>
+#include <map>
+#include <cmath>
 
 #include <SDL2pp/SDL2pp.hh>
 #include <SDL2pp/Window.hh>
@@ -76,7 +77,7 @@ void View::PlayerRenderer::render_player(View::Camera& camera, Model::Player& pl
     );
 }
 
-void View::PlayerRenderer::render_fov() {
+void View::PlayerRenderer::render_fov(angle_t angle) {
     auto viewport = game_state_manager->get_camera().get_viewport();
     int viewport_width = viewport.GetX();
     int viewport_height = viewport.GetY();
@@ -87,15 +88,25 @@ void View::PlayerRenderer::render_fov() {
     // Squared texture
     int fov_texture_size = fov_texture.GetWidth();
 
+    int length_to_corners = std::sqrt(
+        (viewport_width * viewport_width) + (viewport_height * viewport_height)
+    ) / 2;
+
     renderer->Copy(
         fov_texture,
         SDL2pp::Rect(
-            (fov_texture_size - viewport_width) / 2,
-            (fov_texture_size - viewport_height) / 2,
-            viewport_width,
-            viewport_height
+            (fov_texture_size - 2 * length_to_corners) / 2,
+            (fov_texture_size - 2 * length_to_corners) / 2,
+            2 * length_to_corners,
+            2 * length_to_corners
         ),
-        SDL2pp::NullOpt
+        SDL2pp::Rect(
+            (viewport_width - 2 * length_to_corners) / 2,
+            (viewport_height - 2 * length_to_corners) / 2,
+            2 * length_to_corners,
+            2 * length_to_corners
+        ),
+        angle
     );
 }
 
@@ -109,11 +120,21 @@ View::PlayerRenderer::PlayerRenderer(
 void View::PlayerRenderer::render() {
     auto camera = game_state_manager->get_camera();
 
-    game_state_manager->map_function_on_players(
-        [this, &camera] (Model::Player& player) {
-            render_player(camera, player);
+    game_state_manager->call_function_on_players(
+        [this, &camera] (std::map<short_id_t, Model::Player>& map) {
+            Model::Player* reference_player = nullptr;
+            short_id_t reference_player_id = game_state_manager->get_reference_player_id();
+
+            for (auto& pair : map) {
+                if (pair.first == reference_player_id) {
+                    reference_player = &pair.second;
+                } else {
+                    render_player(camera, pair.second);
+                }
+            }
+
+            render_player(camera, *reference_player);
+            render_fov(reference_player->get_angle());
         }
     );
-
-    render_fov();
 };

@@ -6,6 +6,7 @@
 #include "base_context.h"
 
 #include "handler/menu_event_handler_strategy.h"
+#include "render/player_renderer.h"
 
 #include "entity/pane.h"
 #include "entity/exit_button.h"
@@ -19,6 +20,7 @@ class MenuContext: public BaseContext {
 protected:
     SDL_Event placeholder;
     Controller::MenuEventHandlerStrategy event_handler_strategy;
+    View::PlayerRenderer player_renderer;
     View::Pane background;
     View::ExitButton exit_button;
 
