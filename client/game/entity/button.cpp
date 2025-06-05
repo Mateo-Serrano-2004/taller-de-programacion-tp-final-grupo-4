@@ -25,12 +25,12 @@ bool View::Button::check_click(Shared<SDL_Event> event) const {
     return true;
 }
 
-View::Button::Button(short_id_t texture_id, Weak<Controller::BaseController> controller,
+View::Button::Button(Model::TextureID texture_id, Weak<Controller::BaseController> controller,
                      Pane* parent):
                      View::Pane(texture_id, controller, parent),
                      callback(controller) {}
 
-View::Button::Button(short_id_t texture_id, Weak<Controller::BaseController> controller):
+View::Button::Button(Model::TextureID texture_id, Weak<Controller::BaseController> controller):
                      View::Pane(texture_id, controller),
                      callback(controller) {}
 

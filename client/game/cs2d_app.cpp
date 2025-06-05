@@ -13,19 +13,44 @@
 #include <SDL2pp/Point.hh>
 
 #include "common/definitions.h"
+#include "common/texture_id.h"
 
 #include "context/context_manager.h"
 #include "context/in_game_context.h"
 #include "context/menu_context.h"
-#include "texture/texture_storage.h"
-#include "texture/texture_generator.h"
+
+#include "asset/asset_manager.h"
+#include "asset/asset_generator.h"
+#include "asset/asset_addresser.h"
+
 #include "controller/game_controller.h"
 
 #include "client/net/client_protocol.h"
 
-const std::vector<std::string> paths = {"player/ct1.bmp", "player/ct2.bmp", "player/ct3.bmp",
-                                        "player/ct4.bmp", "player/t1.bmp",  "player/t2.bmp",
-                                        "player/t3.bmp",  "player/t4.bmp",  "player/vip.bmp"};
+const std::vector<std::string> paths = {"ct1.bmp", "ct2.bmp", "ct3.bmp",
+                                        "ct4.bmp", "t1.bmp",  "t2.bmp",
+                                        "t3.bmp",  "t4.bmp"};
+
+void App::CS2DApp::load_sprites(Shared<Model::AssetManager> asset_manager, Shared<SDL2pp::Renderer> renderer) {
+    Model::AssetAddresser asset_addresser;
+
+    asset_manager->load_texture(Model::TextureID::SPRITE_CT1, asset_addresser.get_sprite_path(paths[0]));
+    asset_manager->load_texture(Model::TextureID::SPRITE_CT2, asset_addresser.get_sprite_path(paths[1]));
+    asset_manager->load_texture(Model::TextureID::SPRITE_CT3, asset_addresser.get_sprite_path(paths[2]));
+    asset_manager->load_texture(Model::TextureID::SPRITE_CT4, asset_addresser.get_sprite_path(paths[3]));
+    asset_manager->load_texture(Model::TextureID::SPRITE_T1, asset_addresser.get_sprite_path(paths[4]));
+    asset_manager->load_texture(Model::TextureID::SPRITE_T2, asset_addresser.get_sprite_path(paths[5]));
+    asset_manager->load_texture(Model::TextureID::SPRITE_T3, asset_addresser.get_sprite_path(paths[6]));
+    asset_manager->load_texture(Model::TextureID::SPRITE_T4, asset_addresser.get_sprite_path(paths[7]));
+
+    SDL2pp::Color dark_green(33, 42, 34, 255);
+    SDL2pp::Color smooth_green(110, 120, 112, 255);
+
+    View::AssetGenerator asset_generator(renderer);
+    asset_manager->load_texture(Model::TextureID::FOV, asset_generator.generate_fov());
+    asset_manager->load_texture(Model::TextureID::BG_DARK_GREEN, asset_generator.generate_plain_texture(dark_green));
+    asset_manager->load_texture(Model::TextureID::BG_SMOOTH_GREEN, asset_generator.generate_plain_texture(smooth_green));
+}
 
 App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
     auto window = make_shared<SDL2pp::Window>(
@@ -38,27 +63,13 @@ App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
 
     renderer->SetDrawColor(255, 255, 255, 255);
     renderer->SetDrawBlendMode(SDL_BLENDMODE_BLEND);
-
     
-    auto texture_storage = make_shared<Model::TextureStorage>(Weak<SDL2pp::Renderer>(renderer));
-    for (size_t i = 0; i < paths.size(); ++i) {
-        texture_storage->load_texture(i, paths[i]);
-    }
-
-    SDL2pp::Color white(255, 255, 255, 255);
-    SDL2pp::Color black(0, 0, 0, 255);
-
-    SDL2pp::Color dark_green(33, 42, 34, 255);
-    SDL2pp::Color smooth_green(110, 120, 112, 255);
-
-    View::TextureGenerator texture_generator(renderer);
-    texture_storage->load_texture(10, std::move(texture_generator.generate_fov()));
-    texture_storage->load_texture(11, std::move(texture_generator.generate_background(dark_green)));
-    texture_storage->load_texture(12, std::move(texture_generator.generate_background(smooth_green)));
+    auto asset_manager = make_shared<Model::AssetManager>(renderer);
+    load_sprites(asset_manager, renderer);
 
     context_manager = make_shared<Context::ContextManager>();
     controller = make_shared<Controller::GameController>(
-        window, renderer, texture_storage, context_manager, protocol
+        window, renderer, asset_manager, context_manager, protocol
     );
 
     auto in_game_context = make_shared<Context::InGameContext>(

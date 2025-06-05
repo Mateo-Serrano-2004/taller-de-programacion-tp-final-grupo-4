@@ -10,11 +10,13 @@
 #include <SDL2pp/Rect.hh>
 
 #include "common/model/player.h"
+#include "common/texture_id.h"
 
 #include "camera.h"
 
 #include "controller/game_controller.h"
-#include "texture/texture_storage.h"
+#include "asset/asset_manager.h"
+#include "common/texture_id.h"
 #include "handler/game_state_manager.h"
 
 SDL2pp::Point View::PlayerRenderer::get_skin_top_left_corner(short_id_t skin_piece) {
@@ -28,7 +30,7 @@ SDL2pp::Point View::PlayerRenderer::get_skin_top_left_corner(short_id_t skin_pie
 }
 
 void View::PlayerRenderer::render_player(View::Camera& camera, Model::Player& player) {
-    SDL2pp::Texture& texture = texture_storage->get_texture(player.get_skin_id());
+    Shared<SDL2pp::Texture> texture = asset_manager->get_texture((Model::TextureID) player.get_skin_id());
     SDL2pp::Point skin_top_left_corner = get_skin_top_left_corner(player.get_skin_piece());
     angle_t angle = player.get_angle();
 
@@ -69,7 +71,7 @@ void View::PlayerRenderer::render_player(View::Camera& camera, Model::Player& pl
     );
 
     renderer->Copy(
-        texture,
+        *texture,
         skin_rect,
         top_left_corner,
         angle,
@@ -83,17 +85,17 @@ void View::PlayerRenderer::render_fov(angle_t angle) {
     int viewport_height = viewport.GetY();
 
     // Id del fov_texture
-    auto& fov_texture = texture_storage->get_texture(10);
+    auto fov_texture = asset_manager->get_texture(Model::TextureID::FOV);
 
     // Squared texture
-    int fov_texture_size = fov_texture.GetWidth();
+    int fov_texture_size = fov_texture->GetWidth();
 
     int length_to_corners = std::sqrt(
         (viewport_width * viewport_width) + (viewport_height * viewport_height)
     ) / 2;
 
     renderer->Copy(
-        fov_texture,
+        *fov_texture,
         SDL2pp::Rect(
             (fov_texture_size - 2 * length_to_corners) / 2,
             (fov_texture_size - 2 * length_to_corners) / 2,

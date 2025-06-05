@@ -7,7 +7,7 @@
 #include "server/events/overloaded.h"
 
 void Game::run() {
-    current_round = Round(180);
+    current_round = Round();
     PeriodicClock clock(GAME_FPS); 
 
     while (is_not_finished) {

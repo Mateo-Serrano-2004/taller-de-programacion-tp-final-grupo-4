@@ -2,6 +2,7 @@
 #define CLIENT_GAME_ENTITY_RENDERED_H
 
 #include "common/definitions.h"
+#include "common/texture_id.h"
 
 namespace SDL2pp {
 class Window;
@@ -9,7 +10,7 @@ class Renderer;
 };
 
 namespace Model {
-class TextureStorage;
+class AssetManager;
 };
 
 namespace Controller {
@@ -21,13 +22,13 @@ class Rendered {
 protected:
     Shared<SDL2pp::Window> window;
     Shared<SDL2pp::Renderer> renderer;
-    Shared<Model::TextureStorage> texture_storage;
-    short_id_t texture_id;
+    Shared<Model::AssetManager> asset_manager;
+    Model::TextureID texture_id;
 
 public:
-    Rendered(short_id_t texture_id, Weak<Controller::BaseController> controller);
+    Rendered(Model::TextureID texture_id, Weak<Controller::BaseController> controller);
 
-    void set_new_texture_id(short_id_t new_texture_id);
+    void set_new_texture_id(Model::TextureID new_texture_id);
 
     virtual void render() = 0;
 

@@ -49,6 +49,8 @@ public:
 
     void update_camera();
 
+    uint16_t get_time_left();
+
     void update(DTO::GameStateDTO&& game_state_dto);
 
     ~GameStateManager() = default;

@@ -15,7 +15,7 @@ public:
     PlayerRenderContext(
         SDL2pp::Window& window,
         SDL2pp::Renderer& renderer,
-        Model::TextureStorage& texture_storage,
+        Model::AssetManager& asset_manager,
         Camera& camera);
 
     PlayerRenderContext(const PlayerRenderContext&) = delete;

@@ -4,19 +4,19 @@
 #include <SDL2pp/Window.hh>
 #include <SDL2pp/Renderer.hh>
 
-#include "texture/texture_storage.h"
+#include "asset/asset_manager.h"
 
 namespace View {
 struct RenderContext {
 public:
     SDL2pp::Window& window;
     SDL2pp::Renderer& renderer;
-    Model::TextureStorage& texture_storage;
+    Model::AssetManager& asset_manager;
 
     RenderContext(
         SDL2pp::Window& window,
         SDL2pp::Renderer& renderer,
-        Model::TextureStorage& texture_storage);
+        Model::AssetManager& asset_manager);
 
     RenderContext(const RenderContext&) = delete;
     RenderContext& operator=(const RenderContext&) = delete;

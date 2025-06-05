@@ -56,6 +56,8 @@ DTO::GameStateDTO Net::ClientProtocol::receive_match_state() {
 
     skt.recvall(&match.is_valid, sizeof(match.is_valid));
     receive_player_list(match.players);
+    skt.recvall(&match.time_left, sizeof(match.time_left));
+    match.time_left = ntohs(match.time_left);
 
     return match;
 }

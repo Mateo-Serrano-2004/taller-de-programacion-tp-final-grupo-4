@@ -7,12 +7,12 @@
 #include <SDL2pp/Texture.hh>
 
 #include "controller/base_controller.h"
-#include "texture/texture_storage.h"
+#include "asset/asset_manager.h"
 
-View::Pane::Pane(short_id_t texture_id, Weak<Controller::BaseController> controller, Pane* parent):
+View::Pane::Pane(Model::TextureID texture_id, Weak<Controller::BaseController> controller, Pane* parent):
         View::Rendered(texture_id, controller), parent(parent) {}
 
-View::Pane::Pane(short_id_t texture_id, Weak<Controller::BaseController> controller):
+View::Pane::Pane(Model::TextureID texture_id, Weak<Controller::BaseController> controller):
         View::Pane(texture_id, controller, nullptr) {}
 
 bool View::Pane::has_position() const { return (bool) position; }
@@ -70,12 +70,12 @@ SDL2pp::Rect View::Pane::get_parent_position() const {
 }
 
 void View::Pane::render() {
-    SDL2pp::Texture& texture = texture_storage->get_texture(texture_id);
+    Shared<SDL2pp::Texture> texture = asset_manager->get_texture(texture_id);
 
     SDL2pp::Rect absolute_position = get_absolute_position();
 
     renderer->Copy(
-        texture,
+        *texture,
         texture_slice,
         absolute_position
     );

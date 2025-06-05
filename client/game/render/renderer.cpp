@@ -4,11 +4,11 @@
 #include <SDL2pp/Renderer.hh>
 
 #include "controller/base_controller.h"
-#include "texture/texture_storage.h"
+#include "asset/asset_manager.h"
 
 View::Renderer::Renderer(Weak<Controller::BaseController> controller) {
     auto controller_locked = controller.lock();
     window = controller_locked->get_window();    
     renderer = controller_locked->get_renderer();    
-    texture_storage = controller_locked->get_texture_storage();    
+    asset_manager = controller_locked->get_asset_manager();    
 }

@@ -24,7 +24,6 @@ Controller::GameStateManager::GameStateManager(
 }
 
 View::Camera Controller::GameStateManager::get_camera() {
-    std::lock_guard<std::mutex> lock(mutex);
     return camera;
 }
 
@@ -41,6 +40,7 @@ void Controller::GameStateManager::map_function_on_players(
 void Controller::GameStateManager::call_function_on_players(
     const std::function<void(std::map<short_id_t, Model::Player>&)>& func
 ) {
+    std::lock_guard<std::mutex> lock(mutex);
     func(game_state->get_players());
 }
 
@@ -49,6 +49,10 @@ void Controller::GameStateManager::update_camera() {
     camera.set_viewport_size(new_viewport_size.GetX(), new_viewport_size.GetY());
 }
 
+uint16_t Controller::GameStateManager::get_time_left() {
+    return game_state->get_time_left();
+};
+
 void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
     auto new_game_state = make_shared<Model::GameState>();
 
@@ -56,6 +60,8 @@ void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
         Model::Player player = player_dto_parser.parse(std::move(player_dto));
         new_game_state->register_player(std::move(player));
     }
+
+    new_game_state->set_time_left(game_state_dto.time_left);
 
     std::lock_guard<std::mutex> lock(mutex);
     game_state = new_game_state;

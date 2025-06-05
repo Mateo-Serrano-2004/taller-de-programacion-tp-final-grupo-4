@@ -9,7 +9,7 @@
 #include <SDL2pp/Renderer.hh>
 
 #include "base_context.h"
-#include "texture/texture_storage.h"
+#include "asset/asset_manager.h"
 
 void Context::ContextManager::add_context(Shared<Context::BaseContext> context) {
     contexts.insert({ context->get_name(), context });

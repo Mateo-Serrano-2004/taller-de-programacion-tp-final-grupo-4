@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 
 #include "common/definitions.h"
+#include "common/texture_id.h"
 
 #include "pane.h"
 
@@ -22,13 +23,13 @@ protected:
 
 public:
     Button(
-        short_id_t texture_id,
+        Model::TextureID texture_id,
         Weak<Controller::BaseController> controller,
         Pane* parent
     );
 
     Button(
-        short_id_t texture_id,
+        Model::TextureID texture_id,
         Weak<Controller::BaseController> controller
     );
 

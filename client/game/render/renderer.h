@@ -9,7 +9,7 @@ class Renderer;
 };
 
 namespace Model {
-class TextureStorage;
+class AssetManager;
 };
 
 namespace Controller {
@@ -21,7 +21,7 @@ class Renderer {
 protected:
     Shared<SDL2pp::Window> window;
     Shared<SDL2pp::Renderer> renderer;
-    Shared<Model::TextureStorage> texture_storage;
+    Shared<Model::AssetManager> asset_manager;
 
 public:
     Renderer(Weak<Controller::BaseController> controller);

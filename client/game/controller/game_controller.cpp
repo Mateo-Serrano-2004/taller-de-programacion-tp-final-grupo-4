@@ -9,7 +9,7 @@
 #include "common/event_type.h"
 
 #include "handler/game_state_manager.h"
-#include "texture/texture_storage.h"
+#include "asset/asset_manager.h"
 #include "context/context_manager.h"
 
 #include "client/net/client_protocol.h"
@@ -21,10 +21,10 @@ void Controller::GameController::process_event(Shared<Model::Event> event) {
 Controller::GameController::GameController(
 	Shared<SDL2pp::Window> window,
 	Shared<SDL2pp::Renderer> renderer,
-	Shared<Model::TextureStorage> texture_storage,
+	Shared<Model::AssetManager> asset_manager,
 	Shared<Context::ContextManager> context_manager,
 	Net::ClientProtocol* protocol
-): Controller::BaseController(window, renderer, texture_storage, context_manager),
+): Controller::BaseController(window, renderer, asset_manager, context_manager),
    protocol(protocol),
    game_state_manager(make_shared<Controller::GameStateManager>(
 	protocol->receive_player_id(),

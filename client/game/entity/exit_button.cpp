@@ -5,7 +5,7 @@
 #include "controller/base_controller.h"
 #include "event/quit_event.h"
 
-View::ExitButton::ExitButton(short_id_t texture_id, Weak<Controller::BaseController> controller,
+View::ExitButton::ExitButton(Model::TextureID texture_id, Weak<Controller::BaseController> controller,
                              Pane* parent)
                              : View::Button(texture_id, controller, parent) {
     on_click(
@@ -16,5 +16,5 @@ View::ExitButton::ExitButton(short_id_t texture_id, Weak<Controller::BaseControl
     );
 }
 
-View::ExitButton::ExitButton(short_id_t texture_id, Weak<Controller::BaseController> controller)
+View::ExitButton::ExitButton(Model::TextureID texture_id, Weak<Controller::BaseController> controller)
                              : View::ExitButton(texture_id, controller, nullptr) {}

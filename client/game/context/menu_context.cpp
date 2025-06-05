@@ -5,6 +5,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/Rect.hh>
 
+#include "common/texture_id.h"
+
 #include "controller/game_controller.h"
 #include "controller/base_controller.h"
 #include "exception/closed_window.h"
@@ -67,5 +69,5 @@ Context::MenuContext::MenuContext(Weak<Controller::GameController> controller):
 Context::BaseContext("menu", controller),
 event_handler_strategy(controller),
 player_renderer(controller),
-background(11, controller),
-exit_button(12, controller, &background) {}
+background(Model::TextureID::BG_DARK_GREEN, controller),
+exit_button(Model::TextureID::BG_SMOOTH_GREEN, controller, &background) {}

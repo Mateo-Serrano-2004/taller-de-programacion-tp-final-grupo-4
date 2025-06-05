@@ -2,16 +2,18 @@
 #define CLIENT_GAME_TEXTURE_TEXTURE_GENERATOR_H
 
 #include <SDL2/SDL.h>
-#include <SDL2pp/Texture.hh>
 
 #include "common/definitions.h"
 
 namespace SDL2pp {
 class Renderer;
+class Texture;
+class Point;
+class Color;
 };
 
 namespace View {
-class TextureGenerator {
+class AssetGenerator {
 protected:
     Shared<SDL2pp::Renderer> renderer;
 
@@ -21,14 +23,16 @@ protected:
     void draw_triangle(int half_size, int angle);
 
 public:
-    TextureGenerator(Shared<SDL2pp::Renderer> renderer);
+    AssetGenerator(Shared<SDL2pp::Renderer> renderer);
+
+    // Generate assets from scratch
 
     // FOV = Field of view
-    SDL2pp::Texture generate_fov();
-    SDL2pp::Texture generate_background(const SDL2pp::Point& size, const SDL2pp::Color& color);
-    SDL2pp::Texture generate_background(const SDL2pp::Color& color);
+    Shared<SDL2pp::Texture> generate_fov();
+    Shared<SDL2pp::Texture> generate_plain_texture(const SDL2pp::Point& size, const SDL2pp::Color& color);
+    Shared<SDL2pp::Texture> generate_plain_texture(const SDL2pp::Color& color);
 
-    ~TextureGenerator() = default;
+    ~AssetGenerator() = default;
 };
 };
 

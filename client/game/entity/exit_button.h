@@ -4,6 +4,7 @@
 #include <functional>
 
 #include "common/definitions.h"
+#include "common/texture_id.h"
 
 #include "button.h"
 
@@ -15,13 +16,13 @@ namespace View {
 class ExitButton: public Button {
 public:
     ExitButton(
-        short_id_t texture_id,
+        Model::TextureID texture_id,
         Weak<Controller::BaseController> controller,
         Pane* parent
     );
 
     ExitButton(
-        short_id_t texture_id,
+        Model::TextureID texture_id,
         Weak<Controller::BaseController> controller
     );
 

@@ -5,6 +5,7 @@
 #include <SDL2pp/Rect.hh>
 
 #include "common/definitions.h"
+#include "common/texture_id.h"
 
 #include "rendered.h"
 
@@ -21,13 +22,13 @@ protected:
 
 public:
     Pane(
-        short_id_t texture_id,
+        Model::TextureID texture_id,
         Weak<Controller::BaseController> controller,
         Pane* parent
     );
 
     Pane(
-        short_id_t texture_id,
+        Model::TextureID texture_id,
         Weak<Controller::BaseController> controller
     );
 

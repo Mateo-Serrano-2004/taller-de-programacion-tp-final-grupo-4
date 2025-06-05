@@ -8,7 +8,7 @@
 #include <SDL2pp/Point.hh>
 
 #include "controller/game_controller.h"
-#include "texture/texture_storage.h"
+#include "asset/asset_manager.h"
 
 #include "entity/rendered.h"
 

@@ -89,6 +89,9 @@ void ServerProtocol::send_player_list(const std::vector<DTO::PlayerDTO>& players
 void ServerProtocol::send_game_state(const DTO::GameStateDTO& game_state_dto) {
     peer.sendall(&game_state_dto.is_valid, sizeof(game_state_dto.is_valid));
     send_player_list(game_state_dto.players);
+
+    uint16_t time_left = htons(game_state_dto.time_left);
+    peer.sendall(&time_left, sizeof(time_left));
 }
 
 void ServerProtocol::send_all_maps_names(const std::vector<std::string>& maps) {

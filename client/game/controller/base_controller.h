@@ -16,7 +16,7 @@ class ContextManager;
 
 namespace Model {
 class Event;
-class TextureStorage;
+class AssetManager;
 };
 
 namespace Controller {
@@ -25,7 +25,7 @@ protected:
     SharedQueue<Model::Event> processor_event_queue;
     Shared<SDL2pp::Window> window;
     Shared<SDL2pp::Renderer> renderer;
-    Shared<Model::TextureStorage> texture_storage;
+    Shared<Model::AssetManager> asset_manager;
     Shared<Context::ContextManager> context_manager;
 
     BaseController(const BaseController&) = delete;
@@ -37,13 +37,13 @@ public:
     BaseController(
         Shared<SDL2pp::Window> window,
         Shared<SDL2pp::Renderer> renderer,
-        Shared<Model::TextureStorage> texture_storage,
+        Shared<Model::AssetManager> asset_manager,
         Shared<Context::ContextManager> context_manager
     );
 
     Shared<SDL2pp::Window> get_window();
     Shared<SDL2pp::Renderer> get_renderer();
-    Shared<Model::TextureStorage> get_texture_storage();
+    Shared<Model::AssetManager> get_asset_manager();
     Weak<Context::ContextManager> get_context_manager();
 
     virtual void handle_event(Shared<Model::Event> event);
