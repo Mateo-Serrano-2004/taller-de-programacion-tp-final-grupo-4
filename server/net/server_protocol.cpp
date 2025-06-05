@@ -60,6 +60,10 @@ EventVariant ServerProtocol::receive_event() {
         case Model::EventType::LEAVE_GAME: {
             return LeaveGameEvent();
         }
+        case Model::EventType::PICK_SPRITE: {
+            uint8_t sprite_id = uint8_t(data[1]);
+            return PickSpriteEvent(sprite_id);
+        }
         default:
             throw std::invalid_argument("Invalid event code");
     }

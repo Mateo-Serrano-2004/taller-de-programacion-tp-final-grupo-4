@@ -38,10 +38,7 @@ Controller::GameController::GameController(
 void Controller::GameController::handle_event(Shared<Model::Event> event) {
 	if (event->get_type() == Model::EventType::WINDOW_RESIZE) {
         game_state_manager->update_camera();
-    } else if (event->get_type() == Model::EventType::PICK_SKIN) {
-		auto pick_sprite_event = std::static_pointer_cast<Model::PickSpriteEvent>(event);
-		game_state_manager->update_player_sprite(pick_sprite_event->get_sprite_id());
-	} else {
+    } else {
 		Controller::BaseController::handle_event(event);
 	}
 }

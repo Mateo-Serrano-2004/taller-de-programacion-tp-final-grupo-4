@@ -16,6 +16,21 @@
 #include "event/rotation_event.h"
 #include "event/stop_movement_event.h"
 #include "event/username_event.h"
+#include "event/pick_sprite_event.h"
+
+DTO::EventDTO DTO::EventDTOCreator::create_pick_sprite_event() const {
+    auto pick_sprite_event = std::static_pointer_cast<Model::PickSpriteEvent>(event);
+    DTO::EventDTO event_dto;
+    std::vector<char> data;
+
+    data.push_back(static_cast<char>(Model::EventType::PICK_SPRITE));
+    data.push_back(static_cast<char>(pick_sprite_event->get_sprite_id()));
+
+    event_dto.size = 2;
+    event_dto.data = std::move(data);
+
+    return event_dto;
+}
 
 DTO::EventDTO DTO::EventDTOCreator::create_request_maps_event() const {
     DTO::EventDTO event_dto;
@@ -178,6 +193,8 @@ DTO::EventDTO DTO::EventDTOCreator::to_dto() const {
             return create_request_maps_event();
         case Model::EventType::REQUEST_GAMES_LIST:
             return create_request_games_list_event();
+        case Model::EventType::PICK_SPRITE:
+            return create_pick_sprite_event();
         default:
             throw std::runtime_error("Unknown event type");
     }

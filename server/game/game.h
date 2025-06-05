@@ -57,6 +57,7 @@ private:
     void handle_movement(const uint8_t& player_id, const MovementEvent& event);
     void handle_stop_movement(const uint8_t& player_id, const StopMovementEvent& event);
     void handle_rotation(const uint8_t& player_id, const RotationEvent& event);
+    void handle_pick_sprite(const uint8_t player_id, const PickSpriteEvent& event);
     void clear_game_queue();
 
     Game(const Game&) = delete;

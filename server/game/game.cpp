@@ -23,6 +23,7 @@ void Game::handle(uint8_t player_id, const GameEventVariant& event) {
                        [player_id, this](const LeaveGameEvent&) { handle_leave_game(player_id); },
                        [player_id, this](const QuitEvent&) { handle_leave_game(player_id); },
                        [player_id, this](const RotationEvent& e) { handle_rotation(player_id, e); },
+                       [player_id, this](const PickSpriteEvent& e) { handle_pick_sprite(player_id, e); },
                        [this](const DropWeaponEvent&) {},
                        [this](const UseWeaponEvent&) {}, [this](const DefuseBombEvent&) {},
                        [this](const SwitchWeaponEvent&) {}, [this](const ReloadWeaponEvent&) {},
@@ -59,6 +60,13 @@ void Game::handle_rotation(const uint8_t& player_id, const RotationEvent& event)
     auto it = players.find(player_id);
     if (it != players.end()) {
         it->second.set_angle(event.get_angle_in_degrees());
+    }
+}
+
+void Game::handle_pick_sprite(const uint8_t player_id, const PickSpriteEvent& event) {
+    auto it = players.find(player_id);
+    if (it != players.end()) {
+        it->second.set_skin_id(event.get_sprite_id());
     }
 }
 
