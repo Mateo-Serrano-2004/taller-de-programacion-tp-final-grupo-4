@@ -19,8 +19,6 @@ class Button: public Pane {
 protected:
     Controller::Callback callback;
 
-    bool check_click(Shared<SDL_Event> event) const;
-
 public:
     Button(
         Model::TextureID texture_id,
@@ -33,8 +31,9 @@ public:
         Weak<Controller::BaseController> controller
     );
 
+    bool check_click(Shared<SDL_Event> event) const;
     void on_click(std::function<void(Weak<Controller::BaseController>)> callback);
-    void trigger(Shared<SDL_Event> event);
+    bool trigger(Shared<SDL_Event> event);
 
     virtual ~Button() override = default;
 };

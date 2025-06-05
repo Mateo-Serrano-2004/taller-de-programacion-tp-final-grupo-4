@@ -34,7 +34,7 @@ SDL2pp::Point View::PlayerRenderer::get_skin_top_left_corner(short_id_t skin_pie
 void View::PlayerRenderer::render_name(const SDL2pp::Point& player_center, const std::string& player) {
     Shared<SDL2pp::Texture> text = asset_manager->apply_font_to_text(
             Model::FontID::STANDARD,
-            "HOLA",
+            player,
             SDL2pp::Color(255, 0, 0, 255)
         );
     renderer->Copy(

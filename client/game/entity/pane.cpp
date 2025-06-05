@@ -18,7 +18,7 @@ View::Pane::Pane(Model::TextureID texture_id, Weak<Controller::BaseController> c
 bool View::Pane::has_position() const { return (bool) position; }
 
 SDL2pp::Rect View::Pane::get_position() const {
-    return position ? *position : SDL2pp::Rect();
+    return position ? *position : get_parent_position();
 }
 
 void View::Pane::set_position(const SDL2pp::Rect& new_position) {

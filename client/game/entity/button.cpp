@@ -38,6 +38,8 @@ void View::Button::on_click(std::function<void(Weak<Controller::BaseController>)
     this->callback.set_callback(callback);
 }
 
-void View::Button::trigger(Shared<SDL_Event> event) {
-    if (check_click(event)) callback();
+bool View::Button::trigger(Shared<SDL_Event> event) {
+    bool triggered_event = check_click(event);
+    if (triggered_event) callback();
+    return triggered_event;
 }

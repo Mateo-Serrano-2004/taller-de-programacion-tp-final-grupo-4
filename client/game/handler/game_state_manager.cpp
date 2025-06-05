@@ -29,6 +29,11 @@ View::Camera Controller::GameStateManager::get_camera() {
 
 short_id_t Controller::GameStateManager::get_reference_player_id() const { return reference_player_id; }
 
+void Controller::GameStateManager::update_player_sprite(Model::TextureID texture_id) {
+    std::lock_guard<std::mutex> lock(mutex);
+    game_state->get_player_by_id(reference_player_id).set_skin_id((short_id_t) texture_id);
+}
+
 void Controller::GameStateManager::map_function_on_players(
         const std::function<void(Model::Player&)>& func) {
     std::lock_guard<std::mutex> lock(mutex);
