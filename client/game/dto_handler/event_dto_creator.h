@@ -23,6 +23,7 @@ private:
     EventDTO create_movement_event() const;
     EventDTO create_stop_movement_event() const;
     EventDTO create_rotation_event() const;
+    EventDTO create_switch_weapon_event() const;
 
 public:
     explicit EventDTOCreator(Shared<Model::Event> event): event(std::move(event)) {}

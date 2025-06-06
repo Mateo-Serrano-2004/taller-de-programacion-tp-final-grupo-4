@@ -5,6 +5,7 @@
 
 #include "common/definitions.h"
 #include "common/model/player.h"
+#include "common/model/weapon.h"
 #include "common/model/vector_2d.h"
 
 namespace Model {
@@ -14,10 +15,6 @@ private:
 
 public:
     MovablePlayer(short_id_t id, const std::string& name);
-
-    MovablePlayer(short_id_t id, short_id_t skin_id, short_id_t skin_piece, angle_t angle,
-                  std::string name, Physics::Vector2D position,
-                  Physics::Vector2D movement_direction, Weapon weapon);
 
     MovablePlayer(MovablePlayer&&) = default;
 

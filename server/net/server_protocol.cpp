@@ -66,6 +66,10 @@ EventVariant ServerProtocol::receive_event() {
             uint8_t sprite_id = uint8_t(data[1]);
             return PickSpriteEvent(sprite_id);
         }
+        case Model::EventType::SWITCH_WEAPON: {
+            uint8_t slot_id = uint8_t(data[1]);
+            return SwitchWeaponEvent(slot_id);
+        }
         default:
             throw std::invalid_argument("Invalid event code");
     }

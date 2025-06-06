@@ -24,9 +24,10 @@ void Game::handle(uint8_t player_id, const GameEventVariant& event) {
                        [player_id, this](const QuitEvent&) { handle_leave_game(player_id); },
                        [player_id, this](const RotationEvent& e) { handle_rotation(player_id, e); },
                        [player_id, this](const PickSpriteEvent& e) { handle_pick_sprite(player_id, e); },
+                       [this](const SwitchWeaponEvent&) {},
                        [this](const DropWeaponEvent&) {},
                        [this](const UseWeaponEvent&) {}, [this](const DefuseBombEvent&) {},
-                       [this](const SwitchWeaponEvent&) {}, [this](const ReloadWeaponEvent&) {},
+                       [this](const ReloadWeaponEvent&) {},
                        [this](const BuyEvent&) {}, [this](const BuyAmmoEvent&) {}},
             event);
 }

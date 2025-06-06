@@ -63,11 +63,11 @@ public:
 
 class SwitchWeaponEvent {
 private:
-    uint8_t weapon_id;
+    uint8_t slot_id;
 
 public:
-    explicit SwitchWeaponEvent(uint8_t weapon_id): weapon_id(weapon_id) {}
-    uint8_t get_weapon_id() const { return weapon_id; }
+    explicit SwitchWeaponEvent(uint8_t slot_id): slot_id(slot_id) {}
+    uint8_t get_slot_id() const { return slot_id; }
 };
 
 class ReloadWeaponEvent {
