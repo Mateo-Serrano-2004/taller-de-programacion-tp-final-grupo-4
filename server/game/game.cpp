@@ -25,12 +25,20 @@ void Game::handle(uint8_t player_id, const GameEventVariant& event) {
                        },
                        [player_id, this](const LeaveGameEvent&) { handle_leave_game(player_id); },
                        [player_id, this](const QuitEvent&) { handle_leave_game(player_id); },
+                       [player_id, this](const SwitchWeaponEvent& e) {handle_switch_weapon(player_id, e);},
                        //[player_id, this](const StartGameEvent&) { handle_start_game(); },
                        [this](const RotationEvent&) {}, [this](const DropWeaponEvent&) {},
                        [this](const UseWeaponEvent&) {}, [this](const DefuseBombEvent&) {},
-                       [this](const SwitchWeaponEvent&) {}, [this](const ReloadWeaponEvent&) {},
+                        [this](const ReloadWeaponEvent&) {},
                        [this](const BuyEvent&) {}, [this](const BuyAmmoEvent&) {}},
             event);
+}
+
+void Game::handle_switch_weapon(const uint8_t& player_id, const SwitchWeaponEvent& event) {
+    auto it = players.find(player_id);
+    if (it != players.end()) {
+        it->second.equip_weapon_by_type(event.get_weapon_type());
+    }
 }
 
 void Game::handle_start_game() {
