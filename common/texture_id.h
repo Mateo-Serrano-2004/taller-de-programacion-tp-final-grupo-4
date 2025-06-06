@@ -21,14 +21,11 @@ enum TextureID {
     SPRITE_BOMB,
     SPRITE_KNIFE,
 
-    // Backgrounds from 0x50
-    BG_DARK_GREEN = 0x10,
-    BG_SMOOTH_GREEN = 0x11,
-
     // Custom backgrounds from 0x70
 
     // Special textures
-    FOV = 0xC0
+    FOV = 0xC0,
+    NO_TEXTURE = 0xFF
 };
 };
 

@@ -2,7 +2,6 @@
 
 #include <map>
 #include <cmath>
-#include <iostream>
 
 #include <SDL2pp/SDL2pp.hh>
 #include <SDL2pp/Window.hh>

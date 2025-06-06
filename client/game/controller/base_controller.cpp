@@ -2,7 +2,6 @@
 
 #include <utility>
 #include <memory>
-#include <iostream>
 
 #include <SDL2pp/Window.hh>
 #include <SDL2pp/Renderer.hh>

@@ -2,7 +2,6 @@
 
 #include <utility>
 #include <cmath>
-#include <iostream>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/Point.hh>

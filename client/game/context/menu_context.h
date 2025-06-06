@@ -10,7 +10,7 @@
 
 #include "entity/entity_positioner.h"
 #include "entity/pane.h"
-#include "entity/exit_button.h"
+#include "entity/button.h"
 
 namespace Controller {
 class GameController;
@@ -24,7 +24,7 @@ protected:
     Controller::MenuEventHandlerStrategy event_handler_strategy;
     View::PlayerRenderer player_renderer;
     View::Pane background;
-    View::ExitButton exit_button;
+    View::Button exit_button;
 
     void render() override;
     void dispatch_events() override;

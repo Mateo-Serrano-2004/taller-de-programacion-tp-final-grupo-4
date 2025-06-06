@@ -4,7 +4,6 @@
 #include <string>
 #include <memory>
 #include <utility>
-#include <iostream>
 
 #include <SDL2pp/SDL2pp.hh>
 #include <SDL2pp/Window.hh>
@@ -24,6 +23,7 @@
 #include "asset/asset_generator.h"
 #include "asset/asset_addresser.h"
 #include "asset/font_id.h"
+#include "asset/background_id.h"
 
 #include "controller/game_controller.h"
 
@@ -92,15 +92,17 @@ void App::CS2DApp::load_player_sprites(Shared<Model::AssetManager> asset_manager
     );
 }
 
-void App::CS2DApp::load_backgrounds(Shared<Model::AssetManager> asset_manager,
+void App::CS2DApp::load_generated_textures(Shared<Model::AssetManager> asset_manager,
                                     Shared<SDL2pp::Renderer> renderer) {
     SDL2pp::Color dark_green(33, 42, 34, 255);
     SDL2pp::Color smooth_green(110, 120, 112, 255);
+    SDL2pp::Color yellow(255, 255, 0, 255);
 
     View::AssetGenerator asset_generator(renderer);
     asset_manager->load_texture(Model::TextureID::FOV, asset_generator.generate_fov());
-    asset_manager->load_texture(Model::TextureID::BG_DARK_GREEN, asset_generator.generate_plain_texture(dark_green));
-    asset_manager->load_texture(Model::TextureID::BG_SMOOTH_GREEN, asset_generator.generate_plain_texture(smooth_green));
+    asset_manager->load_background(Model::BackgroundID::BG_DARK_GREEN, asset_generator.generate_plain_texture(dark_green));
+    asset_manager->load_background(Model::BackgroundID::BG_SMOOTH_GREEN, asset_generator.generate_plain_texture(smooth_green));
+    asset_manager->load_background(Model::BackgroundID::BG_YELLOW, asset_generator.generate_plain_texture(yellow));
 }
 
 void App::CS2DApp::load_fonts(Shared<Model::AssetManager> asset_manager) {
@@ -108,7 +110,7 @@ void App::CS2DApp::load_fonts(Shared<Model::AssetManager> asset_manager) {
     asset_manager->load_font(
         Model::FontID::STANDARD,
         asset_addresser.get_font_path("liberationsans.ttf"),
-        20
+        16
     );
 }
 
@@ -120,14 +122,11 @@ App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
         SDL_WINDOW_SHOWN
     );
     auto renderer = make_shared<SDL2pp::Renderer>(*window, -1, SDL_RENDERER_ACCELERATED);
-
-    renderer->SetDrawColor(255, 255, 255, 255);
-    renderer->SetDrawBlendMode(SDL_BLENDMODE_BLEND);
     
     auto asset_manager = make_shared<Model::AssetManager>(renderer);
     load_weapon_sprites(asset_manager);
     load_player_sprites(asset_manager);
-    load_backgrounds(asset_manager, renderer);
+    load_generated_textures(asset_manager, renderer);
     load_fonts(asset_manager);
 
     context_manager = make_shared<Context::ContextManager>();
