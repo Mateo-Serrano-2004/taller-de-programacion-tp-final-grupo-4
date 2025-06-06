@@ -59,7 +59,7 @@ private:
     void handle_rotation(const uint8_t& player_id, const RotationEvent& event);
     void handle_pick_sprite(const uint8_t player_id, const PickSpriteEvent& event);
     void clear_game_queue();
-
+    
     Game(const Game&) = delete;
     Game& operator=(const Game&) = delete;
 
@@ -77,15 +77,16 @@ public:
 
     void run() override;
     bool is_dead() const;
-    void stop() override;
-    void close_clients_queues();
+    void kill();
+
+    void close_queues();
 
     Game(Game&&) = default;
     Game& operator=(Game&&) = default;
 
     ~Game() override {
-        is_not_finished = false;
-        close_clients_queues();
+        kill();
+        close_queues();
         join();
     }
 };

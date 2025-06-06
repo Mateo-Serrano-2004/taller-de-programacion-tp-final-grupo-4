@@ -12,10 +12,11 @@
 #include "common/DTO/game_state_dto.h"
 #include "common/queue.h"
 #include "server/events/events.h"
+#include "common/definitions.h"
 
 #include "game.h"
 
-using GameMap = std::map<uint8_t, std::unique_ptr<Game>>;
+using GameMap = std::map<uint8_t, Unique<Game>>;
 
 class GameManager {
 private:
@@ -25,7 +26,8 @@ private:
     uint8_t game_counter = 0;
     
     void reap_games();
-
+    void clear_games();
+    
     GameManager(const GameManager&) = delete;
     GameManager& operator=(const GameManager&) = delete;
 
@@ -40,8 +42,6 @@ public:
     GameQueue* get_game_queue(const uint8_t& game_id);
     std::vector<GameInfoDTO> get_games();
     std::vector<std::string> get_name_maps();
-
-    void clear_games();
     std::string get_game_map(const uint8_t& game_id);
 
     GameManager(GameManager&&) = default;

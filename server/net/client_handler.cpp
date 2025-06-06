@@ -35,7 +35,7 @@ void ClientHandler::handle_game_event(const GameEventVariant& event) {
 
     if (std::holds_alternative<LeaveGameEvent>(event)) {
         protocol.send_game_state(DTO::GameStateDTO());
-        sender.reset();
+        close();
     }
 }
 
@@ -57,11 +57,18 @@ void ClientHandler::run() {
         }
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
-        kill();
-        sender->kill();
+        close();
     }
 }
 
 void ClientHandler::kill() { is_alive = false; }
 
 bool ClientHandler::is_dead() const { return !is_alive; }
+
+void ClientHandler::close() {
+    kill();
+    if (sender) {
+        sender->kill();
+        sender->join();
+    }
+}

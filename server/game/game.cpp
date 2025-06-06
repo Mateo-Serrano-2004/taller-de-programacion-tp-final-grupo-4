@@ -171,9 +171,10 @@ GameQueue& Game::get_queue() { return game_queue; }
 
 bool Game::is_dead() const { return !is_not_finished; }
 
-void Game::stop() { is_not_finished = false; }
+void Game::kill() { is_not_finished = false; }
 
-void Game::close_clients_queues() {
+void Game::close_queues() {
+    game_queue.close();
     for (auto& [id, queue]: client_queues) {
         queue->close();
     }

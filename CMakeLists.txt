@@ -17,7 +17,7 @@ project(counter_strike_2d
     )
 
 option(CS2D_TESTS "Enable / disable tests." OFF)
-option(CS2D_CLIENT "Enable / disable client program." OFF)
+option(CS2D_CLIENT "Enable / disable client program." ON)
 option(CS2D_SERVER "Enable / disable server program." ON)
 option(CS2D_EDITOR "Enable / disable editor program." OFF)
 option(CS2D_MAKE_WARNINGS_AS_ERRORS "Enable / disable warnings as errors." OFF)
@@ -34,7 +34,7 @@ set_project_warnings(cs2d_common ${CS2D_MAKE_WARNINGS_AS_ERRORS} FALSE)
 
 target_include_directories(cs2d_common PUBLIC .)
 
-if(CS2D_CLIENT OR CS2D_EDITOR)
+if(CS2D_CLIENT)
     set(SDL2PP_WITH_IMAGE YES)
     set(SDL2PP_WITH_MIXER YES)
     set(SDL2PP_WITH_TTF YES)

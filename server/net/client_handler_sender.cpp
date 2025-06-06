@@ -7,7 +7,13 @@ void ClientHandlerSender::run() {
             protocol.send_game_state(game);
         } catch (const std::exception& e) {
             std::cerr << "Error: " << e.what() << std::endl;
-            kill();
+            close();
         }
     }
+}
+
+void ClientHandlerSender::close() {
+    kill();
+    sender_queue.close();
+    join();
 }

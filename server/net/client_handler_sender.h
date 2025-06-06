@@ -23,11 +23,15 @@ public:
     void run() override;
     void kill() { is_alive = false; }
     Queue<DTO::GameStateDTO>& get_queue() { return sender_queue; }
+    void close();
 
     ClientHandlerSender(ClientHandlerSender&&) = default;
     ClientHandlerSender& operator=(ClientHandlerSender&&) = default;
 
-    ~ClientHandlerSender() { join(); }
+    ~ClientHandlerSender() {
+        close();
+        join();
+    }
 };
 
 #endif  // CLIENT_HANDLER_SENDER_H

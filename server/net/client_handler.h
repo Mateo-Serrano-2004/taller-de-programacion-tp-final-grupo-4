@@ -43,11 +43,14 @@ public:
     void run() override;
     bool is_dead() const;
     void kill();
+    void close();
 
     ClientHandler(ClientHandler&&) = default;
     ClientHandler& operator=(ClientHandler&&) = default;
 
-    ~ClientHandler() = default;
+    ~ClientHandler() {
+        close();
+    }
 };
 
 #endif  // CLIENT_HANDLER_H

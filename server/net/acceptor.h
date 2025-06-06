@@ -7,6 +7,7 @@
 
 #include "common/socket.h"
 #include "common/thread.h"
+#include "common/definitions.h"
 #include "server/game/game_manager.h"
 
 #include "client_handler.h"
@@ -14,7 +15,7 @@
 class Acceptor: public Thread {
 private:
     Socket &acceptor;
-    std::list<std::unique_ptr<ClientHandler>> clients;
+    std::list<Unique<ClientHandler>> clients;
     bool is_alive = true;
     GameManager& game_manager;
 
