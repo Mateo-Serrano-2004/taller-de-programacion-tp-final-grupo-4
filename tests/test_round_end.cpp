@@ -6,6 +6,7 @@
 #include "../server/game/game.h"
 #include "../common/DTO/game_state_dto.h"
 #include "../common/queue.h"
+#include "common/weapon_type.h"
 
 //ojo que revisa si termino PARTIDA, pero hasta ahora en código informa si temino ronda en el dto de game
 void test_round_end() {
@@ -143,11 +144,134 @@ void test_player_moves_correctly_with_two_different_commands(){
     assert(false && "NO ESTA TESTIANDO NADA TODAVÍA"); //no esta testeando nada todavía
 }
 
-int main() {
-    test_round_end();
-    test_player_moves_forward_until_9_then_stops();
-    //test_player_moves_correctly_with_two_different_commands();
+void test_players_have_default_guns() {
+    using namespace std::chrono;
 
+    ClientQueue client_queue1;
+    ClientQueue client_queue2;
+
+    Game game("test_party", "test_map");
+
+    uint8_t player_id1 = game.add_player("Player1", client_queue1);
+    uint8_t player_id2 = game.add_player("Player2", client_queue2);
+
+    std::this_thread::sleep_for(milliseconds(80));
+    game.stop();
+
+    int count = 0;
+
+    DTO::GameStateDTO dto;
+    while (client_queue1.try_pop(dto)) {
+        for (const auto& player : dto.players) {
+            std::cout << "[DTO: " << count << "] Player " << static_cast<int>(player.player_id)
+                      << " ARMA EQUIPADA ID: " << static_cast<int>(player.weapon.id)
+                      << ", LOADED AMMO: " << static_cast<int>(player.weapon.loaded_ammo)
+                      << std::endl;
+
+            assert(player.weapon.id == static_cast<uint8_t>(WeaponID::KNIFE));
+        }
+        count++;
+    }
+}
+
+void test_player_switch_weapon() {
+    std::cout << "[TEST] - Arranca con KNIFE (como default) e intenta cambiar a la SECONDARY" << std::endl;
+    using namespace std::chrono;
+
+    ClientQueue client_queue1;
+
+    Game game("test_party", "test_map");
+
+    uint8_t player_id = game.add_player("Player1", client_queue1);
+
+    std::this_thread::sleep_for(milliseconds(80));
+
+    game.get_queue().push({player_id, SwitchWeaponEvent(WeaponType::SECONDARY)});
+
+    std::this_thread::sleep_for(milliseconds(80));
+    game.stop();
+
+    int count = 0;
+    bool weapon_was_switched = false;
+    DTO::GameStateDTO dto;
+    bool knife_detected = false;
+    bool glock_detected = false;
+
+    while (client_queue1.try_pop(dto)) {
+        for (const auto& player : dto.players) {
+            if (player.player_id != player_id) continue;
+
+            WeaponID current_weapon = static_cast<WeaponID>(player.weapon.id);
+
+            std::cout << "[DTO: " << count << "] Player " << static_cast<int>(player.player_id)
+                    << " ARMA EQUIPADA ID: " << static_cast<int>(current_weapon)
+                    << ", LOADED AMMO: " << static_cast<int>(player.weapon.loaded_ammo)
+                    << std::endl;
+
+            if (!glock_detected) {
+                if (current_weapon == WeaponID::KNIFE) {
+                    knife_detected = true;
+                } else if (current_weapon == WeaponID::GLOCK) {
+                    assert(knife_detected);
+                    glock_detected = true;
+                } else {
+                    assert(false && "Arma inesperada antes del cambio a Glock");
+                }
+            } else {
+                assert(current_weapon == WeaponID::GLOCK);
+            }
+        }
+        count++;
+    }
+
+    assert(knife_detected && "Nunca se recibió el arma KNIFE");
+    assert(glock_detected && "Nunca se cambió a GLOCK");
+    std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+}
+
+void test_player_cannot_switch_to_unowned_primary_weapon(){
+    std::cout << "[TEST] El jugador comienza con KNIFE y trata de cambiar al arma PRIMARY (que no tiene) — debería mantenerse con el KNIFE" << std::endl;
+
+    using namespace std::chrono;
+
+    ClientQueue client_queue1;
+
+    Game game("test_party", "test_map");
+
+    uint8_t player_id = game.add_player("Player1", client_queue1);
+
+    std::this_thread::sleep_for(milliseconds(80));
+
+    game.get_queue().push({player_id, SwitchWeaponEvent(WeaponType::PRIMARY)});
+
+    std::this_thread::sleep_for(milliseconds(80));
+    game.stop();
+
+    int count = 0;
+
+    DTO::GameStateDTO dto;
+    while (client_queue1.try_pop(dto)) {
+        for (const auto& player : dto.players) {
+            std::cout << "[DTO: " << count << "] Player " << static_cast<int>(player.player_id)
+                      << " ARMA EQUIPADA ID: " << static_cast<int>(player.weapon.id)
+                      << ", LOADED AMMO: " << static_cast<int>(player.weapon.loaded_ammo)
+                      << std::endl;
+
+            assert(player.weapon.id == static_cast<uint8_t>(WeaponID::KNIFE));
+        }
+        count++;
+    }
+    std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+}
+
+
+int main() {
+    //test_round_end();
+    //test_player_moves_forward_until_9_then_stops();
+    //test_player_moves_correctly_with_two_different_commands();
+    //test_players_have_default_guns();
+    test_player_switch_weapon();
+    test_player_cannot_switch_to_unowned_primary_weapon();
     std::cout << "Pasaron los test" << std::endl;
     return 0;
 }
