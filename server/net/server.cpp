@@ -14,9 +14,11 @@ Controller::Server::Server(const std::string& port, const std::string& game_conf
 }
 
 void Controller::Server::run() {
+    Socket skt(port.c_str());
     GameManager game_manager(game_config_path);
-    Acceptor acceptor(port.c_str(), game_manager);
+    Acceptor acceptor(skt, game_manager);
 
     std::string input;
     while (input != EXIT) std::getline(std::cin, input);
+    skt.shutdown(2);
 }

@@ -13,7 +13,7 @@
 
 class Acceptor: public Thread {
 private:
-    Socket acceptor;
+    Socket &acceptor;
     std::list<std::unique_ptr<ClientHandler>> clients;
     bool is_alive = true;
     GameManager& game_manager;
@@ -25,8 +25,8 @@ private:
     Acceptor& operator=(const Acceptor&) = delete;
 
 public:
-    explicit Acceptor(const std::string& port, GameManager& game_manager):
-            acceptor(port.c_str()), game_manager(game_manager) {
+    explicit Acceptor(Socket& acceptor, GameManager& game_manager):
+            acceptor(acceptor), game_manager(game_manager) {
         start();
     }
     void kill();
