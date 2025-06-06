@@ -6,6 +6,7 @@ uint8_t GameManager::create_game(const std::string& party_name, const std::strin
                                  const std::string& username,
                                  Queue<DTO::GameStateDTO>& client_queue) {
     std::lock_guard<std::mutex> lock(mtx);
+    reap_games();
     games[game_counter] = std::move(std::make_unique<Game>(party_name, map_name));
     games[game_counter]->add_player(username, client_queue);
     return game_counter++;
@@ -14,6 +15,7 @@ uint8_t GameManager::create_game(const std::string& party_name, const std::strin
 uint8_t GameManager::join_game(const uint8_t& game_id, const std::string& username,
                                Queue<DTO::GameStateDTO>& client_queue) {
     std::lock_guard<std::mutex> lock(mtx);
+    reap_games();
     auto it = games.find(game_id);
     if (it == games.end())
         return -1;
@@ -55,4 +57,24 @@ std::string GameManager::get_game_map(const uint8_t& game_id) {
     if (it == games.end())
         throw std::runtime_error("Game not found");
     return it->second->get_map_name();
+}
+
+void GameManager::clear_games() {
+    std::lock_guard<std::mutex> lock(mtx);
+    for (auto& [id, game] : games) {
+        game->stop();
+    }
+}
+
+void GameManager::reap_games() {
+    std::lock_guard<std::mutex> lock(mtx);
+    for (auto it = games.begin(); it != games.end();) {
+        if (it->second->is_dead()) {
+            it->second->stop();
+            it->second->join();
+            it = games.erase(it);
+        } else {
+            ++it;
+        }
+    }
 }

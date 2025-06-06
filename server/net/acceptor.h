@@ -2,6 +2,7 @@
 #define ACCEPTOR_H
 
 #include <list>
+#include <memory>
 #include <string>
 
 #include "common/socket.h"
@@ -13,7 +14,7 @@
 class Acceptor: public Thread {
 private:
     Socket acceptor;
-    std::list<ClientHandler*> clients;
+    std::list<std::unique_ptr<ClientHandler>> clients;
     bool is_alive = true;
     GameManager& game_manager;
 
@@ -28,13 +29,14 @@ public:
             acceptor(port.c_str()), game_manager(game_manager) {
         start();
     }
-
+    void kill();
     void run() override;
 
     Acceptor(Acceptor&&) = default;
     Acceptor& operator=(Acceptor&&) = default;
 
     ~Acceptor() {
+        kill();
         clear();
         join();
     }

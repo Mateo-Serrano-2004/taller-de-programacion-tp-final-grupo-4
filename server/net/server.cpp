@@ -14,7 +14,6 @@ Controller::Server::Server(const std::string& port, const std::string& game_conf
 }
 
 void Controller::Server::run() {
-
     GameManager game_manager(game_config_path);
     Acceptor acceptor(port.c_str(), game_manager);
 

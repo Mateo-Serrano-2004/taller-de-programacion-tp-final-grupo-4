@@ -169,4 +169,12 @@ std::string Game::get_map_name() const { return map_name; }
 
 GameQueue& Game::get_queue() { return game_queue; }
 
+bool Game::is_dead() const { return !is_not_finished; }
+
 void Game::stop() { is_not_finished = false; }
+
+void Game::close_clients_queues() {
+    for (auto& [id, queue]: client_queues) {
+        queue->close();
+    }
+}

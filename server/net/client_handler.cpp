@@ -11,7 +11,7 @@ void ClientHandler::handle_map_request() {
 }
 
 void ClientHandler::handle_create_game(const CreateGameEvent& event) {
-    sender = new ClientHandlerSender(protocol);
+    sender = std::make_unique<ClientHandlerSender>(protocol);
     uint8_t game_id = game_manager.create_game(event.get_party_name(), event.get_map_name(),
                                                username, sender->get_queue());
     player_id = 0;
@@ -20,7 +20,7 @@ void ClientHandler::handle_create_game(const CreateGameEvent& event) {
 }
 
 void ClientHandler::handle_join_game(const JoinGameEvent& event) {
-    sender = new ClientHandlerSender(protocol);
+    sender = std::make_unique<ClientHandlerSender>(protocol);
     player_id = game_manager.join_game(event.get_game_id(), username, sender->get_queue());
     game_queue = game_manager.get_game_queue(event.get_game_id());
     protocol.send_player_id(player_id);
@@ -35,7 +35,7 @@ void ClientHandler::handle_game_event(const GameEventVariant& event) {
 
     if (std::holds_alternative<LeaveGameEvent>(event)) {
         protocol.send_game_state(DTO::GameStateDTO());
-        delete sender;
+        sender.reset();
     }
 }
 
@@ -58,6 +58,7 @@ void ClientHandler::run() {
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
         kill();
+        sender->kill();
     }
 }
 

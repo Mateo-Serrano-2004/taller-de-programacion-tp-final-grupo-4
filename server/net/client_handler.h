@@ -22,7 +22,7 @@ private:
     GameManager& game_manager;
     GameQueue* game_queue;
     std::string username;
-    ClientHandlerSender* sender;
+    std::unique_ptr<ClientHandlerSender> sender;
     uint8_t player_id = 0;
 
     void handle_create_game(const CreateGameEvent& event);

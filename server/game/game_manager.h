@@ -23,6 +23,8 @@ private:
     GameMap games;
     std::string game_config_path;
     uint8_t game_counter = 0;
+    
+    void reap_games();
 
     GameManager(const GameManager&) = delete;
     GameManager& operator=(const GameManager&) = delete;
@@ -38,12 +40,16 @@ public:
     GameQueue* get_game_queue(const uint8_t& game_id);
     std::vector<GameInfoDTO> get_games();
     std::vector<std::string> get_name_maps();
+
+    void clear_games();
     std::string get_game_map(const uint8_t& game_id);
 
     GameManager(GameManager&&) = default;
     GameManager& operator=(GameManager&&) = default;
 
-    ~GameManager() = default;
+    ~GameManager() {
+        clear_games();
+    }
 };
 
 #endif  // GAME_MANAGER_H

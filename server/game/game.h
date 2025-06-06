@@ -77,14 +77,15 @@ public:
 
     void run() override;
     bool is_dead() const;
-    void kill();
     void stop() override;
+    void close_clients_queues();
 
     Game(Game&&) = default;
     Game& operator=(Game&&) = default;
 
     ~Game() override {
         is_not_finished = false;
+        close_clients_queues();
         join();
     }
 };
