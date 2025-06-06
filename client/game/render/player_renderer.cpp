@@ -110,7 +110,7 @@ void View::PlayerRenderer::render_player(View::Camera& camera, Model::Player& pl
     );
 
     render_weapon(camera_view, angle, (Model::TextureID) (player.get_current_weapon().get_sprite_id()));
-    render_name(camera_view, "HOLA");
+    render_name(camera_view, player.get_name());
 }
 
 void View::PlayerRenderer::render_fov(angle_t angle) {
