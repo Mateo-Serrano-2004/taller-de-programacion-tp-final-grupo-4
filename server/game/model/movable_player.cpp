@@ -3,14 +3,31 @@
 #include <string>
 #include <utility>
 
-Model::MovablePlayer::MovablePlayer(short_id_t id, const std::string& name):
-        Model::Player(id, name) {}
+Model::MovablePlayer::MovablePlayer(short_id_t id, const std::string& name)
+    : Model::Player(id, name),
+      movement_direction(0, 0),
+      knife(std::make_unique<Knife>()),
+      secondary(std::make_unique<Glock>()),
+      primary(nullptr),
+      bomb(nullptr),
+      equipped_weapon(nullptr)
+{
+    equipped_weapon = knife.get();
+}
 
 Model::MovablePlayer::MovablePlayer(short_id_t id, short_id_t skin_id, short_id_t skin_piece,
                                     angle_t angle, std::string name, Physics::Vector2D position,
-                                    Physics::Vector2D direction):
-        Model::Player(id, skin_id, skin_piece, angle, name, position),
-        movement_direction(std::move(direction)) {}
+                                    Physics::Vector2D direction)
+    : Model::Player(id, skin_id, skin_piece, angle, name, position),
+      movement_direction(std::move(direction)),
+      knife(std::make_unique<Knife>()),
+      secondary(std::make_unique<Glock>()),
+      primary(nullptr),
+      bomb(nullptr),
+      equipped_weapon(nullptr)
+{
+    equipped_weapon = knife.get();
+}
 
 void Model::MovablePlayer::update_movement_direction_by_merge(const Physics::Vector2D& direction) {
     coord_t new_x = direction.get_x();
@@ -33,4 +50,27 @@ void Model::MovablePlayer::update_position() {
         position.set_x(0);
     if (position.get_y() < 0)
         position.set_y(0);
+}
+
+void Model::MovablePlayer::equip_weapon_by_type(WeaponType type) {
+    switch (type) {
+        case WeaponType::KNIFE:
+            if (knife) equipped_weapon = knife.get();
+            break;
+        case WeaponType::SECONDARY:
+            if (secondary) equipped_weapon = secondary.get();
+            break;
+        case WeaponType::PRIMARY:
+            if (primary) equipped_weapon = primary.get();
+            break;
+        case WeaponType::BOMB:
+            if (bomb) equipped_weapon = bomb.get();
+            break;
+    }
+}
+
+DTO::PlayerDTO Model::MovablePlayer::to_dto() const {
+    DTO::PlayerDTO dto = Player::to_dto();
+    dto.weapon = equipped_weapon ? equipped_weapon->to_dto() : WeaponDTO();
+    return dto;
 }
