@@ -9,8 +9,6 @@
 #include "controller/game_controller.h"
 #include "controller/base_controller.h"
 
-#include "asset/background_id.h"
-
 #include "command/quit_command.h"
 
 #include "event/quit_event.h"
@@ -49,8 +47,8 @@ event_handler_strategy(controller),
 player_renderer(controller),
 background(controller),
 exit_button(controller, &background) {
-    background.set_background(Model::BackgroundID::BG_DARK_GREEN);
-    exit_button.set_background(Model::BackgroundID::BG_SMOOTH_GREEN);
+    background.set_background_color(SDL2pp::Color(31, 45, 31, 255));
+    exit_button.set_background_color(SDL2pp::Color(78, 107, 60, 255));
 
     exit_button.set_command(make_unique<Command::QuitCommand>());
 }

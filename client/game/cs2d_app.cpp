@@ -26,7 +26,6 @@
 #include "asset/asset_generator.h"
 #include "asset/asset_addresser.h"
 #include "asset/font_id.h"
-#include "asset/background_id.h"
 
 #include "controller/game_controller.h"
 
@@ -121,15 +120,8 @@ void App::CS2DApp::load_hud_textures(
 
 void App::CS2DApp::load_generated_textures(Shared<Model::AssetManager> asset_manager,
                                     Shared<SDL2pp::Renderer> renderer) {
-    SDL2pp::Color dark_green(33, 42, 34, 255);
-    SDL2pp::Color smooth_green(110, 120, 112, 255);
-    SDL2pp::Color yellow(255, 255, 0, 255);
-
     View::AssetGenerator asset_generator(renderer);
     asset_manager->load_texture(Model::TextureID::FOV, asset_generator.generate_fov());
-    asset_manager->load_background(Model::BackgroundID::BG_DARK_GREEN, asset_generator.generate_plain_texture(dark_green));
-    asset_manager->load_background(Model::BackgroundID::BG_SMOOTH_GREEN, asset_generator.generate_plain_texture(smooth_green));
-    asset_manager->load_background(Model::BackgroundID::BG_YELLOW, asset_generator.generate_plain_texture(yellow));
 }
 
 void App::CS2DApp::load_fonts(Shared<Model::AssetManager> asset_manager) {

@@ -5,17 +5,17 @@
 #include <SDL2pp/Optional.hh>
 #include <SDL2pp/Rect.hh>
 #include <SDL2pp/Texture.hh>
+#include <SDL2pp/Color.hh>
 
 #include "controller/base_controller.h"
 #include "asset/asset_manager.h"
 
 View::Pane::Pane(Weak<Controller::BaseController> controller, Pane* parent):
         View::Rendered(controller),
-        background_id(Model::BackgroundID::NO_BACKGROUND),
         position(SDL2pp::NullOpt),
         parent(parent) {}
 
-Model::BackgroundID View::Pane::get_background_id() const { return background_id; }
+Shared<SDL2pp::Texture> View::Pane::get_background() const { return background; }
 
 bool View::Pane::has_position() const { return (bool) position; }
 
@@ -41,11 +41,8 @@ SDL2pp::Rect View::Pane::get_parent_position() const {
     return parent ? parent->get_position() : renderer->GetViewport();
 }
 
-void View::Pane::set_background(Model::BackgroundID new_background_id) {
-    background_id = new_background_id;
-    if (background_id != Model::BackgroundID::NO_BACKGROUND) {
-        background = asset_manager->get_background(background_id);
-    }
+void View::Pane::set_background_color(const SDL2pp::Color& new_color) {
+    background = asset_manager->generate_background(new_color);
 }
 
 void View::Pane::set_position(const SDL2pp::Rect& new_position) {

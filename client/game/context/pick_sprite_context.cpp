@@ -9,8 +9,6 @@
 #include "controller/game_controller.h"
 #include "controller/base_controller.h"
 
-#include "asset/background_id.h"
-
 #include "command/composite_command.h"
 #include "command/pick_sprite_command.h"
 #include "command/switch_context_command.h"
@@ -27,7 +25,7 @@ Context::PickSpriteContext::PickSpriteContext(Weak<Controller::GameController> c
   pick_sprite_3_button(controller, &background),
   pick_sprite_4_button(controller, &background) {
 
-    background.set_background(Model::BackgroundID::BG_DARK_GREEN);
+    background.set_background_color(SDL2pp::Color(31, 45, 31, 255));
 
     build_button(pick_sprite_1_button, Model::TextureID::SPRITE_CT1);
     build_button(pick_sprite_2_button, Model::TextureID::SPRITE_CT2);
@@ -36,7 +34,7 @@ Context::PickSpriteContext::PickSpriteContext(Weak<Controller::GameController> c
 }
 
 void Context::PickSpriteContext::build_button(View::Button& button, Model::TextureID texture_id) {
-    button.set_background(Model::BackgroundID::BG_SMOOTH_GREEN);
+    button.set_background_color(SDL2pp::Color(78, 107, 60, 255));
     button.set_texture(texture_id);
     button.set_draw_texture(true);
     button.set_texture_slice(SDL2pp::Rect(0, 0, 32, 32));

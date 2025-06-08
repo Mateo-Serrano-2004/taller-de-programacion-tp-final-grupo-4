@@ -10,7 +10,8 @@
 #include <SDL2pp/Color.hh>
 
 Model::AssetManager::AssetManager(Shared<SDL2pp::Renderer> renderer)
-: renderer(renderer) {}
+: renderer(renderer),
+  asset_generator(renderer) {}
 
 void Model::AssetManager::load_texture(Model::TextureID id, const std::string& path) {
     textures.insert({id, make_shared<SDL2pp::Texture>(*renderer, path)});
@@ -20,8 +21,22 @@ void Model::AssetManager::load_texture(Model::TextureID id, Shared<SDL2pp::Textu
     textures.insert({id, texture});
 }
 
-void Model::AssetManager::load_background(Model::BackgroundID id, Shared<SDL2pp::Texture> background) {
-    backgrounds.insert({id, background});
+Shared<SDL2pp::Texture> Model::AssetManager::generate_background(
+    uint8_t red,
+    uint8_t green,
+    uint8_t blue,
+    uint8_t alpha
+) {
+    color_tuple color(red, green, blue, alpha);
+    auto bg = backgrounds.find(color);
+    if (bg != backgrounds.end()) return bg->second;
+    auto new_bg = asset_generator.generate_plain_texture(SDL2pp::Color(red, green, blue, alpha));
+    backgrounds.insert({color, new_bg});
+    return new_bg;
+}
+
+Shared<SDL2pp::Texture> Model::AssetManager::generate_background(const SDL2pp::Color& color) {
+    return generate_background(color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha());
 }
 
 void Model::AssetManager::load_font(Model::FontID id, const std::string& path, int size) {
@@ -34,10 +49,6 @@ void Model::AssetManager::load_font(Model::FontID id, Shared<SDL2pp::Font> font)
 
 Shared<SDL2pp::Texture> Model::AssetManager::get_texture(Model::TextureID id) {
     return textures.at(id);
-}
-
-Shared<SDL2pp::Texture> Model::AssetManager::get_background(Model::BackgroundID id) {
-    return backgrounds.at(id);
 }
 
 Shared<SDL2pp::Font> Model::AssetManager::get_font(Model::FontID id) {

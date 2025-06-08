@@ -13,6 +13,7 @@
 #include <cstdint>
 #include <memory>
 #include <functional>
+#include <tuple>
 
 #include "queue.h"
 
@@ -41,7 +42,7 @@ using signed_id_t = int8_t;
 using long_id_t = uint16_t;
 
 
-// Functions
-using Callback = std::function<void()>;
+// Colors
+using color_tuple = std::tuple<uint8_t, uint8_t, uint8_t, uint8_t>;
 
 #endif  // COMMON_DEFINITIONS_H
