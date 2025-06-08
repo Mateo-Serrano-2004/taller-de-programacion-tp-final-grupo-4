@@ -38,6 +38,7 @@ public:
     SDL2pp::Rect get_parent_position() const;
 
     void set_background_color(const SDL2pp::Color& new_color);
+    void set_background_color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
     void set_position(const SDL2pp::Rect& new_position);
     void set_auto_fit();
     void set_full_texture();

@@ -2,7 +2,6 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/Rect.hh>
-#include <SDL2pp/Color.hh>
 
 #include "common/texture_id.h"
 
@@ -47,8 +46,8 @@ event_handler_strategy(controller),
 player_renderer(controller),
 background(controller),
 exit_button(controller, &background) {
-    background.set_background_color(SDL2pp::Color(31, 45, 31, 255));
-    exit_button.set_background_color(SDL2pp::Color(78, 107, 60, 255));
+    background.set_background_color(31, 45, 31, 255);
+    exit_button.set_background_color(78, 107, 60, 255);
 
     exit_button.set_command(make_unique<Command::QuitCommand>());
 }

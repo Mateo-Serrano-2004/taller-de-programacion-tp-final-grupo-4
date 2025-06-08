@@ -3,7 +3,6 @@
 #include <functional>
 
 #include <SDL2/SDL.h>
-#include <SDL2pp/Color.hh>
 
 #include "common/event_type.h"
 #include "common/model/player.h"
@@ -35,5 +34,5 @@ Context::InGameContext::InGameContext(Weak<Controller::GameController> controlle
   hud_renderer(controller),
   event_handler_strategy(controller),
   game_state_manager(controller.lock()->get_game_state_manager()) {
-    background.set_background_color(SDL2pp::Color(255, 255, 0, 0));
+    background.set_background_color(255, 255, 0, 0);
 }

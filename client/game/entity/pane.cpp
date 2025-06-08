@@ -45,6 +45,10 @@ void View::Pane::set_background_color(const SDL2pp::Color& new_color) {
     background = asset_manager->generate_background(new_color);
 }
 
+void View::Pane::set_background_color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) {
+    background = asset_manager->generate_background(red, green, blue, alpha);
+}
+
 void View::Pane::set_position(const SDL2pp::Rect& new_position) {
     position = new_position;
 }
