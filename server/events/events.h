@@ -6,6 +6,7 @@
 #include <variant>
 
 #include "common/model/vector_2d.h"
+#include "common/weapon_type.h" 
 
 class MovementEvent {
 private:
@@ -63,11 +64,11 @@ public:
 
 class SwitchWeaponEvent {
 private:
-    uint8_t weapon_id;
+    WeaponType weapon_type;
 
 public:
-    explicit SwitchWeaponEvent(uint8_t weapon_id): weapon_id(weapon_id) {}
-    uint8_t get_weapon_id() const { return weapon_id; }
+    explicit SwitchWeaponEvent(WeaponType weapon_type) : weapon_type(weapon_type) {}
+    WeaponType get_weapon_type() const { return weapon_type; }
 };
 
 class ReloadWeaponEvent {
@@ -92,11 +93,11 @@ public:
 
 class BuyEvent {
 private:
-    uint8_t weapon_id;
+    WeaponID weapon_id;
 
 public:
-    explicit BuyEvent(uint8_t weapon_id): weapon_id(weapon_id) {}
-    uint8_t get_weapon_id() const { return weapon_id; }
+    explicit BuyEvent(WeaponID weapon_id): weapon_id(weapon_id) {}
+    WeaponID get_weapon_id() const { return weapon_id; }
 };
 
 class BuyAmmoEvent {

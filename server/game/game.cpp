@@ -16,21 +16,51 @@ void Game::run() {
     }
 }
 
+
 void Game::handle(uint8_t player_id, const GameEventVariant& event) {
     std::visit(
             overloaded{[player_id, this](const MovementEvent& e) { handle_movement(player_id, e); },
                        [player_id, this](const StopMovementEvent& e) { handle_stop_movement(player_id, e); },
                        [player_id, this](const LeaveGameEvent&) { handle_leave_game(player_id); },
                        [player_id, this](const QuitEvent&) { handle_leave_game(player_id); },
-                       [player_id, this](const RotationEvent& e) { handle_rotation(player_id, e); },
-                       [this](const DropWeaponEvent&) {},
+                       [player_id, this](const SwitchWeaponEvent& e) {handle_switch_weapon(player_id, e);},
+                       [player_id, this](const BuyEvent& e) {handle_buy_weapon(player_id, e);},
+                       //[player_id, this](const StartGameEvent&) { handle_start_game(); },
+                       [this](const RotationEvent&) {}, [this](const DropWeaponEvent&) {},
                        [this](const UseWeaponEvent&) {}, [this](const DefuseBombEvent&) {},
-                       [this](const SwitchWeaponEvent&) {}, [this](const ReloadWeaponEvent&) {},
-                       [this](const BuyEvent&) {}, [this](const BuyAmmoEvent&) {}},
+                        [this](const ReloadWeaponEvent&) {},
+                        [this](const BuyAmmoEvent&) {}},
             event);
 }
 
+void Game::handle_switch_weapon(const uint8_t& player_id, const SwitchWeaponEvent& event) {
+    auto it = players.find(player_id);
+    if (it != players.end()) {
+        it->second.equip_weapon_by_type(event.get_weapon_type());
+    }
+}
+
+void Game::handle_buy_weapon(const uint8_t& player_id, const BuyEvent& event) {
+    //if (this->state != GameState::Playing) return; TODAVÍA NO CAMBIA EL ESTADO EL GAME
+
+    auto it = players.find(player_id);
+    if (it == players.end()) return;
+    gamelogic.buy_weapon(it->second, event.get_weapon_id(), current_round);
+}
+
+
+void Game::handle_start_game() {
+    if (state != GameState::WaitingStart) return;
+
+    clear_game_queue();  
+
+    current_round = Round(180);
+    state = GameState::Playing;
+    std::cout << "[GAME] Partida iniciada" << std::endl;
+}
+
 void Game::handle_leave_game(const uint8_t& player_id) {
+    //Ojo ver estado de partida
     auto it = players.find(player_id);
     players.erase(it);
     auto queue_it = client_queues.find(player_id);
@@ -44,6 +74,7 @@ void Game::handle_movement(const uint8_t& player_id, const MovementEvent& event)
     }
 }
 
+// solo te deja uno
 void Game::handle_stop_movement(const uint8_t& player_id, const StopMovementEvent& event) {
     auto it = players.find(player_id);
     if (it != players.end()) {
@@ -52,13 +83,6 @@ void Game::handle_stop_movement(const uint8_t& player_id, const StopMovementEven
         } else {
             it->second.stop_vertical_movement();
         }
-    }
-}
-
-void Game::handle_rotation(const uint8_t& player_id, const RotationEvent& event) {
-    auto it = players.find(player_id);
-    if (it != players.end()) {
-        it->second.set_angle(event.get_angle_in_degrees());
     }
 }
 

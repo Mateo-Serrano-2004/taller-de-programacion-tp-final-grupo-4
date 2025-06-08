@@ -19,6 +19,7 @@
 
 #include "movement_system.h" 
 #include "round.h"
+#include "game_logic.h"
 
 using GameQueue = Queue<std::pair<uint8_t, GameEventVariant>>;
 using ClientQueue = Queue<DTO::GameStateDTO>;
@@ -48,6 +49,7 @@ private:
     Round current_round;
     MovementSystem movement_system;
     GameState state = GameState::WaitingPlayers;
+    GameLogic gamelogic;
 
     void tick(uint16_t frames_to_process);  // agregar current_tick
     void broadcast_game_state();
@@ -56,7 +58,9 @@ private:
     void handle_leave_game(const uint8_t& player_id);
     void handle_movement(const uint8_t& player_id, const MovementEvent& event);
     void handle_stop_movement(const uint8_t& player_id, const StopMovementEvent& event);
-    void handle_rotation(const uint8_t& player_id, const RotationEvent& event);
+    void handle_switch_weapon(const uint8_t& player_id, const SwitchWeaponEvent& event);
+    void handle_buy_weapon(const uint8_t& player_id, const BuyEvent& event);
+    void handle_start_game();
     void clear_game_queue();
 
     Game(const Game&) = delete;

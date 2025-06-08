@@ -5,7 +5,7 @@
 #include <iostream>
 
 enum class RoundState {
-    NotStarted,
+    Buying,
     Active,
     Ended
 };
@@ -13,15 +13,18 @@ enum class RoundState {
 class Round {
 private:
     RoundState state;
-    int ticks_remaining;
+    int buying_ticks_remaining;
+    int active_ticks_remaining;
 
 public:
-    explicit Round(int duration_in_ticks = 3600);  // default: 60s @ 60FPS
+    explicit Round(int duration_in_ticks = 3600, int buying_ticks = 600);  // default: 60s @ 60FPS
 
     void update(int frames_to_process);
     bool has_ended() const;
     RoundState get_state() const;
     uint16_t get_ticks_remaining() const;
+    bool is_buying_phase() const;
 };
 
 #endif // ROUND_H
+

@@ -41,5 +41,5 @@ void Model::Player::set_position(Physics::Vector2D new_position) {
 bool Model::Player::is_alive() const { return alive; }
 
 DTO::PlayerDTO Model::Player::to_dto() const {
-    return DTO::PlayerDTO(id, skin_id, skin_piece, angle, position.get_x(), position.get_y(), name);
+    return DTO::PlayerDTO(id, skin_id, skin_piece, angle, position.get_x(), position.get_y(), name, WeaponDTO());
 }
