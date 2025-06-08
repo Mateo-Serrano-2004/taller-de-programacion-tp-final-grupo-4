@@ -34,5 +34,5 @@ Context::InGameContext::InGameContext(Weak<Controller::GameController> controlle
   hud_renderer(controller),
   event_handler_strategy(controller),
   game_state_manager(controller.lock()->get_game_state_manager()) {
-    background.set_background_color(255, 255, 0, 0);
+    background.set_background_color(0, 0, 255, 0);
 }
