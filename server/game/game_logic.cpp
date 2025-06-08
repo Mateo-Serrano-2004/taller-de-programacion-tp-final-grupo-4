@@ -1,7 +1,7 @@
 #include "game_logic.h"
 #include <cstdint>
 
-void GameLogic::buy_weapon(Model::MovablePlayer& player, WeaponID weapon_id, const Round& round) const {
+void GameLogic::buy_weapon(MovablePlayer& player, WeaponID weapon_id, const Round& round) const {
     if (!round.is_buying_phase()) return;
     if (!WeaponFactory::is_buyable(weapon_id)) return;
     if (!player.is_alive()) return;
@@ -14,7 +14,7 @@ void GameLogic::buy_weapon(Model::MovablePlayer& player, WeaponID weapon_id, con
     std::unique_ptr<Weapon> dropped_weapon = player.receive_weapon(std::move(weapon));
     if (dropped_weapon) {
          // FALTA: manejar drop del arma anterior cargarla en algun lado
-        std::cout << "ARMA DROPEADA ES DE ID: " << static_cast<int>(dropped_weapon->to_dto().id) << std::endl;
+        std::cout << "ARMA DROPEADA ES DE ID: " << static_cast<int>(dropped_weapon->to_dto().weapon_id) << std::endl;
     }
 
     player.subtract_money(WeaponFactory::get_price(weapon_id));
@@ -22,6 +22,6 @@ void GameLogic::buy_weapon(Model::MovablePlayer& player, WeaponID weapon_id, con
    
 }
 
-bool GameLogic::has_enough_money(const Model::MovablePlayer& player, WeaponID weapon_id) const {
+bool GameLogic::has_enough_money(const MovablePlayer& player, WeaponID weapon_id) const {
     return player.get_money() >= WeaponFactory::get_price(weapon_id);
 }

@@ -2,8 +2,10 @@
 
 #include "common/texture_id.h"
 
-Model::Weapon::Weapon(uint8_t sprite_id, uint8_t ammo_in_charger, uint16_t total_ammo
-): sprite_id(sprite_id), ammo_in_charger(ammo_in_charger), total_ammo(total_ammo) {}
+Model::Weapon::Weapon(): sprite_id(0), ammo_in_charger(0), total_ammo(0) {}
+
+Model::Weapon::Weapon(uint8_t sprite_id, uint8_t ammo_in_charger, uint16_t total_ammo):
+        sprite_id(sprite_id), ammo_in_charger(ammo_in_charger), total_ammo(total_ammo) {}
 
 uint8_t Model::Weapon::get_sprite_id() const { return sprite_id; }
 

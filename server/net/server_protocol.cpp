@@ -10,6 +10,7 @@
 #include "common/DTO/weapon_dto.h"
 #include "common/definitions.h"
 #include "common/event_type.h"
+#include "common/weapon_type.h"
 
 EventVariant ServerProtocol::receive_event() {
     uint8_t size;
@@ -67,8 +68,8 @@ EventVariant ServerProtocol::receive_event() {
             return PickSpriteEvent(sprite_id);
         }
         case Model::EventType::SWITCH_WEAPON: {
-            uint8_t slot_id = uint8_t(data[1]);
-            return SwitchWeaponEvent(slot_id);
+            WeaponType weapon_type = WeaponType(data[1]);
+            return SwitchWeaponEvent(weapon_type);
         }
         default:
             throw std::invalid_argument("Invalid event code");
@@ -100,11 +101,10 @@ void ServerProtocol::send_player_list(const std::vector<DTO::PlayerDTO>& players
 
 void ServerProtocol::send_weapon(const DTO::PlayerDTO& player_dto) {
     DTO::WeaponDTO weapon_dto = player_dto.weapon_dto;
-    uint16_t total_ammo = htons(weapon_dto.total_ammo);
 
-    peer.sendall(&weapon_dto.sprite_id, sizeof(weapon_dto.sprite_id));
+    peer.sendall(&weapon_dto.weapon_id, sizeof(weapon_dto.weapon_id));
     peer.sendall(&weapon_dto.loaded_ammo, sizeof(weapon_dto.loaded_ammo));
-    peer.sendall(&total_ammo, sizeof(total_ammo));
+    peer.sendall(&weapon_dto.total_ammo, sizeof(weapon_dto.total_ammo));
 }
 
 void ServerProtocol::send_game_state(const DTO::GameStateDTO& game_state_dto) {

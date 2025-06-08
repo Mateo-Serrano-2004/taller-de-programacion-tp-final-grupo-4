@@ -78,13 +78,13 @@ void Controller::InGameEventHandlerStrategy::handle_switch_weapon_event(Shared<S
         case SDLK_1:
             slot_id = Model::SlotID::PRIMARY_WEAPON;
             break;
-        case SDLK_d:
+        case SDLK_2:
             slot_id = Model::SlotID::SECONDARY_WEAPON;
             break;
-        case SDLK_w:
+        case SDLK_3:
             slot_id = Model::SlotID::KNIFE;
             break;
-        case SDLK_s:
+        case SDLK_4:
             slot_id = Model::SlotID::BOMB;
             break;
     }

@@ -13,10 +13,10 @@ enum class WeaponID : uint8_t {
 };
 
 enum class WeaponType : uint8_t {
-    KNIFE,
-    SECONDARY,
-    PRIMARY,
-    BOMB
+    PRIMARY = 0x00,
+    SECONDARY = 0x01,
+    KNIFE = 0x02,
+    BOMB = 0x03
 };
 
 #endif

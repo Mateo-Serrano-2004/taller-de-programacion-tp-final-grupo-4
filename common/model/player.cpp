@@ -4,6 +4,7 @@
 #include <utility>
 
 #include "common/texture_id.h"
+#include "common/DTO/weapon_dto.h"
 
 Model::Player::Player(short_id_t id, const std::string& name):
         id(id), skin_id(0), skin_piece(0), angle(0), name(name), position(0, 0), alive(true),
@@ -51,7 +52,7 @@ bool Model::Player::is_alive() const { return alive; }
 Model::Weapon Model::Player::get_current_weapon() const { return current_weapon; }
 
 DTO::PlayerDTO Model::Player::to_dto() const {
-    return DTO::PlayerDTO(id, skin_id, skin_piece, angle, position.get_x(), position.get_y(), name, WeaponDTO());
+    return DTO::PlayerDTO(id, skin_id, skin_piece, angle, position.get_x(), position.get_y(), name, DTO::WeaponDTO());
 }
 
 Model::Player::~Player() {}

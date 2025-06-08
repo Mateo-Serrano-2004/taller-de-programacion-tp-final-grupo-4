@@ -13,6 +13,7 @@ private:
     uint16_t total_ammo;
 
 public:
+    Weapon();
     Weapon(uint8_t sprite_id, uint8_t ammo_in_charger, uint16_t total_ammo);
 
     uint8_t get_sprite_id() const;

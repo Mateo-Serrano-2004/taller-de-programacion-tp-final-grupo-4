@@ -8,14 +8,14 @@
 #include <iostream>
 class GameLogic {
 private:
-    bool has_enough_money(const Model::MovablePlayer& player, WeaponID weapon_id) const;
+    bool has_enough_money(const MovablePlayer& player, WeaponID weapon_id) const;
     uint16_t get_weapon_cost(WeaponID weapon_id) const;
 
 public:
     GameLogic() = default;
     ~GameLogic() = default;
 
-    void buy_weapon(Model::MovablePlayer& player, WeaponID weapon_id, const Round& round) const;
+    void buy_weapon(MovablePlayer& player, WeaponID weapon_id, const Round& round) const;
 };
 
 #endif // GAME_LOGIC_H

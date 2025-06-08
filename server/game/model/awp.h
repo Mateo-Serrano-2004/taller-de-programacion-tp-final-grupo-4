@@ -20,28 +20,12 @@ public:
         return WeaponType::PRIMARY;
     }
 
-    WeaponDTO to_dto() const override {
-        return WeaponDTO{
+    DTO::WeaponDTO to_dto() const override {
+        return DTO::WeaponDTO(
             static_cast<uint8_t>(WeaponID::AWP),
-            0,
-            0,
             loaded_ammo,
             total_ammo
-        };
-    }
-
-    bool can_shoot() const override {
-        return loaded_ammo > 0;
-    }
-
-    void shoot() override {
-        if (can_shoot()) {
-            loaded_ammo--;
-        }
-    }
-
-    void reload() override {
-        loaded_ammo = total_ammo;
+        );
     }
 };
 

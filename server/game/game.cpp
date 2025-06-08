@@ -176,7 +176,7 @@ uint8_t Game::add_player(const std::string& username, ClientQueue& client_queue)
         return -1;
     }
     const uint8_t new_id = next_player_id++;
-    players.emplace(new_id, Model::MovablePlayer(new_id, username));
+    players.emplace(new_id, MovablePlayer(new_id, username));
     client_queues[new_id] = &client_queue;
 
     if (state == GameState::WaitingPlayers && players.size() >= min_players_to_start) {

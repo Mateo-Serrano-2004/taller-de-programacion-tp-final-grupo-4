@@ -39,7 +39,7 @@ private:
     std::string map_name;
     GameQueue game_queue;
 
-    std::map<uint8_t, Model::MovablePlayer> players;
+    std::map<uint8_t, MovablePlayer> players;
     std::map<uint8_t, ClientQueue*> client_queues;
 
     std::vector<uint8_t> dropped_weapons;
@@ -62,6 +62,7 @@ private:
     void handle_pick_sprite(const uint8_t player_id, const PickSpriteEvent& event);
     void handle_switch_weapon(const uint8_t& player_id, const SwitchWeaponEvent& event);
     void handle_buy_weapon(const uint8_t& player_id, const BuyEvent& event);
+    void handle_start_game();
     void clear_game_queue();
 
     Game(const Game&) = delete;

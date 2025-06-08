@@ -5,7 +5,6 @@
 
 #include "common/definitions.h"
 #include "common/model/player.h"
-#include "common/model/weapon.h"
 #include "common/model/vector_2d.h"
 #include "common/weapon_type.h"
 #include "weapon.h"
@@ -14,8 +13,7 @@
 #include "ak47.h"
 #include <iostream>
 
-namespace Model {
-class MovablePlayer: public Player {
+class MovablePlayer: public Model::Player {
 private:
     Physics::Vector2D movement_direction;
     std::unique_ptr<Weapon> knife;
@@ -51,6 +49,5 @@ public:
 
     ~MovablePlayer() override = default;
 };
-};  // namespace Model
 
 #endif  // PLAYER_H

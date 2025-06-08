@@ -4,6 +4,7 @@
 #include <memory>
 #include "server/game/model/weapon.h"
 #include "common/weapon_type.h"
+#include "model/weapon.h"
 
 #include "server/game/model/glock.h"
 #include "server/game/model/ak47.h"

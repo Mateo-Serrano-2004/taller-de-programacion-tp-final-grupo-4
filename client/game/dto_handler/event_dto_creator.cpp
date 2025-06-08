@@ -1,5 +1,6 @@
 #include "event_dto_creator.h"
 
+#include <iostream>
 #include <cstdint>
 #include <string>
 #include <utility>
@@ -178,6 +179,8 @@ DTO::EventDTO DTO::EventDTOCreator::create_switch_weapon_event() const {
 
     uint8_t event_dto_size = 2;
     std::vector<char> data;
+
+    std::cout << switch_weapon->get_slot_id() << std::endl;
 
     data.push_back(static_cast<char>(Model::EventType::SWITCH_WEAPON));
     data.push_back(static_cast<char>(switch_weapon->get_slot_id()));

@@ -13,13 +13,7 @@ public:
 
     virtual WeaponType get_weapon_type() const = 0;
 
-    virtual WeaponDTO to_dto() const = 0;
-
-    virtual bool can_shoot() const = 0;
-
-    virtual void shoot() = 0;
-
-    virtual void reload() = 0;
+    virtual DTO::WeaponDTO to_dto() const = 0;
 };
 
 #endif  // WEAPON_H

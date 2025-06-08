@@ -19,9 +19,6 @@ public:
 
     uint64_t sleep_and_get_frames();
 
-private:
-    uint64_t rate;
-    time_point start;
 };
 
 #endif  // PERIODIC_CLOCK_H
