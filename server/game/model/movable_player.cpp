@@ -80,29 +80,39 @@ uint16_t Model::MovablePlayer::get_money() const {
     return money;
 }
 
-void Model::MovablePlayer::receive_weapon(std::unique_ptr<Weapon> weapon) {
-    if (!weapon) return;
+std::unique_ptr<Weapon> Model::MovablePlayer::receive_weapon(std::unique_ptr<Weapon> weapon) {
+    if (!weapon) return nullptr;
 
     WeaponType type = weapon->get_weapon_type();
-    // FALTA: Que acá retorne el ownership del arma vieja para el drop luego (según caso)
+    std::unique_ptr<Weapon> dropped_weapon = nullptr;
+
     switch (type) {
         case WeaponType::KNIFE:
+            dropped_weapon = std::move(knife);
             knife = std::move(weapon);
             equipped_weapon = knife.get();
             break;
+
         case WeaponType::SECONDARY:
+            dropped_weapon = std::move(secondary);
             secondary = std::move(weapon);
             equipped_weapon = secondary.get();
             break;
+
         case WeaponType::PRIMARY:
+            dropped_weapon = std::move(primary);
             primary = std::move(weapon);
             equipped_weapon = primary.get();
             break;
+
         case WeaponType::BOMB:
+            dropped_weapon = std::move(bomb);
             bomb = std::move(weapon);
             equipped_weapon = bomb.get();
             break;
     }
+
+    return dropped_weapon;
 }
 
 

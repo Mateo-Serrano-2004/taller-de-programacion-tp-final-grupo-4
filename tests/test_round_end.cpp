@@ -412,6 +412,61 @@ void test_player_cannot_buy_awp_due_to_money() {
     std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
 }
 
+void test_player_buy_glock_and_drop_the_old_glock() {
+    std::cout << "[TEST] - Compra GLOCK cuando ya la tiene por defecto (SOLO LO USO PARA VER QUE DROPEA LA GLOCK VIEJA)" << std::endl;
+    using namespace std::chrono;
+
+    ClientQueue client_queue1;
+
+    Game game("test_party", "test_map");
+
+    uint8_t player_id = game.add_player("Player1", client_queue1);
+
+    std::this_thread::sleep_for(milliseconds(80));
+
+    game.get_queue().push({player_id, BuyEvent(WeaponID::GLOCK)});
+
+    std::this_thread::sleep_for(milliseconds(80));
+
+    game.stop();
+
+    int count = 0;
+    bool weapon_was_switched = false;
+    DTO::GameStateDTO dto;
+    bool knife_detected = false;
+    bool glock_detected = false;
+
+    while (client_queue1.try_pop(dto)) {
+        for (const auto& player : dto.players) {
+            if (player.player_id != player_id) continue;
+
+            WeaponID current_weapon = static_cast<WeaponID>(player.weapon.id);
+
+            std::cout << "[DTO: " << count << "] Player " << static_cast<int>(player.player_id)
+                    << " ARMA EQUIPADA ID: " << static_cast<int>(current_weapon)
+                    << ", LOADED AMMO: " << static_cast<int>(player.weapon.loaded_ammo)
+                    << std::endl;
+
+            if (!glock_detected) {
+                if (current_weapon == WeaponID::KNIFE) {
+                    knife_detected = true;
+                } else if (current_weapon == WeaponID::GLOCK) {
+                    assert(knife_detected);
+                    glock_detected = true;
+                } else {
+                    assert(false && "Arma inesperada antes del cambio a GLOCK");
+                }
+            } else {
+                assert(current_weapon == WeaponID::GLOCK);
+            }
+        }
+        count++;
+    }
+    assert(false && "[TEST] - NO esta bien, en realidad deberia checkear en gamestate que venga un drop weapon, falta implementar");
+    assert(knife_detected && "Nunca se recibió el arma KNIFE");
+    assert(glock_detected && "Nunca se cambió a GLOCK");
+    std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+}
 
 int main() {
     //test_round_end();
@@ -423,6 +478,7 @@ int main() {
     test_player_buy_ak47_and_switch_auto();
     test_player_buy_m3_and_switch_auto();
     test_player_cannot_buy_awp_due_to_money();
+    //test_player_buy_glock_and_drop_the_old_glock(); ---------------> FALTA CHEQUEAR BIEN EL DROP WEAPON DTO
     std::cout << "Pasaron los test" << std::endl;
     return 0;
 }

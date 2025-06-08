@@ -42,7 +42,7 @@ public:
     Physics::Vector2D get_direction() const;
 
     void equip_weapon_by_type(WeaponType type);
-    void receive_weapon(std::unique_ptr<Weapon> weapon);
+    std::unique_ptr<Weapon> receive_weapon(std::unique_ptr<Weapon> weapon);
     uint16_t get_money() const;
     void subtract_money(uint16_t amount);
 

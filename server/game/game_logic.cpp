@@ -10,10 +10,16 @@ void GameLogic::buy_weapon(Model::MovablePlayer& player, WeaponID weapon_id, con
 
     std::unique_ptr<Weapon> weapon = WeaponFactory::create(weapon_id);
     if(!weapon) return;
-    player.receive_weapon(std::move(weapon));
+    
+    std::unique_ptr<Weapon> dropped_weapon = player.receive_weapon(std::move(weapon));
+    if (dropped_weapon) {
+         // FALTA: manejar drop del arma anterior cargarla en algun lado
+        std::cout << "ARMA DROPEADA ES DE ID: " << static_cast<int>(dropped_weapon->to_dto().id) << std::endl;
+    }
+
     player.subtract_money(WeaponFactory::get_price(weapon_id));
 
-    // FALTA: manejar drop del arma anterior
+   
 }
 
 bool GameLogic::has_enough_money(const Model::MovablePlayer& player, WeaponID weapon_id) const {
