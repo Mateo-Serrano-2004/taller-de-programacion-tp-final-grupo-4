@@ -10,6 +10,7 @@
 #include "entity/pane.h"
 
 #include "render/player_renderer.h"
+#include "render/hud_renderer.h"
 
 namespace Controller {
 class GameStateManager;
@@ -22,6 +23,7 @@ protected:
     SDL_Event placeholder;
     View::Pane background;
     View::PlayerRenderer player_renderer;
+    View::HUDRenderer hud_renderer;
     Controller::InGameEventHandlerStrategy event_handler_strategy;
     Shared<Controller::GameStateManager> game_state_manager;
 

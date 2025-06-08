@@ -5,9 +5,12 @@
 #include <memory>
 #include <utility>
 
+#include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 #include <SDL2pp/Window.hh>
 #include <SDL2pp/Renderer.hh>
+#include <SDL2pp/Texture.hh>
+#include <SDL2pp/Surface.hh>
 #include <SDL2pp/Color.hh>
 #include <SDL2pp/Point.hh>
 
@@ -38,6 +41,10 @@ const std::vector<std::string> player_sprites = {
 const std::vector<std::string> weapon_sprites = {
     "ak47.bmp", "awp.bmp", "bomb_d.bmp",
     "glock.bmp", "knife.bmp", "m3.bmp"
+};
+
+const std::vector<std::string> hud_textures = {
+    "hud_nums.bmp"
 };
 
 void App::CS2DApp::load_weapon_sprites(Shared<Model::AssetManager> asset_manager) {
@@ -92,6 +99,26 @@ void App::CS2DApp::load_player_sprites(Shared<Model::AssetManager> asset_manager
     );
 }
 
+void App::CS2DApp::load_hud_textures(
+    Shared<Model::AssetManager> asset_manager,
+    Shared<SDL2pp::Renderer> renderer
+) {
+    Model::AssetAddresser asset_addresser;
+
+    SDL2pp::Surface surface(asset_addresser.get_hud_resource(hud_textures[0]));
+
+    surface.SetColorKey(
+        true,
+        SDL_MapRGB(surface.Get()->format, 0, 0, 0)
+    );
+
+    auto texture = make_shared<SDL2pp::Texture>(*renderer, surface);
+
+    asset_manager->load_texture(
+        Model::TextureID::HUD_NUMS, texture
+    );
+}
+
 void App::CS2DApp::load_generated_textures(Shared<Model::AssetManager> asset_manager,
                                     Shared<SDL2pp::Renderer> renderer) {
     SDL2pp::Color dark_green(33, 42, 34, 255);
@@ -126,6 +153,7 @@ App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
     auto asset_manager = make_shared<Model::AssetManager>(renderer);
     load_weapon_sprites(asset_manager);
     load_player_sprites(asset_manager);
+    load_hud_textures(asset_manager, renderer);
     load_generated_textures(asset_manager, renderer);
     load_fonts(asset_manager);
 

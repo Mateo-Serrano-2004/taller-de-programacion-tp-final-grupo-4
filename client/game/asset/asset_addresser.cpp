@@ -18,6 +18,10 @@ std::string Model::AssetAddresser::get_player_sprite_path(const std::string& par
     return assets_main_path + "gfx/player/" + partial_path;
 }
 
+std::string Model::AssetAddresser::get_hud_resource(const std::string& partial_path) {
+    return assets_main_path + "gfx/" + partial_path;
+}
+
 std::string Model::AssetAddresser::get_font_path(const std::string& partial_path) {
     return assets_main_path + "gfx/fonts/" + partial_path;
 }

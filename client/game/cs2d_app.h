@@ -19,6 +19,7 @@ protected:
 
     void load_weapon_sprites(Shared<Model::AssetManager> asset_manager);
     void load_player_sprites(Shared<Model::AssetManager> asset_manager);
+    void load_hud_textures(Shared<Model::AssetManager> asset_manager, Shared<SDL2pp::Renderer> renderer);
     void load_generated_textures(Shared<Model::AssetManager> asset_manager, Shared<SDL2pp::Renderer> renderer);
     void load_fonts(Shared<Model::AssetManager> asset_manager);
 

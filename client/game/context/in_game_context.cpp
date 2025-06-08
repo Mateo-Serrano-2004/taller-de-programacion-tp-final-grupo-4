@@ -18,6 +18,7 @@
 void Context::InGameContext::render() {
     background.render();
     player_renderer.render();
+    hud_renderer.render();
 }
 
 void Context::InGameContext::dispatch_events() {
@@ -32,6 +33,7 @@ Context::InGameContext::InGameContext(Weak<Controller::GameController> controlle
 : Context::BaseContext("in-game", controller),
   background(controller),
   player_renderer(controller),
+  hud_renderer(controller),
   event_handler_strategy(controller),
   game_state_manager(controller.lock()->get_game_state_manager()) {
     background.set_background(Model::BackgroundID::BG_YELLOW);

@@ -14,14 +14,15 @@ enum TextureID {
     SPRITE_T4 = 0x06,
 
     // Weapons from 0x10
-    SPRITE_GLOCK,
-    SPRITE_AWP,
-    SPRITE_AK47,
-    SPRITE_M3,
-    SPRITE_BOMB,
-    SPRITE_KNIFE,
+    SPRITE_GLOCK = 0x10,
+    SPRITE_AWP = 0x11,
+    SPRITE_AK47 = 0x12,
+    SPRITE_M3 = 0x13,
+    SPRITE_BOMB = 0x14,
+    SPRITE_KNIFE = 0x15,
 
-    // Custom backgrounds from 0x70
+    // HUD textures from 0x40
+    HUD_NUMS = 0x40,
 
     // Special textures
     FOV = 0xC0,
