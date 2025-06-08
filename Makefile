@@ -49,6 +49,8 @@ test_round_end:
 	    server/game/game.cpp \
 	    server/game/round.cpp \
 		server/game/movement_system.cpp \
+		server/game/weapon_factory.cpp \
+		server/game/game_logic.cpp \
 	    -o build/test_round_end \
 	    -lpthread
 

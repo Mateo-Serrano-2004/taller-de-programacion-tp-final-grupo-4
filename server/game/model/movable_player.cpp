@@ -10,21 +10,23 @@ Model::MovablePlayer::MovablePlayer(short_id_t id, const std::string& name)
       secondary(std::make_unique<Glock>()),
       primary(nullptr),
       bomb(nullptr),
-      equipped_weapon(nullptr)
+      equipped_weapon(nullptr),
+      money(800)
 {
     equipped_weapon = knife.get();
 }
 
 Model::MovablePlayer::MovablePlayer(short_id_t id, short_id_t skin_id, short_id_t skin_piece,
                                     angle_t angle, std::string name, Physics::Vector2D position,
-                                    Physics::Vector2D direction)
+                                    Physics::Vector2D direction, uint16_t money)
     : Model::Player(id, skin_id, skin_piece, angle, name, position),
       movement_direction(std::move(direction)),
       knife(std::make_unique<Knife>()),
       secondary(std::make_unique<Glock>()),
       primary(nullptr),
       bomb(nullptr),
-      equipped_weapon(nullptr)
+      equipped_weapon(nullptr),
+      money(money)
 {
     equipped_weapon = knife.get();
 }
@@ -68,6 +70,41 @@ void Model::MovablePlayer::equip_weapon_by_type(WeaponType type) {
             break;
     }
 }
+
+void Model::MovablePlayer::subtract_money(uint16_t amount) {
+    if (amount > money) money = 0;
+    else money -= amount;
+}
+
+uint16_t Model::MovablePlayer::get_money() const {
+    return money;
+}
+
+void Model::MovablePlayer::receive_weapon(std::unique_ptr<Weapon> weapon) {
+    if (!weapon) return;
+
+    WeaponType type = weapon->get_weapon_type();
+    // FALTA: Que acá retorne el ownership del arma vieja para el drop luego (según caso)
+    switch (type) {
+        case WeaponType::KNIFE:
+            knife = std::move(weapon);
+            equipped_weapon = knife.get();
+            break;
+        case WeaponType::SECONDARY:
+            secondary = std::move(weapon);
+            equipped_weapon = secondary.get();
+            break;
+        case WeaponType::PRIMARY:
+            primary = std::move(weapon);
+            equipped_weapon = primary.get();
+            break;
+        case WeaponType::BOMB:
+            bomb = std::move(weapon);
+            equipped_weapon = bomb.get();
+            break;
+    }
+}
+
 
 DTO::PlayerDTO Model::MovablePlayer::to_dto() const {
     DTO::PlayerDTO dto = Player::to_dto();

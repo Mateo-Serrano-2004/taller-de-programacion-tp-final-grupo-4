@@ -6,9 +6,12 @@
 #include "common/definitions.h"
 #include "common/model/player.h"
 #include "common/model/vector_2d.h"
+#include "common/weapon_type.h"
 #include "weapon.h"
 #include "knife.h"
 #include "glock.h"
+#include "ak47.h"
+#include <iostream>
 
 namespace Model {
 class MovablePlayer: public Player {
@@ -21,12 +24,14 @@ private:
 
     Weapon* equipped_weapon = nullptr;
 
+    uint16_t money;
+
 public:
     MovablePlayer(short_id_t id, const std::string& name);
 
     MovablePlayer(short_id_t id, short_id_t skin_id, short_id_t skin_piece, angle_t angle,
                   std::string name, Physics::Vector2D position,
-                  Physics::Vector2D movement_direction);
+                  Physics::Vector2D movement_direction, uint16_t money);
 
     MovablePlayer(MovablePlayer&&) = default;
 
@@ -37,6 +42,9 @@ public:
     Physics::Vector2D get_direction() const;
 
     void equip_weapon_by_type(WeaponType type);
+    void receive_weapon(std::unique_ptr<Weapon> weapon);
+    uint16_t get_money() const;
+    void subtract_money(uint16_t amount);
 
     DTO::PlayerDTO to_dto() const;
 

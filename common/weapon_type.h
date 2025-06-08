@@ -1,6 +1,8 @@
 #ifndef COMMON_WEAPON_TYPE_H
 #define COMMON_WEAPON_TYPE_H
 
+#include <cstdint> 
+
 enum class WeaponID : uint8_t {
     KNIFE = 0,
     GLOCK = 1,

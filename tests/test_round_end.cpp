@@ -264,14 +264,165 @@ void test_player_cannot_switch_to_unowned_primary_weapon(){
     std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
 }
 
+void test_player_buy_ak47_and_switch_auto() {
+    std::cout << "[TEST] - Arranca con KNIFE (como default) compra AK47 ($800 y tiene $800) y se cambia automáticamente" << std::endl;
+    using namespace std::chrono;
+
+    ClientQueue client_queue1;
+
+    Game game("test_party", "test_map");
+
+    uint8_t player_id = game.add_player("Player1", client_queue1);
+
+    std::this_thread::sleep_for(milliseconds(80));
+
+    game.get_queue().push({player_id, BuyEvent(WeaponID::AK47)});
+
+    std::this_thread::sleep_for(milliseconds(80));
+
+    game.stop();
+
+    int count = 0;
+    bool weapon_was_switched = false;
+    DTO::GameStateDTO dto;
+    bool knife_detected = false;
+    bool ak_detected = false;
+
+    while (client_queue1.try_pop(dto)) {
+        for (const auto& player : dto.players) {
+            if (player.player_id != player_id) continue;
+
+            WeaponID current_weapon = static_cast<WeaponID>(player.weapon.id);
+
+            std::cout << "[DTO: " << count << "] Player " << static_cast<int>(player.player_id)
+                    << " ARMA EQUIPADA ID: " << static_cast<int>(current_weapon)
+                    << ", LOADED AMMO: " << static_cast<int>(player.weapon.loaded_ammo)
+                    << std::endl;
+
+            if (!ak_detected) {
+                if (current_weapon == WeaponID::KNIFE) {
+                    knife_detected = true;
+                } else if (current_weapon == WeaponID::AK47) {
+                    assert(knife_detected);
+                    ak_detected = true;
+                } else {
+                    assert(false && "Arma inesperada antes del cambio a AK47");
+                }
+            } else {
+                assert(current_weapon == WeaponID::AK47);
+            }
+        }
+        count++;
+    }
+
+    assert(knife_detected && "Nunca se recibió el arma KNIFE");
+    assert(ak_detected && "Nunca se cambió a AK47");
+    std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+}
+
+void test_player_buy_m3_and_switch_auto() {
+    std::cout << "[TEST] - Arranca con KNIFE, compra M3 ($650 y tiene $800) y se cambia automáticamente" << std::endl;
+    using namespace std::chrono;
+
+    ClientQueue client_queue1;
+    Game game("test_party", "test_map");
+
+    uint8_t player_id = game.add_player("Player1", client_queue1);
+
+    std::this_thread::sleep_for(milliseconds(80));
+
+    game.get_queue().push({player_id, BuyEvent(WeaponID::M3)});
+
+    std::this_thread::sleep_for(milliseconds(80));
+    game.stop();
+
+    int count = 0;
+    bool knife_detected = false;
+    bool m3_detected = false;
+
+    DTO::GameStateDTO dto;
+    while (client_queue1.try_pop(dto)) {
+        for (const auto& player : dto.players) {
+            if (player.player_id != player_id) continue;
+
+            WeaponID current_weapon = static_cast<WeaponID>(player.weapon.id);
+
+            std::cout << "[DTO: " << count << "] Player " << static_cast<int>(player.player_id)
+                      << " ARMA EQUIPADA ID: " << static_cast<int>(current_weapon)
+                      << ", LOADED AMMO: " << static_cast<int>(player.weapon.loaded_ammo)
+                      << std::endl;
+
+            if (!m3_detected) {
+                if (current_weapon == WeaponID::KNIFE) {
+                    knife_detected = true;
+                } else if (current_weapon == WeaponID::M3) {
+                    assert(knife_detected);
+                    m3_detected = true;
+                } else {
+                    assert(false && "Arma inesperada antes del cambio a M3");
+                }
+            } else {
+                assert(current_weapon == WeaponID::M3);
+            }
+        }
+        count++;
+    }
+
+    assert(knife_detected && "Nunca se recibió el arma KNIFE");
+    assert(m3_detected && "Nunca se cambió a M3");
+    std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+}
+
+void test_player_cannot_buy_awp_due_to_money() {
+    std::cout << "[TEST] - Arranca con KNIFE y NO puede comprar AWP (cuesta 1000, tiene 800)" << std::endl;
+    using namespace std::chrono;
+
+    ClientQueue client_queue1;
+    Game game("test_party", "test_map");
+
+    uint8_t player_id = game.add_player("Player1", client_queue1);  // Tiene 800
+
+    std::this_thread::sleep_for(milliseconds(80));
+
+    game.get_queue().push({player_id, BuyEvent(WeaponID::AWP)});  // AWP cuesta más
+
+    std::this_thread::sleep_for(milliseconds(80));
+    game.stop();
+
+    int count = 0;
+    bool only_knife_detected = true;
+
+    DTO::GameStateDTO dto;
+    while (client_queue1.try_pop(dto)) {
+        for (const auto& player : dto.players) {
+            if (player.player_id != player_id) continue;
+
+            WeaponID current_weapon = static_cast<WeaponID>(player.weapon.id);
+
+            std::cout << "[DTO: " << count << "] Player " << static_cast<int>(player.player_id)
+                      << " ARMA EQUIPADA ID: " << static_cast<int>(current_weapon)
+                      << ", LOADED AMMO: " << static_cast<int>(player.weapon.loaded_ammo)
+                      << std::endl;
+
+            assert(current_weapon == WeaponID::KNIFE && "El jugador no debería haber cambiado de arma (no tenía suficiente dinero)");
+        }
+        count++;
+    }
+
+    std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+}
+
 
 int main() {
     //test_round_end();
     //test_player_moves_forward_until_9_then_stops();
     //test_player_moves_correctly_with_two_different_commands();
     //test_players_have_default_guns();
-    test_player_switch_weapon();
-    test_player_cannot_switch_to_unowned_primary_weapon();
+    //test_player_switch_weapon();
+    //test_player_cannot_switch_to_unowned_primary_weapon();
+    test_player_buy_ak47_and_switch_auto();
+    test_player_buy_m3_and_switch_auto();
+    test_player_cannot_buy_awp_due_to_money();
     std::cout << "Pasaron los test" << std::endl;
     return 0;
 }

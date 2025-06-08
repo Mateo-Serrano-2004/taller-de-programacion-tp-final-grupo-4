@@ -26,11 +26,12 @@ void Game::handle(uint8_t player_id, const GameEventVariant& event) {
                        [player_id, this](const LeaveGameEvent&) { handle_leave_game(player_id); },
                        [player_id, this](const QuitEvent&) { handle_leave_game(player_id); },
                        [player_id, this](const SwitchWeaponEvent& e) {handle_switch_weapon(player_id, e);},
+                       [player_id, this](const BuyEvent& e) {handle_buy_weapon(player_id, e);},
                        //[player_id, this](const StartGameEvent&) { handle_start_game(); },
                        [this](const RotationEvent&) {}, [this](const DropWeaponEvent&) {},
                        [this](const UseWeaponEvent&) {}, [this](const DefuseBombEvent&) {},
                         [this](const ReloadWeaponEvent&) {},
-                       [this](const BuyEvent&) {}, [this](const BuyAmmoEvent&) {}},
+                        [this](const BuyAmmoEvent&) {}},
             event);
 }
 
@@ -40,6 +41,15 @@ void Game::handle_switch_weapon(const uint8_t& player_id, const SwitchWeaponEven
         it->second.equip_weapon_by_type(event.get_weapon_type());
     }
 }
+
+void Game::handle_buy_weapon(const uint8_t& player_id, const BuyEvent& event) {
+    //if (this->state != GameState::Playing) return; TODAVÍA NO CAMBIA EL ESTADO EL GAME
+
+    auto it = players.find(player_id);
+    if (it == players.end()) return;
+    gamelogic.buy_weapon(it->second, event.get_weapon_id(), current_round);
+}
+
 
 void Game::handle_start_game() {
     if (state != GameState::WaitingStart) return;
