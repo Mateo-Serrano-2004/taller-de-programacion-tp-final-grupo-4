@@ -8,7 +8,7 @@
 #include "common/definitions.h"
 
 namespace Model {
-class TextureStorage;
+class AssetManager;
 };
 
 namespace SDL2pp {

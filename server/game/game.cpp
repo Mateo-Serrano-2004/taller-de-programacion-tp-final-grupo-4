@@ -7,7 +7,7 @@
 #include "server/events/overloaded.h"
 
 void Game::run() {
-    current_round = Round(180);
+    current_round = Round();
     PeriodicClock clock(GAME_FPS); 
 
     while (is_not_finished) {
@@ -23,13 +23,13 @@ void Game::handle(uint8_t player_id, const GameEventVariant& event) {
                        [player_id, this](const StopMovementEvent& e) { handle_stop_movement(player_id, e); },
                        [player_id, this](const LeaveGameEvent&) { handle_leave_game(player_id); },
                        [player_id, this](const QuitEvent&) { handle_leave_game(player_id); },
+                       [player_id, this](const RotationEvent& e) { handle_rotation(player_id, e); },
+                       [player_id, this](const PickSpriteEvent& e) { handle_pick_sprite(player_id, e); },
                        [player_id, this](const SwitchWeaponEvent& e) {handle_switch_weapon(player_id, e);},
                        [player_id, this](const BuyEvent& e) {handle_buy_weapon(player_id, e);},
-                       //[player_id, this](const StartGameEvent&) { handle_start_game(); },
-                       [this](const RotationEvent&) {}, [this](const DropWeaponEvent&) {},
+                       [this](const DropWeaponEvent&) {},
                        [this](const UseWeaponEvent&) {}, [this](const DefuseBombEvent&) {},
-                        [this](const ReloadWeaponEvent&) {},
-                        [this](const BuyAmmoEvent&) {}},
+                       [this](const ReloadWeaponEvent&) {}, [this](const BuyAmmoEvent&) {}},
             event);
 }
 
@@ -83,6 +83,20 @@ void Game::handle_stop_movement(const uint8_t& player_id, const StopMovementEven
         } else {
             it->second.stop_vertical_movement();
         }
+    }
+}
+
+void Game::handle_rotation(const uint8_t& player_id, const RotationEvent& event) {
+    auto it = players.find(player_id);
+    if (it != players.end()) {
+        it->second.set_angle(event.get_angle_in_degrees());
+    }
+}
+
+void Game::handle_pick_sprite(const uint8_t player_id, const PickSpriteEvent& event) {
+    auto it = players.find(player_id);
+    if (it != players.end()) {
+        it->second.set_skin_id(event.get_sprite_id());
     }
 }
 

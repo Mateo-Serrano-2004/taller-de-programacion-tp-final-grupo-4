@@ -8,13 +8,17 @@
 #include <SDL2pp/Renderer.hh>
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Rect.hh>
+#include <SDL2pp/Color.hh>
 
 #include "common/model/player.h"
+#include "common/texture_id.h"
 
 #include "camera.h"
 
 #include "controller/game_controller.h"
-#include "texture/texture_storage.h"
+#include "asset/asset_manager.h"
+#include "asset/font_id.h"
+#include "common/texture_id.h"
 #include "handler/game_state_manager.h"
 
 SDL2pp::Point View::PlayerRenderer::get_skin_top_left_corner(short_id_t skin_piece) {
@@ -27,8 +31,37 @@ SDL2pp::Point View::PlayerRenderer::get_skin_top_left_corner(short_id_t skin_pie
     return SDL2pp::Point(skin_piece_x, skin_piece_y);
 }
 
+void View::PlayerRenderer::render_weapon(const SDL2pp::Point& player_center,
+                                         angle_t player_angle,
+                                         Model::TextureID texture_id) {
+    Shared<SDL2pp::Texture> weapon_texture = asset_manager->get_texture(texture_id);
+
+    SDL2pp::Rect weapon_coords(player_center.GetX() - 16, player_center.GetY() - 32, 32, 32);
+    SDL2pp::Point point_to_rotate(16, 32);
+
+    renderer->Copy(*weapon_texture, SDL2pp::NullOpt, weapon_coords, player_angle, point_to_rotate);
+}
+
+void View::PlayerRenderer::render_name(const SDL2pp::Point& player_center,
+                                       const std::string& player) {
+    Shared<SDL2pp::Texture> text = asset_manager->apply_font_to_text(
+            Model::FontID::STANDARD,
+            player,
+            SDL2pp::Color(255, 0, 0, 255)
+        );
+    renderer->Copy(
+        *text,
+        SDL2pp::NullOpt,
+        SDL2pp::Rect(
+            player_center.GetX() - (text->GetWidth()) / 2,
+            player_center.GetY() - 17 - text->GetHeight(),
+            text->GetWidth(), text->GetHeight()
+        )
+    );
+}
+
 void View::PlayerRenderer::render_player(View::Camera& camera, Model::Player& player) {
-    SDL2pp::Texture& texture = texture_storage->get_texture(player.get_skin_id());
+    Shared<SDL2pp::Texture> texture = asset_manager->get_texture((Model::TextureID) player.get_skin_id());
     SDL2pp::Point skin_top_left_corner = get_skin_top_left_corner(player.get_skin_piece());
     angle_t angle = player.get_angle();
 
@@ -69,12 +102,15 @@ void View::PlayerRenderer::render_player(View::Camera& camera, Model::Player& pl
     );
 
     renderer->Copy(
-        texture,
+        *texture,
         skin_rect,
         top_left_corner,
         angle,
         SDL2pp::NullOpt
     );
+
+    render_weapon(camera_view, angle, (Model::TextureID) (player.get_current_weapon().get_sprite_id()));
+    render_name(camera_view, player.get_name());
 }
 
 void View::PlayerRenderer::render_fov(angle_t angle) {
@@ -83,17 +119,17 @@ void View::PlayerRenderer::render_fov(angle_t angle) {
     int viewport_height = viewport.GetY();
 
     // Id del fov_texture
-    auto& fov_texture = texture_storage->get_texture(10);
+    auto fov_texture = asset_manager->get_texture(Model::TextureID::FOV);
 
     // Squared texture
-    int fov_texture_size = fov_texture.GetWidth();
+    int fov_texture_size = fov_texture->GetWidth();
 
     int length_to_corners = std::sqrt(
         (viewport_width * viewport_width) + (viewport_height * viewport_height)
     ) / 2;
 
     renderer->Copy(
-        fov_texture,
+        *fov_texture,
         SDL2pp::Rect(
             (fov_texture_size - 2 * length_to_corners) / 2,
             (fov_texture_size - 2 * length_to_corners) / 2,

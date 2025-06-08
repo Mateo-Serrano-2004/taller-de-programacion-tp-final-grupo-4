@@ -7,6 +7,7 @@
 #include "common/definitions.h"
 
 #include "vector_2d.h"
+#include "weapon.h"
 
 namespace Model {
 class Player {
@@ -19,6 +20,8 @@ protected:
     Physics::Vector2D position;
     bool alive;
 
+    Weapon current_weapon;
+
     Player(const Player&) = delete;
     Player& operator=(const Player&) = delete;
 
@@ -26,7 +29,7 @@ public:
     Player(short_id_t id, const std::string& name);
 
     Player(short_id_t id, short_id_t skin_id, short_id_t skin_piece, angle_t angle,
-           const std::string& name, const Physics::Vector2D& position);
+           const std::string& name, const Physics::Vector2D& position, const Weapon& weapon);
 
     Player(Player&&) = default;
     Player& operator=(Player&&) = default;
@@ -38,15 +41,17 @@ public:
     std::string get_name() const;
     Physics::Vector2D get_position() const;
     bool is_alive() const;
+    Weapon get_current_weapon() const;
 
     void set_skin_id(short_id_t new_skin_id);
     void set_skin_piece(short_id_t new_skin_piece);
     void set_angle(angle_t new_angle);
     void set_position(Physics::Vector2D new_position);
+    void set_current_weapon(const Weapon& weapon);
 
     DTO::PlayerDTO to_dto() const;
 
-    virtual ~Player() = default;
+    virtual ~Player();
 };
 };  // namespace Model
 

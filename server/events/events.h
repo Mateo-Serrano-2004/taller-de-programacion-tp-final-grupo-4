@@ -80,15 +80,13 @@ public:
     uint8_t get_weapon_id() const { return weapon_id; }
 };
 
-class SelectSideAndModelEvent {
+class PickSpriteEvent {
 private:
-    uint8_t side;
-    uint8_t model;
+    uint8_t sprite_id;
 
 public:
-    SelectSideAndModelEvent(uint8_t side, uint8_t model): side(side), model(model) {}
-    uint8_t get_side() const { return side; }
-    uint8_t get_model() const { return model; }
+    PickSpriteEvent(uint8_t sprite_id): sprite_id(sprite_id) {}
+    uint8_t get_sprite_id() const { return sprite_id; }
 };
 
 class BuyEvent {
@@ -162,7 +160,9 @@ public:
 using GameEventVariant =
         std::variant<LeaveGameEvent, MovementEvent, StopMovementEvent, RotationEvent,
                      DropWeaponEvent, UseWeaponEvent, DefuseBombEvent, SwitchWeaponEvent,
-                     ReloadWeaponEvent, BuyEvent, BuyAmmoEvent, QuitEvent>;
+                     ReloadWeaponEvent, BuyEvent, BuyAmmoEvent, QuitEvent,
+                     PickSpriteEvent
+                     >;
 
 using EventVariant = std::variant<GameEventVariant, UsernameEvent, CreateGameEvent, MapRequestEvent,
                                   JoinGameEvent, ListGamesEvent>;

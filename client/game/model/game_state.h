@@ -11,13 +11,17 @@ namespace Model {
 class GameState {
 private:
     std::map<short_id_t, Player> players;
+    uint16_t time_left;
 
 public:
-    GameState() = default;
+    GameState();
 
     std::map<short_id_t, Player>& get_players();
     Player& get_player_by_id(short_id_t id);
     void register_player(Player&& player);
+
+    void set_time_left(uint16_t new_time_left);
+    uint16_t get_time_left() const;
 
     ~GameState() = default;
 };

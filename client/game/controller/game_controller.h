@@ -15,7 +15,7 @@ class ContextManager;
 
 namespace Model {
 class Event;
-class TextureStorage;
+class AssetManager;
 };
 
 namespace SDL2pp {
@@ -43,7 +43,7 @@ public:
     GameController(
         Shared<SDL2pp::Window> window,
         Shared<SDL2pp::Renderer> renderer,
-        Shared<Model::TextureStorage> texture_storage,
+        Shared<Model::AssetManager> asset_manager,
         Shared<Context::ContextManager> context_manager,
         Net::ClientProtocol* protocol
     );

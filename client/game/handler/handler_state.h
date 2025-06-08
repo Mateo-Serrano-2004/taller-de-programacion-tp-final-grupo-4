@@ -6,6 +6,7 @@ struct HandlerState {
 public:
     bool moving_vertically;
     bool moving_horizontally;
+    bool switching_weapon;
 
     HandlerState();
     ~HandlerState() = default;

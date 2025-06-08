@@ -17,7 +17,7 @@ private:
     int active_ticks_remaining;
 
 public:
-    explicit Round(int duration_in_ticks = 3600, int buying_ticks = 600);  // default: 60s @ 60FPS
+    explicit Round(int duration_in_ticks = 7200, int buying_ticks = 600);  // default: 60s @ 60FPS
 
     void update(int frames_to_process);
     bool has_ended() const;

@@ -2,21 +2,25 @@
 
 #include <utility>
 #include <cmath>
-#include <iostream>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Window.hh>
 
+#include "common/slot_id.h"
+
 #include "game_state_manager.h"
 
 #include "controller/game_controller.h"
+
 #include "event/quit_event.h"
 #include "event/movement_event.h"
 #include "event/stop_movement_event.h"
 #include "event/rotation_event.h"
 #include "event/window_resize_event.h"
+#include "event/switch_weapon_event.h"
 #include "event/switch_context_event.h"
+
 #include "exception/closed_window.h"
 
 void Controller::InGameEventHandlerStrategy::handle_movement_event(Shared<SDL_Event> event) {
@@ -62,26 +66,41 @@ void Controller::InGameEventHandlerStrategy::handle_window_event(Shared<SDL_Even
     }
 }
 
+void Controller::InGameEventHandlerStrategy::handle_switch_weapon_event(Shared<SDL_Event> event) {
+    if (handler_state.switching_weapon) return;
+
+    Shared<Model::SwitchWeaponEvent> switch_weapon_event;
+    auto key_symbol = event->key.keysym.sym;
+
+    Model::SlotID slot_id;
+
+    switch (key_symbol) {
+        case SDLK_1:
+            slot_id = Model::SlotID::PRIMARY_WEAPON;
+            break;
+        case SDLK_d:
+            slot_id = Model::SlotID::SECONDARY_WEAPON;
+            break;
+        case SDLK_w:
+            slot_id = Model::SlotID::KNIFE;
+            break;
+        case SDLK_s:
+            slot_id = Model::SlotID::BOMB;
+            break;
+    }
+
+    handler_state.switching_weapon = true;
+    switch_weapon_event = make_shared<Model::SwitchWeaponEvent>(slot_id);
+
+    controller.lock()->handle_event(std::move(switch_weapon_event));
+}
+
 void Controller::InGameEventHandlerStrategy::handle_switch_context_event(Shared<SDL_Event>) {
     auto switch_context_event = make_shared<Model::SwitchContextEvent>("menu");
     controller.lock()->handle_event(std::move(switch_context_event));
 }
 
-void Controller::InGameEventHandlerStrategy::handle_keydown_event(Shared<SDL_Event> event) {
-    auto key_symbol = event->key.keysym.sym;
-    if (key_symbol == SDLK_ESCAPE) {
-        handle_switch_context_event(nullptr);
-    } else if (
-        key_symbol == SDLK_w ||
-        key_symbol == SDLK_a ||
-        key_symbol == SDLK_s ||
-        key_symbol == SDLK_d
-    ) {
-        handle_movement_event(std::move(event));
-    }
-}
-
-void Controller::InGameEventHandlerStrategy::handle_keyup_event(Shared<SDL_Event> event) {
+void Controller::InGameEventHandlerStrategy::handle_stop_movement_event(Shared<SDL_Event> event) {
     Shared<Model::StopMovementEvent> stop_movement_event;
     auto key_symbol = event->key.keysym.sym;
     bool is_horizontal = false;
@@ -105,6 +124,42 @@ void Controller::InGameEventHandlerStrategy::handle_keyup_event(Shared<SDL_Event
     stop_movement_event = make_shared<Model::StopMovementEvent>(is_horizontal);
 
     controller.lock()->handle_event(std::move(stop_movement_event));
+}
+
+void Controller::InGameEventHandlerStrategy::handle_stop_switching_weapon_event() {
+    handler_state.switching_weapon = false;
+}
+
+void Controller::InGameEventHandlerStrategy::handle_keydown_event(Shared<SDL_Event> event) {
+    auto key_symbol = event->key.keysym.sym;
+    if (key_symbol == SDLK_ESCAPE) {
+        handle_switch_context_event(nullptr);
+    } else if (key_symbol == SDLK_w ||
+               key_symbol == SDLK_a ||
+               key_symbol == SDLK_s ||
+               key_symbol == SDLK_d) {
+        handle_movement_event(std::move(event));
+    } else if (key_symbol == SDLK_1 ||
+               key_symbol == SDLK_2 ||
+               key_symbol == SDLK_3 ||
+               key_symbol == SDLK_4) {
+        handle_switch_weapon_event(std::move(event));
+    }
+}
+
+void Controller::InGameEventHandlerStrategy::handle_keyup_event(Shared<SDL_Event> event) {
+    auto key_symbol = event->key.keysym.sym;
+    if (key_symbol == SDLK_w ||
+        key_symbol == SDLK_a ||
+        key_symbol == SDLK_s ||
+        key_symbol == SDLK_d) {
+        handle_stop_movement_event(std::move(event));
+    } else if (key_symbol == SDLK_1 ||
+               key_symbol == SDLK_2 ||
+               key_symbol == SDLK_3 ||
+               key_symbol == SDLK_4) {
+        handle_stop_switching_weapon_event();
+    }
 }
 
 Controller::InGameEventHandlerStrategy::InGameEventHandlerStrategy(Weak<Controller::GameController> controller)

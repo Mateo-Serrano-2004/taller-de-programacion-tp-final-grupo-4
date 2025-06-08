@@ -8,8 +8,9 @@
 #include "handler/menu_event_handler_strategy.h"
 #include "render/player_renderer.h"
 
+#include "entity/entity_positioner.h"
 #include "entity/pane.h"
-#include "entity/exit_button.h"
+#include "entity/button.h"
 
 namespace Controller {
 class GameController;
@@ -19,19 +20,17 @@ namespace Context {
 class MenuContext: public BaseContext {
 protected:
     SDL_Event placeholder;
+    View::EntityPositioner positioner;
     Controller::MenuEventHandlerStrategy event_handler_strategy;
     View::PlayerRenderer player_renderer;
     View::Pane background;
-    View::ExitButton exit_button;
+    View::Button exit_button;
 
     void render() override;
     void dispatch_events() override;
 
     MenuContext(const MenuContext&) = delete;
     MenuContext& operator=(const MenuContext&) = delete;
-
-    void size_pane_relatively_to_parent(View::Pane& pane, double portion_x, double portion_y);
-    void place_pane_relatively_to_parent(View::Pane& pane, double portion_x, double portion_y);
 
 public:
     MenuContext(Weak<Controller::GameController> controller);

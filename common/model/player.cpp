@@ -3,18 +3,22 @@
 #include <string>
 #include <utility>
 
+#include "common/texture_id.h"
+
 Model::Player::Player(short_id_t id, const std::string& name):
-        id(id), skin_id(0), skin_piece(0), angle(0), name(name), position(0, 0), alive(true) {}
+        id(id), skin_id(0), skin_piece(0), angle(0), name(name), position(0, 0), alive(true),
+        current_weapon(Model::TextureID::SPRITE_GLOCK, 30, 90) {}
 
 Model::Player::Player(short_id_t id, short_id_t skin_id, short_id_t skin_piece, angle_t angle,
-                      const std::string& name, const Physics::Vector2D& position):
+                      const std::string& name, const Physics::Vector2D& position, const Model::Weapon& weapon):
         id(id),
         skin_id(skin_id),
         skin_piece(skin_piece),
         angle(angle),
         name(name),
         position(position),
-        alive(true) {}
+        alive(true),
+        current_weapon(weapon) {}
 
 short_id_t Model::Player::get_id() const { return id; }
 
@@ -38,8 +42,16 @@ void Model::Player::set_position(Physics::Vector2D new_position) {
     position = std::move(new_position);
 }
 
+void Model::Player::set_current_weapon(const Model::Weapon& weapon) {
+    current_weapon = weapon;
+}
+
 bool Model::Player::is_alive() const { return alive; }
+
+Model::Weapon Model::Player::get_current_weapon() const { return current_weapon; }
 
 DTO::PlayerDTO Model::Player::to_dto() const {
     return DTO::PlayerDTO(id, skin_id, skin_piece, angle, position.get_x(), position.get_y(), name, WeaponDTO());
 }
+
+Model::Player::~Player() {}

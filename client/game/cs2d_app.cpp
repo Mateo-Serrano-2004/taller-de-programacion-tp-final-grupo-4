@@ -4,28 +4,134 @@
 #include <string>
 #include <memory>
 #include <utility>
-#include <iostream>
 
+#include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 #include <SDL2pp/Window.hh>
 #include <SDL2pp/Renderer.hh>
+#include <SDL2pp/Texture.hh>
+#include <SDL2pp/Surface.hh>
 #include <SDL2pp/Color.hh>
 #include <SDL2pp/Point.hh>
 
 #include "common/definitions.h"
+#include "common/texture_id.h"
 
 #include "context/context_manager.h"
 #include "context/in_game_context.h"
 #include "context/menu_context.h"
-#include "texture/texture_storage.h"
-#include "texture/texture_generator.h"
+#include "context/pick_sprite_context.h"
+
+#include "asset/asset_manager.h"
+#include "asset/asset_generator.h"
+#include "asset/asset_addresser.h"
+#include "asset/font_id.h"
+
 #include "controller/game_controller.h"
 
 #include "client/net/client_protocol.h"
 
-const std::vector<std::string> paths = {"player/ct1.bmp", "player/ct2.bmp", "player/ct3.bmp",
-                                        "player/ct4.bmp", "player/t1.bmp",  "player/t2.bmp",
-                                        "player/t3.bmp",  "player/t4.bmp",  "player/vip.bmp"};
+const std::vector<std::string> player_sprites = {
+    "ct1.bmp", "ct2.bmp", "ct3.bmp",
+    "ct4.bmp", "t1.bmp",  "t2.bmp",
+    "t3.bmp",  "t4.bmp"
+};
+
+const std::vector<std::string> weapon_sprites = {
+    "ak47.bmp", "awp.bmp", "bomb_d.bmp",
+    "glock.bmp", "knife.bmp", "m3.bmp"
+};
+
+const std::vector<std::string> hud_textures = {
+    "hud_nums.bmp"
+};
+
+void App::CS2DApp::load_weapon_sprites(Shared<Model::AssetManager> asset_manager) {
+    Model::AssetAddresser asset_addresser;
+
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_AK47, asset_addresser.get_weapon_sprite_path(weapon_sprites[0])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_AWP, asset_addresser.get_weapon_sprite_path(weapon_sprites[1])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_BOMB, asset_addresser.get_weapon_sprite_path(weapon_sprites[2])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_GLOCK, asset_addresser.get_weapon_sprite_path(weapon_sprites[3])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_KNIFE, asset_addresser.get_weapon_sprite_path(weapon_sprites[4])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_M3, asset_addresser.get_weapon_sprite_path(weapon_sprites[5])
+    );
+}
+
+void App::CS2DApp::load_player_sprites(Shared<Model::AssetManager> asset_manager) {
+    Model::AssetAddresser asset_addresser;
+
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_CT1, asset_addresser.get_player_sprite_path(player_sprites[0])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_CT2, asset_addresser.get_player_sprite_path(player_sprites[1])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_CT3, asset_addresser.get_player_sprite_path(player_sprites[2])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_CT4, asset_addresser.get_player_sprite_path(player_sprites[3])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_T1, asset_addresser.get_player_sprite_path(player_sprites[4])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_T2, asset_addresser.get_player_sprite_path(player_sprites[5])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_T3, asset_addresser.get_player_sprite_path(player_sprites[6])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::SPRITE_T4, asset_addresser.get_player_sprite_path(player_sprites[7])
+    );
+}
+
+void App::CS2DApp::load_hud_textures(
+    Shared<Model::AssetManager> asset_manager,
+    Shared<SDL2pp::Renderer> renderer
+) {
+    Model::AssetAddresser asset_addresser;
+
+    SDL2pp::Surface surface(asset_addresser.get_hud_resource(hud_textures[0]));
+
+    surface.SetColorKey(
+        true,
+        SDL_MapRGB(surface.Get()->format, 0, 0, 0)
+    );
+
+    auto texture = make_shared<SDL2pp::Texture>(*renderer, surface);
+
+    asset_manager->load_texture(
+        Model::TextureID::HUD_NUMS, texture
+    );
+}
+
+void App::CS2DApp::load_generated_textures(Shared<Model::AssetManager> asset_manager,
+                                    Shared<SDL2pp::Renderer> renderer) {
+    View::AssetGenerator asset_generator(renderer);
+    asset_manager->load_texture(Model::TextureID::FOV, asset_generator.generate_fov());
+}
+
+void App::CS2DApp::load_fonts(Shared<Model::AssetManager> asset_manager) {
+    Model::AssetAddresser asset_addresser;
+    asset_manager->load_font(
+        Model::FontID::STANDARD,
+        asset_addresser.get_font_path("liberationsans.ttf"),
+        16
+    );
+}
 
 App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
     auto window = make_shared<SDL2pp::Window>(
@@ -35,30 +141,17 @@ App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
         SDL_WINDOW_SHOWN
     );
     auto renderer = make_shared<SDL2pp::Renderer>(*window, -1, SDL_RENDERER_ACCELERATED);
-
-    renderer->SetDrawColor(255, 255, 255, 255);
-    renderer->SetDrawBlendMode(SDL_BLENDMODE_BLEND);
-
     
-    auto texture_storage = make_shared<Model::TextureStorage>(Weak<SDL2pp::Renderer>(renderer));
-    for (size_t i = 0; i < paths.size(); ++i) {
-        texture_storage->load_texture(i, paths[i]);
-    }
-
-    SDL2pp::Color white(255, 255, 255, 255);
-    SDL2pp::Color black(0, 0, 0, 255);
-
-    SDL2pp::Color dark_green(33, 42, 34, 255);
-    SDL2pp::Color smooth_green(110, 120, 112, 255);
-
-    View::TextureGenerator texture_generator(renderer);
-    texture_storage->load_texture(10, std::move(texture_generator.generate_fov()));
-    texture_storage->load_texture(11, std::move(texture_generator.generate_background(dark_green)));
-    texture_storage->load_texture(12, std::move(texture_generator.generate_background(smooth_green)));
+    auto asset_manager = make_shared<Model::AssetManager>(renderer);
+    load_weapon_sprites(asset_manager);
+    load_player_sprites(asset_manager);
+    load_hud_textures(asset_manager, renderer);
+    load_generated_textures(asset_manager, renderer);
+    load_fonts(asset_manager);
 
     context_manager = make_shared<Context::ContextManager>();
     controller = make_shared<Controller::GameController>(
-        window, renderer, texture_storage, context_manager, protocol
+        window, renderer, asset_manager, context_manager, protocol
     );
 
     auto in_game_context = make_shared<Context::InGameContext>(
@@ -73,8 +166,15 @@ App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
         )
     );
 
+    auto pick_sprite_context = make_shared<Context::PickSpriteContext>(
+        Weak<Controller::GameController>(
+            std::static_pointer_cast<Controller::GameController>(controller)
+        )
+    );
+
     context_manager->add_context(in_game_context);
     context_manager->add_context(menu_context);
+    context_manager->add_context(pick_sprite_context);
 
-    context_manager->set_current_context("in-game");
+    context_manager->set_current_context("pick-sprite");
 }

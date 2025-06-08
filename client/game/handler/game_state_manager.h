@@ -6,6 +6,7 @@
 #include <map>
 
 #include "common/definitions.h"
+#include "common/texture_id.h"
 
 #include "dto_handler/player_dto_parser.h"
 #include "render/camera.h"
@@ -44,10 +45,14 @@ public:
 
     short_id_t get_reference_player_id() const;
 
+    void update_player_sprite(Model::TextureID texture_id);
+
     void map_function_on_players(const std::function<void(Model::Player&)>& func);
     void call_function_on_players(const std::function<void(std::map<short_id_t, Model::Player>&)>& func);
 
     void update_camera();
+
+    uint16_t get_time_left();
 
     void update(DTO::GameStateDTO&& game_state_dto);
 

@@ -2,14 +2,13 @@
 
 #include <utility>
 #include <memory>
-#include <iostream>
 
 #include <SDL2pp/Window.hh>
 #include <SDL2pp/Renderer.hh>
 
 #include "common/event_type.h"
 
-#include "texture/texture_storage.h"
+#include "asset/asset_manager.h"
 #include "event/event.h"
 #include "event/switch_context_event.h"
 #include "context/context_manager.h"
@@ -18,9 +17,9 @@
 Controller::BaseController::BaseController(
     Shared<SDL2pp::Window> window,
     Shared<SDL2pp::Renderer> renderer,
-    Shared<Model::TextureStorage> texture_storage,
+    Shared<Model::AssetManager> asset_manager,
     Shared<Context::ContextManager> context_manager
-): window(window), renderer(renderer), texture_storage(texture_storage), context_manager(context_manager) {
+): window(window), renderer(renderer), asset_manager(asset_manager), context_manager(context_manager) {
     start();
 }
 
@@ -32,8 +31,8 @@ Shared<SDL2pp::Renderer> Controller::BaseController::get_renderer() {
     return renderer;
 }
 
-Shared<Model::TextureStorage> Controller::BaseController::get_texture_storage() {
-    return texture_storage;
+Shared<Model::AssetManager> Controller::BaseController::get_asset_manager() {
+    return asset_manager;
 }
 
 Weak<Context::ContextManager> Controller::BaseController::get_context_manager() {

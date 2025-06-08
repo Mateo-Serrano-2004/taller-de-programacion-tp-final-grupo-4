@@ -13,6 +13,7 @@ class EventDTOCreator {
 private:
     Shared<Model::Event> event;
 
+    EventDTO create_pick_sprite_event() const;
     EventDTO create_request_maps_event() const;
     EventDTO create_request_games_list_event() const;
     EventDTO create_username_event() const;
@@ -22,6 +23,7 @@ private:
     EventDTO create_movement_event() const;
     EventDTO create_stop_movement_event() const;
     EventDTO create_rotation_event() const;
+    EventDTO create_switch_weapon_event() const;
 
 public:
     explicit EventDTOCreator(Shared<Model::Event> event): event(std::move(event)) {}

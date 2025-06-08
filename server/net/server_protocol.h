@@ -17,6 +17,7 @@ private:
     Socket peer;
 
     void send_player_list(const std::vector<DTO::PlayerDTO>& players);
+    void send_weapon(const DTO::PlayerDTO& player_dto);
 
     ServerProtocol(const ServerProtocol&) = delete;
     ServerProtocol& operator=(const ServerProtocol&) = delete;

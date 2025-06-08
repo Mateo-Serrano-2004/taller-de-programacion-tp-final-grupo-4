@@ -5,6 +5,7 @@
 
 #include "common/definitions.h"
 #include "common/model/player.h"
+#include "common/model/weapon.h"
 #include "common/model/vector_2d.h"
 #include "common/weapon_type.h"
 #include "weapon.h"
