@@ -14,6 +14,7 @@
 #include <memory>
 #include <functional>
 #include <tuple>
+#include <string>
 
 #include "queue.h"
 
@@ -44,5 +45,6 @@ using long_id_t = uint16_t;
 
 // Colors
 using color_tuple = std::tuple<uint8_t, uint8_t, uint8_t, uint8_t>;
+using font_tuple = std::tuple<std::string, uint8_t>;
 
 #endif  // COMMON_DEFINITIONS_H

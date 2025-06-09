@@ -9,6 +9,7 @@
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Rect.hh>
 #include <SDL2pp/Color.hh>
+#include <SDL2pp/Font.hh>
 
 #include "camera.h"
 
@@ -44,12 +45,12 @@ void View::PlayerRenderer::render_weapon(const SDL2pp::Point& player_center,
 }
 
 void View::PlayerRenderer::render_name(const SDL2pp::Point& player_center,
-                                       const std::string& player) {
+                                       const std::string& player_name) {
     Shared<SDL2pp::Texture> text = asset_manager->apply_font_to_text(
-            Model::FontID::STANDARD,
-            player,
-            SDL2pp::Color(255, 0, 0, 255)
-        );
+        font,
+        player_name,
+        SDL2pp::Color(255, 255, 255, 255)
+    );
     renderer->Copy(
         *text,
         SDL2pp::NullOpt,
@@ -152,6 +153,7 @@ View::PlayerRenderer::PlayerRenderer(
 ): View::Renderer(controller) {
     auto controller_locked = controller.lock();
     game_state_manager = controller_locked->get_game_state_manager();
+    font = asset_manager->generate_font("liberationsans", 16);
 }
 
 void View::PlayerRenderer::render() {
@@ -170,8 +172,8 @@ void View::PlayerRenderer::render() {
                 }
             }
 
-            render_player(camera, reference_player);
             render_fov(reference_player->get_angle());
+            render_player(camera, reference_player);
         }
     );
 };

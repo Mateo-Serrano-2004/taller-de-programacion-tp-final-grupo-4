@@ -11,6 +11,10 @@
 
 #include "renderer.h"
 
+namespace SDL2pp {
+class Font;
+};
+
 namespace Model {
 class Player;
 };
@@ -27,6 +31,7 @@ class RenderedPlayer;
 class PlayerRenderer: public Renderer {
 protected:
     Shared<Controller::GameStateManager> game_state_manager;
+    Shared<SDL2pp::Font> font;
 
     SDL2pp::Point get_sprite_top_left_corner(short_id_t sprite_piece);
 

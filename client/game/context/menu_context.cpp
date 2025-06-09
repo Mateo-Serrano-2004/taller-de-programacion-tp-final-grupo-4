@@ -17,11 +17,6 @@
 void Context::MenuContext::render() {
     player_renderer.render();
 
-    exit_button.set_position(SDL2pp::Point(0, 0));
-    exit_button.set_size(SDL2pp::Point(60, 40));
-
-    exit_button.set_texture_slice_to_match_position();
-
     background.render();
     exit_button.render();
 }
@@ -44,6 +39,7 @@ background(controller),
 exit_button(controller) {
     background.set_background_color(31, 45, 31, 255);
     exit_button.set_background_color(78, 107, 60, 255);
+    exit_button.set_text("Exit");
 
     exit_button.set_command(make_unique<Command::QuitCommand>());
 }

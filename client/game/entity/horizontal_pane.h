@@ -5,29 +5,24 @@
 
 #include "common/definitions.h"
 
-#include "pane.h"
+#include "smart_pane.h"
 
 namespace Controller {
 class BaseController;
 };
 
 namespace View {
-class HorizontalPane: public Pane {
+class HorizontalPane: public SmartPane {
 protected:
-    std::vector<Pane*> children;
     int gap;
 
-    void position_children();
+    void position_children() override;
 
 public:
     HorizontalPane(Weak<Controller::BaseController> controller, int gap = 0);
 
-    void set_gap(int new_gap);
-    void add_child(Pane* new_child);
-
     int get_gap() const;
-
-    virtual void render() override;
+    void set_gap(int new_gap);
 
     virtual ~HorizontalPane() override = default;
 };

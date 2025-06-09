@@ -11,7 +11,7 @@
 #include "controller/base_controller.h"
 
 View::Button::Button(Weak<Controller::BaseController> controller):
-                     View::Pane(controller),
+                     View::Label(controller),
                      command(nullptr),
                      controller(controller) {}
 

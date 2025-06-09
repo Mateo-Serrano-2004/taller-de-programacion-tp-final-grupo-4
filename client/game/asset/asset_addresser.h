@@ -14,7 +14,7 @@ public:
     std::string get_weapon_sprite_path(const std::string& partial_path);
     std::string get_player_sprite_path(const std::string& partial_path);
     std::string get_hud_resource(const std::string& partial_path);
-    std::string get_font_path(const std::string& partial_path);
+    std::string get_font_path(const std::string& font_name);
 };
 };
 

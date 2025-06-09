@@ -24,28 +24,10 @@ void View::HorizontalPane::position_children() {
 }
 
 View::HorizontalPane::HorizontalPane(Weak<Controller::BaseController> controller, int gap):
-        View::Pane(controller), gap(gap) {}
-
-void View::HorizontalPane::set_gap(int new_gap) {
-    gap = new_gap;
-    position_children();
-}
-
-void View::HorizontalPane::add_child(View::Pane* new_child) {
-    children.push_back(new_child);
-    new_child->set_parent(this);
-    position_children();
-}
+        View::SmartPane(controller), gap(gap) {}
 
 int View::HorizontalPane::get_gap() const { return gap; }
 
-void View::HorizontalPane::render() {
-    View::Pane::render();
-    std::for_each(
-        children.begin(),
-        children.end(),
-        [] (View::Pane* child) {
-            child->render();
-        }
-    );
+void View::HorizontalPane::set_gap(int new_gap) {
+    gap = new_gap;
 }

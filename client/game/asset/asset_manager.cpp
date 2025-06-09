@@ -39,27 +39,24 @@ Shared<SDL2pp::Texture> Model::AssetManager::generate_background(const SDL2pp::C
     return generate_background(color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha());
 }
 
-void Model::AssetManager::load_font(Model::FontID id, const std::string& path, int size) {
-    fonts.insert({id, make_shared<SDL2pp::Font>(path, size)});
-}
-
-void Model::AssetManager::load_font(Model::FontID id, Shared<SDL2pp::Font> font) {
-    fonts.insert({id, font});
+Shared<SDL2pp::Font> Model::AssetManager::generate_font(const std::string& name, uint8_t size) {
+    font_tuple font(name, size);
+    auto f = fonts.find(font);
+    if (f != fonts.end()) return f->second;
+    auto new_f = asset_generator.generate_font(asset_addresser.get_font_path(name), size);
+    fonts.insert({font, new_f});
+    return new_f;
 }
 
 Shared<SDL2pp::Texture> Model::AssetManager::get_texture(Model::TextureID id) {
     return textures.at(id);
 }
 
-Shared<SDL2pp::Font> Model::AssetManager::get_font(Model::FontID id) {
-    return fonts.at(id);
-}
-
 Shared<SDL2pp::Texture> Model::AssetManager::apply_font_to_text(
-    Model::FontID id,
+    Shared<SDL2pp::Font> font,
     const std::string& text,
     const SDL2pp::Color& color
 ) {
     SDL_Color sdl_color {color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha()};
-    return make_shared<SDL2pp::Texture>(*renderer, fonts.at(id)->RenderText_Blended(text, sdl_color));
+    return make_shared<SDL2pp::Texture>(*renderer, font->RenderText_Blended(text, sdl_color));
 }

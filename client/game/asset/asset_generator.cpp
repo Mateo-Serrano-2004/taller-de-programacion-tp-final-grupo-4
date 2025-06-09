@@ -5,6 +5,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/Renderer.hh>
+#include <SDL2pp/Font.hh>
 #include <SDL2pp/Texture.hh>
 #include <SDL2pp/Color.hh>
 #include <SDL2pp/Point.hh>
@@ -116,4 +117,11 @@ Shared<SDL2pp::Texture> View::AssetGenerator::generate_plain_texture(
 Shared<SDL2pp::Texture> View::AssetGenerator::generate_plain_texture(const SDL2pp::Color& color) {
     SDL_Rect bounds = get_bounds();
     return generate_plain_texture(SDL2pp::Point(bounds.w, bounds.h), color);
+}
+
+Shared<SDL2pp::Font> View::AssetGenerator::generate_font(
+    const std::string& path,
+    uint8_t size
+) {
+    return make_shared<SDL2pp::Font>(path, size);
 }

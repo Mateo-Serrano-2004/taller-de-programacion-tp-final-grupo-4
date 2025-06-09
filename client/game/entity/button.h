@@ -4,7 +4,6 @@
 #include <string>
 
 #include <SDL2/SDL.h>
-#include <SDL2pp/Color.hh>
 
 #include "common/definitions.h"
 
@@ -12,14 +11,14 @@
 
 #include "asset/texture_id.h"
 
-#include "pane.h"
+#include "label.h"
 
 namespace Controller {
 class BaseController;
 };
 
 namespace View {
-class Button: public Pane {
+class Button: public Label {
 protected:
     Unique<Command::BaseCommand> command;
     Weak<Controller::BaseController> controller;

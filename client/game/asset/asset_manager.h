@@ -7,6 +7,7 @@
 
 #include "common/definitions.h"
 
+#include "asset_addresser.h"
 #include "asset_generator.h"
 #include "asset/texture_id.h"
 
@@ -22,11 +23,12 @@ class Color;
 namespace Model {
 class AssetManager {
 private:
+    AssetAddresser asset_addresser;
     Shared<SDL2pp::Renderer> renderer;
     View::AssetGenerator asset_generator;
     std::map<TextureID, Shared<SDL2pp::Texture>> textures;
     std::map<color_tuple, Shared<SDL2pp::Texture>> backgrounds;
-    std::map<FontID, Shared<SDL2pp::Font>> fonts;
+    std::map<font_tuple, Shared<SDL2pp::Font>> fonts;
 
 public:
     AssetManager(Shared<SDL2pp::Renderer> renderer);
@@ -37,14 +39,12 @@ public:
     Shared<SDL2pp::Texture> generate_background(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
     Shared<SDL2pp::Texture> generate_background(const SDL2pp::Color& color);
 
-    void load_font(FontID id, const std::string& path, int size);
-    void load_font(FontID id, Shared<SDL2pp::Font> font);
+    Shared<SDL2pp::Font> generate_font(const std::string& name, uint8_t size);
 
     Shared<SDL2pp::Texture> get_texture(TextureID id);
-    Shared<SDL2pp::Font> get_font(FontID id);
 
     Shared<SDL2pp::Texture> apply_font_to_text(
-        FontID id,
+        Shared<SDL2pp::Font> font,
         const std::string& text,
         const SDL2pp::Color& color
     );

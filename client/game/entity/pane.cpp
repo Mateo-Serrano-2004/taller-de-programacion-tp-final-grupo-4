@@ -90,7 +90,7 @@ void View::Pane::set_texture_slice_to_match_position() {
 void View::Pane::set_parent(View::Pane* new_parent) {
     parent = new_parent;
     if (parent) position = parent->get_position();
-    else position = window->GetSize();
+    else position = SDL2pp::Point(0, 0);
 }
 
 void View::Pane::center() {
