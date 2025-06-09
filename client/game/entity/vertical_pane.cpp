@@ -19,12 +19,10 @@ void View::VerticalPane::position_children() {
     }
 }
 
-View::VerticalPane::VerticalPane(Weak<Controller::BaseController> controller, int gap)
-: View::SmartPane(controller), gap(gap) {}
+View::VerticalPane::VerticalPane(Weak<Controller::BaseController> controller, int gap):
+        View::SmartPane(controller), gap(gap) {}
 
-int View::VerticalPane::get_gap() const {
-    return gap;
-}
+int View::VerticalPane::get_gap() const { return gap; }
 
 void View::VerticalPane::set_gap(int new_gap) {
     gap = new_gap;

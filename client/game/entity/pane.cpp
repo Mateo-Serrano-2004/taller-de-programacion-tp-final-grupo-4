@@ -12,9 +12,14 @@
 
 View::Pane::Pane(Weak<Controller::BaseController> controller):
         View::Rendered(controller),
+        draw_background(false),
         position(0, 0),
         size(window->GetSize()),
-        parent(nullptr) {}
+        parent(nullptr) {
+    background = asset_manager->generate_background(SDL2pp::Color(0, 0, 0, 255));
+}
+
+bool View::Pane::get_draw_background() const { return draw_background; }
 
 Shared<SDL2pp::Texture> View::Pane::get_background() const { return background; }
 
@@ -50,6 +55,10 @@ SDL2pp::Point View::Pane::get_absolute_position() const {
 }
 
 View::Pane* View::Pane::get_parent() const { return parent; }
+
+void View::Pane::set_draw_background(bool new_draw_background) {
+    draw_background = new_draw_background;
+}
 
 void View::Pane::set_background_color(const SDL2pp::Color& new_color) {
     background = asset_manager->generate_background(new_color);
@@ -103,11 +112,13 @@ void View::Pane::center() {
 void View::Pane::render() {
     SDL2pp::Point absolute_position = get_absolute_position();
 
-    renderer->Copy(
-        *background,
-        texture_slice,
-        SDL2pp::Rect(absolute_position, size)
-    );
+    if (draw_background) {
+        renderer->Copy(
+            *background,
+            texture_slice,
+            SDL2pp::Rect(absolute_position, size)
+        );
+    }
 
     if (draw_texture) {
         renderer->Copy(

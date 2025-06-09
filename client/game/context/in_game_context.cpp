@@ -14,7 +14,6 @@
 #include "exception/closed_window.h"
 
 void Context::InGameContext::render() {
-    background.render();
     player_renderer.render();
     hud_renderer.render();
 }
@@ -29,10 +28,7 @@ void Context::InGameContext::dispatch_events() {
 
 Context::InGameContext::InGameContext(Weak<Controller::GameController> controller)
 : Context::BaseContext("in-game", controller),
-  background(controller),
   player_renderer(controller),
   hud_renderer(controller),
   event_handler_strategy(controller),
-  game_state_manager(controller.lock()->get_game_state_manager()) {
-    background.set_background_color(0, 0, 255, 0);
-}
+  game_state_manager(controller.lock()->get_game_state_manager()) {}

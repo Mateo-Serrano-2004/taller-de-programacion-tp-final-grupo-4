@@ -22,6 +22,7 @@ class BaseController;
 namespace View {
 class Pane: public Rendered {
 protected:
+    bool draw_background;
     Shared<SDL2pp::Texture> background;
     SDL2pp::Point position;
     SDL2pp::Point size;
@@ -29,6 +30,8 @@ protected:
 
 public:
     Pane(Weak<Controller::BaseController> controller);
+
+    bool get_draw_background() const;
 
     Shared<SDL2pp::Texture> get_background() const;
     SDL2pp::Point get_position() const;
@@ -39,6 +42,8 @@ public:
     int get_height() const;
     SDL2pp::Point get_absolute_position() const;
     Pane* get_parent() const;
+
+    void set_draw_background(bool new_draw_background);
 
     void set_background_color(const SDL2pp::Color& new_color);
     void set_background_color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);

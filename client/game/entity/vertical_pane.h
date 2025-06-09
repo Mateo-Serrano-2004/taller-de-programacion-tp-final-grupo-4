@@ -1,8 +1,6 @@
 #ifndef CLIENT_GAME_ENTITY_VERTICAL_PANE_H
 #define CLIENT_GAME_ENTITY_VERTICAL_PANE_H
 
-#include <vector>
-
 #include "common/definitions.h"
 
 #include "smart_pane.h"

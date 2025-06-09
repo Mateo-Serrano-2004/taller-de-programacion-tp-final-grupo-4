@@ -13,11 +13,7 @@ void View::SmartPane::add_child(View::Pane* new_child) {
 void View::SmartPane::render() {
     position_children();
     View::Pane::render();
-    std::for_each(
-        children.begin(),
-        children.end(),
-        [] (View::Pane* child) {
-            child->render();
-        }
-    );
+    for (auto child: children) {
+        child->render();
+    }
 }

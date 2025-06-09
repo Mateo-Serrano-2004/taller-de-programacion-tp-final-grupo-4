@@ -1,9 +1,5 @@
 #include "horizontal_pane.h"
 
-#include <algorithm>
-
-#include <SDL2pp/Point.hh>
-
 #include "controller/base_controller.h"
 
 void View::HorizontalPane::position_children() {

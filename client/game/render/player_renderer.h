@@ -9,6 +9,8 @@
 
 #include "asset/texture_id.h"
 
+#include "entity/pane.h"
+
 #include "renderer.h"
 
 namespace SDL2pp {
@@ -30,6 +32,7 @@ class RenderedPlayer;
 
 class PlayerRenderer: public Renderer {
 protected:
+    Pane background;
     Shared<Controller::GameStateManager> game_state_manager;
     Shared<SDL2pp::Font> font;
 

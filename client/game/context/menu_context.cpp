@@ -38,8 +38,10 @@ player_renderer(controller),
 background(controller),
 exit_button(controller) {
     background.set_background_color(31, 45, 31, 255);
+    background.set_draw_background(true);
     exit_button.set_background_color(78, 107, 60, 255);
-    exit_button.set_text("Exit");
+    exit_button.set_draw_background(true);
 
+    exit_button.set_text("Exit");
     exit_button.set_command(make_unique<Command::QuitCommand>());
 }

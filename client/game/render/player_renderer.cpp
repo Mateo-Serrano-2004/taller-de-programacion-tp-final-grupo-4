@@ -150,13 +150,16 @@ void View::PlayerRenderer::render_fov(angle_t angle) {
 
 View::PlayerRenderer::PlayerRenderer(
     Weak<Controller::GameController> controller
-): View::Renderer(controller) {
+): View::Renderer(controller), background(controller) {
     auto controller_locked = controller.lock();
     game_state_manager = controller_locked->get_game_state_manager();
     font = asset_manager->generate_font("liberationsans", 16);
+    background.set_background_color(0, 255, 255, 255);
+    background.set_draw_background(true);
 }
 
 void View::PlayerRenderer::render() {
+    background.render();
     auto camera = game_state_manager->get_camera();
 
     game_state_manager->call_function_on_players(

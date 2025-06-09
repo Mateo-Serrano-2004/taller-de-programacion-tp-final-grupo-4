@@ -21,7 +21,6 @@ namespace Context {
 class InGameContext : public BaseContext {
 protected:
     SDL_Event placeholder;
-    View::Pane background;
     View::PlayerRenderer player_renderer;
     View::HUDRenderer hud_renderer;
     Controller::InGameEventHandlerStrategy event_handler_strategy;
