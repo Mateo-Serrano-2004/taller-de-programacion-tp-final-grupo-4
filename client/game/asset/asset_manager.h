@@ -6,9 +6,9 @@
 #include <string>
 
 #include "common/definitions.h"
-#include "common/texture_id.h"
 
 #include "asset_generator.h"
+#include "asset/texture_id.h"
 
 #include "font_id.h"
 

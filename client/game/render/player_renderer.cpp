@@ -13,10 +13,13 @@
 #include "camera.h"
 
 #include "controller/game_controller.h"
+
 #include "asset/asset_manager.h"
 #include "asset/font_id.h"
-#include "common/texture_id.h"
+#include "asset/texture_id.h"
+
 #include "handler/game_state_manager.h"
+
 #include "model/rendered_player.h"
 
 SDL2pp::Point View::PlayerRenderer::get_sprite_top_left_corner(short_id_t sprite_piece) {

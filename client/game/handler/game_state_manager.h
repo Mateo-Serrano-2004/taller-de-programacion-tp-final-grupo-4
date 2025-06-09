@@ -6,7 +6,8 @@
 #include <map>
 
 #include "common/definitions.h"
-#include "common/texture_id.h"
+
+#include "asset/texture_id.h"
 
 #include "enum/enum_translator.h"
 

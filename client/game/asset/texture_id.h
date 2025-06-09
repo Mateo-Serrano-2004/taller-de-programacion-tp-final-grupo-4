@@ -1,5 +1,5 @@
-#ifndef COMMON_TEXTURE_ID_H
-#define COMMON_TEXTURE_ID_H
+#ifndef CLIENT_GAME_ASSET_TEXTURE_ID_H
+#define CLIENT_GAME_ASSET_TEXTURE_ID_H
 
 namespace Model {
 enum TextureID {
@@ -30,4 +30,4 @@ enum TextureID {
 };
 };
 
-#endif // COMMON_TEXTURE_ID_H
+#endif // CLIENT_GAME_ASSET_TEXTURE_ID_H

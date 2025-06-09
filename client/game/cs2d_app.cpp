@@ -15,7 +15,6 @@
 #include <SDL2pp/Point.hh>
 
 #include "common/definitions.h"
-#include "common/texture_id.h"
 
 #include "context/context_manager.h"
 #include "context/in_game_context.h"
@@ -25,6 +24,7 @@
 #include "asset/asset_manager.h"
 #include "asset/asset_generator.h"
 #include "asset/asset_addresser.h"
+#include "asset/texture_id.h"
 #include "asset/font_id.h"
 
 #include "controller/game_controller.h"

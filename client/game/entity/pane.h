@@ -5,7 +5,8 @@
 #include <SDL2pp/Rect.hh>
 
 #include "common/definitions.h"
-#include "common/texture_id.h"
+
+#include "asset/texture_id.h"
 
 #include "rendered.h"
 

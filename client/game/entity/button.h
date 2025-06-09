@@ -7,9 +7,10 @@
 #include <SDL2pp/Color.hh>
 
 #include "common/definitions.h"
-#include "common/texture_id.h"
 
 #include "command/base_command.h"
+
+#include "asset/texture_id.h"
 
 #include "pane.h"
 

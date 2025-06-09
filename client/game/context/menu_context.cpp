@@ -3,7 +3,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/Rect.hh>
 
-#include "common/texture_id.h"
 
 #include "controller/game_controller.h"
 #include "controller/base_controller.h"
@@ -11,6 +10,8 @@
 #include "command/quit_command.h"
 
 #include "event/quit_event.h"
+
+#include "asset/texture_id.h"
 
 #include "exception/closed_window.h"
 

@@ -4,14 +4,14 @@
 
 #include <SDL2/SDL.h>
 
-#include "common/texture_id.h"
-
 #include "controller/game_controller.h"
 #include "controller/base_controller.h"
 
 #include "command/composite_command.h"
 #include "command/pick_role_command.h"
 #include "command/switch_context_command.h"
+
+#include "asset/texture_id.h"
 
 #include "event/quit_event.h"
 #include "event/switch_context_event.h"

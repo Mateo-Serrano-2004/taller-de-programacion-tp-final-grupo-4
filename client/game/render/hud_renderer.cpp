@@ -9,10 +9,11 @@
 #include <SDL2pp/Rect.hh>
 #include <SDL2pp/Point.hh>
 
-#include "common/texture_id.h"
-
 #include "controller/game_controller.h"
+
 #include "asset/asset_manager.h"
+#include "asset/texture_id.h"
+
 #include "handler/game_state_manager.h"
 
 std::vector<uint8_t> View::HUDRenderer::get_units_of_time_left(uint16_t seconds_left) {

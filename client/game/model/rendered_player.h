@@ -6,11 +6,12 @@
 
 #include "common/definitions.h"
 #include "common/role_id.h"
-#include "common/texture_id.h"
 #include "common/weapon_id.h"
 #include "common/model/player.h"
 #include "common/model/weapon.h"
 #include "common/model/vector_2d.h"
+
+#include "asset/texture_id.h"
 
 namespace View {
 class RenderedPlayer: public Model::Player {

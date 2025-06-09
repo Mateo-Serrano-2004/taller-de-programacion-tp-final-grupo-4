@@ -2,9 +2,10 @@
 #define CLIENT_GAME_CONTEXT_PICK_ROLE_CONTEXT_H
 
 #include "common/definitions.h"
-#include "common/texture_id.h"
 
 #include "base_context.h"
+
+#include "asset/texture_id.h"
 
 #include "entity/entity_positioner.h"
 #include "entity/pane.h"

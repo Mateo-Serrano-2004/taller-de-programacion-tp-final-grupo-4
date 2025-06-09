@@ -10,7 +10,7 @@ Model::EnumTranslator::EnumTranslator()
     {Model::RoleID::T2, Model::TextureID::SPRITE_T2},
     {Model::RoleID::T3, Model::TextureID::SPRITE_T3},
     {Model::RoleID::T4, Model::TextureID::SPRITE_T4},
-    {Model::RoleID::NO_ROLE, Model::TextureID::NO_TEXTURE}
+    {Model::RoleID::NO_ROLE, Model::TextureID::SPRITE_CT1}
   }, textures_to_roles{
     {Model::TextureID::SPRITE_CT1, Model::RoleID::CT1},
     {Model::TextureID::SPRITE_CT2, Model::RoleID::CT2},

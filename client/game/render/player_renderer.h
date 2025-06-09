@@ -6,7 +6,8 @@
 #include <SDL2pp/Point.hh>
 
 #include "common/definitions.h"
-#include "common/texture_id.h"
+
+#include "asset/texture_id.h"
 
 #include "renderer.h"
 

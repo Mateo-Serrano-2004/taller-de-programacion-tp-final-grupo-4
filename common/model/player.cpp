@@ -11,7 +11,7 @@
 Model::Player::Player(short_id_t id, const std::string& name)
 : alive(true),
   id(id),
-  role_id(Model::RoleID::CT1),
+  role_id(Model::RoleID::NO_ROLE),
   angle(0),
   money(0),
   name(name),
