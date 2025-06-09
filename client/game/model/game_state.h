@@ -4,21 +4,23 @@
 #include <map>
 
 #include "common/definitions.h"
-#include "common/model/player.h"
 
+namespace View {
+class RenderedPlayer;
+};
 
 namespace Model {
 class GameState {
 private:
-    std::map<short_id_t, Player> players;
+    std::map<short_id_t, Shared<View::RenderedPlayer>> players;
     uint16_t time_left;
 
 public:
     GameState();
 
-    std::map<short_id_t, Player>& get_players();
-    Player& get_player_by_id(short_id_t id);
-    void register_player(Player&& player);
+    std::map<short_id_t, Shared<View::RenderedPlayer>>& get_players();
+    Shared<View::RenderedPlayer> get_player_by_id(short_id_t id);
+    void register_player(Shared<View::RenderedPlayer> player);
 
     void set_time_left(uint16_t new_time_left);
     uint16_t get_time_left() const;

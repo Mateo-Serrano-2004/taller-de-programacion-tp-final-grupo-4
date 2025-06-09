@@ -3,25 +3,29 @@
 
 #include <cstdint>
 
-#include "common/DTO/weapon_dto.h"
+#include "common/weapon_id.h"
+#include "common/slot_id.h"
+
+namespace DTO {
+class WeaponDTO;
+};
 
 namespace Model {
 class Weapon {
 private:
-    uint8_t sprite_id;
-    uint8_t ammo_in_charger;
+    Model::WeaponID weapon_id;
+    uint8_t loaded_ammo;
     uint16_t total_ammo;
 
 public:
-    Weapon();
-    Weapon(uint8_t sprite_id, uint8_t ammo_in_charger, uint16_t total_ammo);
+    Weapon(Model::WeaponID weapon_id, uint8_t loaded_ammo, uint16_t total_ammo);
 
-    uint8_t get_sprite_id() const;
-    uint8_t get_ammo_in_charger() const;
+    Model::WeaponID get_weapon_id() const;
+    uint8_t get_loaded_ammo() const;
     uint16_t get_total_ammo() const;
 
-    void set_sprite_id(uint8_t new_sprite_id);
-    void set_ammo_in_charger(uint8_t new_ammo_in_charger);
+    void set_weapon_id(Model::WeaponID new_weapon_id);
+    void set_loaded_ammo(uint8_t new_loaded_ammo);
     void set_total_ammo(uint16_t new_total_ammo);
 
     Weapon(const Weapon&) = default;
@@ -31,7 +35,7 @@ public:
 
     DTO::WeaponDTO to_dto() const;
 
-    ~Weapon() = default;
+    virtual ~Weapon() = default;
 };
 };
 

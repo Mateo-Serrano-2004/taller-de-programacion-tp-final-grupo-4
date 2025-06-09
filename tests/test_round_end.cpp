@@ -3,10 +3,10 @@
 #include <thread>
 #include <cassert>
 
-#include "../server/game/game.h"
-#include "../common/DTO/game_state_dto.h"
-#include "../common/queue.h"
-#include "common/weapon_type.h"
+#include "server/game/game.h"
+#include "common/DTO/game_state_dto.h"
+#include "common/queue.h"
+#include "common/slot_id.h"
 
 //ojo que revisa si termino PARTIDA, pero hasta ahora en código informa si temino ronda en el dto de game
 void test_round_end() {
@@ -186,7 +186,7 @@ void test_player_switch_weapon() {
 
     std::this_thread::sleep_for(milliseconds(80));
 
-    game.get_queue().push({player_id, SwitchWeaponEvent(WeaponType::SECONDARY)});
+    game.get_queue().push({player_id, SwitchWeaponEvent(Model::SlotID::SECONDARY_WEAPON)});
 
     std::this_thread::sleep_for(milliseconds(80));
     game.stop();
@@ -242,7 +242,7 @@ void test_player_cannot_switch_to_unowned_primary_weapon(){
 
     std::this_thread::sleep_for(milliseconds(80));
 
-    game.get_queue().push({player_id, SwitchWeaponEvent(WeaponType::PRIMARY)});
+    game.get_queue().push({player_id, SwitchWeaponEvent(Model::SlotID::PRIMARY_WEAPON)});
 
     std::this_thread::sleep_for(milliseconds(80));
     game.stop();

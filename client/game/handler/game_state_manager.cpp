@@ -13,6 +13,7 @@
 #include "common/DTO/game_state_dto.h"
 
 #include "model/game_state.h"
+#include "model/rendered_player.h"
 
 Controller::GameStateManager::GameStateManager(
     short_id_t reference_player_id,
@@ -31,11 +32,11 @@ short_id_t Controller::GameStateManager::get_reference_player_id() const { retur
 
 void Controller::GameStateManager::update_player_sprite(Model::TextureID texture_id) {
     std::lock_guard<std::mutex> lock(mutex);
-    game_state->get_player_by_id(reference_player_id).set_skin_id((short_id_t) texture_id);
+    game_state->get_player_by_id(reference_player_id)->set_sprite_id(texture_id);
 }
 
 void Controller::GameStateManager::map_function_on_players(
-        const std::function<void(Model::Player&)>& func) {
+        const std::function<void(Shared<View::RenderedPlayer>&)>& func) {
     std::lock_guard<std::mutex> lock(mutex);
     for (auto& [id, player]: game_state->get_players()) {
         func(player);
@@ -43,7 +44,7 @@ void Controller::GameStateManager::map_function_on_players(
 }
 
 void Controller::GameStateManager::call_function_on_players(
-    const std::function<void(std::map<short_id_t, Model::Player>&)>& func
+    const std::function<void(std::map<short_id_t, Shared<View::RenderedPlayer>>&)>& func
 ) {
     std::lock_guard<std::mutex> lock(mutex);
     func(game_state->get_players());
@@ -61,16 +62,22 @@ uint16_t Controller::GameStateManager::get_time_left() {
 void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
     auto new_game_state = make_shared<Model::GameState>();
 
-    for (DTO::PlayerDTO& player_dto: game_state_dto.players) {
-        Model::Player player = player_dto_parser.parse(std::move(player_dto));
-        new_game_state->register_player(std::move(player));
+    for (const auto& dto: game_state_dto.players) {
+        auto player = make_shared<View::RenderedPlayer>(std::move(dto.to_player()));
+        player->set_sprite_id(
+            enum_translator.get_texture_from_role(player->get_role_id())
+        );
+        player->set_weapon_sprite_id(
+            enum_translator.get_texture_from_weapon(player->get_current_weapon()->get_weapon_id())
+        );
+        new_game_state->register_player(player);
     }
 
     new_game_state->set_time_left(game_state_dto.time_left);
 
     std::lock_guard<std::mutex> lock(mutex);
     game_state = new_game_state;
-    auto reference_player_position = game_state->get_player_by_id(reference_player_id).get_position();
+    auto reference_player_position = game_state->get_player_by_id(reference_player_id)->get_position();
     camera.set_center(
         reference_player_position.get_x(),
         reference_player_position.get_y()

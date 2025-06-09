@@ -1,58 +1,84 @@
 #include "player.h"
 
+#include <cstdint>
 #include <string>
 #include <utility>
 
-#include "common/texture_id.h"
+#include "common/DTO/player_dto.h"
 #include "common/DTO/weapon_dto.h"
+#include "common/weapon_id.h"
 
-Model::Player::Player(short_id_t id, const std::string& name):
-        id(id), skin_id(0), skin_piece(0), angle(0), name(name), position(0, 0), alive(true),
-        current_weapon(Model::TextureID::SPRITE_GLOCK, 30, 90) {}
+Model::Player::Player(short_id_t id, const std::string& name)
+: alive(true),
+  id(id),
+  role_id(Model::RoleID::CT1),
+  angle(0),
+  money(0),
+  name(name),
+  position(0, 0) {}
 
-Model::Player::Player(short_id_t id, short_id_t skin_id, short_id_t skin_piece, angle_t angle,
-                      const std::string& name, const Physics::Vector2D& position, const Model::Weapon& weapon):
-        id(id),
-        skin_id(skin_id),
-        skin_piece(skin_piece),
-        angle(angle),
-        name(name),
-        position(position),
-        alive(true),
-        current_weapon(weapon) {}
+Model::Player::Player(
+    short_id_t id,
+    Model::RoleID role_id,
+    angle_t angle,
+    uint16_t money,
+    const std::string& name,
+    const Physics::Vector2D& position,
+    Shared<Model::Weapon> weapon
+): alive(true),
+   id(id),
+   role_id(role_id),
+   angle(angle),
+   money(money),
+   name(name),
+   position(position),
+   current_weapon(weapon) {}
+
+bool Model::Player::is_alive() const { return alive; }
 
 short_id_t Model::Player::get_id() const { return id; }
 
-short_id_t Model::Player::get_skin_id() const { return skin_id; }
-
-short_id_t Model::Player::get_skin_piece() const { return skin_piece; }
+Model::RoleID Model::Player::get_role_id() const { return role_id; }
 
 angle_t Model::Player::get_angle() const { return angle; }
+
+uint16_t Model::Player::get_money() const { return money; }
 
 std::string Model::Player::get_name() const { return name; }
 
 Physics::Vector2D Model::Player::get_position() const { return position; }
 
-void Model::Player::set_skin_id(short_id_t new_skin_id) { skin_id = new_skin_id; }
+void Model::Player::set_alive(bool new_alive) {
+    alive = new_alive;
+}
 
-void Model::Player::set_skin_piece(short_id_t new_skin_piece) { skin_piece = new_skin_piece; }
+void Model::Player::set_role_id(Model::RoleID new_role_id) { role_id = new_role_id; }
 
 void Model::Player::set_angle(angle_t new_angle) { angle = new_angle; }
+
+void Model::Player::set_money(uint16_t new_money) {
+    money = new_money;
+}
 
 void Model::Player::set_position(Physics::Vector2D new_position) {
     position = std::move(new_position);
 }
 
-void Model::Player::set_current_weapon(const Model::Weapon& weapon) {
+void Model::Player::set_current_weapon(Shared<Model::Weapon> weapon) {
     current_weapon = weapon;
 }
 
-bool Model::Player::is_alive() const { return alive; }
-
-Model::Weapon Model::Player::get_current_weapon() const { return current_weapon; }
+Shared<Model::Weapon> Model::Player::get_current_weapon() const { return current_weapon; }
 
 DTO::PlayerDTO Model::Player::to_dto() const {
-    return DTO::PlayerDTO(id, skin_id, skin_piece, angle, position.get_x(), position.get_y(), name, DTO::WeaponDTO());
+    return DTO::PlayerDTO(
+        id,
+        role_id,
+        angle,
+        money,
+        position.get_x(),
+        position.get_y(),
+        name,
+        current_weapon->to_dto()
+    );
 }
-
-Model::Player::~Player() {}

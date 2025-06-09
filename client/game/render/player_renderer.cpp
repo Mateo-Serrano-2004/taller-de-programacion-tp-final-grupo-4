@@ -10,9 +10,6 @@
 #include <SDL2pp/Rect.hh>
 #include <SDL2pp/Color.hh>
 
-#include "common/model/player.h"
-#include "common/texture_id.h"
-
 #include "camera.h"
 
 #include "controller/game_controller.h"
@@ -20,15 +17,16 @@
 #include "asset/font_id.h"
 #include "common/texture_id.h"
 #include "handler/game_state_manager.h"
+#include "model/rendered_player.h"
 
-SDL2pp::Point View::PlayerRenderer::get_skin_top_left_corner(short_id_t skin_piece) {
-    uint16_t skin_row = skin_piece ? static_cast<uint16_t>((skin_piece - 1) / 2) : 0;
-    uint16_t skin_column = static_cast<uint16_t>(skin_piece % 2);
+SDL2pp::Point View::PlayerRenderer::get_sprite_top_left_corner(short_id_t sprite_piece) {
+    uint16_t sprite_row = sprite_piece ? static_cast<uint16_t>((sprite_piece - 1) / 2) : 0;
+    uint16_t sprite_column = static_cast<uint16_t>(sprite_piece % 2);
 
-    uint16_t skin_piece_x = skin_column * 32;
-    uint16_t skin_piece_y = skin_row * 32;
+    uint16_t sprite_piece_x = sprite_column * 32;
+    uint16_t sprite_piece_y = sprite_row * 32;
 
-    return SDL2pp::Point(skin_piece_x, skin_piece_y);
+    return SDL2pp::Point(sprite_piece_x, sprite_piece_y);
 }
 
 void View::PlayerRenderer::render_weapon(const SDL2pp::Point& player_center,
@@ -60,16 +58,16 @@ void View::PlayerRenderer::render_name(const SDL2pp::Point& player_center,
     );
 }
 
-void View::PlayerRenderer::render_player(View::Camera& camera, Model::Player& player) {
-    Shared<SDL2pp::Texture> texture = asset_manager->get_texture((Model::TextureID) player.get_skin_id());
-    SDL2pp::Point skin_top_left_corner = get_skin_top_left_corner(player.get_skin_piece());
-    angle_t angle = player.get_angle();
+void View::PlayerRenderer::render_player(View::Camera& camera, Shared<View::RenderedPlayer>& player) {
+    Shared<SDL2pp::Texture> texture = asset_manager->get_texture((Model::TextureID) player->get_sprite_id());
+    SDL2pp::Point sprite_top_left_corner = get_sprite_top_left_corner(player->get_sprite_piece());
+    angle_t angle = player->get_angle();
 
     // Get the view from the camera
     coord_t viewport_width = camera.get_viewport_width();
     coord_t viewport_height = camera.get_viewport_height();
 
-    SDL2pp::Point camera_view = camera.get_camera_view(player.get_position());
+    SDL2pp::Point camera_view = camera.get_camera_view(player->get_position());
     int camera_view_x = camera_view.GetX();
     int camera_view_y = camera_view.GetY();
 
@@ -89,9 +87,9 @@ void View::PlayerRenderer::render_player(View::Camera& camera, Model::Player& pl
         to account for the texture's width and height.
     */
 
-    SDL2pp::Rect skin_rect(
-        skin_top_left_corner.GetX(),
-        skin_top_left_corner.GetY(),
+    SDL2pp::Rect sprite_rect(
+        sprite_top_left_corner.GetX(),
+        sprite_top_left_corner.GetY(),
         32,
         32
     );
@@ -103,14 +101,14 @@ void View::PlayerRenderer::render_player(View::Camera& camera, Model::Player& pl
 
     renderer->Copy(
         *texture,
-        skin_rect,
+        sprite_rect,
         top_left_corner,
         angle,
         SDL2pp::NullOpt
     );
 
-    render_weapon(camera_view, angle, (Model::TextureID) (player.get_current_weapon().get_sprite_id()));
-    render_name(camera_view, player.get_name());
+    render_weapon(camera_view, angle, player->get_weapon_sprite_id());
+    render_name(camera_view, player->get_name());
 }
 
 void View::PlayerRenderer::render_fov(angle_t angle) {
@@ -157,19 +155,19 @@ void View::PlayerRenderer::render() {
     auto camera = game_state_manager->get_camera();
 
     game_state_manager->call_function_on_players(
-        [this, &camera] (std::map<short_id_t, Model::Player>& map) {
-            Model::Player* reference_player = nullptr;
+        [this, &camera] (std::map<short_id_t, Shared<View::RenderedPlayer>>& map) {
+            Shared<View::RenderedPlayer> reference_player = nullptr;
             short_id_t reference_player_id = game_state_manager->get_reference_player_id();
 
             for (auto& pair : map) {
                 if (pair.first == reference_player_id) {
-                    reference_player = &pair.second;
+                    reference_player = pair.second;
                 } else {
                     render_player(camera, pair.second);
                 }
             }
 
-            render_player(camera, *reference_player);
+            render_player(camera, reference_player);
             render_fov(reference_player->get_angle());
         }
     );

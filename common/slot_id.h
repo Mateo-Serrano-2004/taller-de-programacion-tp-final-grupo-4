@@ -5,8 +5,8 @@ namespace Model {
 enum SlotID {
     PRIMARY_WEAPON = 0x00,
     SECONDARY_WEAPON = 0x01,
-    KNIFE = 0x02,
-    BOMB = 0x03
+    KNIFE_SLOT = 0x02,
+    BOMB_SLOT = 0x03
 };
 };
 

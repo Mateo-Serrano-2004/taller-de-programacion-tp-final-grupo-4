@@ -11,8 +11,6 @@
 #include "context/context_manager.h"
 #include "handler/game_state_manager.h"
 #include "asset/asset_manager.h"
-#include "event/pick_sprite_event.h"
-
 
 #include "client/net/client_protocol.h"
 

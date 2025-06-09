@@ -37,6 +37,5 @@ void Controller::Receiver::run() {
 }
 
 Controller::Receiver::~Receiver() {
-    stop();
     join();
 }

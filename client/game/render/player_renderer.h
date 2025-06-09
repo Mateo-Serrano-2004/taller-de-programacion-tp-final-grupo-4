@@ -21,16 +21,17 @@ class GameStateManager;
 
 namespace View {
 class Camera;
+class RenderedPlayer;
 
 class PlayerRenderer: public Renderer {
 protected:
     Shared<Controller::GameStateManager> game_state_manager;
 
-    SDL2pp::Point get_skin_top_left_corner(short_id_t skin_piece);
+    SDL2pp::Point get_sprite_top_left_corner(short_id_t sprite_piece);
 
     void render_weapon(const SDL2pp::Point& player_center, angle_t player_angle, Model::TextureID texture_id);
     void render_name(const SDL2pp::Point& player_center, const std::string& player);
-    void render_player(Camera& camera, Model::Player& player);
+    void render_player(Camera& camera, Shared<View::RenderedPlayer>& player);
     void render_fov(angle_t angle);
 
 public:

@@ -20,7 +20,7 @@
 #include "context/context_manager.h"
 #include "context/in_game_context.h"
 #include "context/menu_context.h"
-#include "context/pick_sprite_context.h"
+#include "context/pick_role_context.h"
 
 #include "asset/asset_manager.h"
 #include "asset/asset_generator.h"
@@ -166,7 +166,7 @@ App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
         )
     );
 
-    auto pick_sprite_context = make_shared<Context::PickSpriteContext>(
+    auto pick_role_context = make_shared<Context::PickRoleContext>(
         Weak<Controller::GameController>(
             std::static_pointer_cast<Controller::GameController>(controller)
         )
@@ -174,7 +174,7 @@ App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
 
     context_manager->add_context(in_game_context);
     context_manager->add_context(menu_context);
-    context_manager->add_context(pick_sprite_context);
+    context_manager->add_context(pick_role_context);
 
-    context_manager->set_current_context("pick-sprite");
+    context_manager->set_current_context("pick-role");
 }

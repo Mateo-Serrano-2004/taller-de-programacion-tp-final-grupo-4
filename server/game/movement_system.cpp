@@ -1,6 +1,6 @@
 #include "movement_system.h"
 
-void MovementSystem::process_movements(std::map<uint8_t, MovablePlayer>& players, uint16_t frames_to_process) {
+void MovementSystem::process_movements(std::map<uint8_t, FullPlayer>& players, uint16_t frames_to_process) {
 
     for (auto& [id, player] : players) {
 

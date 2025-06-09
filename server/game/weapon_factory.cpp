@@ -1,25 +1,23 @@
 #include "weapon_factory.h"
 
-std::unique_ptr<Weapon> WeaponFactory::create(WeaponID id) {
-    switch (id) {
-        case WeaponID::GLOCK: return std::make_unique<Glock>();
-        case WeaponID::AK47:  return std::make_unique<AK47>();
-        case WeaponID::M3:    return std::make_unique<M3>();
-        case WeaponID::AWP:   return std::make_unique<AWP>();
-        default:              return nullptr;
-    }
-}
+#include <memory>
 
-uint16_t WeaponFactory::get_price(WeaponID id) {
-    switch (id) {
-        case WeaponID::GLOCK: return 300;
-        case WeaponID::AK47:  return 800;
-        case WeaponID::M3:    return 650;
-        case WeaponID::AWP:   return 1000;
-        default:              return 9999;
-    }
-}
+#include "common/slot_id.h"
+#include "common/model/weapon.h"
 
-bool WeaponFactory::is_buyable(WeaponID id) {
-    return id != WeaponID::KNIFE && id != WeaponID::BOMB;
+Shared<FullWeapon> WeaponFactory::create(Model::WeaponID id) {
+    switch (id) {
+        case Model::WeaponID::GLOCK:
+            return make_shared<FullWeapon>(id, Model::SlotID::SECONDARY_WEAPON, 20, 20);
+        case Model::WeaponID::AK47:
+            return make_shared<FullWeapon>(id, Model::SlotID::PRIMARY_WEAPON, 45, 45);
+        case Model::WeaponID::M3:
+            return make_shared<FullWeapon>(id, Model::SlotID::PRIMARY_WEAPON, 8, 8);
+        case Model::WeaponID::AWP:
+            return make_shared<FullWeapon>(id, Model::SlotID::PRIMARY_WEAPON, 30, 30);
+        case Model::WeaponID::KNIFE:
+            return make_shared<FullWeapon>(id, Model::SlotID::KNIFE_SLOT, 0, 0);
+        case Model::WeaponID::BOMB:
+            return make_shared<FullWeapon>(id, Model::SlotID::BOMB_SLOT, 0, 0);
+    }
 }

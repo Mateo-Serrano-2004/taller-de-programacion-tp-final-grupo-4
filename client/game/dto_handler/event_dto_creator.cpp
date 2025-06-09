@@ -1,6 +1,5 @@
 #include "event_dto_creator.h"
 
-#include <iostream>
 #include <cstdint>
 #include <string>
 #include <utility>
@@ -16,16 +15,16 @@
 #include "event/rotation_event.h"
 #include "event/stop_movement_event.h"
 #include "event/username_event.h"
-#include "event/pick_sprite_event.h"
+#include "event/pick_role_event.h"
 #include "event/switch_weapon_event.h"
 
-DTO::EventDTO DTO::EventDTOCreator::create_pick_sprite_event() const {
-    auto pick_sprite_event = std::static_pointer_cast<Model::PickSpriteEvent>(event);
+DTO::EventDTO DTO::EventDTOCreator::create_pick_role_event() const {
+    auto pick_role_event = std::static_pointer_cast<Model::PickRoleEvent>(event);
     DTO::EventDTO event_dto;
     std::vector<char> data;
 
-    data.push_back(static_cast<char>(Model::EventType::PICK_SPRITE));
-    data.push_back(static_cast<char>(pick_sprite_event->get_sprite_id()));
+    data.push_back(static_cast<char>(Model::EventType::PICK_ROLE));
+    data.push_back(static_cast<char>(pick_role_event->get_role_id()));
 
     event_dto.size = 2;
     event_dto.data = std::move(data);
@@ -180,8 +179,6 @@ DTO::EventDTO DTO::EventDTOCreator::create_switch_weapon_event() const {
     uint8_t event_dto_size = 2;
     std::vector<char> data;
 
-    std::cout << switch_weapon->get_slot_id() << std::endl;
-
     data.push_back(static_cast<char>(Model::EventType::SWITCH_WEAPON));
     data.push_back(static_cast<char>(switch_weapon->get_slot_id()));
 
@@ -212,8 +209,8 @@ DTO::EventDTO DTO::EventDTOCreator::to_dto() const {
             return create_request_maps_event();
         case Model::EventType::REQUEST_GAMES_LIST:
             return create_request_games_list_event();
-        case Model::EventType::PICK_SPRITE:
-            return create_pick_sprite_event();
+        case Model::EventType::PICK_ROLE:
+            return create_pick_role_event();
         case Model::EventType::SWITCH_WEAPON:
             return create_switch_weapon_event();
         default:

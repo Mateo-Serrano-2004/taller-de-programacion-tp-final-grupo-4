@@ -6,7 +6,9 @@
 #include <variant>
 
 #include "common/model/vector_2d.h"
-#include "common/weapon_type.h" 
+#include "common/slot_id.h"
+#include "common/role_id.h"
+#include "common/weapon_id.h"
 
 class MovementEvent {
 private:
@@ -64,11 +66,11 @@ public:
 
 class SwitchWeaponEvent {
 private:
-    WeaponType weapon_type;
+    Model::SlotID slot_id;
 
 public:
-    explicit SwitchWeaponEvent(WeaponType weapon_type) : weapon_type(weapon_type) {}
-    WeaponType get_weapon_type() const { return weapon_type; }
+    explicit SwitchWeaponEvent(Model::SlotID slot_id) : slot_id(slot_id) {}
+    Model::SlotID get_slot_id() const { return slot_id; }
 };
 
 class ReloadWeaponEvent {
@@ -80,22 +82,22 @@ public:
     uint8_t get_weapon_id() const { return weapon_id; }
 };
 
-class PickSpriteEvent {
+class PickRoleEvent {
 private:
-    uint8_t sprite_id;
+    Model::RoleID role_id;
 
 public:
-    PickSpriteEvent(uint8_t sprite_id): sprite_id(sprite_id) {}
-    uint8_t get_sprite_id() const { return sprite_id; }
+    PickRoleEvent(Model::RoleID role_id): role_id(role_id) {}
+    Model::RoleID get_role_id() const { return role_id; }
 };
 
 class BuyEvent {
 private:
-    WeaponID weapon_id;
+    Model::WeaponID weapon_id;
 
 public:
-    explicit BuyEvent(WeaponID weapon_id): weapon_id(weapon_id) {}
-    WeaponID get_weapon_id() const { return weapon_id; }
+    explicit BuyEvent(Model::WeaponID weapon_id): weapon_id(weapon_id) {}
+    Model::WeaponID get_weapon_id() const { return weapon_id; }
 };
 
 class BuyAmmoEvent {
@@ -161,7 +163,7 @@ using GameEventVariant =
         std::variant<LeaveGameEvent, MovementEvent, StopMovementEvent, RotationEvent,
                      DropWeaponEvent, UseWeaponEvent, DefuseBombEvent, SwitchWeaponEvent,
                      ReloadWeaponEvent, BuyEvent, BuyAmmoEvent, QuitEvent,
-                     PickSpriteEvent
+                     PickRoleEvent
                      >;
 
 using EventVariant = std::variant<GameEventVariant, UsernameEvent, CreateGameEvent, MapRequestEvent,

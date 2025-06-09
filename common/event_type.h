@@ -11,7 +11,7 @@ enum EventType {
     DEFUSE_BOMB = 0x04,
     SWITCH_WEAPON = 0x05,
     RELOAD_WEAPON = 0x06,
-    SELECT_SIDE_AND_MODEL = 0x07,
+    PICK_ROLE = 0x07,
     BUY_WEAPON = 0x08,
     BUY_AMMO = 0x09,
     LEAVE_GAME = 0x0A,
@@ -29,8 +29,7 @@ enum EventType {
 
     // Internal client events
     SWITCH_CONTEXT = 0xA0,
-    WINDOW_RESIZE = 0xA1,
-    PICK_SPRITE = 0xA2
+    WINDOW_RESIZE = 0xA1
 };
 };
 

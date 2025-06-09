@@ -1,23 +1,19 @@
-#ifndef WEAPON_FACTORY_H
-#define WEAPON_FACTORY_H
+#ifndef SERVER_GAME_WEAPON_FACTORY_H
+#define SERVER_GAME_WEAPON_FACTORY_H
 
-#include <memory>
-#include "server/game/model/weapon.h"
-#include "common/weapon_type.h"
-#include "model/weapon.h"
+#include <cstdint>
 
-#include "server/game/model/glock.h"
-#include "server/game/model/ak47.h"
-#include "server/game/model/m3.h"
-#include "server/game/model/awp.h"
+#include "common/definitions.h"
+
+#include "model/full_weapon.h"
+
+namespace Model {
+class Weapon;
+};
 
 class WeaponFactory {
 public:
-    static std::unique_ptr<Weapon> create(WeaponID id);
-
-    static uint16_t get_price(WeaponID id);
-
-    static bool is_buyable(WeaponID id);
+    static Shared<FullWeapon> create(Model::WeaponID id);
 };
 
-#endif // WEAPON_FACTORY_H
+#endif // SERVER_GAME_WEAPON_FACTORY_H

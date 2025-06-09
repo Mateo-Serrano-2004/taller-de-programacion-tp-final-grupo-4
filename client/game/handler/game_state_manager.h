@@ -8,7 +8,8 @@
 #include "common/definitions.h"
 #include "common/texture_id.h"
 
-#include "dto_handler/player_dto_parser.h"
+#include "enum/enum_translator.h"
+
 #include "render/camera.h"
 
 namespace SDL2pp {
@@ -24,13 +25,17 @@ class GameState;
 class Player;
 };
 
+namespace View {
+class RenderedPlayer;
+};
+
 namespace Controller {
 class GameStateManager {
 
 private:
     std::mutex mutex;
+    Model::EnumTranslator enum_translator;
     Shared<Model::GameState> game_state;
-    DTO::PlayerDTOParser player_dto_parser;
     short_id_t reference_player_id;
     Weak<SDL2pp::Window> window;
     View::Camera camera;
@@ -47,8 +52,12 @@ public:
 
     void update_player_sprite(Model::TextureID texture_id);
 
-    void map_function_on_players(const std::function<void(Model::Player&)>& func);
-    void call_function_on_players(const std::function<void(std::map<short_id_t, Model::Player>&)>& func);
+    void map_function_on_players(
+        const std::function<void(Shared<View::RenderedPlayer>&)>& func
+    );
+    void call_function_on_players(
+        const std::function<void(std::map<short_id_t, Shared<View::RenderedPlayer>>&)>& func
+    );
 
     void update_camera();
 

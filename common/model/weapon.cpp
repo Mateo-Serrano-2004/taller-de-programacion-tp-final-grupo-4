@@ -1,24 +1,26 @@
 #include "weapon.h"
 
-#include "common/texture_id.h"
+#include "common/weapon_id.h"
+#include "common/DTO/weapon_dto.h"
 
-Model::Weapon::Weapon(): sprite_id(0), ammo_in_charger(0), total_ammo(0) {}
+Model::Weapon::Weapon(
+    Model::WeaponID weapon_id,
+    uint8_t loaded_ammo,
+    uint16_t total_ammo
+): weapon_id(weapon_id), loaded_ammo(loaded_ammo), total_ammo(total_ammo) {}
 
-Model::Weapon::Weapon(uint8_t sprite_id, uint8_t ammo_in_charger, uint16_t total_ammo):
-        sprite_id(sprite_id), ammo_in_charger(ammo_in_charger), total_ammo(total_ammo) {}
+Model::WeaponID Model::Weapon::get_weapon_id() const { return weapon_id; }
 
-uint8_t Model::Weapon::get_sprite_id() const { return sprite_id; }
-
-uint8_t Model::Weapon::get_ammo_in_charger() const { return ammo_in_charger; }
+uint8_t Model::Weapon::get_loaded_ammo() const { return loaded_ammo; }
 
 uint16_t Model::Weapon::get_total_ammo() const { return total_ammo; }
 
-void Model::Weapon::set_sprite_id(uint8_t new_sprite_id) {
-    sprite_id = new_sprite_id;
+void Model::Weapon::set_weapon_id(Model::WeaponID new_weapon_id) {
+    weapon_id = new_weapon_id;
 }
 
-void Model::Weapon::set_ammo_in_charger(uint8_t new_ammo_in_charger) {
-    ammo_in_charger = new_ammo_in_charger;
+void Model::Weapon::set_loaded_ammo(uint8_t new_loaded_ammo) {
+    loaded_ammo = new_loaded_ammo;
 }
 
 void Model::Weapon::set_total_ammo(uint16_t new_total_ammo) {
@@ -27,8 +29,8 @@ void Model::Weapon::set_total_ammo(uint16_t new_total_ammo) {
 
 DTO::WeaponDTO Model::Weapon::to_dto() const {
     return DTO::WeaponDTO(
-        sprite_id,
-        ammo_in_charger,
+        weapon_id,
+        loaded_ammo,
         total_ammo
     );
 }

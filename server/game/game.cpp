@@ -1,7 +1,5 @@
 #include "game.h"
 
-#include <iostream>
-
 #include "common/model/vector_2d.h"
 #include "common/periodic_clock.h"
 #include "server/events/overloaded.h"
@@ -24,9 +22,9 @@ void Game::handle(uint8_t player_id, const GameEventVariant& event) {
                        [player_id, this](const LeaveGameEvent&) { handle_leave_game(player_id); },
                        [player_id, this](const QuitEvent&) { handle_leave_game(player_id); },
                        [player_id, this](const RotationEvent& e) { handle_rotation(player_id, e); },
-                       [player_id, this](const PickSpriteEvent& e) { handle_pick_sprite(player_id, e); },
-                       [player_id, this](const SwitchWeaponEvent& e) {handle_switch_weapon(player_id, e);},
-                       [player_id, this](const BuyEvent& e) {handle_buy_weapon(player_id, e);},
+                       [player_id, this](const PickRoleEvent& e) { handle_pick_role(player_id, e); },
+                       [player_id, this](const SwitchWeaponEvent& e) { handle_switch_weapon(player_id, e); },
+                       [player_id, this](const BuyEvent& e) { handle_buy_weapon(player_id, e); },
                        [this](const DropWeaponEvent&) {},
                        [this](const UseWeaponEvent&) {}, [this](const DefuseBombEvent&) {},
                        [this](const ReloadWeaponEvent&) {}, [this](const BuyAmmoEvent&) {}},
@@ -36,7 +34,7 @@ void Game::handle(uint8_t player_id, const GameEventVariant& event) {
 void Game::handle_switch_weapon(const uint8_t& player_id, const SwitchWeaponEvent& event) {
     auto it = players.find(player_id);
     if (it != players.end()) {
-        it->second.equip_weapon_by_type(event.get_weapon_type());
+        it->second.equip_weapon_by_type(event.get_slot_id());
     }
 }
 
@@ -56,7 +54,6 @@ void Game::handle_start_game() {
 
     current_round = Round(180);
     state = GameState::Playing;
-    std::cout << "[GAME] Partida iniciada" << std::endl;
 }
 
 void Game::handle_leave_game(const uint8_t& player_id) {
@@ -93,10 +90,10 @@ void Game::handle_rotation(const uint8_t& player_id, const RotationEvent& event)
     }
 }
 
-void Game::handle_pick_sprite(const uint8_t player_id, const PickSpriteEvent& event) {
+void Game::handle_pick_role(const uint8_t player_id, const PickRoleEvent& event) {
     auto it = players.find(player_id);
     if (it != players.end()) {
-        it->second.set_skin_id(event.get_sprite_id());
+        it->second.set_role_id(event.get_role_id());
     }
 }
 
@@ -176,7 +173,7 @@ uint8_t Game::add_player(const std::string& username, ClientQueue& client_queue)
         return -1;
     }
     const uint8_t new_id = next_player_id++;
-    players.emplace(new_id, MovablePlayer(new_id, username));
+    players.emplace(new_id, FullPlayer(new_id, username));
     client_queues[new_id] = &client_queue;
 
     if (state == GameState::WaitingPlayers && players.size() >= min_players_to_start) {

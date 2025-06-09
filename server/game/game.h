@@ -14,7 +14,7 @@
 #include "common/DTO/game_state_dto.h"
 #include "common/queue.h"
 #include "common/thread.h"
-#include "model/movable_player.h"
+#include "model/full_player.h"
 #include "server/events/events.h"
 
 #include "movement_system.h" 
@@ -39,7 +39,7 @@ private:
     std::string map_name;
     GameQueue game_queue;
 
-    std::map<uint8_t, MovablePlayer> players;
+    std::map<uint8_t, FullPlayer> players;
     std::map<uint8_t, ClientQueue*> client_queues;
 
     std::vector<uint8_t> dropped_weapons;
@@ -59,7 +59,7 @@ private:
     void handle_movement(const uint8_t& player_id, const MovementEvent& event);
     void handle_stop_movement(const uint8_t& player_id, const StopMovementEvent& event);
     void handle_rotation(const uint8_t& player_id, const RotationEvent& event);
-    void handle_pick_sprite(const uint8_t player_id, const PickSpriteEvent& event);
+    void handle_pick_role(const uint8_t player_id, const PickRoleEvent& event);
     void handle_switch_weapon(const uint8_t& player_id, const SwitchWeaponEvent& event);
     void handle_buy_weapon(const uint8_t& player_id, const BuyEvent& event);
     void handle_start_game();

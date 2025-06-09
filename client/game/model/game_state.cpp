@@ -3,16 +3,20 @@
 #include <map>
 #include <utility>
 
+#include "model/rendered_player.h"
+
 Model::GameState::GameState(): time_left(0) {}
 
-std::map<short_id_t, Model::Player>& Model::GameState::get_players() { return players; }
+std::map<short_id_t, Shared<View::RenderedPlayer>>& Model::GameState::get_players() {
+    return players;
+}
 
-Model::Player& Model::GameState::get_player_by_id(short_id_t id) {
+Shared<View::RenderedPlayer> Model::GameState::get_player_by_id(short_id_t id) {
     return players.at(id);
 }
 
-void Model::GameState::register_player(Model::Player&& player) {
-    players.emplace(player.get_id(), std::move(player));
+void Model::GameState::register_player(Shared<View::RenderedPlayer> player) {
+    players.insert({player->get_id(), player});
 }
 
 void Model::GameState::set_time_left(uint16_t new_time_left) {
