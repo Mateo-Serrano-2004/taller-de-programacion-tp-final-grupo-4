@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include <SDL2pp/Rect.hh>
+#include <SDL2pp/Point.hh>
 
 #include "controller/base_controller.h"
 
@@ -10,18 +10,16 @@ void View::HorizontalPane::position_children() {
     int total_width = children.empty() ? 0 : (children.size() - 1) * gap;
 
     for (auto child: children) {
-        total_width += child->get_position().GetW();
+        total_width += child->get_width();
     }
 
-    int previous_start = (get_position().GetW() - total_width) / 2;
+    int previous_start = (get_width() - total_width) / 2;
 
-    for (size_t i = 0; i < children.size(); i++) {
-        auto children_pos = children_positions[i];
-        children_positions[i].SetX(previous_start);
-        children_positions[i].SetY((get_position().GetH() - children_pos.GetH()) / 2);
-        previous_start += children_pos.GetW();
+    for (auto child: children) {
+        child->set_x(previous_start);
+        child->set_y((get_height() - child->get_height()) / 2);
+        previous_start += child->get_width();
         previous_start += gap;
-        children[i]->set_position(children_positions[i]);
     }
 }
 
@@ -35,7 +33,6 @@ void View::HorizontalPane::set_gap(int new_gap) {
 
 void View::HorizontalPane::add_child(View::Pane* new_child) {
     children.push_back(new_child);
-    children_positions.push_back(new_child->get_position());
     new_child->set_parent(this);
     position_children();
 }

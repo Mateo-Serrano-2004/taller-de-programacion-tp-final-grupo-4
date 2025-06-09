@@ -25,10 +25,7 @@ protected:
     Weak<Controller::BaseController> controller;
 
 public:
-    Button(
-        Weak<Controller::BaseController> controller,
-        Pane* parent = nullptr
-    );
+    Button(Weak<Controller::BaseController> controller);
 
     bool check_click(Shared<SDL_Event> event) const;
 

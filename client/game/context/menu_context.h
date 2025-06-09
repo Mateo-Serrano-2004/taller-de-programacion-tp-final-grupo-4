@@ -8,7 +8,6 @@
 #include "handler/menu_event_handler_strategy.h"
 #include "render/player_renderer.h"
 
-#include "entity/entity_positioner.h"
 #include "entity/pane.h"
 #include "entity/button.h"
 
@@ -20,7 +19,6 @@ namespace Context {
 class MenuContext: public BaseContext {
 protected:
     SDL_Event placeholder;
-    View::EntityPositioner positioner;
     Controller::MenuEventHandlerStrategy event_handler_strategy;
     View::PlayerRenderer player_renderer;
     View::Pane background;

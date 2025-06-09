@@ -6,26 +6,26 @@
 #include <SDL2pp/Renderer.hh>
 #include <SDL2pp/Texture.hh>
 #include <SDL2pp/Color.hh>
+#include <SDL2pp/Point.hh>
 
 #include "controller/base_controller.h"
 
-View::Button::Button(Weak<Controller::BaseController> controller,
-                     View::Pane* parent):
-                     View::Pane(controller, parent),
+View::Button::Button(Weak<Controller::BaseController> controller):
+                     View::Pane(controller),
                      command(nullptr),
                      controller(controller) {}
 
 bool View::Button::check_click(Shared<SDL_Event> event) const {
     if (event->type != SDL_MOUSEBUTTONDOWN) return false;
 
-    SDL2pp::Rect position = get_absolute_position();
+    SDL2pp::Point position = get_absolute_position();
 
     int x = event->button.x, y = event->button.y;
 
     if (x < position.GetX() ||
         y < position.GetY() ||
-        x > position.GetX() + position.GetW() ||
-        y > position.GetY() + position.GetH()) {
+        x > position.GetX() + get_width() ||
+        y > position.GetY() + get_height()) {
         return false;
     }
 

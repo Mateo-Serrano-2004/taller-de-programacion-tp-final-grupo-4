@@ -3,6 +3,8 @@
 #include <utility>
 
 #include <SDL2/SDL.h>
+#include <SDL2pp/Point.hh>
+#include <SDL2pp/Rect.hh>
 
 #include "controller/game_controller.h"
 #include "controller/base_controller.h"
@@ -19,7 +21,7 @@
 
 Context::PickRoleContext::PickRoleContext(Weak<Controller::GameController> controller)
 : Context::BaseContext("pick-role", controller),
-  background(controller, 3),
+  background(controller, 5),
   pick_role_1_button(controller),
   pick_role_2_button(controller),
   pick_role_3_button(controller),
@@ -38,7 +40,7 @@ void Context::PickRoleContext::build_button(View::Button& button, Model::Texture
     button.set_texture(texture_id);
     button.set_draw_texture(true);
     button.set_texture_slice(SDL2pp::Rect(0, 0, 32, 32));
-    button.set_position(SDL2pp::Rect(0, 0, 128, 128));
+    button.set_size(SDL2pp::Point(128, 128));
     background.add_child(&button);
 
     auto composite_command = make_unique<Command::CompositeCommand>(controller);

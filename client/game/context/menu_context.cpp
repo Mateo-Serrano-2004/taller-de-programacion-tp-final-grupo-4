@@ -3,7 +3,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/Rect.hh>
 
-
 #include "controller/game_controller.h"
 #include "controller/base_controller.h"
 
@@ -18,12 +17,8 @@
 void Context::MenuContext::render() {
     player_renderer.render();
 
-    positioner.size_pane_relatively_to_parent(background, 0.6, 0.6);
-    positioner.place_pane_relatively_to_parent(background, 0.5, 0.5);
-
-    exit_button.set_position(SDL2pp::Rect(0, 0, 60, 40));
-
-    positioner.place_pane_relatively_to_parent(exit_button, 0.5, 0.8);
+    exit_button.set_position(SDL2pp::Point(0, 0));
+    exit_button.set_size(SDL2pp::Point(60, 40));
 
     exit_button.set_texture_slice_to_match_position();
 
@@ -46,7 +41,7 @@ Context::BaseContext("menu", controller),
 event_handler_strategy(controller),
 player_renderer(controller),
 background(controller),
-exit_button(controller, &background) {
+exit_button(controller) {
     background.set_background_color(31, 45, 31, 255);
     exit_button.set_background_color(78, 107, 60, 255);
 

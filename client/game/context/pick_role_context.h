@@ -7,7 +7,6 @@
 
 #include "asset/texture_id.h"
 
-#include "entity/entity_positioner.h"
 #include "entity/horizontal_pane.h"
 #include "entity/button.h"
 
@@ -21,7 +20,6 @@ namespace Context {
 class PickRoleContext: public BaseContext {
 protected:
     SDL_Event placeholder;
-    View::EntityPositioner positioner;
     Model::EnumTranslator enum_translator;
 
     View::HorizontalPane background;

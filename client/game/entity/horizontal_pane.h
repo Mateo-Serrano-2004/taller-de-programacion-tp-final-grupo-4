@@ -3,12 +3,9 @@
 
 #include <vector>
 
-#include <SDL2pp/Rect.hh>
-
 #include "common/definitions.h"
 
 #include "pane.h"
-#include "entity_positioner.h"
 
 namespace Controller {
 class BaseController;
@@ -17,9 +14,7 @@ class BaseController;
 namespace View {
 class HorizontalPane: public Pane {
 protected:
-    EntityPositioner positioner;
     std::vector<Pane*> children;
-    std::vector<SDL2pp::Rect> children_positions;
     int gap;
 
     void position_children();
