@@ -19,11 +19,11 @@
 
 Context::PickRoleContext::PickRoleContext(Weak<Controller::GameController> controller)
 : Context::BaseContext("pick-role", controller),
-  background(controller),
-  pick_role_1_button(controller, &background),
-  pick_role_2_button(controller, &background),
-  pick_role_3_button(controller, &background),
-  pick_role_4_button(controller, &background) {
+  background(controller, 3),
+  pick_role_1_button(controller),
+  pick_role_2_button(controller),
+  pick_role_3_button(controller),
+  pick_role_4_button(controller) {
 
     background.set_background_color(31, 45, 31, 255);
 
@@ -38,6 +38,8 @@ void Context::PickRoleContext::build_button(View::Button& button, Model::Texture
     button.set_texture(texture_id);
     button.set_draw_texture(true);
     button.set_texture_slice(SDL2pp::Rect(0, 0, 32, 32));
+    button.set_position(SDL2pp::Rect(0, 0, 128, 128));
+    background.add_child(&button);
 
     auto composite_command = make_unique<Command::CompositeCommand>(controller);
     composite_command->add_command(make_unique<Command::PickRoleCommand>(
@@ -50,21 +52,6 @@ void Context::PickRoleContext::build_button(View::Button& button, Model::Texture
 
 void Context::PickRoleContext::render() {
     background.render();
-
-    positioner.size_pane_relatively_to_parent(pick_role_1_button, 0.2, 0.3);
-    positioner.size_pane_relatively_to_parent(pick_role_2_button, 0.2, 0.3);
-    positioner.size_pane_relatively_to_parent(pick_role_3_button, 0.2, 0.3);
-    positioner.size_pane_relatively_to_parent(pick_role_4_button, 0.2, 0.3);
-
-    positioner.place_pane_relatively_to_parent(pick_role_1_button, 0.1, 0.5);
-    positioner.place_pane_relatively_to_parent(pick_role_2_button, 0.35, 0.5);
-    positioner.place_pane_relatively_to_parent(pick_role_3_button, 0.65, 0.5);
-    positioner.place_pane_relatively_to_parent(pick_role_4_button, 0.9, 0.5);
-
-    pick_role_1_button.render();
-    pick_role_2_button.render();
-    pick_role_3_button.render();
-    pick_role_4_button.render();
 }
 
 void Context::PickRoleContext::dispatch_events() {
