@@ -13,6 +13,8 @@
 #include <QDrag>
 #include <QMimeData>
 #include <QApplication>
+#include <QFileDialog>
+#include "map_serializer.h"
 
 #include "../widgets/styled_button.h"
 #include "grid_view.h"
@@ -67,6 +69,14 @@ MapEditorWidget::MapEditorWidget(QWidget* parent) : QWidget(parent) {
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         msgBox.setStyleSheet("QPushButton { min-width: 80px; min-height: 30px; }");
         if (msgBox.exec() == QMessageBox::Yes) emit backClicked();
+    });
+
+    connect(saveButton, &QPushButton::clicked, this, [this]() {
+        QString filePath = QFileDialog::getSaveFileName(this, "Guardar mapa", "", "YAML files (*.yaml)");
+        if (!filePath.isEmpty()) {
+            MapSerializer::saveToYaml(gridScene, filePath);
+        }
+        
     });
 
 
@@ -129,6 +139,8 @@ void MapEditorWidget::addCategory(const QString& title, const QString& path, con
     for (const QString& fileName : files) {
         QListWidgetItem* item = new QListWidgetItem(QIcon(dir.filePath(fileName)), fileName);
         item->setData(Qt::UserRole, type);
+        item->setData(Qt::UserRole + 1, dir.filePath(fileName));  // Guardamos la ruta del asset
+
         assetsList->addItem(item);
     }
 }
@@ -163,6 +175,11 @@ void MapEditorWidget::placeTileAt(int x, int y, QListWidgetItem* item) {
     removeTileAt(x, y);
     QGraphicsPixmapItem* tileItem = new QGraphicsPixmapItem(pixmap);
     tileItem->setPos(x * 32, y * 32);
+
+    //save asset path in the item data
+    QString assetPath = item->data(Qt::UserRole + 1).toString();
+    tileItem->setData(0, assetPath);
+
     gridScene->addItem(tileItem);
 }
 

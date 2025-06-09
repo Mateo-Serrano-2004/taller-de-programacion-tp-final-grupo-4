@@ -31,7 +31,6 @@ add_subdirectory(common/)
 
 include(cmake/CompilerWarnings.cmake)
 set_project_warnings(cs2d_common ${CS2D_MAKE_WARNINGS_AS_ERRORS} FALSE)
-
 target_include_directories(cs2d_common PUBLIC .)
 
 if(CS2D_CLIENT)
@@ -94,8 +93,10 @@ if(CS2D_EDITOR)
 
     find_package(Qt5 COMPONENTS Widgets REQUIRED)
     set_project_warnings(cs2d_editor ${CS2D_MAKE_WARNINGS_AS_ERRORS} FALSE)
+    find_package(yaml-cpp REQUIRED)
 
-    target_link_libraries(cs2d_editor Qt5::Widgets)
+    #target_link_libraries(cs2d_editor Qt5::Widgets)
+    target_link_libraries(cs2d_editor PRIVATE yaml-cpp Qt5::Widgets)
 endif()
 
 
