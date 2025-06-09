@@ -18,6 +18,7 @@
 
 #include "../widgets/styled_button.h"
 #include "grid_view.h"
+#include "../widgets/styled_file_dialog.h"
 
 void MapEditorWidget::setUpLeftPanel() {
     leftPanel = new QWidget(this);
@@ -72,11 +73,16 @@ MapEditorWidget::MapEditorWidget(QWidget* parent) : QWidget(parent) {
     });
 
     connect(saveButton, &QPushButton::clicked, this, [this]() {
-        QString filePath = QFileDialog::getSaveFileName(this, "Guardar mapa", "", "YAML files (*.yaml *.yml)");
-        if (!filePath.isEmpty()) {
-            if (!filePath.endsWith(".yaml") && !filePath.endsWith(".yml")) {
+        StyledFileDialog fileDialog(this);
+        fileDialog.setAcceptMode(QFileDialog::AcceptSave);
+        fileDialog.setNameFilter("YAML files (*.yaml *.yml)");
+        fileDialog.setWindowTitle("Guardar mapa");
+
+        if (fileDialog.exec() == QDialog::Accepted) {
+            QString filePath = fileDialog.selectedFiles().first();
+            if (!filePath.endsWith(".yaml") && !filePath.endsWith(".yml"))
                 filePath += ".yaml";
-            }
+
             MapSerializer::saveToYaml(gridScene, filePath);
         }
         
