@@ -2,6 +2,7 @@
 #define EDITOR_MAIN_WINDOW_H
 
 #include <QMainWindow>
+#include "../scenes/map_editor_widget.h"
 
 namespace Ui {
 class MainWindow;
@@ -17,11 +18,10 @@ public:
 private slots:
     void setUpWindow();
     void showMenuScene();
-    void showMapEditorScene();
-    void showMapEditorSceneWithMap(const QString& filePath);
 
 private:
     Ui::MainWindow* ui;
+    MapEditorWidget* mapEditor = nullptr;
 };
 
 #endif  // EDITOR_MAIN_WINDOW_H

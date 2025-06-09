@@ -42,5 +42,5 @@ MenuWidget::MenuWidget(QWidget* parent) : QWidget(parent) {
             if (!filePath.isEmpty())
                 emit editMapRequested(filePath);
         }
-});
+    });
 } 

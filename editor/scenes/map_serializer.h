@@ -7,6 +7,7 @@
 class MapSerializer {
 public:
     static void saveToYaml(QGraphicsScene* scene, const QString& filePath);
+    static void loadFromYaml(const QString& filePath, QGraphicsScene* scene);
 };
 
 #endif // MAP_SERIALIZER_H

@@ -11,6 +11,7 @@ class MapEditorWidget : public QWidget {
     Q_OBJECT
 public:
     explicit MapEditorWidget(QWidget* parent = nullptr);
+    void loadMap(const QString& filePath);
 
 signals:
     void backClicked();
@@ -26,6 +27,7 @@ private:
     void addCategory(const QString& title, const QString& path, const QString& type);
     void removeTileAt(int x, int y);
     void placeTileAt(int x, int y, QListWidgetItem* item);
+    
     QWidget* leftPanel = nullptr;
     QGraphicsView* gridView = nullptr;
     QGraphicsScene* gridScene = nullptr;

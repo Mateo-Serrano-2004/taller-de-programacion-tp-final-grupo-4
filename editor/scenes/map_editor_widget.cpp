@@ -72,8 +72,11 @@ MapEditorWidget::MapEditorWidget(QWidget* parent) : QWidget(parent) {
     });
 
     connect(saveButton, &QPushButton::clicked, this, [this]() {
-        QString filePath = QFileDialog::getSaveFileName(this, "Guardar mapa", "", "YAML files (*.yaml)");
+        QString filePath = QFileDialog::getSaveFileName(this, "Guardar mapa", "", "YAML files (*.yaml *.yml)");
         if (!filePath.isEmpty()) {
+            if (!filePath.endsWith(".yaml") && !filePath.endsWith(".yml")) {
+                filePath += ".yaml";
+            }
             MapSerializer::saveToYaml(gridScene, filePath);
         }
         
@@ -224,3 +227,7 @@ bool MapEditorWidget::eventFilter(QObject* obj, QEvent* event) {
     }
     return QWidget::eventFilter(obj, event);
 } 
+
+void MapEditorWidget::loadMap(const QString& path) {
+    MapSerializer::loadFromYaml(path, gridScene);
+}
