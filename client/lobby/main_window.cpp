@@ -5,6 +5,9 @@
 #include <string>
 #include <iostream>
 
+#include "common/DTO/game_info_dto.h"
+#include "common/definitions.h"
+
 #include "client/game/cs2d_app.h"
 #include "client/game/dto_handler/event_dto_creator.h"
 #include "client/game/event/create_game_event.h"
@@ -12,9 +15,8 @@
 #include "client/game/event/request_games_list_event.h"
 #include "client/game/event/request_maps_event.h"
 #include "client/game/event/username_event.h"
-#include "common/DTO/game_info_dto.h"
-#include "common/definitions.h"
 
+#include "client/exception/closed_app.h"
 
 MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWindow) {
     setUpWindow();
@@ -29,8 +31,14 @@ MainWindow::~MainWindow() {
 
 void MainWindow::runGame() {
     this->hide();
-    App::CS2DApp game(protocol);
-    game.launch();
+    try {
+        App::CS2DApp game(protocol);
+        game.launch();
+    } catch (const ClosedAppException& e) {
+        clearCurrentScene();
+        QApplication::quit();
+        return;
+    }
     this->show();
     showLobbyScene();
 }
