@@ -15,6 +15,10 @@
 #include "model/game_state.h"
 #include "model/rendered_player.h"
 
+void Controller::GameStateManager::add_player_shooting(Shared<View::RenderedPlayer> player) {
+    pending_weapon_usages.push_back(player);
+}
+
 Controller::GameStateManager::GameStateManager(
     short_id_t reference_player_id,
     Weak<SDL2pp::Window> window
@@ -50,6 +54,14 @@ void Controller::GameStateManager::call_function_on_players(
     func(game_state->get_players());
 }
 
+void Controller::GameStateManager::map_function_on_pending_weapon_usages(
+        const std::function<void(Shared<View::RenderedPlayer>&)>& func) {
+    for (auto& player: pending_weapon_usages) {
+        func(player);
+    }
+    pending_weapon_usages.clear();
+}
+
 void Controller::GameStateManager::update_camera() {
     auto new_viewport_size = window.lock()->GetSize();
     camera.set_viewport_size(new_viewport_size.GetX(), new_viewport_size.GetY());
@@ -71,6 +83,7 @@ void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
             enum_translator.get_texture_from_weapon(player->get_current_weapon()->get_weapon_id())
         );
         new_game_state->register_player(player);
+        if (player->is_shooting()) add_player_shooting(player);
     }
 
     new_game_state->set_time_left(game_state_dto.time_left);
