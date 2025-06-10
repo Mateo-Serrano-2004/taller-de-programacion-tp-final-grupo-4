@@ -7,6 +7,8 @@
 
 #include "common/definitions.h"
 
+#include "event/event.h"
+
 namespace Model {
 class AssetManager;
 };
@@ -32,10 +34,10 @@ public:
     ContextManager() = default;
 
     void add_context(Shared<BaseContext> context);
-
     void set_current_context(const std::string& context_name);
+
     void update_current_context();
-    void update_context_size();
+    void propage_event(Shared<Model::Event> event);
 
     ContextManager(ContextManager&&) = default;
     ContextManager& operator=(ContextManager&&) = default;

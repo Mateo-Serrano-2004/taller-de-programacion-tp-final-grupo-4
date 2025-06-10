@@ -6,6 +6,8 @@
 
 #include "common/definitions.h"
 
+#include "event/event.h"
+
 namespace Controller {
 class BaseController;
 }
@@ -35,7 +37,7 @@ public:
     const std::string& get_name() const;
     
     void update();
-    virtual void update_size() = 0;
+    virtual void handle_event(Shared<Model::Event> event) = 0;
 
     BaseContext(BaseContext&&) = default;
     BaseContext& operator=(BaseContext&&) = default;

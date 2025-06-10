@@ -7,6 +7,8 @@
 #include <SDL2pp/Rect.hh>
 #include <SDL2pp/Renderer.hh>
 
+#include "common/event_type.h"
+
 #include "controller/game_controller.h"
 #include "controller/base_controller.h"
 
@@ -16,10 +18,46 @@
 
 #include "asset/texture_id.h"
 
-#include "event/quit_event.h"
-#include "event/window_resize_event.h"
-#include "event/switch_context_event.h"
-#include "event/pick_role_event.h"
+void Context::PickRoleContext::trigger_buttons(Shared<SDL_Event> event) {
+    if (pick_role_1_button.trigger(event)) ;
+    else if (pick_role_2_button.trigger(event)) ;
+    else if (pick_role_3_button.trigger(event)) ;
+    else if (pick_role_4_button.trigger(event)) ;
+}
+
+void Context::PickRoleContext::build_button(View::Button& button, Model::TextureID texture_id) {
+    background.add_child(&button);
+    button.set_background_color(78, 107, 60, 255);
+    button.set_texture(texture_id);
+    button.set_draw_texture(true);
+    button.set_texture_slice(SDL2pp::Rect(0, 0, 32, 32));
+    button.set_min_size(SDL2pp::Point(128, 128));
+    button.set_scale_factor(0.1);
+    button.set_scale_size(true);
+
+    auto composite_command = make_unique<Command::CompositeCommand>(controller);
+    composite_command->add_command(make_unique<Command::PickRoleCommand>(
+        enum_translator.get_role_from_texture(texture_id)
+    ));
+    composite_command->add_command(make_unique<Command::SwitchContextCommand>("in-game"));
+
+    button.set_command(std::move(composite_command));
+}
+
+void Context::PickRoleContext::update_size() {
+    vertical_pane.set_max_size(renderer->GetViewport().GetSize());
+    vertical_pane.set_size(renderer->GetViewport().GetSize());
+}
+
+void Context::PickRoleContext::render() {
+    vertical_pane.render();
+}
+
+void Context::PickRoleContext::dispatch_events() {
+    while (SDL_PollEvent(&placeholder)) {
+        strategy.handle(make_shared<SDL_Event>(placeholder));
+    }
+}
 
 Context::PickRoleContext::PickRoleContext(Weak<Controller::GameController> controller)
 : Context::BaseContext("pick-role", controller),
@@ -48,43 +86,12 @@ Context::PickRoleContext::PickRoleContext(Weak<Controller::GameController> contr
     build_button(pick_role_4_button, Model::TextureID::SPRITE_CT4);
 }
 
-void Context::PickRoleContext::trigger_buttons(Shared<SDL_Event> event) {
-    if (pick_role_1_button.trigger(event)) ;
-    else if (pick_role_2_button.trigger(event)) ;
-    else if (pick_role_3_button.trigger(event)) ;
-    else if (pick_role_4_button.trigger(event)) ;
-}
-
-void Context::PickRoleContext::build_button(View::Button& button, Model::TextureID texture_id) {
-    background.add_child(&button);
-    button.set_background_color(78, 107, 60, 255);
-    button.set_texture(texture_id);
-    button.set_draw_texture(true);
-    button.set_texture_slice(SDL2pp::Rect(0, 0, 32, 32));
-    button.set_min_size(SDL2pp::Point(128, 128));
-    button.set_scale_factor(0.1);
-    button.set_scale_size(true);
-
-    auto composite_command = make_unique<Command::CompositeCommand>(controller);
-    composite_command->add_command(make_unique<Command::PickRoleCommand>(
-        enum_translator.get_role_from_texture(texture_id)
-    ));
-    composite_command->add_command(make_unique<Command::SwitchContextCommand>("in-game"));
-
-    button.set_command(std::move(composite_command));
-}
-
-void Context::PickRoleContext::render() {
-    vertical_pane.render();
-}
-
-void Context::PickRoleContext::dispatch_events() {
-    while (SDL_PollEvent(&placeholder)) {
-        strategy.handle(make_shared<SDL_Event>(placeholder));
+void Context::PickRoleContext::handle_event(Shared<Model::Event> event) {
+    Model::EventType event_type = event->get_type();
+    if (
+        event_type == Model::EventType::SWITCH_CONTEXT || 
+        event_type == Model::EventType::WINDOW_RESIZE 
+    ) {
+        update_size();
     }
-}
-
-void Context::PickRoleContext::update_size() {
-    vertical_pane.set_max_size(renderer->GetViewport().GetSize());
-    vertical_pane.set_size(renderer->GetViewport().GetSize());
-}
+} 

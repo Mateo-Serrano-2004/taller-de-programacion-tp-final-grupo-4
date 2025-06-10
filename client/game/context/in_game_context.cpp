@@ -11,6 +11,10 @@
 
 #include "exception/closed_window.h"
 
+void Context::InGameContext::update_size() {
+    player_renderer.update_size();
+}
+
 void Context::InGameContext::render() {
     player_renderer.render();
     hud_renderer.render();
@@ -30,6 +34,12 @@ Context::InGameContext::InGameContext(Weak<Controller::GameController> controlle
   hud_renderer(controller),
   event_handler_strategy(controller) {}
 
-void Context::InGameContext::update_size() {
-    player_renderer.update_size();
+void Context::InGameContext::handle_event(Shared<Model::Event> event) {
+    Model::EventType event_type = event->get_type();
+    if (
+        event_type == Model::EventType::SWITCH_CONTEXT || 
+        event_type == Model::EventType::WINDOW_RESIZE 
+    ) {
+        update_size();
+    }
 }

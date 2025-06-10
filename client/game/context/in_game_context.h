@@ -7,6 +7,8 @@
 
 #include "handler/in_game_event_handler_strategy.h"
 
+#include "event/event.h"
+
 #include "entity/pane.h"
 
 #include "render/player_renderer.h"
@@ -24,6 +26,8 @@ protected:
     View::HUDRenderer hud_renderer;
     Controller::InGameEventHandlerStrategy event_handler_strategy;
 
+    void update_size();
+
     void render() override;
     void dispatch_events() override;
 
@@ -33,7 +37,7 @@ protected:
 public:
     InGameContext(Weak<Controller::GameController> controller);
 
-    void update_size() override;
+    void handle_event(Shared<Model::Event> event) override;
 
     InGameContext(InGameContext&&) = default;
     InGameContext& operator=(InGameContext&&) = default;

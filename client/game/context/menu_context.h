@@ -3,13 +3,18 @@
 
 #include <SDL2/SDL.h>
 
+#include "common/definitions.h"
+
 #include "base_context.h"
 
 #include "handler/menu_event_handler_strategy.h"
-#include "render/player_renderer.h"
+
+#include "event/event.h"
 
 #include "entity/vertical_pane.h"
 #include "entity/button.h"
+
+#include "render/player_renderer.h"
 
 namespace Controller {
 class GameController;
@@ -29,6 +34,8 @@ protected:
     View::VerticalPane background;
     View::Button exit_button;
 
+    void update_size();
+
     void render() override;
     void dispatch_events() override;
 
@@ -38,7 +45,7 @@ protected:
 public:
     MenuContext(Weak<Controller::GameController> controller);
 
-    void update_size() override;
+    void handle_event(Shared<Model::Event> event) override;
 
     MenuContext(MenuContext&&) = default;
     MenuContext& operator=(MenuContext&&) = default;

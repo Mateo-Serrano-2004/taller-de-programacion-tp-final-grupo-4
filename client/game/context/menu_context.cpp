@@ -4,19 +4,19 @@
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Renderer.hh>
 
+#include "common/event_type.h"
+
 #include "controller/game_controller.h"
-#include "controller/base_controller.h"
 
 #include "command/quit_command.h"
 
-#include "event/quit_event.h"
-
-#include "asset/texture_id.h"
-
-#include "exception/closed_window.h"
-
 void Context::MenuContext::trigger_buttons(Shared<SDL_Event> event) {
     exit_button.trigger(event);
+}
+
+void Context::MenuContext::update_size() {
+    background.set_max_size(renderer->GetViewport().GetSize());
+    background.set_size(renderer->GetViewport().GetSize());
 }
 
 void Context::MenuContext::render() {
@@ -49,7 +49,12 @@ exit_button(controller) {
     exit_button.set_command(make_unique<Command::QuitCommand>());
 }
 
-void Context::MenuContext::update_size() {
-    background.set_max_size(renderer->GetViewport().GetSize());
-    background.set_size(renderer->GetViewport().GetSize());
+void Context::MenuContext::handle_event(Shared<Model::Event> event) {
+    Model::EventType event_type = event->get_type();
+    if (
+        event_type == Model::EventType::SWITCH_CONTEXT || 
+        event_type == Model::EventType::WINDOW_RESIZE 
+    ) {
+        update_size();
+    }
 }

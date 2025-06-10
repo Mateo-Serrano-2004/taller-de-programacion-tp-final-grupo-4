@@ -11,6 +11,8 @@
 
 #include "asset/texture_id.h"
 
+#include "event/event.h"
+
 #include "entity/horizontal_pane.h"
 #include "entity/vertical_pane.h"
 #include "entity/label.h"
@@ -42,6 +44,7 @@ protected:
     View::Button pick_role_4_button;
 
     void build_button(View::Button& button, Model::TextureID texture_id);
+    void update_size();
 
     void render() override;
     void dispatch_events() override;
@@ -49,7 +52,7 @@ protected:
 public:
     PickRoleContext(Weak<Controller::GameController> controller);
 
-    void update_size() override;
+    void handle_event(Shared<Model::Event> event) override;
 
     ~PickRoleContext() override = default;
 };

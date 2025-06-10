@@ -8,7 +8,10 @@
 #include <SDL2pp/Renderer.hh>
 
 #include "base_context.h"
+
 #include "asset/asset_manager.h"
+
+#include "event/switch_context_event.h"
 
 void Context::ContextManager::add_context(Shared<Context::BaseContext> context) {
     contexts.insert({ context->get_name(), context });
@@ -16,7 +19,6 @@ void Context::ContextManager::add_context(Shared<Context::BaseContext> context) 
 
 void Context::ContextManager::set_current_context(const std::string& context_name) {
     current_context_name = context_name;
-    contexts.at(current_context_name)->update_size();
 }
 
 void Context::ContextManager::update_current_context() {
@@ -26,6 +28,10 @@ void Context::ContextManager::update_current_context() {
     contexts.at(current_context_name)->update();
 }
 
-void Context::ContextManager::update_context_size() {
-    contexts.at(current_context_name)->update_size();
+void Context::ContextManager::propage_event(Shared<Model::Event> event) {
+    if (event->get_type() == Model::EventType::SWITCH_CONTEXT) {
+        auto switch_context_event = std::static_pointer_cast<Model::SwitchContextEvent>(event);
+        set_current_context(switch_context_event->get_new_context_name());
+    }
+    contexts.at(current_context_name)->handle_event(event);
 }
