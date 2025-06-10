@@ -36,5 +36,28 @@ install-qt5:
 
 install: install-compile-tools install-sdl2 install-qt5
 
+test_shoot:
+	mkdir -p build
+	g++ -std=c++20 -I. \
+	    test/test.cpp \
+	    common/DTO/game_state_dto.cpp \
+	    common/DTO/player_dto.cpp \
+		common/DTO/weapon_dto.cpp \
+	    common/model/vector_2d.cpp \
+	    common/model/player.cpp \
+		common/model/weapon.cpp \
+	    common/periodic_clock.cpp \
+	    server/game/model/full_player.cpp \
+		server/game/model/full_weapon.cpp \
+	    server/game/game.cpp \
+	    server/game/round.cpp \
+		server/game/movement_system.cpp \
+		server/game/weapon_factory.cpp \
+		server/game/game_logic.cpp \
+		server/game/shop.cpp \
+	    -o build/test_shoot \
+	    -lpthread
+
+
 clean:
 	rm -Rf ./build
