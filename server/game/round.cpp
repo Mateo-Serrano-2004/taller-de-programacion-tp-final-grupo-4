@@ -37,6 +37,10 @@ bool Round::is_buying_phase() const {
     return state == RoundState::Buying;
 }
 
+bool Round::is_active_phase() const {
+    return state == RoundState::Active;
+}
+
 uint16_t Round::get_ticks_remaining() const {
     if (state == RoundState::Ended) return 0;
     if (state == RoundState::Buying) return buying_ticks_remaining;

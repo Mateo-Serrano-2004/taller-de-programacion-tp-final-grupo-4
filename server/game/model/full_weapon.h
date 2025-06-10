@@ -8,13 +8,17 @@
 class FullWeapon: public Model::Weapon {
 protected:
     Model::SlotID slot_id;
-
+    bool triggered;
+    bool trigger_blocked;
 public:
     FullWeapon(Model::WeaponID weapon_id, Model::SlotID slot_id, uint8_t loaded_ammo, uint16_t total_ammo);
 
     Model::SlotID get_slot_id() const;
 
     void set_slot_id(Model::SlotID new_slot_id);
+    void press_trigger();
+    void release_trigger();
+    bool shoot();
 
     ~FullWeapon() override = default;
 };

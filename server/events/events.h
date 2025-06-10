@@ -47,12 +47,13 @@ public:
 };
 
 class UseWeaponEvent {
-private:
-    uint8_t weapon_id;
-
 public:
-    explicit UseWeaponEvent(uint8_t weapon_id): weapon_id(weapon_id) {}
-    uint8_t get_weapon_id() const { return weapon_id; }
+    explicit UseWeaponEvent() {}
+};
+
+class StopUsingWeaponEvent {
+public:
+    explicit StopUsingWeaponEvent() {}
 };
 
 class DefuseBombEvent {
@@ -163,7 +164,7 @@ using GameEventVariant =
         std::variant<LeaveGameEvent, MovementEvent, StopMovementEvent, RotationEvent,
                      DropWeaponEvent, UseWeaponEvent, DefuseBombEvent, SwitchWeaponEvent,
                      ReloadWeaponEvent, BuyEvent, BuyAmmoEvent, QuitEvent,
-                     PickRoleEvent
+                     PickRoleEvent, StopUsingWeaponEvent
                      >;
 
 using EventVariant = std::variant<GameEventVariant, UsernameEvent, CreateGameEvent, MapRequestEvent,

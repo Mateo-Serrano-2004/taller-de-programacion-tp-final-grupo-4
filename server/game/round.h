@@ -24,6 +24,7 @@ public:
     RoundState get_state() const;
     uint16_t get_ticks_remaining() const;
     bool is_buying_phase() const;
+    bool is_active_phase() const;
 };
 
 #endif // ROUND_H

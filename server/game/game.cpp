@@ -26,9 +26,24 @@ void Game::handle(uint8_t player_id, const GameEventVariant& event) {
                        [player_id, this](const SwitchWeaponEvent& e) { handle_switch_weapon(player_id, e); },
                        [player_id, this](const BuyEvent& e) { handle_buy_weapon(player_id, e); },
                        [this](const DropWeaponEvent&) {},
-                       [this](const UseWeaponEvent&) {}, [this](const DefuseBombEvent&) {},
+                       [player_id, this](const UseWeaponEvent&) {handle_use_weapon(player_id); }, 
+                       [player_id, this](const StopUsingWeaponEvent&) {handle_stop_using_weapon(player_id); }, 
+                       [this](const DefuseBombEvent&) {},
                        [this](const ReloadWeaponEvent&) {}, [this](const BuyAmmoEvent&) {}},
             event);
+}
+
+void Game::handle_use_weapon(const uint8_t& player_id) {
+    //if (this->state != GameState::Playing) return; TODAVÍA NO CAMBIA EL ESTADO EL GAME
+    auto it = players.find(player_id);
+    if (it == players.end()) return;
+    gamelogic.start_using_weapon(it->second, current_round);
+}
+
+void Game::handle_stop_using_weapon(const uint8_t& player_id) {
+    auto it = players.find(player_id);
+    if (it == players.end()) return;
+    gamelogic.stop_using_weapon(it->second);
 }
 
 void Game::handle_switch_weapon(const uint8_t& player_id, const SwitchWeaponEvent& event) {
@@ -134,6 +149,8 @@ void Game::tick(uint16_t frames_to_process) {
     movement_system.process_movements(players, 1);
 
     current_round.update(1);
+
+    gamelogic.process_shooting(players, current_round);
             
     if (current_round.has_ended()) {
         

@@ -9,7 +9,7 @@
 DTO::PlayerDTO::PlayerDTO(short_id_t player_id, short_id_t role_id,
                           angle_t angle, uint16_t money,
                           coord_t position_x, coord_t position_y,
-                          const std::string& name, const DTO::WeaponDTO& weapon_dto):
+                          const std::string& name, const DTO::WeaponDTO& weapon_dto, uint8_t shooting):
         player_id(player_id),
         role_id(role_id),
         angle(angle),
@@ -17,7 +17,8 @@ DTO::PlayerDTO::PlayerDTO(short_id_t player_id, short_id_t role_id,
         position_x(position_x),
         position_y(position_y),
         name(name),
-        weapon_dto(weapon_dto) {}
+        weapon_dto(weapon_dto),
+        shooting(shooting) {}
 
 Model::Player DTO::PlayerDTO::to_player() const {
     return Model::Player(

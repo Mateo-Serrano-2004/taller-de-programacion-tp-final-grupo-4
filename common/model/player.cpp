@@ -10,6 +10,7 @@
 
 Model::Player::Player(short_id_t id, const std::string& name)
 : alive(true),
+shooting(false),
   id(id),
   role_id(Model::RoleID::NO_ROLE),
   angle(0),
@@ -26,6 +27,7 @@ Model::Player::Player(
     const Physics::Vector2D& position,
     Shared<Model::Weapon> weapon
 ): alive(true),
+shooting(false),
    id(id),
    role_id(role_id),
    angle(angle),
@@ -35,6 +37,8 @@ Model::Player::Player(
    current_weapon(weapon) {}
 
 bool Model::Player::is_alive() const { return alive; }
+
+bool Model::Player::is_shooting() const { return shooting; }
 
 short_id_t Model::Player::get_id() const { return id; }
 
@@ -79,6 +83,7 @@ DTO::PlayerDTO Model::Player::to_dto() const {
         position.get_x(),
         position.get_y(),
         name,
-        current_weapon->to_dto()
+        current_weapon->to_dto(),
+        shooting
     );
 }
