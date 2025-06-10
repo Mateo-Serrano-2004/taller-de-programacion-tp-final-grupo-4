@@ -26,6 +26,9 @@ protected:
     void handle_stop_movement_event(Shared<SDL_Event> event);
     void handle_stop_switching_weapon_event();
 
+    void handle_click();
+    void handle_click_release();
+
     void handle_keydown_event(Shared<SDL_Event> event);
     void handle_keyup_event(Shared<SDL_Event> event);
 

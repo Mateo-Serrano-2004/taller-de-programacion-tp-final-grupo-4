@@ -20,6 +20,8 @@
 #include "event/window_resize_event.h"
 #include "event/switch_weapon_event.h"
 #include "event/switch_context_event.h"
+#include "event/use_weapon_event.h"
+#include "event/stop_using_weapon_event.h"
 
 #include "exception/closed_window.h"
 
@@ -136,6 +138,20 @@ void Controller::InGameEventHandlerStrategy::handle_stop_switching_weapon_event(
     handler_state.switching_weapon = false;
 }
 
+void Controller::InGameEventHandlerStrategy::handle_click() {
+    if (handler_state.is_shooting) return;
+    auto use_weapon_event = make_shared<Model::UseWeaponEvent>();
+    handler_state.is_shooting = true;
+    controller.lock()->handle_event(std::move(use_weapon_event));
+}
+
+void Controller::InGameEventHandlerStrategy::handle_click_release() {
+    if (!handler_state.is_shooting) return;
+    auto stop_using_weapon_event = make_shared<Model::StopUsingWeaponEvent>();
+    handler_state.is_shooting = false;
+    controller.lock()->handle_event(std::move(stop_using_weapon_event));
+}
+
 void Controller::InGameEventHandlerStrategy::handle_keydown_event(Shared<SDL_Event> event) {
     auto key_symbol = event->key.keysym.sym;
     if (key_symbol == SDLK_ESCAPE || key_symbol == SDLK_b) {
@@ -176,14 +192,16 @@ void Controller::InGameEventHandlerStrategy::handle(Shared<SDL_Event> event) {
     Controller::EventHandlerStrategy::handle(event);
     auto event_type = event->type;
 
-    if (event_type == SDL_QUIT) return;
-
     if (event_type == SDL_KEYDOWN) {
         handle_keydown_event(event);
     } else if (event_type == SDL_KEYUP) {
         handle_keyup_event(event);
     } else if (event_type == SDL_WINDOWEVENT) {
         handle_window_event(event);
+    } else if (event_type == SDL_MOUSEBUTTONDOWN) {
+        handle_click();
+    } else if (event_type == SDL_MOUSEBUTTONUP) {
+        handle_click_release();
     }
 }
 

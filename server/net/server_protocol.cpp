@@ -72,6 +72,12 @@ EventVariant ServerProtocol::receive_event() {
             Model::SlotID slot_id = Model::SlotID(data[1]);
             return SwitchWeaponEvent(slot_id);
         }
+        case Model::EventType::USE_WEAPON: {
+            return UseWeaponEvent();
+        }
+        case Model::EventType::STOP_USING_WEAPON: {
+            return StopUsingWeaponEvent();
+        }
         default:
             throw std::invalid_argument("Invalid event code");
     }
@@ -90,6 +96,7 @@ void ServerProtocol::send_player_list(const std::vector<DTO::PlayerDTO>& players
 
         peer.sendall(&p.player_id, sizeof(p.player_id));
         peer.sendall(&p.role_id, sizeof(p.role_id));
+        peer.sendall(&p.shooting, sizeof(p.shooting));
         peer.sendall(&angle, sizeof(angle));
         peer.sendall(&money, sizeof(money));
         peer.sendall(&position_x, sizeof(position_x));

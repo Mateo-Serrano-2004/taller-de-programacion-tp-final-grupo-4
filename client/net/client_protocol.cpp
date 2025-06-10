@@ -21,6 +21,7 @@ void Net::ClientProtocol::receive_player_list(std::vector<DTO::PlayerDTO>& playe
         std::vector<char> name;
         short_id_t player_id;
         short_id_t role_id;
+        uint8_t shooting;
         angle_t angle;
         uint16_t money;
         coord_t position_x;
@@ -28,6 +29,7 @@ void Net::ClientProtocol::receive_player_list(std::vector<DTO::PlayerDTO>& playe
 
         skt.recvall(&player_id, sizeof(player_id));
         skt.recvall(&role_id, sizeof(role_id));
+        skt.recvall(&shooting, sizeof(shooting));
         skt.recvall(&angle, sizeof(angle));
         angle = ntohs(angle);
         skt.recvall(&money, sizeof(money));
@@ -43,7 +45,7 @@ void Net::ClientProtocol::receive_player_list(std::vector<DTO::PlayerDTO>& playe
         DTO::WeaponDTO weapon_dto = receive_weapon();
 
         players.emplace_back(player_id, role_id, angle, money, position_x, position_y,
-                             std::string(name.begin(), name.end()), weapon_dto, false);
+                             std::string(name.begin(), name.end()), weapon_dto, shooting);
     }
 }
 

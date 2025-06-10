@@ -18,6 +18,28 @@
 #include "event/pick_role_event.h"
 #include "event/switch_weapon_event.h"
 
+DTO::EventDTO DTO::EventDTOCreator::create_stop_using_weapon_event() const {
+    DTO::EventDTO event_dto;
+    std::vector<char> data;
+    data.push_back(static_cast<char>(Model::EventType::STOP_USING_WEAPON));
+
+    event_dto.size = 1;
+    event_dto.data = std::move(data);
+
+    return event_dto;
+}
+
+DTO::EventDTO DTO::EventDTOCreator::create_use_weapon_event() const {
+    DTO::EventDTO event_dto;
+    std::vector<char> data;
+    data.push_back(static_cast<char>(Model::EventType::USE_WEAPON));
+
+    event_dto.size = 1;
+    event_dto.data = std::move(data);
+
+    return event_dto;
+}
+
 DTO::EventDTO DTO::EventDTOCreator::create_pick_role_event() const {
     auto pick_role_event = std::static_pointer_cast<Model::PickRoleEvent>(event);
     DTO::EventDTO event_dto;
@@ -213,6 +235,10 @@ DTO::EventDTO DTO::EventDTOCreator::to_dto() const {
             return create_pick_role_event();
         case Model::EventType::SWITCH_WEAPON:
             return create_switch_weapon_event();
+        case Model::EventType::USE_WEAPON:
+            return create_use_weapon_event();
+        case Model::EventType::STOP_USING_WEAPON:
+            return create_stop_using_weapon_event();
         default:
             throw std::runtime_error("Unknown event type");
     }

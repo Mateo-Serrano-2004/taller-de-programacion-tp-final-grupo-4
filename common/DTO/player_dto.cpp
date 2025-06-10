@@ -22,7 +22,7 @@ DTO::PlayerDTO::PlayerDTO(short_id_t player_id, short_id_t role_id,
 
 Model::Player DTO::PlayerDTO::to_player() const {
     return Model::Player(
-        player_id, (Model::RoleID) (role_id), angle, money,
+        shooting, player_id, (Model::RoleID) (role_id), angle, money,
         name,
         Physics::Vector2D(position_x, position_y),
         make_shared<Model::Weapon>(std::move(weapon_dto.to_weapon()))

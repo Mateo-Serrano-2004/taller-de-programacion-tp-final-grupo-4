@@ -31,6 +31,7 @@ public:
     Player(short_id_t id, const std::string& name);
 
     Player(
+        bool shooting,
         short_id_t id,
         Model::RoleID role_id,
         angle_t angle,

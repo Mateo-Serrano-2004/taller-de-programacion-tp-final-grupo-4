@@ -1,4 +1,5 @@
 #include "handler_state.h"
 
 Model::HandlerState::HandlerState():
-moving_vertically(false), moving_horizontally(false), switching_weapon(false) {}
+moving_vertically(false), moving_horizontally(false), switching_weapon(false),
+is_shooting(false) {}

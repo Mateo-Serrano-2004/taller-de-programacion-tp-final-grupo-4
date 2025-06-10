@@ -7,6 +7,7 @@ public:
     bool moving_vertically;
     bool moving_horizontally;
     bool switching_weapon;
+    bool is_shooting;
 
     HandlerState();
     ~HandlerState() = default;
