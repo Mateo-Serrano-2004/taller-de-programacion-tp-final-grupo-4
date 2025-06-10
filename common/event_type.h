@@ -16,6 +16,7 @@ enum EventType {
     BUY_AMMO = 0x09,
     LEAVE_GAME = 0x0A,
     STOP_MOVEMENT = 0x0B,
+    STOP_USING_WEAPON = 0x0C,
 
     // Lobby events
     USERNAME = 0x10,
