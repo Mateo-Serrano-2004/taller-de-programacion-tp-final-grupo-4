@@ -3,6 +3,9 @@
 
 #include <map>
 
+#include <SDL2pp/Mixer.hh>
+#include <SDL2pp/Chunk.hh>
+
 #include <SDL2pp/Point.hh>
 
 #include "common/definitions.h"
@@ -32,6 +35,8 @@ class RenderedPlayer;
 
 class PlayerRenderer: public Renderer {
 protected:
+    SDL2pp::Mixer mixer;
+    SDL2pp::Chunk chunk;
     Pane background;
     Shared<Controller::GameStateManager> game_state_manager;
     Shared<SDL2pp::Font> font;
