@@ -129,10 +129,9 @@ App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
         "In Game",
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
         640, 460,
-        SDL_WINDOW_SHOWN
+        0
     );
     auto renderer = make_shared<SDL2pp::Renderer>(*window, -1, SDL_RENDERER_ACCELERATED);
-    SDL_SetWindowResizable(window->Get(), SDL_FALSE);
     
     auto asset_manager = make_shared<Model::AssetManager>(renderer);
     load_weapon_sprites(asset_manager);

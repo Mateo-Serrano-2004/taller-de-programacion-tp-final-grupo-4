@@ -13,7 +13,9 @@ class GameController;
 class GameStateManager;
 
 class InGameEventHandlerStrategy: public EventHandlerStrategy {
-private:
+protected:
+    Shared<GameStateManager> game_state_manager;
+
     Model::HandlerState handler_state;
 
     void handle_movement_event(Shared<SDL_Event> event);
@@ -31,7 +33,7 @@ public:
     InGameEventHandlerStrategy(Weak<GameController> controller);
 
     void handle(Shared<SDL_Event> event) override;
-    void handle_current_game_state(Shared<Controller::GameStateManager> game_state_manager);
+    void handle_current_game_state();
 
     ~InGameEventHandlerStrategy() override = default;
 };

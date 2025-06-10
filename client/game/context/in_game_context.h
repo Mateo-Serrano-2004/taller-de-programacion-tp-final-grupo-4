@@ -13,7 +13,6 @@
 #include "render/hud_renderer.h"
 
 namespace Controller {
-class GameStateManager;
 class GameController;
 }
 
@@ -24,7 +23,6 @@ protected:
     View::PlayerRenderer player_renderer;
     View::HUDRenderer hud_renderer;
     Controller::InGameEventHandlerStrategy event_handler_strategy;
-    Shared<Controller::GameStateManager> game_state_manager;
 
     void render() override;
     void dispatch_events() override;

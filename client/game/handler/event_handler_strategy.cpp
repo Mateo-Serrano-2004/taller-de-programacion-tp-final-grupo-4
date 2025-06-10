@@ -20,7 +20,9 @@ void Controller::EventHandlerStrategy::handle_window_resize_event() {
 void Controller::EventHandlerStrategy::handle(Shared<SDL_Event> event) {
     auto type = event->type;
     if (type == SDL_QUIT) handle_quit_event();
-    else if (type == SDL_WINDOWEVENT_RESIZED) handle_window_resize_event();
+    else if (type == SDL_WINDOWEVENT) {
+        if (event->window.event == SDL_WINDOWEVENT_RESIZED) handle_window_resize_event();
+    }
 }
 
 Controller::EventHandlerStrategy::EventHandlerStrategy(

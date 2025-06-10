@@ -23,6 +23,7 @@
 
 Context::PickRoleContext::PickRoleContext(Weak<Controller::GameController> controller)
 : Context::BaseContext("pick-role", controller),
+  strategy(controller, this),
   vertical_pane(controller, 10),
   label(controller),
   background(controller, 5),
@@ -35,7 +36,6 @@ Context::PickRoleContext::PickRoleContext(Weak<Controller::GameController> contr
     vertical_pane.add_child(&background);
     vertical_pane.set_background_color(31, 45, 31, 255);
     vertical_pane.set_draw_background(true);
-    vertical_pane.set_scale_size(true);
 
     label.set_text("Choose your skin");
 
@@ -46,6 +46,13 @@ Context::PickRoleContext::PickRoleContext(Weak<Controller::GameController> contr
     build_button(pick_role_2_button, Model::TextureID::SPRITE_CT2);
     build_button(pick_role_3_button, Model::TextureID::SPRITE_CT3);
     build_button(pick_role_4_button, Model::TextureID::SPRITE_CT4);
+}
+
+void Context::PickRoleContext::trigger_buttons(Shared<SDL_Event> event) {
+    if (pick_role_1_button.trigger(event)) ;
+    else if (pick_role_2_button.trigger(event)) ;
+    else if (pick_role_3_button.trigger(event)) ;
+    else if (pick_role_4_button.trigger(event)) ;
 }
 
 void Context::PickRoleContext::build_button(View::Button& button, Model::TextureID texture_id) {
@@ -73,26 +80,11 @@ void Context::PickRoleContext::render() {
 
 void Context::PickRoleContext::dispatch_events() {
     while (SDL_PollEvent(&placeholder)) {
-        auto event = make_shared<SDL_Event>(placeholder);
-
-        if (placeholder.type == SDL_QUIT) {
-            auto quit_event = make_shared<Model::QuitEvent>();
-            controller.lock()->handle_event(std::move(quit_event));
-        } else if (placeholder.type == SDL_WINDOWEVENT) {
-            if (placeholder.window.event == SDL_WINDOWEVENT_MAXIMIZED) {
-                auto window_resize_event = make_shared<Model::WindowResizeEvent>();
-                controller.lock()->handle_event(std::move(window_resize_event));
-            }
-        } else {
-            // Para evitar que se llamen todos, aunque es medio innecesario y feo
-            if (pick_role_1_button.trigger(event)) ;
-            else if (pick_role_2_button.trigger(event)) ;
-            else if (pick_role_3_button.trigger(event)) ;
-            else if (pick_role_4_button.trigger(event)) ;
-        }
+        strategy.handle(make_shared<SDL_Event>(placeholder));
     }
 }
 
 void Context::PickRoleContext::update_size() {
     vertical_pane.set_max_size(renderer->GetViewport().GetSize());
+    vertical_pane.set_size(renderer->GetViewport().GetSize());
 }

@@ -16,6 +16,7 @@ void Context::ContextManager::add_context(Shared<Context::BaseContext> context) 
 
 void Context::ContextManager::set_current_context(const std::string& context_name) {
     current_context_name = context_name;
+    contexts.at(current_context_name)->update_size();
 }
 
 void Context::ContextManager::update_current_context() {

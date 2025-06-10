@@ -47,6 +47,7 @@ public:
     PlayerRenderer(Weak<Controller::GameController> controller);
 
     void render() override;
+    void update_size();
 
     ~PlayerRenderer() = default;
 };

@@ -1,6 +1,5 @@
 #include "label.h"
 
-#include <iostream>
 #include <string>
 
 #include <SDL2pp/SDL2pp.hh>

@@ -163,7 +163,8 @@ void Controller::InGameEventHandlerStrategy::handle_keyup_event(Shared<SDL_Event
 }
 
 Controller::InGameEventHandlerStrategy::InGameEventHandlerStrategy(Weak<Controller::GameController> controller)
-: Controller::EventHandlerStrategy(controller) {}
+: Controller::EventHandlerStrategy(controller),
+  game_state_manager(controller.lock()->get_game_state_manager()) {}
 
 void Controller::InGameEventHandlerStrategy::handle(Shared<SDL_Event> event) {
     Controller::EventHandlerStrategy::handle(event);
@@ -180,9 +181,7 @@ void Controller::InGameEventHandlerStrategy::handle(Shared<SDL_Event> event) {
     }
 }
 
-void Controller::InGameEventHandlerStrategy::handle_current_game_state(
-    Shared<Controller::GameStateManager> game_state_manager
-) {
+void Controller::InGameEventHandlerStrategy::handle_current_game_state() {
     int mouse_x, mouse_y;
     (void) SDL_GetMouseState(&mouse_x, &mouse_y);
     SDL2pp::Point viewport = game_state_manager->get_camera().get_viewport();

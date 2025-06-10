@@ -8,7 +8,7 @@
 #include "handler/menu_event_handler_strategy.h"
 #include "render/player_renderer.h"
 
-#include "entity/pane.h"
+#include "entity/vertical_pane.h"
 #include "entity/button.h"
 
 namespace Controller {
@@ -17,11 +17,16 @@ class GameController;
 
 namespace Context {
 class MenuContext: public BaseContext {
+friend class Controller::MenuEventHandlerStrategy;
+
+private:
+    void trigger_buttons(Shared<SDL_Event> event);
+
 protected:
     SDL_Event placeholder;
-    Controller::MenuEventHandlerStrategy event_handler_strategy;
+    Controller::MenuEventHandlerStrategy strategy;
     View::PlayerRenderer player_renderer;
-    View::Pane background;
+    View::VerticalPane background;
     View::Button exit_button;
 
     void render() override;

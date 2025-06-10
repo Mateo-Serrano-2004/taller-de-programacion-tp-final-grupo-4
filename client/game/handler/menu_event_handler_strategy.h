@@ -11,19 +11,28 @@ namespace View {
 class Rendered;
 };
 
+namespace Context {
+class MenuContext;
+};
+
 namespace Controller {
 class GameController;
 
 class MenuEventHandlerStrategy: public EventHandlerStrategy {
 protected:
     SDL_Event placeholder;
+    Context::MenuContext* context;
 
     void handle_switch_context_event(Shared<SDL_Event> event) override;
 
+    void handle_click(Shared<SDL_Event> event);
     void handle_keydown_event(Shared<SDL_Event> event);
 
 public:
-    MenuEventHandlerStrategy(Weak<GameController> controller);
+    MenuEventHandlerStrategy(
+        Weak<GameController> controller,
+        Context::MenuContext* context
+    );
 
     void handle(Shared<SDL_Event> event) override;
 

@@ -180,3 +180,8 @@ void View::PlayerRenderer::render() {
         }
     );
 };
+
+void View::PlayerRenderer::update_size() {
+    background.set_max_size(renderer->GetViewport().GetSize());
+    background.set_size(renderer->GetViewport().GetSize());
+}

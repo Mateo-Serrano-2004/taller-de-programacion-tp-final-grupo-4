@@ -1,9 +1,13 @@
 #ifndef CLIENT_GAME_CONTEXT_PICK_ROLE_CONTEXT_H
 #define CLIENT_GAME_CONTEXT_PICK_ROLE_CONTEXT_H
 
+#include <SDL2/SDL.h>
+
 #include "common/definitions.h"
 
 #include "base_context.h"
+
+#include "handler/pick_role_event_handler_strategy.h"
 
 #include "asset/texture_id.h"
 
@@ -16,15 +20,19 @@
 
 namespace Controller {
 class GameController;
-class PickRoleEventHandlerStrategy;
 };
 
 namespace Context {
 class PickRoleContext: public BaseContext {
+friend class Controller::PickRoleEventHandlerStrategy;
+
+private:
+    void trigger_buttons(Shared<SDL_Event> event);
+
 protected:
     SDL_Event placeholder;
     Model::EnumTranslator enum_translator;
-
+    Controller::PickRoleEventHandlerStrategy strategy;
     View::VerticalPane vertical_pane;
     View::Label label;
     View::HorizontalPane background;
