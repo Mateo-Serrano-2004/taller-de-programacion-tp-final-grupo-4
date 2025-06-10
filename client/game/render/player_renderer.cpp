@@ -1,6 +1,5 @@
 #include "player_renderer.h"
 
-#include <iostream>
 #include <map>
 #include <cmath>
 
@@ -187,7 +186,6 @@ void View::PlayerRenderer::render() {
 
     game_state_manager->map_function_on_pending_weapon_usages(
         [this, &camera] (Shared<View::RenderedPlayer>& player) {
-            std::cout << (int) (player->get_current_weapon()->get_loaded_ammo()) << std::endl;
             (void) mixer.PlayChannel(-1, chunk);
         }
     );
