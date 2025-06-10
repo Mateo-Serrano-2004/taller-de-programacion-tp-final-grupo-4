@@ -18,7 +18,7 @@ FullPlayer::FullPlayer(short_id_t id, const std::string& name)
   secondary_weapon(WeaponFactory::create(Model::WeaponID::GLOCK)),
   knife(WeaponFactory::create(Model::WeaponID::KNIFE)) {
     current_weapon = secondary_weapon;
-    money = 600;
+    money = 1500;
 }
 
 void FullPlayer::update_movement_direction_by_merge(const Physics::Vector2D& direction) {
@@ -66,7 +66,7 @@ bool FullPlayer::can_pay(uint16_t price) { return money >= price; }
 Shared<FullWeapon> FullPlayer::equip_new_weapon_and_drop_previous(Shared<FullWeapon> new_weapon) {
     if (!new_weapon) return nullptr;
 
-    Model::SlotID type = std::static_pointer_cast<FullWeapon>(current_weapon)->get_slot_id();
+    Model::SlotID type = new_weapon->get_slot_id();
     Shared<FullWeapon> dropped_weapon = nullptr;
 
     switch (type) {

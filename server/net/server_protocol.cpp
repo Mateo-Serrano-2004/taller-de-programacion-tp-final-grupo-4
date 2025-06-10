@@ -78,6 +78,10 @@ EventVariant ServerProtocol::receive_event() {
         case Model::EventType::STOP_USING_WEAPON: {
             return StopUsingWeaponEvent();
         }
+        case Model::EventType::BUY_WEAPON: {
+            Model::WeaponID weapon_id = Model::WeaponID(data[1]);
+            return BuyEvent(weapon_id);
+        }
         default:
             throw std::invalid_argument("Invalid event code");
     }

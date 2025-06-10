@@ -13,6 +13,7 @@ class EventDTOCreator {
 private:
     Shared<Model::Event> event;
 
+    EventDTO create_buy_weapon_event() const;
     EventDTO create_use_weapon_event() const;
     EventDTO create_stop_using_weapon_event() const;
     EventDTO create_pick_role_event() const;

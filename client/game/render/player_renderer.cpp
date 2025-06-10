@@ -24,7 +24,7 @@
 #include "model/rendered_player.h"
 
 SDL2pp::Point View::PlayerRenderer::get_sprite_top_left_corner(short_id_t sprite_piece) {
-    uint16_t sprite_row = sprite_piece ? static_cast<uint16_t>((sprite_piece - 1) / 2) : 0;
+    uint16_t sprite_row = sprite_piece ? static_cast<uint16_t>(sprite_piece / 2) : 0;
     uint16_t sprite_column = static_cast<uint16_t>(sprite_piece % 2);
 
     uint16_t sprite_piece_x = sprite_column * 32;

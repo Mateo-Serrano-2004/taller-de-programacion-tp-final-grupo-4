@@ -6,6 +6,7 @@
 #include <SDL2/SDL.h>
 
 #include "common/definitions.h"
+#include "common/weapon_id.h"
 
 #include "base_context.h"
 
@@ -25,7 +26,7 @@ class ShopContext: public BaseContext {
 friend class Controller::ShopEventHandlerStrategy;
 
 private:
-    void build_button(View::Button& button, const std::string& weapon_name);
+    void build_button(View::Button& button, const std::string& weapon_name, Model::WeaponID weapon_id);
     void trigger_buttons(Shared<SDL_Event> event);
 
 protected:

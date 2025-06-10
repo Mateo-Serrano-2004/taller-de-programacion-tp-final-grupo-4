@@ -17,6 +17,21 @@
 #include "event/username_event.h"
 #include "event/pick_role_event.h"
 #include "event/switch_weapon_event.h"
+#include "event/buy_weapon_event.h"
+
+DTO::EventDTO DTO::EventDTOCreator::create_buy_weapon_event() const {
+    auto buy_weapon_event = std::static_pointer_cast<Model::BuyWeaponEvent>(event);
+    DTO::EventDTO event_dto;
+    std::vector<char> data;
+
+    data.push_back(static_cast<char>(Model::EventType::BUY_WEAPON));
+    data.push_back(static_cast<char>(buy_weapon_event->get_weapon_id()));
+
+    event_dto.size = 2;
+    event_dto.data = std::move(data);
+
+    return event_dto;
+}
 
 DTO::EventDTO DTO::EventDTOCreator::create_stop_using_weapon_event() const {
     DTO::EventDTO event_dto;
@@ -239,6 +254,8 @@ DTO::EventDTO DTO::EventDTOCreator::to_dto() const {
             return create_use_weapon_event();
         case Model::EventType::STOP_USING_WEAPON:
             return create_stop_using_weapon_event();
+        case Model::EventType::BUY_WEAPON:
+            return create_buy_weapon_event();
         default:
             throw std::runtime_error("Unknown event type");
     }

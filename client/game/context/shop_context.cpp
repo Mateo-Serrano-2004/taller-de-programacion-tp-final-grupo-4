@@ -1,6 +1,7 @@
 #include "shop_context.h"
 
 #include <string>
+#include <utility>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/Point.hh>
@@ -10,7 +11,9 @@
 
 #include "controller/game_controller.h"
 
-void Context::ShopContext::build_button(View::Button& button, const std::string& weapon_name) {
+#include "command/buy_weapon_command.h"
+
+void Context::ShopContext::build_button(View::Button& button, const std::string& weapon_name, Model::WeaponID weapon_id) {
     background.add_child(&button);
     button.set_background_color(78, 107, 60, 255);
     button.set_draw_background(true);
@@ -22,6 +25,10 @@ void Context::ShopContext::build_button(View::Button& button, const std::string&
     button.set_height(button.get_height());
     button.set_min_width(button.get_width());
     button.set_width(button.get_width());
+
+    button.set_command(
+        std::move(make_unique<Command::BuyWeaponCommand>(weapon_id))
+    );
 }
 
 void Context::ShopContext::trigger_buttons(Shared<SDL_Event> event) {
@@ -64,9 +71,9 @@ Context::ShopContext::ShopContext(Weak<Controller::GameController> controller)
     label.set_min_height(label.get_height());
     label.set_min_width(label.get_width());
 
-    build_button(buy_ak47, "AK47");
-    build_button(buy_m3, "M3");
-    build_button(buy_awp, "AWP");
+    build_button(buy_ak47, "AK47", Model::WeaponID::AK47);
+    build_button(buy_m3, "M3", Model::WeaponID::M3);
+    build_button(buy_awp, "AWP", Model::WeaponID::AWP);
 }
 
 void Context::ShopContext::handle_event(Shared<Model::Event> event) {
