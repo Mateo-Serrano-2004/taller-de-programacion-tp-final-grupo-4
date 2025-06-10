@@ -1,0 +1,218 @@
+map:
+  tiles:
+    - x: 20
+      y: 25
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 21
+      y: 25
+      type: site
+      asset: assets/gfx/tiles/Sites/bomb.png
+    - x: 22
+      y: 25
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 23
+      y: 25
+      type: box
+      asset: assets/gfx/tiles/Boxes/box5.png
+    - x: 24
+      y: 25
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 25
+      y: 25
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 26
+      y: 25
+      type: site
+      asset: assets/gfx/tiles/Sites/spawn_b.png
+    - x: 27
+      y: 25
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 28
+      y: 25
+      type: site
+      asset: assets/gfx/tiles/Sites/bomb.png
+    - x: 20
+      y: 26
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 21
+      y: 26
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 22
+      y: 26
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/rocks.png
+    - x: 23
+      y: 26
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/rocks.png
+    - x: 24
+      y: 26
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/rocks.png
+    - x: 25
+      y: 26
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/rocks.png
+    - x: 26
+      y: 26
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/rocks.png
+    - x: 27
+      y: 26
+      type: box
+      asset: assets/gfx/tiles/Boxes/box5.png
+    - x: 28
+      y: 26
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 20
+      y: 27
+      type: box
+      asset: assets/gfx/tiles/Boxes/box5.png
+    - x: 21
+      y: 27
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 22
+      y: 27
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/rocks.png
+    - x: 23
+      y: 27
+      type: site
+      asset: assets/gfx/tiles/Sites/bomb.png
+    - x: 24
+      y: 27
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/rocks.png
+    - x: 25
+      y: 27
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/rocks.png
+    - x: 26
+      y: 27
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/rocks.png
+    - x: 27
+      y: 27
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/rocks.png
+    - x: 28
+      y: 27
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 20
+      y: 28
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 21
+      y: 28
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 22
+      y: 28
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/rocks.png
+    - x: 23
+      y: 28
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/rocks.png
+    - x: 24
+      y: 28
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/rocks.png
+    - x: 25
+      y: 28
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/rocks.png
+    - x: 26
+      y: 28
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/rocks.png
+    - x: 27
+      y: 28
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/rocks.png
+    - x: 28
+      y: 28
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 20
+      y: 29
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 21
+      y: 29
+      type: site
+      asset: assets/gfx/tiles/Sites/bomb.png
+    - x: 22
+      y: 29
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 23
+      y: 29
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 24
+      y: 29
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 25
+      y: 29
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 26
+      y: 29
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 27
+      y: 29
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 28
+      y: 29
+      type: box
+      asset: assets/gfx/tiles/Boxes/box5.png
+    - x: 20
+      y: 30
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 21
+      y: 30
+      type: site
+      asset: assets/gfx/tiles/Sites/spawn_a.png
+    - x: 22
+      y: 30
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 23
+      y: 30
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 24
+      y: 30
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 25
+      y: 30
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 26
+      y: 30
+      type: site
+      asset: assets/gfx/tiles/Sites/bomb.png
+    - x: 27
+      y: 30
+      type: background
+      asset: assets/gfx/tiles/Backgrounds/brick.png
+    - x: 28
+      y: 30
+      type: site
+      asset: assets/gfx/tiles/Sites/bomb.png

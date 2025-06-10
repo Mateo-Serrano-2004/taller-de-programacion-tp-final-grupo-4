@@ -2,8 +2,10 @@
 #include <yaml-cpp/yaml.h>
 #include <QGraphicsPixmapItem>
 #include <QFile>
+#include <algorithm>
 #include <QTextStream>
 #include <QDebug>
+#include <vector>
 
 void MapSerializer::saveToYaml(QGraphicsScene* scene, const QString& filePath) {
     YAML::Emitter out;
@@ -11,6 +13,14 @@ void MapSerializer::saveToYaml(QGraphicsScene* scene, const QString& filePath) {
     out << YAML::Key << "map" << YAML::Value;
     out << YAML::BeginMap;
     out << YAML::Key << "tiles" << YAML::Value << YAML::BeginSeq;
+
+    struct Tile {
+        int x, y;
+        QString type;
+        QString asset;
+    };
+
+    std::vector<Tile> tiles;
 
     for (QGraphicsItem* item : scene->items()) {
         auto pixItem = dynamic_cast<QGraphicsPixmapItem*>(item);
@@ -31,11 +41,27 @@ void MapSerializer::saveToYaml(QGraphicsScene* scene, const QString& filePath) {
         else if (assetPath.contains("/Cars/")) type = "car";
         else type = "unknown";
 
+        tiles.push_back({x, y, type, assetPath});
+        /*
         out << YAML::BeginMap;
         out << YAML::Key << "x" << YAML::Value << x;
         out << YAML::Key << "y" << YAML::Value << y;
         out << YAML::Key << "type" << YAML::Value << type.toStdString();
         out << YAML::Key << "asset" << YAML::Value << assetPath.toStdString();
+        out << YAML::EndMap;*/
+    }
+    //sorted tiles by y then by x
+    std::sort(tiles.begin(), tiles.end(), [](const Tile& a, const Tile& b) {
+        if (a.y == b.y) return a.x < b.x;
+        return a.y < b.y;
+    });
+
+    for (const auto& tile : tiles) {
+        out << YAML::BeginMap;
+        out << YAML::Key << "x" << YAML::Value << tile.x;
+        out << YAML::Key << "y" << YAML::Value << tile.y;
+        out << YAML::Key << "type" << YAML::Value << tile.type.toStdString();
+        out << YAML::Key << "asset" << YAML::Value << tile.asset.toStdString();
         out << YAML::EndMap;
     }
 
@@ -52,38 +78,41 @@ void MapSerializer::saveToYaml(QGraphicsScene* scene, const QString& filePath) {
 }
 
 void MapSerializer::loadFromYaml(const QString& filePath, QGraphicsScene* scene) {
+    scene->clear();
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qWarning("No se pudo abrir el archivo YAML.");
         return;
     }
 
-    YAML::Node root = YAML::Load(file.readAll().toStdString());
-    file.close();
+    YAML::Node root = YAML::LoadFile(filePath.toStdString());
+    std::map<QString, QList <YAML::Node>> groupedTiles;
 
-    for (QGraphicsItem* item : scene->items()) {
-        if (auto pix = dynamic_cast<QGraphicsPixmapItem*>(item)) {
-            scene->removeItem(pix);
-            delete pix;
-        }
-    }
-
-    if (!root["map"] || !root["map"]["tiles"]) return;
 
     for (const auto& tile : root["map"]["tiles"]) {
-        int x = tile["x"].as<int>();
-        int y = tile["y"].as<int>();
-        std::string path = tile["asset"].as<std::string>();
-        if (!tile["asset"]) {
-            qWarning() << "El nodo no contiene 'path'";
-            continue;
-        }
-        QPixmap pix(QString::fromStdString(path));
-        if (pix.isNull()) continue;
+        QString type = QString::fromStdString(tile["type"].as<std::string>());
+        groupedTiles[type].append(tile);
+    }
 
-        QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pix);
-        item->setPos(x * 32, y * 32);
-        item->setData(0, QString::fromStdString(path));
-        scene->addItem(item);
+    QStringList orderedLayers = {"background", "wall", "box", "site", "car", "unknown"};
+
+    for (const QString& layer : orderedLayers) {
+        for (const auto& tile : groupedTiles[layer]) {
+            int x = tile["x"].as<int>();
+            int y = tile["y"].as<int>();
+            QString assetPath = QString::fromStdString(tile["asset"].as<std::string>());
+
+            QPixmap pix(assetPath);
+            if (pix.isNull()) {
+                qWarning() << "No se pudo cargar imagen:" << assetPath;
+                continue;
+            }
+
+            QGraphicsPixmapItem* pixmapItem = new QGraphicsPixmapItem(pix);
+            pixmapItem->setPos(x * 32, y * 32);
+            pixmapItem->setData(0, assetPath);
+            scene->addItem(pixmapItem);
+        }
+        
     }
 }

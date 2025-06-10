@@ -148,7 +148,7 @@ void MapEditorWidget::addCategory(const QString& title, const QString& path, con
     for (const QString& fileName : files) {
         QListWidgetItem* item = new QListWidgetItem(QIcon(dir.filePath(fileName)), fileName);
         item->setData(Qt::UserRole, type);
-        item->setData(Qt::UserRole + 1, dir.filePath(fileName));  // Guardamos la ruta del asset
+        item->setData(Qt::UserRole + 1, dir.filePath(fileName)); //here we save the full asset path
 
         assetsList->addItem(item);
     }
@@ -186,8 +186,7 @@ void MapEditorWidget::placeTileAt(int x, int y, QListWidgetItem* item) {
     tileItem->setPos(x * 32, y * 32);
 
     //save asset path in the item data
-    QString assetPath = item->data(Qt::UserRole + 1).toString();
-    tileItem->setData(0, assetPath);
+    tileItem->setData(0, item->data(Qt::UserRole + 1));
 
     gridScene->addItem(tileItem);
 }
