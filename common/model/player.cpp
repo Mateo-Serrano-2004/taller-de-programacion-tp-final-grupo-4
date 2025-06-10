@@ -83,6 +83,7 @@ DTO::PlayerDTO Model::Player::to_dto() const {
         position.get_x(),
         position.get_y(),
         name,
-        current_weapon->to_dto()
+        current_weapon->to_dto(),
+        shooting
     );
 }
