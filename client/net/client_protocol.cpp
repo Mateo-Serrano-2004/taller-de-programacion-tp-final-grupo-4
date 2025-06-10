@@ -43,7 +43,7 @@ void Net::ClientProtocol::receive_player_list(std::vector<DTO::PlayerDTO>& playe
         DTO::WeaponDTO weapon_dto = receive_weapon();
 
         players.emplace_back(player_id, role_id, angle, money, position_x, position_y,
-                             std::string(name.begin(), name.end()), weapon_dto);
+                             std::string(name.begin(), name.end()), weapon_dto, false);
     }
 }
 

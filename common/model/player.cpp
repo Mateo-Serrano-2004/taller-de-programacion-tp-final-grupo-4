@@ -10,7 +10,7 @@
 
 Model::Player::Player(short_id_t id, const std::string& name)
 : alive(true),
-shooting(false),
+  shooting(false),
   id(id),
   role_id(Model::RoleID::NO_ROLE),
   angle(0),
@@ -27,7 +27,7 @@ Model::Player::Player(
     const Physics::Vector2D& position,
     Shared<Model::Weapon> weapon
 ): alive(true),
-shooting(false),
+   shooting(false),
    id(id),
    role_id(role_id),
    angle(angle),
