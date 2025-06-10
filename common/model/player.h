@@ -18,6 +18,7 @@ namespace Model {
 class Player {
 protected:
     bool alive;
+    bool shooting;
     short_id_t id;
     Model::RoleID role_id;
     angle_t angle;
@@ -45,6 +46,7 @@ public:
     Player& operator=(Player&&) = default;
 
     bool is_alive() const;
+    bool is_shooting() const;
     short_id_t get_id() const;
     Model::RoleID get_role_id() const;
     angle_t get_angle() const;

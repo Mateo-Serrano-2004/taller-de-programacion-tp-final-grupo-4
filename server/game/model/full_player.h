@@ -31,6 +31,9 @@ public:
     void stop_vertical_movement();
     void stop_horizontal_movement();
     void update_position();
+    void start_using_weapon();
+    void stop_using_weapon();
+    void shoot();
 
     void equip_weapon_by_type(Model::SlotID type);
 

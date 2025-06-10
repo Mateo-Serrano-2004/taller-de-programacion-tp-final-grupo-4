@@ -90,3 +90,22 @@ void FullPlayer::substract_money(uint16_t amount) {
     if (amount > money) money = 0;
     else money -= amount;
 }
+
+void FullPlayer::start_using_weapon() {
+    if (!current_weapon || !alive) return;
+    std::static_pointer_cast<FullWeapon>(current_weapon)->press_trigger();
+}
+
+void FullPlayer::stop_using_weapon() {
+    if (!current_weapon) return;
+    std::static_pointer_cast<FullWeapon>(current_weapon)->release_trigger();
+    shooting = false;
+}
+
+void FullPlayer::shoot() {
+    if (!current_weapon || !alive) {
+        shooting = false;
+        return;
+    }
+    shooting = std::static_pointer_cast<FullWeapon>(current_weapon)->shoot();
+}
