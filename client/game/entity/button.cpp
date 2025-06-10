@@ -39,7 +39,7 @@ void View::Button::set_command(Unique<Command::BaseCommand> new_command) {
 
 bool View::Button::trigger(Shared<SDL_Event> event) {
     bool triggered_event = check_click(event);
-    if (triggered_event) {
+    if (triggered_event && command) {
         command->execute();
     }
     return triggered_event;

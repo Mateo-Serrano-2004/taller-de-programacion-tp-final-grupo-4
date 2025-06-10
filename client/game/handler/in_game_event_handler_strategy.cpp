@@ -95,9 +95,15 @@ void Controller::InGameEventHandlerStrategy::handle_switch_weapon_event(Shared<S
     controller.lock()->handle_event(std::move(switch_weapon_event));
 }
 
-void Controller::InGameEventHandlerStrategy::handle_switch_context_event(Shared<SDL_Event>) {
-    auto switch_context_event = make_shared<Model::SwitchContextEvent>("menu");
-    controller.lock()->handle_event(std::move(switch_context_event));
+void Controller::InGameEventHandlerStrategy::handle_switch_context_event(Shared<SDL_Event> event) {
+    auto key_symbol = event->key.keysym.sym;
+    if (key_symbol == SDLK_ESCAPE) {
+        auto switch_to_menu = make_shared<Model::SwitchContextEvent>("menu");
+        controller.lock()->handle_event(std::move(switch_to_menu));
+    } else {
+        auto switch_to_shop = make_shared<Model::SwitchContextEvent>("shop");
+        controller.lock()->handle_event(std::move(switch_to_shop));
+    }
 }
 
 void Controller::InGameEventHandlerStrategy::handle_stop_movement_event(Shared<SDL_Event> event) {
@@ -132,8 +138,8 @@ void Controller::InGameEventHandlerStrategy::handle_stop_switching_weapon_event(
 
 void Controller::InGameEventHandlerStrategy::handle_keydown_event(Shared<SDL_Event> event) {
     auto key_symbol = event->key.keysym.sym;
-    if (key_symbol == SDLK_ESCAPE) {
-        handle_switch_context_event(nullptr);
+    if (key_symbol == SDLK_ESCAPE || key_symbol == SDLK_b) {
+        handle_switch_context_event(event);
     } else if (key_symbol == SDLK_w ||
                key_symbol == SDLK_a ||
                key_symbol == SDLK_s ||

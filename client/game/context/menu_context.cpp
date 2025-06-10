@@ -45,6 +45,9 @@ exit_button(controller) {
     exit_button.set_background_color(78, 107, 60, 255);
     exit_button.set_draw_background(true);
     exit_button.set_text("Exit");
+    exit_button.set_font_size(16);
+    exit_button.set_height(exit_button.get_height() + 6);
+    exit_button.set_width(exit_button.get_width() + 6);
 
     exit_button.set_command(make_unique<Command::QuitCommand>());
 }
