@@ -35,6 +35,8 @@ protected:
 public:
     InGameContext(Weak<Controller::GameController> controller);
 
+    void update_size() override;
+
     InGameContext(InGameContext&&) = default;
     InGameContext& operator=(InGameContext&&) = default;
 

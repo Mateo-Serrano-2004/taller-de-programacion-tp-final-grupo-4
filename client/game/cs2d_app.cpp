@@ -132,6 +132,7 @@ App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
         SDL_WINDOW_SHOWN
     );
     auto renderer = make_shared<SDL2pp::Renderer>(*window, -1, SDL_RENDERER_ACCELERATED);
+    SDL_SetWindowResizable(window->Get(), SDL_FALSE);
     
     auto asset_manager = make_shared<Model::AssetManager>(renderer);
     load_weapon_sprites(asset_manager);

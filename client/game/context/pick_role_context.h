@@ -16,6 +16,7 @@
 
 namespace Controller {
 class GameController;
+class PickRoleEventHandlerStrategy;
 };
 
 namespace Context {
@@ -39,6 +40,8 @@ protected:
 
 public:
     PickRoleContext(Weak<Controller::GameController> controller);
+
+    void update_size() override;
 
     ~PickRoleContext() override = default;
 };

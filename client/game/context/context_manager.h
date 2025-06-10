@@ -35,6 +35,7 @@ public:
 
     void set_current_context(const std::string& context_name);
     void update_current_context();
+    void update_context_size();
 
     ContextManager(ContextManager&&) = default;
     ContextManager& operator=(ContextManager&&) = default;

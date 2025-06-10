@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Rect.hh>
+#include <SDL2pp/Renderer.hh>
 
 #include "controller/game_controller.h"
 #include "controller/base_controller.h"
@@ -16,6 +17,7 @@
 #include "asset/texture_id.h"
 
 #include "event/quit_event.h"
+#include "event/window_resize_event.h"
 #include "event/switch_context_event.h"
 #include "event/pick_role_event.h"
 
@@ -33,10 +35,12 @@ Context::PickRoleContext::PickRoleContext(Weak<Controller::GameController> contr
     vertical_pane.add_child(&background);
     vertical_pane.set_background_color(31, 45, 31, 255);
     vertical_pane.set_draw_background(true);
+    vertical_pane.set_scale_size(true);
 
     label.set_text("Choose your skin");
 
-    background.set_size(SDL2pp::Point(600, 130));
+    background.set_scale_size(true);
+    background.set_max_height(150);
 
     build_button(pick_role_1_button, Model::TextureID::SPRITE_CT1);
     build_button(pick_role_2_button, Model::TextureID::SPRITE_CT2);
@@ -50,7 +54,9 @@ void Context::PickRoleContext::build_button(View::Button& button, Model::Texture
     button.set_texture(texture_id);
     button.set_draw_texture(true);
     button.set_texture_slice(SDL2pp::Rect(0, 0, 32, 32));
-    button.set_size(SDL2pp::Point(128, 128));
+    button.set_min_size(SDL2pp::Point(128, 128));
+    button.set_scale_factor(0.1);
+    button.set_scale_size(true);
 
     auto composite_command = make_unique<Command::CompositeCommand>(controller);
     composite_command->add_command(make_unique<Command::PickRoleCommand>(
@@ -72,6 +78,11 @@ void Context::PickRoleContext::dispatch_events() {
         if (placeholder.type == SDL_QUIT) {
             auto quit_event = make_shared<Model::QuitEvent>();
             controller.lock()->handle_event(std::move(quit_event));
+        } else if (placeholder.type == SDL_WINDOWEVENT) {
+            if (placeholder.window.event == SDL_WINDOWEVENT_MAXIMIZED) {
+                auto window_resize_event = make_shared<Model::WindowResizeEvent>();
+                controller.lock()->handle_event(std::move(window_resize_event));
+            }
         } else {
             // Para evitar que se llamen todos, aunque es medio innecesario y feo
             if (pick_role_1_button.trigger(event)) ;
@@ -80,4 +91,8 @@ void Context::PickRoleContext::dispatch_events() {
             else if (pick_role_4_button.trigger(event)) ;
         }
     }
+}
+
+void Context::PickRoleContext::update_size() {
+    vertical_pane.set_max_size(renderer->GetViewport().GetSize());
 }

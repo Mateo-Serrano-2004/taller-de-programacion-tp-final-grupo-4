@@ -32,3 +32,5 @@ Context::InGameContext::InGameContext(Weak<Controller::GameController> controlle
   hud_renderer(controller),
   event_handler_strategy(controller),
   game_state_manager(controller.lock()->get_game_state_manager()) {}
+
+void Context::InGameContext::update_size() {}

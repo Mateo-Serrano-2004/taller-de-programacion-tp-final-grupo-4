@@ -36,9 +36,8 @@ Controller::GameController::GameController(
 void Controller::GameController::handle_event(Shared<Model::Event> event) {
 	if (event->get_type() == Model::EventType::WINDOW_RESIZE) {
         game_state_manager->update_camera();
-    } else {
-		Controller::BaseController::handle_event(event);
-	}
+    }
+	Controller::BaseController::handle_event(event);
 }
 
 Shared<Controller::GameStateManager> Controller::GameController::get_game_state_manager() {

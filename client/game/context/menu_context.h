@@ -33,9 +33,10 @@ protected:
 public:
     MenuContext(Weak<Controller::GameController> controller);
 
+    void update_size() override;
+
     MenuContext(MenuContext&&) = default;
     MenuContext& operator=(MenuContext&&) = default;
-
 
     ~MenuContext() override = default;
 };

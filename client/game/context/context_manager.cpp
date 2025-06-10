@@ -24,3 +24,7 @@ void Context::ContextManager::update_current_context() {
     }
     contexts.at(current_context_name)->update();
 }
+
+void Context::ContextManager::update_context_size() {
+    contexts.at(current_context_name)->update_size();
+}

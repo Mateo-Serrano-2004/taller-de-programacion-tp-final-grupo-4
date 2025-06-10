@@ -43,6 +43,8 @@ void Controller::BaseController::handle_event(Shared<Model::Event> event) {
     if (event->get_type() == Model::EventType::SWITCH_CONTEXT) {
         auto switch_context_event = std::static_pointer_cast<Model::SwitchContextEvent>(event);
         context_manager->set_current_context(switch_context_event->get_new_context_name());
+    } else if (event->get_type() == Model::EventType::WINDOW_RESIZE) {
+        context_manager->update_context_size();
     } else {
         processor_event_queue.push(event);
 

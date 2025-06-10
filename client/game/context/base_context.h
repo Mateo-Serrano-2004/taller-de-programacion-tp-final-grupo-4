@@ -35,7 +35,8 @@ public:
     const std::string& get_name() const;
     
     void update();
-    
+    virtual void update_size() = 0;
+
     BaseContext(BaseContext&&) = default;
     BaseContext& operator=(BaseContext&&) = default;
 

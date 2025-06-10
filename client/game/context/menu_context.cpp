@@ -45,3 +45,5 @@ exit_button(controller) {
     exit_button.set_text("Exit");
     exit_button.set_command(make_unique<Command::QuitCommand>());
 }
+
+void Context::MenuContext::update_size() {}
