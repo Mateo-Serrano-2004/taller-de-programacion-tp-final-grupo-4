@@ -27,7 +27,7 @@ private:
     void addCategory(const QString& title, const QString& path, const QString& type);
     void removeTileAt(int x, int y);
     void placeTileAt(int x, int y, QListWidgetItem* item);
-    
+    void drawGridLines(int width, int height);
     QWidget* leftPanel = nullptr;
     QGraphicsView* gridView = nullptr;
     QGraphicsScene* gridScene = nullptr;

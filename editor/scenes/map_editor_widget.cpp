@@ -125,13 +125,24 @@ void MapEditorWidget::setUpGrid() {
     int gridH = rows * tile;
 
     gridScene->addRect(0, 0, gridW, gridH, QPen(Qt::NoPen), QBrush(Qt::white));
-    QPen gridPen(QColor("#222222"));
+    drawGridLines(gridW, gridH);
+    /*QPen gridPen(QColor("#222222"));
     for (int x = 0; x <= gridW; x += tile)
         gridScene->addLine(x, 0, x, gridH, gridPen);
     for (int y = 0; y <= gridH; y += tile)
-        gridScene->addLine(0, y, gridW, y, gridPen);
+        gridScene->addLine(0, y, gridW, y, gridPen);*/
 
     gridView = new GridView(gridScene, this);
+}
+
+void MapEditorWidget::drawGridLines(int width, int height) {
+    int tile = 32;
+
+    QPen gridPen(QColor("#222222"));
+    for (int x = 0; x <= width; x += tile)
+        gridScene->addLine(x, 0, x, height, gridPen);
+    for (int y = 0; y <= height; y += tile)
+        gridScene->addLine(0, y, width, y, gridPen);
 }
 
 void MapEditorWidget::addCategory(const QString& title, const QString& path, const QString& type) {
@@ -235,4 +246,5 @@ bool MapEditorWidget::eventFilter(QObject* obj, QEvent* event) {
 
 void MapEditorWidget::loadMap(const QString& path) {
     MapSerializer::loadFromYaml(path, gridScene);
+    drawGridLines(gridScene->width(), gridScene->height());
 }
