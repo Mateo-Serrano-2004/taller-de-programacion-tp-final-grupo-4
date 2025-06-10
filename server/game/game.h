@@ -78,15 +78,16 @@ public:
     void run() override;
     bool is_dead() const;
     void kill();
-
+    void close();
     void close_queues();
 
     Game(Game&&) = default;
     Game& operator=(Game&&) = default;
 
     ~Game() override {
-        kill();
-        close_queues();
+        if (is_not_finished) {
+            close_queues();
+        }
         join();
     }
 };

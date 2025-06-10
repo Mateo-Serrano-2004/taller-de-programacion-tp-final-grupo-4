@@ -55,9 +55,8 @@ void ClientHandler::run() {
             EventVariant event = protocol.receive_event();
             handle_event(event);
         }
-    } catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
-        close();
+    } catch (...) {
+        kill();
     }
 }
 

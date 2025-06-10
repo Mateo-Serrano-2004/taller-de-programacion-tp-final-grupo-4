@@ -29,8 +29,13 @@ MainWindow::~MainWindow() {
 
 void MainWindow::runGame() {
     this->hide();
-    App::CS2DApp game(protocol);
-    game.launch();
+    try {
+        App::CS2DApp game(protocol);
+        game.launch();
+    } catch (...) {
+        QApplication::quit();
+        return;
+    }
     this->show();
     showLobbyScene();
 }

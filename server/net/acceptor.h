@@ -37,7 +37,6 @@ public:
     Acceptor& operator=(Acceptor&&) = default;
 
     ~Acceptor() {
-        kill();
         clear();
         join();
     }

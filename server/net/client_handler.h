@@ -49,7 +49,9 @@ public:
     ClientHandler& operator=(ClientHandler&&) = default;
 
     ~ClientHandler() {
-        close();
+        if (is_alive) {
+            close();
+        }
     }
 };
 

@@ -3,22 +3,18 @@
 #include <utility>
 
 void Acceptor::reap() {
-    for (auto it = clients.begin(); it != clients.end();) {
-        if ((*it)->is_dead()) {
-            (*it)->join();
-            it = clients.erase(it);
-        } else {
-            ++it;
+    for (auto& client: clients) {
+        if (client->is_dead()) {
+            client->join();
         }
     }
 }
 
 void Acceptor::clear() {
     for (auto& client: clients) {
-        client->kill();
+        client->close();
         client->join();
     }
-    clients.clear();
 }
 
 void Acceptor::kill() {
@@ -34,7 +30,7 @@ void Acceptor::run() {
             client->start();
             clients.push_back(std::move(client));
         } catch (...) {
-            is_alive = false;
+            kill();
         }
     }
 }
