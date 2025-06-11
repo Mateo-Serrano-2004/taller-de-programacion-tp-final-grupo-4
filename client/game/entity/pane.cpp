@@ -17,7 +17,8 @@ void View::Pane::render_texture(Shared<SDL2pp::Texture> texture) {
         *texture,
         texture_slice,
         SDL2pp::Rect(absolute_position, current_size),
-        angle
+        angle,
+        rotation_point
     );
 }
 
@@ -115,12 +116,8 @@ void View::Pane::clear_children() {
     children.clear();
 }
 
-void View::Pane::scalate() {
-    View::Scalable::scalate(window->GetSize());
-}
-
 void View::Pane::render() {
-    View::Scalable::scalate(window->GetSize());
+    scalate(window->GetSize());
 
     if (draw_background && background) render_texture(background);
     if (draw_texture && texture) render_texture(texture);

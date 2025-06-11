@@ -11,6 +11,7 @@ private:
     SDL2pp::Point min_size;
 
 public:
+    Scalator();
     Scalator(
         SDL2pp::Point max_bounds,
         SDL2pp::Point min_bounds,

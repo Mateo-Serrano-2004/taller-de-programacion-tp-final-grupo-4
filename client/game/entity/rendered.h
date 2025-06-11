@@ -27,6 +27,7 @@ class Rendered {
 protected:
     bool draw_texture;
     angle_t angle;
+    SDL2pp::Optional<SDL2pp::Point> rotation_point;
     Shared<SDL2pp::Texture> texture;
     SDL2pp::Optional<SDL2pp::Rect> texture_slice;
     Shared<SDL2pp::Window> window;
@@ -40,12 +41,14 @@ public:
     bool has_texture_slice() const;
     SDL2pp::Rect get_texture_slice() const;
     angle_t get_angle() const;
+    SDL2pp::Point get_rotation_point() const;
 
     void set_draw_texture(bool new_draw_texture);
     void set_texture(Shared<SDL2pp::Texture> new_texture);
     void set_texture(Model::TextureID new_texture_id);
     void set_texture_slice(const SDL2pp::Rect& new_texture_slice);
     void set_angle(angle_t new_angle);
+    void set_rotation_point(const SDL2pp::Point& new_point);
 
     virtual void render() = 0;
 

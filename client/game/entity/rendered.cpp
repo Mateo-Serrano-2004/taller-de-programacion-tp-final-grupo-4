@@ -14,6 +14,7 @@ View::Rendered::Rendered(
     Weak<Controller::BaseController> controller
 ):  draw_texture(false),
     angle(0),
+    rotation_point(SDL2pp::NullOpt),
     texture_slice(SDL2pp::NullOpt) {
     auto controller_locked = controller.lock();
     window = controller_locked->get_window();
@@ -37,6 +38,8 @@ angle_t View::Rendered::get_angle() const {
     return angle;
 }
 
+SDL2pp::Point View::Rendered::get_rotation_point() const { return *rotation_point; }
+
 void View::Rendered::set_draw_texture(bool new_draw_texture) {
     draw_texture = new_draw_texture;
 }
@@ -59,4 +62,8 @@ void View::Rendered::set_texture_slice(const SDL2pp::Rect& new_texture_slice) {
 
 void View::Rendered::set_angle(angle_t new_angle) {
     angle = new_angle;
+}
+
+void View::Rendered::set_rotation_point(const SDL2pp::Point& new_point) {
+    rotation_point = new_point;
 }

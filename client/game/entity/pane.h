@@ -59,8 +59,6 @@ public:
     void add_child(Pane* new_child);
     void clear_children();
 
-    void scalate();
-
     virtual void render() override;
 
     virtual ~Pane() override = default;

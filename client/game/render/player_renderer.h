@@ -15,6 +15,10 @@
 
 #include "entity/pane.h"
 
+#include "functor/scalator.h"
+
+#include "enum/enum_translator.h"
+
 #include "renderer.h"
 
 namespace SDL2pp {
@@ -36,22 +40,36 @@ class RenderedPlayer;
 
 class PlayerRenderer: public Renderer {
 protected:
-    std::list<Pane> player_panes;
+    Model::EnumTranslator translator;
+    std::list<Pane> game_sprites;
     SDL2pp::Mixer mixer;
     SDL2pp::Chunk chunk;
     Weak<Controller::GameController> controller;
+    Scalator scalator;
     Pane background;
     Shared<Controller::GameStateManager> game_state_manager;
     Shared<SDL2pp::Font> font;
 
-    void set_player_to_be_rendered(Shared<View::RenderedPlayer> player, const SDL2pp::Point& camera_view);
+    void set_player_to_be_rendered(
+        Shared<View::RenderedPlayer> player,
+        const SDL2pp::Point& camera_view,
+        const SDL2pp::Point& player_display_size
+    );
+    void set_weapon_to_be_rendered(
+        Shared<View::RenderedPlayer> player,
+        const SDL2pp::Point& camera_view,
+        const SDL2pp::Point& player_display_size
+    );
+    void set_name_to_be_rendered(
+        Shared<View::RenderedPlayer> player,
+        const SDL2pp::Point& camera_view,
+        const SDL2pp::Point& player_display_size
+    );
 
     SDL2pp::Point get_sprite_top_left_corner(short_id_t sprite_piece);
 
-    void render_weapon(const SDL2pp::Point& player_center, angle_t player_angle, Model::TextureID texture_id);
-    void render_name(const SDL2pp::Point& player_center, const std::string& player);
-    void render_player(Camera& camera, Shared<View::RenderedPlayer>& player);
-    void render_fov(angle_t angle);
+    void load_player(Camera& camera, Shared<View::RenderedPlayer>& player);
+    void load_fov(angle_t angle);
 
 public:
     PlayerRenderer(Weak<Controller::GameController> controller);

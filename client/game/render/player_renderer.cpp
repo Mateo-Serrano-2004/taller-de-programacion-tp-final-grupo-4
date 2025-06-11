@@ -3,6 +3,7 @@
 #include <map>
 #include <cmath>
 
+#include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 #include <SDL2pp/Window.hh>
 #include <SDL2pp/Renderer.hh>
@@ -24,7 +25,21 @@
 
 #include "model/rendered_player.h"
 
-void View::PlayerRenderer::set_player_to_be_rendered(Shared<View::RenderedPlayer> player, const SDL2pp::Point& camera_view) {
+SDL2pp::Point View::PlayerRenderer::get_sprite_top_left_corner(short_id_t sprite_piece) {
+    uint16_t sprite_row = sprite_piece ? static_cast<uint16_t>(sprite_piece / 2) : 0;
+    uint16_t sprite_column = static_cast<uint16_t>(sprite_piece % 2);
+
+    uint16_t sprite_piece_x = sprite_column * 32;
+    uint16_t sprite_piece_y = sprite_row * 32;
+
+    return SDL2pp::Point(sprite_piece_x, sprite_piece_y);
+}
+
+void View::PlayerRenderer::set_player_to_be_rendered(
+    Shared<View::RenderedPlayer> player,
+    const SDL2pp::Point& camera_view,
+    const SDL2pp::Point& player_display_size
+) {
     SDL2pp::Point sprite_top_left_corner = get_sprite_top_left_corner(player->get_sprite_piece());
     angle_t angle = player->get_angle();    
 
@@ -36,77 +51,97 @@ void View::PlayerRenderer::set_player_to_be_rendered(Shared<View::RenderedPlayer
         to account for the texture's width and height.
     */
 
-    SDL2pp::Rect sprite_rect(
+    SDL2pp::Rect sprite_slice(
         sprite_top_left_corner.GetX(),
         sprite_top_left_corner.GetY(),
         32,
         32
     );
 
-    player_panes.emplace_back(controller);
-    auto player_pane = &player_panes.back();
+    game_sprites.emplace_back(controller);
+    auto player_pane = &game_sprites.back();
     background.add_child(player_pane);
+
     player_pane->set_draw_texture(true);
-    player_pane->set_texture(player->get_sprite_id());
-    player_pane->set_texture_slice(sprite_rect);
-    player_pane->set_angle(angle);
-    player_pane->set_apply_scalation(true);
     player_pane->set_keep_aspect_ratio(true);
-    player_pane->set_max_size(SDL2pp::Point(64, 64));
-    player_pane->set_min_size(SDL2pp::Point(32, 32));
-    player_pane->scalate();
+
+    player_pane->set_texture(player->get_sprite_id());
+    player_pane->set_texture_slice(sprite_slice);
+
+    player_pane->set_angle(angle);
 
     SDL2pp::Point top_left_corner(
-        camera_view.GetX() - (player_pane->get_width() / 2),
-        camera_view.GetY() - (player_pane->get_height() / 2)
+        camera_view.GetX() - (player_display_size.GetX() / 2),
+        camera_view.GetY() - (player_display_size.GetY() / 2)
     );
 
     player_pane->set_position(top_left_corner);
+    player_pane->set_size(player_display_size);
 }
 
-SDL2pp::Point View::PlayerRenderer::get_sprite_top_left_corner(short_id_t sprite_piece) {
-    uint16_t sprite_row = sprite_piece ? static_cast<uint16_t>(sprite_piece / 2) : 0;
-    uint16_t sprite_column = static_cast<uint16_t>(sprite_piece % 2);
+void View::PlayerRenderer::set_weapon_to_be_rendered(
+    Shared<View::RenderedPlayer> player,
+    const SDL2pp::Point& camera_view,
+    const SDL2pp::Point& player_display_size
+) {
+    SDL2pp::Point position(
+        camera_view.GetX() - (player_display_size.GetX() / 2),
+        camera_view.GetY() - player_display_size.GetY()
+    );
+    SDL2pp::Point size(
+        player_display_size.GetX(),
+        player_display_size.GetY()
+    );
+    SDL2pp::Point rotation_point(
+        (player_display_size.GetX() / 2),
+        player_display_size.GetY()
+    );
 
-    uint16_t sprite_piece_x = sprite_column * 32;
-    uint16_t sprite_piece_y = sprite_row * 32;
+    game_sprites.emplace_back(controller);
+    auto weapon_sprite = &game_sprites.back();
+    background.add_child(weapon_sprite);
 
-    return SDL2pp::Point(sprite_piece_x, sprite_piece_y);
+    weapon_sprite->set_draw_texture(true);
+
+    weapon_sprite->set_texture(
+        translator.get_texture_from_weapon(
+            player->get_current_weapon()->get_weapon_id()
+        )
+    );
+    weapon_sprite->set_angle(player->get_angle());
+    weapon_sprite->set_rotation_point(rotation_point);
+
+    weapon_sprite->set_size(size);
+    weapon_sprite->set_position(position);
 }
 
-void View::PlayerRenderer::render_weapon(const SDL2pp::Point& player_center,
-                                         angle_t player_angle,
-                                         Model::TextureID texture_id) {
-    Shared<SDL2pp::Texture> weapon_texture = asset_manager->get_texture(texture_id);
-
-    SDL2pp::Rect weapon_coords(player_center.GetX() - 16, player_center.GetY() - 32, 32, 32);
-    SDL2pp::Point point_to_rotate(16, 32);
-
-    renderer->Copy(*weapon_texture, SDL2pp::NullOpt, weapon_coords, player_angle, point_to_rotate);
-}
-
-void View::PlayerRenderer::render_name(const SDL2pp::Point& player_center,
-                                       const std::string& player_name) {
+void View::PlayerRenderer::set_name_to_be_rendered(
+    Shared<View::RenderedPlayer> player,
+    const SDL2pp::Point& camera_view,
+    const SDL2pp::Point& player_display_size
+) {
     Shared<SDL2pp::Texture> text = asset_manager->apply_font_to_text(
         font,
-        player_name,
+        player->get_name(),
         SDL2pp::Color(255, 255, 255, 255)
     );
     SDL2pp::Point position(
-        player_center.GetX() - (text->GetWidth()) / 2,
-        player_center.GetY() - 17 - text->GetHeight()
+        camera_view.GetX() - (text->GetWidth()) / 2,
+        camera_view.GetY() - (player_display_size.GetY() / 2) - text->GetHeight()
     );
 
-    player_panes.emplace_back(controller);
-    auto name = &player_panes.back();
+    game_sprites.emplace_back(controller);
+    auto name = &game_sprites.back();
     background.add_child(name);
+
     name->set_draw_texture(true);
     name->set_texture(text);
+
     name->set_position(position);
-    name->set_size(SDL2pp::Point(text->GetWidth(), text->GetHeight()));
+    name->set_size(text->GetSize());
 }
 
-void View::PlayerRenderer::render_player(View::Camera& camera, Shared<View::RenderedPlayer>& player) {
+void View::PlayerRenderer::load_player(View::Camera& camera, Shared<View::RenderedPlayer>& player) {
     if (player->get_sprite_id() == Model::TextureID::NO_TEXTURE) return;
 
     // Get the view from the camera
@@ -117,21 +152,23 @@ void View::PlayerRenderer::render_player(View::Camera& camera, Shared<View::Rend
     int camera_view_x = camera_view.GetX();
     int camera_view_y = camera_view.GetY();
 
+    // Calculate player's size given the viewport and keeping aspect ratio
+    SDL2pp::Point player_display_size = scalator(window->GetSize(), true);
+
     // Skip rendering if the player is outside the viewport
-    if (camera_view_x >= viewport_width + 15 ||
-        camera_view_y >= viewport_height + 15 ||
-        camera_view_x + 15 <= 0 ||
-        camera_view_y + 15 <= 0) {
+    if (camera_view_x >= viewport_width + (player_display_size.GetX() / 2) ||
+        camera_view_y >= viewport_height + (player_display_size.GetY() / 2) ||
+        camera_view_x + (player_display_size.GetX() / 2) <= 0 ||
+        camera_view_y + (player_display_size.GetY() / 2) <= 0) {
         return;
     }
 
-    set_player_to_be_rendered(player, camera_view);
-
-    render_weapon(camera_view, player->get_angle(), player->get_weapon_sprite_id());
-    render_name(camera_view, player->get_name());
+    set_player_to_be_rendered(player, camera_view, player_display_size);
+    set_weapon_to_be_rendered(player, camera_view, player_display_size);
+    set_name_to_be_rendered(player, camera_view, player_display_size);
 }
 
-void View::PlayerRenderer::render_fov(angle_t angle) {
+void View::PlayerRenderer::load_fov(angle_t angle) {
     auto viewport = game_state_manager->get_camera().get_viewport();
     int viewport_width = viewport.GetX();
     int viewport_height = viewport.GetY();
@@ -172,14 +209,21 @@ View::PlayerRenderer::PlayerRenderer(
    controller(controller),
    background(controller) {
     auto controller_locked = controller.lock();
+
+    SDL_Rect bounds;
+    SDL_GetDisplayBounds(0, &bounds);
+    scalator.set_max_bounds(SDL2pp::Point(bounds.w, bounds.h));
+    scalator.set_max_size(SDL2pp::Point(64, 64));
+    scalator.set_min_size(SDL2pp::Point(32, 32));
+
     game_state_manager = controller_locked->get_game_state_manager();
     font = asset_manager->generate_font("liberationsans", 16);
-    background.set_background_color(0, 255, 255, 255);
+    background.set_background_color(255, 0, 255, 255);
     background.set_draw_background(true);
 }
 
 void View::PlayerRenderer::render() {
-    player_panes.clear();
+    game_sprites.clear();
     background.clear_children();
     auto camera = game_state_manager->get_camera();
     angle_t fov_angle = 0;
@@ -193,17 +237,17 @@ void View::PlayerRenderer::render() {
                 if (pair.first == reference_player_id) {
                     reference_player = pair.second;
                 } else {
-                    render_player(camera, pair.second);
+                    load_player(camera, pair.second);
                 }
             }
 
             fov_angle = reference_player->get_angle();
-            render_player(camera, reference_player);
+            load_player(camera, reference_player);
         }
     );
 
     background.render();
-    render_fov(fov_angle);
+    // render_fov(fov_angle);
 
     game_state_manager->map_function_on_pending_weapon_usages(
         [this] (Shared<View::RenderedPlayer>& player) {
