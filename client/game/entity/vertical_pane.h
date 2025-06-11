@@ -4,23 +4,19 @@
 #include "common/definitions.h"
 
 #include "smart_pane.h"
+#include "gapped.h"
 
 namespace Controller {
 class BaseController;
 };
 
 namespace View {
-class VerticalPane: public SmartPane {
+class VerticalPane: public SmartPane, public Gapped {
 protected:
-    int gap;
-
     void position_children() override;
 
 public:
-    VerticalPane(Weak<Controller::BaseController> controller, int gap = 0);
-
-    int get_gap() const;
-    void set_gap(int new_gap);
+    VerticalPane(Weak<Controller::BaseController> controller, int gap_y = 0);
 
     virtual ~VerticalPane() override = default;
 };

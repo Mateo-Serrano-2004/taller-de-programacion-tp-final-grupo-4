@@ -27,13 +27,13 @@ void Context::PickRoleContext::trigger_buttons(Shared<SDL_Event> event) {
 
 void Context::PickRoleContext::build_button(View::Button& button, Model::TextureID texture_id) {
     background.add_child(&button);
-    button.set_background_color(78, 107, 60, 255);
-    button.set_texture(texture_id);
     button.set_draw_texture(true);
+    button.set_texture(texture_id);
     button.set_texture_slice(SDL2pp::Rect(0, 0, 32, 32));
-    button.set_min_size(SDL2pp::Point(128, 128));
-    button.set_scale_factor(0.1);
-    button.set_scale_size(true);
+    button.set_apply_scalation(true);
+    button.set_keep_aspect_ratio(true);
+    button.set_min_size(SDL2pp::Point(96, 96));
+    button.set_max_size(SDL2pp::Point(160, 160));
 
     auto composite_command = make_unique<Command::CompositeCommand>(controller);
     composite_command->add_command(make_unique<Command::PickRoleCommand>(
@@ -77,8 +77,10 @@ Context::PickRoleContext::PickRoleContext(Weak<Controller::GameController> contr
 
     label.set_text("Choose your skin");
 
-    background.set_scale_size(true);
-    background.set_max_height(150);
+    background.set_apply_scalation(true);
+    background.set_keep_aspect_ratio(true);
+    background.set_max_size(SDL2pp::Point(655, 160));
+    background.set_min_size(SDL2pp::Point(399, 96));
 
     build_button(pick_role_1_button, Model::TextureID::SPRITE_CT1);
     build_button(pick_role_2_button, Model::TextureID::SPRITE_CT2);

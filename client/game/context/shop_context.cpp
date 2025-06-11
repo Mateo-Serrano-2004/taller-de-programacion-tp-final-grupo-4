@@ -17,14 +17,13 @@ void Context::ShopContext::build_button(View::Button& button, const std::string&
     background.add_child(&button);
     button.set_background_color(78, 107, 60, 255);
     button.set_draw_background(true);
-    button.set_scale_size(true);
-    button.set_scale_factor(0.1);
+    button.set_apply_scalation(true);
     button.set_font_size(16);
     button.set_text(weapon_name);
-    button.set_min_height(button.get_height());
-    button.set_height(button.get_height());
-    button.set_min_width(button.get_width());
-    button.set_width(button.get_width());
+    button.set_min_size(button.get_size());
+    button.set_size(button.get_size());
+    button.set_max_height(button.get_height() + 64);
+    button.set_max_width(button.get_width() + 64);
 
     button.set_command(
         std::move(make_unique<Command::BuyWeaponCommand>(weapon_id))
@@ -66,8 +65,6 @@ Context::ShopContext::ShopContext(Weak<Controller::GameController> controller)
 
     label.set_font_size(16);
     label.set_text("Choose a weapon to buy");
-    label.set_scale_size(true);
-    label.set_scale_factor(0.1);
     label.set_min_height(label.get_height());
     label.set_min_width(label.get_width());
 

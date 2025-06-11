@@ -2,6 +2,7 @@
 #define CLIENT_GAME_RENDER_PLAYER_RENDERER_H
 
 #include <map>
+#include <list>
 
 #include <SDL2pp/Mixer.hh>
 #include <SDL2pp/Chunk.hh>
@@ -35,8 +36,10 @@ class RenderedPlayer;
 
 class PlayerRenderer: public Renderer {
 protected:
+    std::list<Pane> player_panes;
     SDL2pp::Mixer mixer;
     SDL2pp::Chunk chunk;
+    Weak<Controller::GameController> controller;
     Pane background;
     Shared<Controller::GameStateManager> game_state_manager;
     Shared<SDL2pp::Font> font;

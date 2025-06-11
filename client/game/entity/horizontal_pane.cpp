@@ -3,27 +3,24 @@
 #include "controller/base_controller.h"
 
 void View::HorizontalPane::position_children() {
-    int total_width = children.empty() ? 0 : (children.size() - 1) * gap;
+    int total_width = children.empty() ? 0 : (children.size() - 1) * gap_x;
 
     for (auto child: children) {
         total_width += child->get_width();
     }
 
-    int previous_start = (int) ((get_width() - total_width) * relative_width_percentage);
+    int previous_start = (int) ((get_width() - total_width) * alignment_x);
 
     for (auto child: children) {
         child->set_x(previous_start);
-        child->set_y((int) ((get_height() - child->get_height()) * relative_height_percentage));
+        child->set_y((int) ((get_height() - child->get_height()) * alignment_y));
         previous_start += child->get_width();
-        previous_start += gap;
+        previous_start += gap_x;
     }
 }
 
-View::HorizontalPane::HorizontalPane(Weak<Controller::BaseController> controller, int gap):
-        View::SmartPane(controller), gap(gap) {}
-
-int View::HorizontalPane::get_gap() const { return gap; }
-
-void View::HorizontalPane::set_gap(int new_gap) {
-    gap = new_gap;
-}
+View::HorizontalPane::HorizontalPane(
+    Weak<Controller::BaseController> controller,
+    int gap_x
+): View::SmartPane(controller),
+   View::Gapped(0, gap_x) {}

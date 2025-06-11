@@ -52,19 +52,23 @@ void View::PlayerRenderer::render_name(const SDL2pp::Point& player_center,
         player_name,
         SDL2pp::Color(255, 255, 255, 255)
     );
-    renderer->Copy(
-        *text,
-        SDL2pp::NullOpt,
-        SDL2pp::Rect(
-            player_center.GetX() - (text->GetWidth()) / 2,
-            player_center.GetY() - 17 - text->GetHeight(),
-            text->GetWidth(), text->GetHeight()
-        )
+    SDL2pp::Point position(
+        player_center.GetX() - (text->GetWidth()) / 2,
+        player_center.GetY() - 17 - text->GetHeight()
     );
+
+    player_panes.emplace_back(controller);
+    auto name = &player_panes.back();
+    background.add_child(name);
+    name->set_draw_texture(true);
+    name->set_texture(text);
+    name->set_position(position);
+    name->set_size(SDL2pp::Point(text->GetWidth(), text->GetHeight()));
 }
 
 void View::PlayerRenderer::render_player(View::Camera& camera, Shared<View::RenderedPlayer>& player) {
-    Shared<SDL2pp::Texture> texture = asset_manager->get_texture((Model::TextureID) player->get_sprite_id());
+    if (player->get_sprite_id() == Model::TextureID::NO_TEXTURE) return;
+
     SDL2pp::Point sprite_top_left_corner = get_sprite_top_left_corner(player->get_sprite_piece());
     angle_t angle = player->get_angle();
 
@@ -99,18 +103,25 @@ void View::PlayerRenderer::render_player(View::Camera& camera, Shared<View::Rend
         32
     );
 
+    player_panes.emplace_back(controller);
+    auto player_pane = &player_panes.back();
+    background.add_child(player_pane);
+    player_pane->set_draw_texture(true);
+    player_pane->set_texture(player->get_sprite_id());
+    player_pane->set_texture_slice(sprite_rect);
+    player_pane->set_angle(angle);
+    player_pane->set_apply_scalation(true);
+    player_pane->set_keep_aspect_ratio(true);
+    player_pane->set_max_size(SDL2pp::Point(64, 64));
+    player_pane->set_min_size(SDL2pp::Point(32, 32));
+    player_pane->scalate();
+
     SDL2pp::Point top_left_corner(
-        camera_view_x - 16,
-        camera_view_y - 16
+        camera_view_x - (player_pane->get_width() / 2),
+        camera_view_y - (player_pane->get_height() / 2)
     );
 
-    renderer->Copy(
-        *texture,
-        sprite_rect,
-        top_left_corner,
-        angle,
-        SDL2pp::NullOpt
-    );
+    player_pane->set_position(top_left_corner);
 
     render_weapon(camera_view, angle, player->get_weapon_sprite_id());
     render_name(camera_view, player->get_name());
@@ -154,6 +165,7 @@ View::PlayerRenderer::PlayerRenderer(
 ): View::Renderer(controller),
    mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096),
    chunk("assets/sfx/weapons/fiveseven.wav"),
+   controller(controller),
    background(controller) {
     auto controller_locked = controller.lock();
     game_state_manager = controller_locked->get_game_state_manager();
@@ -163,11 +175,13 @@ View::PlayerRenderer::PlayerRenderer(
 }
 
 void View::PlayerRenderer::render() {
-    background.render();
+    player_panes.clear();
+    background.clear_children();
     auto camera = game_state_manager->get_camera();
+    angle_t fov_angle = 0;
 
     game_state_manager->call_function_on_players(
-        [this, &camera] (std::map<short_id_t, Shared<View::RenderedPlayer>>& map) {
+        [this, &camera, &fov_angle] (std::map<short_id_t, Shared<View::RenderedPlayer>>& map) {
             Shared<View::RenderedPlayer> reference_player = nullptr;
             short_id_t reference_player_id = game_state_manager->get_reference_player_id();
 
@@ -179,13 +193,16 @@ void View::PlayerRenderer::render() {
                 }
             }
 
-            render_fov(reference_player->get_angle());
+            fov_angle = reference_player->get_angle();
             render_player(camera, reference_player);
         }
     );
 
+    background.render();
+    render_fov(fov_angle);
+
     game_state_manager->map_function_on_pending_weapon_usages(
-        [this, &camera] (Shared<View::RenderedPlayer>& player) {
+        [this] (Shared<View::RenderedPlayer>& player) {
             (void) mixer.PlayChannel(-1, chunk);
         }
     );
