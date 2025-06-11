@@ -43,6 +43,16 @@ std::vector<uint8_t> View::HUDRenderer::get_units_of_time_left(uint16_t seconds_
     return units_of_time_left;
 }
 
+void View::HUDRenderer::render_hud_symbol(uint8_t symbol_number, coord_t pos_x, coord_t pos_y) {
+    auto hud_symbol = asset_manager->get_texture(Model::TextureID::HUD_SYMBOLS);
+    auto viewport = renderer->GetViewport();
+    renderer->Copy(
+        *hud_symbol,
+        SDL2pp::Rect(symbol_number * 64, 0, 64, 64),
+        SDL2pp::Rect(pos_x, pos_y, 22, 33)
+    );
+}
+
 void View::HUDRenderer::render_number(uint8_t number, coord_t pos_x, coord_t pos_y) {
     renderer->Copy(
         *hud_numbers,
@@ -55,17 +65,23 @@ void View::HUDRenderer::render_time() {
     uint16_t seconds_left = game_state_manager->get_time_left();
     auto units = get_units_of_time_left(seconds_left);
 
-    render_number(units[0], 0, 0);
-    render_number(units[1], 22, 0);
+    render_number(units[0], 22, 0);
+    render_number(units[1], 44, 0);
 
     renderer->Copy(
         *hud_numbers,
         SDL2pp::Rect(440, 0, 12, 66),
-        SDL2pp::Rect(44, 0, 6, 33)
+        SDL2pp::Rect(66, 0, 6, 33)
     );
 
-    render_number(units[2], 50, 0);
-    render_number(units[3], 72, 0);
+    render_number(units[2], 72, 0);
+    render_number(units[3], 84, 0);
+
+    render_hud_symbol(2, 0, 0);
+}
+
+void View::HUDRenderer::render_life_points(Shared<RenderedPlayer> player) {
+    render_hud_symbol(0, 0, renderer->GetViewport().GetH() - 33);
 }
 
 // void View::HUDRenderer::render_equipment(Shared<View::RenderedPlayer> player) {}
@@ -73,8 +89,10 @@ void View::HUDRenderer::render_time() {
 void View::HUDRenderer::render_money(Shared<View::RenderedPlayer> player) {
     auto units = get_units(player->get_money());
     for (size_t i = 0; i < units.size(); i++) {
-        render_number(units[i], 98 + (i * 22), renderer->GetViewport().GetH() - 33);
+        render_number(units[i], 122 + (i * 22), renderer->GetViewport().GetH() - 33);
     }
+
+    render_hud_symbol(7, 100, renderer->GetViewport().GetH() - 33);
 }
 
 View::HUDRenderer::HUDRenderer(Weak<Controller::GameController> controller):
@@ -86,5 +104,5 @@ void View::HUDRenderer::render() {
     auto player = game_state_manager->get_reference_player();
     render_time();
     render_money(player);
-    // render_equipment(player);
+    render_life_points(player);
 }

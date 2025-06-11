@@ -1,7 +1,11 @@
 #ifndef CLIENT_GAME_CS2D_APP_H
 #define CLIENT_GAME_CS2D_APP_H
 
+#include <string>
+
 #include "common/definitions.h"
+
+#include "asset/texture_id.h"
 
 #include "application.h"
 
@@ -19,6 +23,12 @@ protected:
 
     void load_weapon_sprites(Shared<Model::AssetManager> asset_manager);
     void load_player_sprites(Shared<Model::AssetManager> asset_manager);
+    void load_hud_texture(
+        Shared<Model::AssetManager> asset_manager,
+        Shared<SDL2pp::Renderer> renderer,
+        const std::string& texture_name,
+        Model::TextureID texture_id
+    );
     void load_hud_textures(Shared<Model::AssetManager> asset_manager, Shared<SDL2pp::Renderer> renderer);
     void load_generated_textures(Shared<Model::AssetManager> asset_manager, Shared<SDL2pp::Renderer> renderer);
 

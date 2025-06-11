@@ -23,11 +23,7 @@ enum TextureID {
 
     // HUD textures from 0x40
     HUD_NUMS = 0x40,
-    HUD_GLOCK = 0x41,
-    HUD_AWP = 0x42,
-    HUD_AK47 = 0x43,
-    HUD_M3 = 0x43,
-    HUD_KNIFE = 0x45,
+    HUD_SYMBOLS = 0x41,
 
     // Special textures
     FOV = 0xC0,

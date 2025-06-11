@@ -25,7 +25,6 @@
 #include "asset/asset_manager.h"
 #include "asset/asset_generator.h"
 #include "asset/asset_addresser.h"
-#include "asset/texture_id.h"
 #include "asset/font_id.h"
 
 #include "controller/game_controller.h"
@@ -44,9 +43,7 @@ const std::vector<std::string> weapon_sprites = {
 };
 
 const std::vector<std::string> hud_textures = {
-    "hud_nums.bmp",
-    "ak47_k.bmp", "awp_k.bmp",
-    "glock_k.bmp", "knife_k.bmp", "m3_k.bmp"
+    "hud_nums.bmp", "hud_symbols.bmp"
 };
 
 void App::CS2DApp::load_weapon_sprites(Shared<Model::AssetManager> asset_manager) {
@@ -101,13 +98,15 @@ void App::CS2DApp::load_player_sprites(Shared<Model::AssetManager> asset_manager
     );
 }
 
-void App::CS2DApp::load_hud_textures(
+void App::CS2DApp::load_hud_texture(
     Shared<Model::AssetManager> asset_manager,
-    Shared<SDL2pp::Renderer> renderer
+    Shared<SDL2pp::Renderer> renderer,
+    const std::string& texture_name,
+    Model::TextureID texture_id
 ) {
     Model::AssetAddresser asset_addresser;
 
-    SDL2pp::Surface surface(asset_addresser.get_hud_resource(hud_textures[0]));
+    SDL2pp::Surface surface(asset_addresser.get_hud_resource(texture_name));
 
     surface.SetColorKey(
         true,
@@ -117,24 +116,16 @@ void App::CS2DApp::load_hud_textures(
     auto texture = make_shared<SDL2pp::Texture>(*renderer, surface);
 
     asset_manager->load_texture(
-        Model::TextureID::HUD_NUMS, texture
+        texture_id, texture
     );
+}
 
-    asset_manager->load_texture(
-        Model::TextureID::HUD_AK47, asset_addresser.get_hud_resource(hud_textures[1])
-    );
-    asset_manager->load_texture(
-        Model::TextureID::HUD_AWP, asset_addresser.get_hud_resource(hud_textures[2])
-    );
-    asset_manager->load_texture(
-        Model::TextureID::HUD_GLOCK, asset_addresser.get_hud_resource(hud_textures[3])
-    );
-    asset_manager->load_texture(
-        Model::TextureID::HUD_KNIFE, asset_addresser.get_hud_resource(hud_textures[4])
-    );
-    asset_manager->load_texture(
-        Model::TextureID::HUD_M3, asset_addresser.get_hud_resource(hud_textures[5])
-    );
+void App::CS2DApp::load_hud_textures(
+    Shared<Model::AssetManager> asset_manager,
+    Shared<SDL2pp::Renderer> renderer
+) {
+    load_hud_texture(asset_manager, renderer, hud_textures[0], Model::TextureID::HUD_NUMS);
+    load_hud_texture(asset_manager, renderer, hud_textures[1], Model::TextureID::HUD_SYMBOLS);
 }
 
 void App::CS2DApp::load_generated_textures(Shared<Model::AssetManager> asset_manager,

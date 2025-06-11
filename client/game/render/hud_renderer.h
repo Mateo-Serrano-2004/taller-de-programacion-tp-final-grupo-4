@@ -25,12 +25,13 @@ protected:
     Shared<SDL2pp::Texture> hud_numbers;
 
     std::vector<uint8_t> get_units(uint16_t number);
-
     std::vector<uint8_t> get_units_of_time_left(uint16_t seconds_left);
+    void render_hud_symbol(uint8_t symbol_number, coord_t pos_x, coord_t pos_y);
+
     void render_number(uint8_t number, coord_t pos_x, coord_t pos_y);
     void render_time();
+    void render_life_points(Shared<RenderedPlayer> player);
     void render_money(Shared<RenderedPlayer> player);
-    // void render_equipment(Shared<View::RenderedPlayer> player);
 
 public:
     HUDRenderer(Weak<Controller::GameController> controller);
