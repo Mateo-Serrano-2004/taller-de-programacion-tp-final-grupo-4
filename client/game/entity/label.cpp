@@ -64,7 +64,6 @@ void View::Label::render() {
     View::Pane::render();
     if (!empty()) {
         SDL2pp::Point absolute_position = get_absolute_position();
-        SDL2pp::Point parent_size = parent ? parent->get_size() : window->GetSize();
         renderer->Copy(
             *text_texture,
             SDL2pp::NullOpt,

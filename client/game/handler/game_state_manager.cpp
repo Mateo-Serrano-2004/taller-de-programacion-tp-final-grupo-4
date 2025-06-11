@@ -34,6 +34,11 @@ View::Camera Controller::GameStateManager::get_camera() {
 
 short_id_t Controller::GameStateManager::get_reference_player_id() const { return reference_player_id; }
 
+Shared<View::RenderedPlayer> Controller::GameStateManager::get_reference_player() {
+    std::lock_guard<std::mutex> lock(mutex);
+    return game_state->get_player_by_id(reference_player_id);
+}
+
 void Controller::GameStateManager::update_player_sprite(Model::TextureID texture_id) {
     std::lock_guard<std::mutex> lock(mutex);
     game_state->get_player_by_id(reference_player_id)->set_sprite_id(texture_id);

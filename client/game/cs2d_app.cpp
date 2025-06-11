@@ -44,7 +44,9 @@ const std::vector<std::string> weapon_sprites = {
 };
 
 const std::vector<std::string> hud_textures = {
-    "hud_nums.bmp"
+    "hud_nums.bmp",
+    "ak47_k.bmp", "awp_k.bmp",
+    "glock_k.bmp", "knife_k.bmp", "m3_k.bmp"
 };
 
 void App::CS2DApp::load_weapon_sprites(Shared<Model::AssetManager> asset_manager) {
@@ -116,6 +118,22 @@ void App::CS2DApp::load_hud_textures(
 
     asset_manager->load_texture(
         Model::TextureID::HUD_NUMS, texture
+    );
+
+    asset_manager->load_texture(
+        Model::TextureID::HUD_AK47, asset_addresser.get_hud_resource(hud_textures[1])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::HUD_AWP, asset_addresser.get_hud_resource(hud_textures[2])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::HUD_GLOCK, asset_addresser.get_hud_resource(hud_textures[3])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::HUD_KNIFE, asset_addresser.get_hud_resource(hud_textures[4])
+    );
+    asset_manager->load_texture(
+        Model::TextureID::HUD_M3, asset_addresser.get_hud_resource(hud_textures[5])
     );
 }
 

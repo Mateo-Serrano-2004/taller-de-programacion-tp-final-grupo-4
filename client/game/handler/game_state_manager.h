@@ -54,6 +54,7 @@ public:
     View::Camera get_camera();
 
     short_id_t get_reference_player_id() const;
+    Shared<View::RenderedPlayer> get_reference_player();
 
     void update_player_sprite(Model::TextureID texture_id);
 
