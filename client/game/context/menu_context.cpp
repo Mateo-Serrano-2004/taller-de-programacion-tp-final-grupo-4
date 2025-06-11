@@ -41,6 +41,7 @@ exit_button(controller) {
     background.set_background_color(31, 45, 31, 255);
     background.set_draw_background(true);
     background.add_child(&exit_button);
+    background.set_relative_width_position_percentage(0.3);
 
     exit_button.set_background_color(78, 107, 60, 255);
     exit_button.set_draw_background(true);

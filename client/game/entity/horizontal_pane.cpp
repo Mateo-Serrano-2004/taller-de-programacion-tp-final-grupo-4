@@ -9,11 +9,11 @@ void View::HorizontalPane::position_children() {
         total_width += child->get_width();
     }
 
-    int previous_start = (get_width() - total_width) / 2;
+    int previous_start = (int) ((get_width() - total_width) * relative_width_percentage);
 
     for (auto child: children) {
         child->set_x(previous_start);
-        child->set_y((get_height() - child->get_height()) / 2);
+        child->set_y((int) ((get_height() - child->get_height()) * relative_height_percentage));
         previous_start += child->get_width();
         previous_start += gap;
     }

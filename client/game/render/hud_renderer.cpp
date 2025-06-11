@@ -75,7 +75,7 @@ void View::HUDRenderer::render_time() {
     );
 
     render_number(units[2], 72, 0);
-    render_number(units[3], 84, 0);
+    render_number(units[3], 94, 0);
 
     render_hud_symbol(2, 0, 0);
 }
@@ -83,8 +83,6 @@ void View::HUDRenderer::render_time() {
 void View::HUDRenderer::render_life_points(Shared<RenderedPlayer> player) {
     render_hud_symbol(0, 0, renderer->GetViewport().GetH() - 33);
 }
-
-// void View::HUDRenderer::render_equipment(Shared<View::RenderedPlayer> player) {}
 
 void View::HUDRenderer::render_money(Shared<View::RenderedPlayer> player) {
     auto units = get_units(player->get_money());

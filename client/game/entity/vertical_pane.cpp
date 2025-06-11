@@ -9,10 +9,10 @@ void View::VerticalPane::position_children() {
         total_height += child->get_height();
     }
 
-    int previous_start = (get_height() - total_height) / 2;
+    int previous_start = (int) ((get_height() - total_height) * relative_height_percentage);
 
     for (auto child: children) {
-        child->set_x((get_width() - child->get_width()) / 2);
+        child->set_x((int) ((get_width() - child->get_width()) * relative_width_percentage));
         child->set_y(previous_start);
         previous_start += child->get_height();
         previous_start += gap;
