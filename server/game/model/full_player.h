@@ -33,7 +33,7 @@ public:
     void update_position();
     void start_using_weapon();
     void stop_using_weapon();
-    void shoot();
+    void shoot(uint16_t frames_to_process);
 
     void equip_weapon_by_type(Model::SlotID type);
 

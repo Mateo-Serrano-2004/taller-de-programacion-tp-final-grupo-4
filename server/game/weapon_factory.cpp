@@ -8,16 +8,16 @@
 Shared<FullWeapon> WeaponFactory::create(Model::WeaponID id) {
     switch (id) {
         case Model::WeaponID::GLOCK:
-            return make_shared<FullWeapon>(id, Model::SlotID::SECONDARY_WEAPON, 20, 20);
+            return make_shared<FullWeapon>(id, Model::SlotID::SECONDARY_WEAPON, 20, 20, false, 0);
         case Model::WeaponID::AK47:
-            return make_shared<FullWeapon>(id, Model::SlotID::PRIMARY_WEAPON, 45, 45);
+            return make_shared<FullWeapon>(id, Model::SlotID::PRIMARY_WEAPON, 45, 45, true, 5);
         case Model::WeaponID::M3:
-            return make_shared<FullWeapon>(id, Model::SlotID::PRIMARY_WEAPON, 8, 8);
+            return make_shared<FullWeapon>(id, Model::SlotID::PRIMARY_WEAPON, 8, 8, false, 0);
         case Model::WeaponID::AWP:
-            return make_shared<FullWeapon>(id, Model::SlotID::PRIMARY_WEAPON, 30, 30);
+            return make_shared<FullWeapon>(id, Model::SlotID::PRIMARY_WEAPON, 30, 30, false, 0);
         case Model::WeaponID::KNIFE:
-            return make_shared<FullWeapon>(id, Model::SlotID::KNIFE_SLOT, 0, 0);
+            return make_shared<FullWeapon>(id, Model::SlotID::KNIFE_SLOT, 0, 0, false, 0);
         case Model::WeaponID::BOMB:
-            return make_shared<FullWeapon>(id, Model::SlotID::BOMB_SLOT, 0, 0);
+            return make_shared<FullWeapon>(id, Model::SlotID::BOMB_SLOT, 0, 0, false, 0);
     }
 }
