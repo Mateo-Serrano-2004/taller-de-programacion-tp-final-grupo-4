@@ -44,6 +44,8 @@ protected:
     Shared<Controller::GameStateManager> game_state_manager;
     Shared<SDL2pp::Font> font;
 
+    void set_player_to_be_rendered(Shared<View::RenderedPlayer> player, const SDL2pp::Point& camera_view);
+
     SDL2pp::Point get_sprite_top_left_corner(short_id_t sprite_piece);
 
     void render_weapon(const SDL2pp::Point& player_center, angle_t player_angle, Model::TextureID texture_id);

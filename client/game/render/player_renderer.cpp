@@ -24,6 +24,46 @@
 
 #include "model/rendered_player.h"
 
+void View::PlayerRenderer::set_player_to_be_rendered(Shared<View::RenderedPlayer> player, const SDL2pp::Point& camera_view) {
+    SDL2pp::Point sprite_top_left_corner = get_sprite_top_left_corner(player->get_sprite_piece());
+    angle_t angle = player->get_angle();    
+
+    /*
+        Camera is centered on the middle of a texture,
+        but SDL2pp::Renderer::Copy takes the top-left corner
+        of the texture as the origin point.
+        So we need to adjust the camera view coordinates
+        to account for the texture's width and height.
+    */
+
+    SDL2pp::Rect sprite_rect(
+        sprite_top_left_corner.GetX(),
+        sprite_top_left_corner.GetY(),
+        32,
+        32
+    );
+
+    player_panes.emplace_back(controller);
+    auto player_pane = &player_panes.back();
+    background.add_child(player_pane);
+    player_pane->set_draw_texture(true);
+    player_pane->set_texture(player->get_sprite_id());
+    player_pane->set_texture_slice(sprite_rect);
+    player_pane->set_angle(angle);
+    player_pane->set_apply_scalation(true);
+    player_pane->set_keep_aspect_ratio(true);
+    player_pane->set_max_size(SDL2pp::Point(64, 64));
+    player_pane->set_min_size(SDL2pp::Point(32, 32));
+    player_pane->scalate();
+
+    SDL2pp::Point top_left_corner(
+        camera_view.GetX() - (player_pane->get_width() / 2),
+        camera_view.GetY() - (player_pane->get_height() / 2)
+    );
+
+    player_pane->set_position(top_left_corner);
+}
+
 SDL2pp::Point View::PlayerRenderer::get_sprite_top_left_corner(short_id_t sprite_piece) {
     uint16_t sprite_row = sprite_piece ? static_cast<uint16_t>(sprite_piece / 2) : 0;
     uint16_t sprite_column = static_cast<uint16_t>(sprite_piece % 2);
@@ -69,9 +109,6 @@ void View::PlayerRenderer::render_name(const SDL2pp::Point& player_center,
 void View::PlayerRenderer::render_player(View::Camera& camera, Shared<View::RenderedPlayer>& player) {
     if (player->get_sprite_id() == Model::TextureID::NO_TEXTURE) return;
 
-    SDL2pp::Point sprite_top_left_corner = get_sprite_top_left_corner(player->get_sprite_piece());
-    angle_t angle = player->get_angle();
-
     // Get the view from the camera
     coord_t viewport_width = camera.get_viewport_width();
     coord_t viewport_height = camera.get_viewport_height();
@@ -88,42 +125,9 @@ void View::PlayerRenderer::render_player(View::Camera& camera, Shared<View::Rend
         return;
     }
 
-    /*
-        Camera is centered on the middle of a texture,
-        but SDL2pp::Renderer::Copy takes the top-left corner
-        of the texture as the origin point.
-        So we need to adjust the camera view coordinates
-        to account for the texture's width and height.
-    */
+    set_player_to_be_rendered(player, camera_view);
 
-    SDL2pp::Rect sprite_rect(
-        sprite_top_left_corner.GetX(),
-        sprite_top_left_corner.GetY(),
-        32,
-        32
-    );
-
-    player_panes.emplace_back(controller);
-    auto player_pane = &player_panes.back();
-    background.add_child(player_pane);
-    player_pane->set_draw_texture(true);
-    player_pane->set_texture(player->get_sprite_id());
-    player_pane->set_texture_slice(sprite_rect);
-    player_pane->set_angle(angle);
-    player_pane->set_apply_scalation(true);
-    player_pane->set_keep_aspect_ratio(true);
-    player_pane->set_max_size(SDL2pp::Point(64, 64));
-    player_pane->set_min_size(SDL2pp::Point(32, 32));
-    player_pane->scalate();
-
-    SDL2pp::Point top_left_corner(
-        camera_view_x - (player_pane->get_width() / 2),
-        camera_view_y - (player_pane->get_height() / 2)
-    );
-
-    player_pane->set_position(top_left_corner);
-
-    render_weapon(camera_view, angle, player->get_weapon_sprite_id());
+    render_weapon(camera_view, player->get_angle(), player->get_weapon_sprite_id());
     render_name(camera_view, player->get_name());
 }
 

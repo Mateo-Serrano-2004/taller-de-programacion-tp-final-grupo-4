@@ -5,6 +5,8 @@
 
 #include "common/definitions.h"
 
+#include "functor/scalator.h"
+
 namespace View {
 class Scalable {
 protected:
@@ -16,6 +18,7 @@ protected:
     SDL2pp::Point max_size;
     SDL2pp::Point min_size;
     SDL2pp::Point current_size;
+    Scalator scalator;
 
     void scalate(const SDL2pp::Point& viewport);
 
@@ -43,7 +46,7 @@ public:
     void set_max_bound(const SDL2pp::Point& new_bounds);
     void set_max_bounds_height(int new_height);
     void set_max_bounds_width(int new_width);
-    void set_min_bound(const SDL2pp::Point& new_bounds);
+    void set_min_bounds(const SDL2pp::Point& new_bounds);
     void set_min_bounds_height(int new_height);
     void set_min_bounds_width(int new_width);
     void set_max_size(const SDL2pp::Point& new_bounds);
