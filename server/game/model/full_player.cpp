@@ -4,7 +4,7 @@
 #include <memory>
 #include <cstdint>
 #include <utility>
-
+#include <iostream>
 #include "common/definitions.h"
 #include "common/weapon_id.h"
 #include "common/slot_id.h"
@@ -18,7 +18,7 @@ FullPlayer::FullPlayer(short_id_t id, const std::string& name)
   secondary_weapon(WeaponFactory::create(Model::WeaponID::GLOCK)),
   knife(WeaponFactory::create(Model::WeaponID::KNIFE)) {
     current_weapon = secondary_weapon;
-    money = 600;
+    money = 650;
 }
 
 void FullPlayer::update_movement_direction_by_merge(const Physics::Vector2D& direction) {
@@ -66,7 +66,7 @@ bool FullPlayer::can_pay(uint16_t price) { return money >= price; }
 Shared<FullWeapon> FullPlayer::equip_new_weapon_and_drop_previous(Shared<FullWeapon> new_weapon) {
     if (!new_weapon) return nullptr;
 
-    Model::SlotID type = std::static_pointer_cast<FullWeapon>(current_weapon)->get_slot_id();
+    Model::SlotID type = std::static_pointer_cast<FullWeapon>(new_weapon)->get_slot_id();
     Shared<FullWeapon> dropped_weapon = nullptr;
 
     switch (type) {
@@ -102,10 +102,10 @@ void FullPlayer::stop_using_weapon() {
     shooting = false;
 }
 
-void FullPlayer::shoot() {
+void FullPlayer::shoot(uint16_t frames_to_process) {
     if (!current_weapon || !alive) {
         shooting = false;
         return;
     }
-    shooting = std::static_pointer_cast<FullWeapon>(current_weapon)->shoot();
+    shooting = std::static_pointer_cast<FullWeapon>(current_weapon)->shoot(frames_to_process);
 }
