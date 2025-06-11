@@ -19,6 +19,7 @@
 #include "../widgets/styled_button.h"
 #include "grid_view.h"
 #include "../widgets/styled_file_dialog.h"
+#include "constants.h"
 
 void MapEditorWidget::setUpLeftPanel() {
     leftPanel = new QWidget(this);
@@ -118,25 +119,20 @@ MapEditorWidget::MapEditorWidget(QWidget* parent) : QWidget(parent) {
 
 void MapEditorWidget::setUpGrid() {
     gridScene = new QGraphicsScene(this);
-    int tile = 32;
-    int cols = 50;
-    int rows = 50; 
+    int tile = TILE_SIZE;
+    int cols = MAP_WIDTH;
+    int rows = MAP_HEIGHT; 
     int gridW = cols * tile;
     int gridH = rows * tile;
 
     gridScene->addRect(0, 0, gridW, gridH, QPen(Qt::NoPen), QBrush(Qt::white));
     drawGridLines(gridW, gridH);
-    /*QPen gridPen(QColor("#222222"));
-    for (int x = 0; x <= gridW; x += tile)
-        gridScene->addLine(x, 0, x, gridH, gridPen);
-    for (int y = 0; y <= gridH; y += tile)
-        gridScene->addLine(0, y, gridW, y, gridPen);*/
 
     gridView = new GridView(gridScene, this);
 }
 
 void MapEditorWidget::drawGridLines(int width, int height) {
-    int tile = 32;
+    int tile = TILE_SIZE;   
 
     QPen gridPen(QColor("#222222"));
     for (int x = 0; x <= width; x += tile)
@@ -174,12 +170,13 @@ void MapEditorWidget::loadAssets() {
     addCategory("Boxes", "assets/gfx/tiles/Boxes", "box");
     addCategory("Sites", "assets/gfx/tiles/Sites", "site");
     addCategory("Cars", "assets/gfx/tiles/Cars", "car");
+    addCategory("Spawns", "assets/gfx/tiles/Spawns", "spawn");
 }
 
 void MapEditorWidget::removeTileAt(int x, int y) {
-    for (QGraphicsItem* item : gridScene->items(QRectF(x*32, y*32, 32, 32))) {
+    for (QGraphicsItem* item : gridScene->items(QRectF(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE))) {
         if (auto pix = dynamic_cast<QGraphicsPixmapItem*>(item)) {
-            if (pix->pos() == QPointF(x*32, y*32)) {
+            if (pix->pos() == QPointF(x*TILE_SIZE, y*TILE_SIZE)) {
                 gridScene->removeItem(pix);
                 delete pix;
                 break;
@@ -191,10 +188,10 @@ void MapEditorWidget::removeTileAt(int x, int y) {
 void MapEditorWidget::placeTileAt(int x, int y, QListWidgetItem* item) {
     if (!(item->flags() & Qt::ItemIsSelectable)) return;
     QIcon icon = item->icon();
-    QPixmap pixmap = icon.pixmap(32, 32);
+    QPixmap pixmap = icon.pixmap(TILE_SIZE, TILE_SIZE);
     removeTileAt(x, y);
     QGraphicsPixmapItem* tileItem = new QGraphicsPixmapItem(pixmap);
-    tileItem->setPos(x * 32, y * 32);
+    tileItem->setPos(x * TILE_SIZE, y * TILE_SIZE);
 
     //save asset path in the item data
     tileItem->setData(0, item->data(Qt::UserRole + 1));
@@ -225,7 +222,7 @@ bool MapEditorWidget::eventFilter(QObject* obj, QEvent* event) {
                     mimeData->setData("application/x-asset-index", QByteArray::number(assetsList->row(item)));
                     drag->setMimeData(mimeData);
                     
-                    QPixmap pixmap = item->icon().pixmap(32, 32);
+                    QPixmap pixmap = item->icon().pixmap(TILE_SIZE, TILE_SIZE);
                     drag->setPixmap(pixmap);
                     drag->setHotSpot(QPoint(pixmap.width()/2, pixmap.height()/2));
                     

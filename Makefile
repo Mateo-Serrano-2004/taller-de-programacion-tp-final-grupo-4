@@ -34,7 +34,11 @@ install-qt5:
 	@echo "Installing QT dependencies"
 	@sudo apt-get install -y qtbase5-dev
 
-install: install-compile-tools install-sdl2 install-qt5
+install-yaml:
+	@echo "Installing YAML dependencies"
+	@sudo apt-get install -y libyaml-cpp-dev
+
+install: install-compile-tools install-sdl2 install-qt5 install-yaml install-yaml
 
 clean:
 	rm -Rf ./build

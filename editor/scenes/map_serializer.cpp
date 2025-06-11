@@ -7,6 +7,8 @@
 #include <QDebug>
 #include <vector>
 
+#include "constants.h"
+
 void MapSerializer::saveToYaml(QGraphicsScene* scene, const QString& filePath) {
     YAML::Emitter out;
     out << YAML::BeginMap;
@@ -27,8 +29,8 @@ void MapSerializer::saveToYaml(QGraphicsScene* scene, const QString& filePath) {
         if (!pixItem) continue;
 
         QPointF pos = pixItem->pos();
-        int x = static_cast<int>(pos.x()) / 32;
-        int y = static_cast<int>(pos.y()) / 32;
+        int x = static_cast<int>(pos.x()) / TILE_SIZE;
+        int y = static_cast<int>(pos.y()) / TILE_SIZE;
 
         QString assetPath = pixItem->data(0).toString();
         if (assetPath.isEmpty()) continue;
@@ -39,6 +41,8 @@ void MapSerializer::saveToYaml(QGraphicsScene* scene, const QString& filePath) {
         else if (assetPath.contains("/Boxes/")) type = "box";
         else if (assetPath.contains("/Sites/")) type = "site";
         else if (assetPath.contains("/Cars/")) type = "car";
+        else if (assetPath.contains("/Spawns/")) type = "spawn";
+
         else type = "unknown";
 
         tiles.push_back({x, y, type, assetPath});
@@ -109,7 +113,7 @@ void MapSerializer::loadFromYaml(const QString& filePath, QGraphicsScene* scene)
             }
 
             QGraphicsPixmapItem* pixmapItem = new QGraphicsPixmapItem(pix);
-            pixmapItem->setPos(x * 32, y * 32);
+            pixmapItem->setPos(x * TILE_SIZE, y * TILE_SIZE);
             pixmapItem->setData(0, assetPath);
             scene->addItem(pixmapItem);
         }

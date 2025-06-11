@@ -1,6 +1,5 @@
 file(GLOB CPP_SOURCES
     "*.cpp"
-    "*.ui"
     )
 
 file(GLOB H_SOURCES

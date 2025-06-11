@@ -1,6 +1,5 @@
 file(GLOB CPP_SRC
     "*.cpp"
-    "*.ui"
     )
 
 file(GLOB H_SRC

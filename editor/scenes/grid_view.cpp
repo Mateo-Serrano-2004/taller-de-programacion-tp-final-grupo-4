@@ -4,11 +4,13 @@
 #include <QDropEvent>
 #include <QMimeData>
 
+#include "constants.h"
+
 void GridView::mousePressEvent(QMouseEvent* event) {
     QPointF pos = mapToScene(event->pos());
-    int tileX = static_cast<int>(pos.x()) / 32;
-    int tileY = static_cast<int>(pos.y()) / 32;
-    if (tileX >= 0 && tileX < 50 && tileY >= 0 && tileY < 50) {
+    int tileX = static_cast<int>(pos.x()) / TILE_SIZE;
+    int tileY = static_cast<int>(pos.y()) / TILE_SIZE;
+    if (tileX >= 0 && tileX < MAP_WIDTH && tileY >= 0 && tileY < MAP_HEIGHT) {
         emit cellClicked(tileX, tileY, event->button());
     }
     QGraphicsView::mousePressEvent(event);
@@ -23,9 +25,9 @@ void GridView::dragEnterEvent(QDragEnterEvent* event) {
 void GridView::dropEvent(QDropEvent* event) {
     if (event->mimeData()->hasFormat("application/x-asset-index")) {
         QPointF pos = mapToScene(event->pos());
-        int x = static_cast<int>(pos.x()) / 32;
-        int y = static_cast<int>(pos.y()) / 32;
-        if (x >= 0 && x < 50 && y >= 0 && y < 50) {
+        int x = static_cast<int>(pos.x()) / TILE_SIZE;
+        int y = static_cast<int>(pos.y()) / TILE_SIZE;
+        if (x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT) {
             QByteArray itemData = event->mimeData()->data("application/x-asset-index");
             int assetIndex = itemData.toInt();
             emit cellDropped(x, y, assetIndex);
@@ -55,9 +57,9 @@ void GridView::dragMoveEvent(QDragMoveEvent* event) {
 void GridView::mouseMoveEvent(QMouseEvent* event) {
     if (event->buttons() & Qt::LeftButton) {
         QPointF pos = mapToScene(event->pos());
-        int tileX = static_cast<int>(pos.x()) / 32;
-        int tileY = static_cast<int>(pos.y()) / 32;
-        if (tileX >= 0 && tileX < 50 && tileY >= 0 && tileY < 50) {
+        int tileX = static_cast<int>(pos.x()) / TILE_SIZE;
+        int tileY = static_cast<int>(pos.y()) / TILE_SIZE;
+        if (tileX >= 0 && tileX < MAP_WIDTH && tileY >= 0 && tileY < MAP_HEIGHT) {
             emit cellClicked(tileX, tileY, Qt::LeftButton);
         }
     }
