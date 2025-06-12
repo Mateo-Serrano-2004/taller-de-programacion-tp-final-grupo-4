@@ -108,6 +108,10 @@ void Game::handle_pick_role(const uint8_t player_id, const PickRoleEvent& event)
     if (it != players.end()) {
         it->second.set_role_id(event.get_role_id());
     }
+    /*
+    SI DESACOPLAMOS EL ADD_PLAYER DEL PICK ROLE
+    */
+    //current_round.add_player(it->second.get_team()); O TODO ESTO VA AL ELEGIR EL ROLL EN REALIDAD
 }
 
 void Game::tick(uint16_t frames_to_process) {
@@ -180,6 +184,13 @@ void Game::broadcast_game_state() {
 }
 // EN NINGUN MOMENTO AGREGO EL PLAYER A LA RONDA
 //ojo que informo error ahora si la partida ya empezó o terminó
+/*
+SI DESACOPLAMOS EL ADD_PLAYER DEL PICK ROLE, ENTONCES ACA DEBERÍA SER Model::TeamID::NONE
+Y AGREGAR LÓGICA QUE IGNORE SI HAY UN NONE EN VARIOS LADOS. 
+
+LO mejor para mi es que primero te llame un metodo consultando a que equipo/s se puede unir
+Luego el add_player lo llama ya con el role y el team asi ya queda en condiciones. 
+*/
 uint8_t Game::add_player(const std::string& username, ClientQueue& client_queue) {
     if(state == GameState::Playing || state == GameState::Finished){
         return -1;
