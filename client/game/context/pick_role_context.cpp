@@ -81,6 +81,7 @@ Context::PickRoleContext::PickRoleContext(Weak<Controller::GameController> contr
     background.set_keep_aspect_ratio(true);
     background.set_max_size(SDL2pp::Point(655, 160));
     background.set_min_size(SDL2pp::Point(399, 96));
+    background.set_min_bounds(SDL2pp::Point(640, 480));
 
     build_button(pick_role_1_button, Model::TextureID::SPRITE_CT1);
     build_button(pick_role_2_button, Model::TextureID::SPRITE_CT2);
