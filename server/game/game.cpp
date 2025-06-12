@@ -5,13 +5,15 @@
 #include "server/events/overloaded.h"
 
 void Game::run() {
-    //current_round = Round(1,1);
     PeriodicClock clock(GAME_FPS); 
 
     while (is_not_finished) {
         uint16_t frames_to_process = clock.sleep_and_get_frames();
         this->tick(frames_to_process);
     }
+
+    // aca debería avisar algo mas? 
+    // lo de la queue y demas lo libera el gamemanager? 
 }
 
 
@@ -164,6 +166,7 @@ void Game::tick(uint16_t frames_to_process) {
             if (rounds_played >= MAX_ROUNDS) {
                 state = GameState::Finished;
                 broadcast_game_state();
+                is_not_finished = false;
                 //broadcasteo termino de partida y lógica de terminar
                 return;
             }
@@ -216,6 +219,7 @@ void Game::tick(uint16_t frames_to_process) {
         if (rounds_played >= MAX_ROUNDS) {
             state = GameState::Finished;
             broadcast_game_state();
+            is_not_finished = false;
             //broadcasteo termino de partida y lógica de terminar
             return;
         }
