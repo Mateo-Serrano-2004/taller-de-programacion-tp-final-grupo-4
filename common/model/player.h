@@ -6,6 +6,7 @@
 
 #include "common/definitions.h"
 #include "common/role_id.h"
+#include "common/team.h"
 
 #include "vector_2d.h"
 #include "weapon.h"
@@ -26,9 +27,11 @@ protected:
     std::string name;
     Physics::Vector2D position;
     Shared<Weapon> current_weapon;
+    uint8_t health;
+    Model::TeamID team;
 
 public:
-    Player(short_id_t id, const std::string& name);
+    Player(short_id_t id, const std::string& name, Model::TeamID team);
 
     Player(
         bool shooting,
@@ -38,7 +41,9 @@ public:
         uint16_t money,
         const std::string& name,
         const Physics::Vector2D& position,
-        Shared<Weapon> weapon
+        Shared<Weapon> weapon,
+        uint8_t health,
+        Model::TeamID team
     );
 
     Player(const Player&) = delete;
@@ -55,6 +60,8 @@ public:
     std::string get_name() const;
     Physics::Vector2D get_position() const;
     Shared<Weapon> get_current_weapon() const;
+    uint8_t get_health() const;
+    Model::TeamID get_team() const;
 
     void set_alive(bool new_alive);
     void set_role_id(Model::RoleID new_sprite_id);
@@ -62,6 +69,7 @@ public:
     void set_money(uint16_t new_money);
     void set_position(Physics::Vector2D new_position);
     void set_current_weapon(Shared<Weapon> weapon);
+    void set_new_team(Model::TeamID new_team);
 
     DTO::PlayerDTO to_dto() const;
 
