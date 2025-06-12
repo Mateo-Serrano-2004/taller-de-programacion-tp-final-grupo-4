@@ -1,9 +1,11 @@
 #include "round.h"
 
-Round::Round(int active_ticks, int buying_ticks)
+Round::Round(int ct_alive, int tt_alive, int duration_in_ticks, int buying_ticks)
     : state(RoundState::Buying),
+      ct_alive(ct_alive),
+      tt_alive(tt_alive),
       buying_ticks_remaining(buying_ticks),
-      active_ticks_remaining(active_ticks) {}
+      active_ticks_remaining(duration_in_ticks) {}
 
 void Round::update(int frames_to_process) {
     if (state == RoundState::Ended) return;
@@ -49,4 +51,17 @@ uint16_t Round::get_ticks_remaining() const {
 
 RoundState Round::get_state() const {
     return state;
+}
+
+void Round::notify_player_death(Model::TeamID team) {
+    if (team == Model::TeamID::CT) {
+        if (--ct_alive <= 0) {
+            state = RoundState::Ended;
+        }
+    } else if (team == Model::TeamID::TT) {
+        if (--tt_alive <= 0) {
+            // Si la bomba está plantada, NO debe terminar la ronda falta esa lógica
+            state = RoundState::Ended;
+        }
+    }
 }
