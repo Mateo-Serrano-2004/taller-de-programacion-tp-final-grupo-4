@@ -4,6 +4,7 @@
 
 #include <arpa/inet.h>
 #include <string.h>
+#include <exception>
 
 #include "common/DTO/game_state_dto.h"
 #include "common/DTO/player_dto.h"
@@ -15,8 +16,8 @@
 
 EventVariant ServerProtocol::receive_event() {
     uint8_t size;
-    peer.recvall(&size, sizeof(size));
-
+    if (!peer.recvall(&size, sizeof(size))) throw std::runtime_error("End of communication");
+    
     std::vector<char> data(size);
     peer.recvall(data.data(), size);
 
