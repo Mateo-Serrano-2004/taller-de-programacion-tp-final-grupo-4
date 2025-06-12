@@ -15,7 +15,6 @@ void ClientHandlerSender::kill() { is_alive = false; }
 
 void ClientHandlerSender::close() {
     sender_queue.close();
-    join();
 }
 
 void ClientHandlerSender::run() {
@@ -31,4 +30,5 @@ void ClientHandlerSender::run() {
 
 ClientHandlerSender::~ClientHandlerSender() {
     close();
+    join();
 }

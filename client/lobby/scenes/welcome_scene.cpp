@@ -36,9 +36,9 @@ void WelcomeScene::setUpWelcome() {
     QWidget* container = new QWidget();
     QVBoxLayout* vLayout = new QVBoxLayout();
     vLayout->addWidget(textLabel);
-    vLayout->addWidget(nameInput);
-    vLayout->addWidget(ipInput);
-    vLayout->addWidget(portInput);
+    // vLayout->addWidget(nameInput);
+    // vLayout->addWidget(ipInput);
+    // vLayout->addWidget(portInput);
     vLayout->addWidget(startButton);
     container->setLayout(vLayout);
     container->setStyleSheet("background: transparent;");

@@ -128,7 +128,7 @@ void ServerProtocol::send_game_state(const DTO::GameStateDTO& game_state_dto) {
     send_player_list(game_state_dto.players);
 
     uint16_t time_left = htons(game_state_dto.time_left);
-    peer.sendall(&time_left, sizeof(time_left));
+    if (peer.sendall(&time_left, sizeof(time_left)) < 2) throw std::runtime_error("Broken pipe");
 }
 
 void ServerProtocol::send_all_maps_names(const std::vector<std::string>& maps) {

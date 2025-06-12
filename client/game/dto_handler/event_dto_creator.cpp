@@ -9,6 +9,7 @@
 
 #include "common/event_type.h"
 #include "event/create_game_event.h"
+#include "event/join_game_event.h"
 #include "event/movement_event.h"
 #include "event/quit_event.h"
 #include "event/request_maps_event.h"
@@ -143,12 +144,13 @@ DTO::EventDTO DTO::EventDTOCreator::create_new_match_event() const {
 }
 
 DTO::EventDTO DTO::EventDTOCreator::create_join_game_event() const {
+    auto join_game_event = std::static_pointer_cast<Model::JoinGameEvent>(event);
     DTO::EventDTO event_dto;
 
     uint8_t event_dto_size = 2;
     std::vector<char> data;
     data.push_back(static_cast<char>(Model::EventType::JOIN_GAME));
-    data.push_back(static_cast<char>(0));
+    data.push_back(static_cast<char>(join_game_event->get_game_id()));
 
     event_dto.size = event_dto_size;
     event_dto.data = std::move(data);

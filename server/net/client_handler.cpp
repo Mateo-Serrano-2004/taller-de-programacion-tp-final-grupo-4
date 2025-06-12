@@ -54,7 +54,6 @@ void ClientHandler::handle_event(const EventVariant& event) {
 void ClientHandler::close() {
     kill();
     sender.reset();
-    join();
 }
 
 ClientHandler::ClientHandler(Socket&& skt, GameManager& game_manager)
@@ -83,4 +82,5 @@ void ClientHandler::run() {
 
 ClientHandler::~ClientHandler() {
     close();
+    join();
 }
