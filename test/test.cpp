@@ -454,7 +454,15 @@ void test_cambio_ronda() {
     uint8_t player1_id = game.add_player("Player1", client_queue1, Model::TeamID::CT, Model::RoleID::CT1);
     uint8_t player2_id = game.add_player("Player2", client_queue2, Model::TeamID::TT, Model::RoleID::T1);
 
-    std::this_thread::sleep_for(seconds(60));
+    std::this_thread::sleep_for(seconds(7));
+    game.get_queue().push({player2_id, UseWeaponEvent()});
+    std::this_thread::sleep_for(milliseconds(32));
+    game.get_queue().push({player2_id, StopUsingWeaponEvent()});
+    std::this_thread::sleep_for(milliseconds(32));
+    game.get_queue().push({player2_id, UseWeaponEvent()});
+    std::this_thread::sleep_for(milliseconds(32));
+    game.get_queue().push({player2_id, StopUsingWeaponEvent()});
+    std::this_thread::sleep_for(seconds(53));
     game.stop();
 
     DTO::GameStateDTO last_printed_dto;
