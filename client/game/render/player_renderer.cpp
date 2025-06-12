@@ -63,7 +63,6 @@ void View::PlayerRenderer::set_player_to_be_rendered(
     background.add_child(player_pane);
 
     player_pane->set_draw_texture(true);
-    player_pane->set_keep_aspect_ratio(true);
 
     player_pane->set_texture(player->get_sprite_id());
     player_pane->set_texture_slice(sprite_slice);
@@ -168,34 +167,37 @@ void View::PlayerRenderer::load_player(View::Camera& camera, Shared<View::Render
     set_name_to_be_rendered(player, camera_view, player_display_size);
 }
 
-void View::PlayerRenderer::load_fov(angle_t angle) {
+void View::PlayerRenderer::render_fov(angle_t angle) {
     auto viewport = game_state_manager->get_camera().get_viewport();
     int viewport_width = viewport.GetX();
     int viewport_height = viewport.GetY();
 
-    // Id del fov_texture
+    // Id del fov_textureMore actions
     auto fov_texture = asset_manager->get_texture(Model::TextureID::FOV);
 
     // Squared texture
     int fov_texture_size = fov_texture->GetWidth();
 
-    int length_to_corners = std::sqrt(
+    int slice_radius = std::sqrt(
+        (640 * 640) + (480 * 480)
+    ) / 2;
+    int max_length_to_corners = std::sqrt(
         (viewport_width * viewport_width) + (viewport_height * viewport_height)
     ) / 2;
 
     renderer->Copy(
         *fov_texture,
         SDL2pp::Rect(
-            (fov_texture_size - 2 * length_to_corners) / 2,
-            (fov_texture_size - 2 * length_to_corners) / 2,
-            2 * length_to_corners,
-            2 * length_to_corners
+            (fov_texture_size - 2 * slice_radius) / 2,
+            (fov_texture_size - 2 * slice_radius) / 2,
+            2 * slice_radius,
+            2 * slice_radius
         ),
         SDL2pp::Rect(
-            (viewport_width - 2 * length_to_corners) / 2,
-            (viewport_height - 2 * length_to_corners) / 2,
-            2 * length_to_corners,
-            2 * length_to_corners
+            (viewport_width - 2 * max_length_to_corners) / 2,
+            (viewport_height - 2 * max_length_to_corners) / 2,
+            2 * max_length_to_corners,
+            2 * max_length_to_corners
         ),
         angle
     );
@@ -207,18 +209,20 @@ View::PlayerRenderer::PlayerRenderer(
    mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096),
    chunk("assets/sfx/weapons/fiveseven.wav"),
    controller(controller),
-   background(controller) {
+   background(controller),
+   fov(controller) {
     auto controller_locked = controller.lock();
 
     SDL_Rect bounds;
     SDL_GetDisplayBounds(0, &bounds);
     scalator.set_max_bounds(SDL2pp::Point(bounds.w, bounds.h));
+    scalator.set_min_bounds(SDL2pp::Point(640, 480));
     scalator.set_max_size(SDL2pp::Point(64, 64));
     scalator.set_min_size(SDL2pp::Point(32, 32));
 
     game_state_manager = controller_locked->get_game_state_manager();
     font = asset_manager->generate_font("liberationsans", 16);
-    background.set_background_color(255, 0, 255, 255);
+    background.set_background_color(255, 0, 255, 100);
     background.set_draw_background(true);
 }
 
@@ -247,10 +251,10 @@ void View::PlayerRenderer::render() {
     );
 
     background.render();
-    // render_fov(fov_angle);
+    render_fov(fov_angle);
 
     game_state_manager->map_function_on_pending_weapon_usages(
-        [this] (Shared<View::RenderedPlayer>& player) {
+        [this] (Shared<View::RenderedPlayer>&) {
             (void) mixer.PlayChannel(-1, chunk);
         }
     );

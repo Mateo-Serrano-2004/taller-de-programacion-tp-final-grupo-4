@@ -47,6 +47,7 @@ protected:
     Weak<Controller::GameController> controller;
     Scalator scalator;
     Pane background;
+    Pane fov;
     Shared<Controller::GameStateManager> game_state_manager;
     Shared<SDL2pp::Font> font;
 
@@ -68,8 +69,9 @@ protected:
 
     SDL2pp::Point get_sprite_top_left_corner(short_id_t sprite_piece);
 
+    void render_fov(angle_t angle);
+
     void load_player(Camera& camera, Shared<View::RenderedPlayer>& player);
-    void load_fov(angle_t angle);
 
 public:
     PlayerRenderer(Weak<Controller::GameController> controller);
