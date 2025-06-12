@@ -66,7 +66,7 @@ private:
     void handle_buy_weapon(const uint8_t& player_id, const BuyEvent& event);
     void handle_start_game();
     void clear_game_queue();
-
+    
     Game(const Game&) = delete;
     Game& operator=(const Game&) = delete;
 
@@ -85,13 +85,16 @@ public:
     void run() override;
     bool is_dead() const;
     void kill();
-    void stop() override;
+    void close();
+    void close_queues();
 
     Game(Game&&) = default;
     Game& operator=(Game&&) = default;
 
     ~Game() override {
-        is_not_finished = false;
+        if (is_not_finished) {
+            close_queues();
+        }
         join();
     }
 };

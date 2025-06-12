@@ -34,7 +34,7 @@ set_project_warnings(cs2d_common ${CS2D_MAKE_WARNINGS_AS_ERRORS} FALSE)
 
 target_include_directories(cs2d_common PUBLIC .)
 
-if(CS2D_CLIENT OR CS2D_EDITOR)
+if(CS2D_CLIENT)
     set(SDL2PP_WITH_IMAGE YES)
     set(SDL2PP_WITH_MIXER YES)
     set(SDL2PP_WITH_TTF YES)

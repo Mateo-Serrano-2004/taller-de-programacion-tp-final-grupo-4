@@ -21,13 +21,20 @@ public:
     explicit ClientHandlerSender(ServerProtocol& protocol): protocol(protocol) { start(); }
 
     void run() override;
-    void kill() { is_alive = false; }
+    void kill();
+    void close();
+    bool is_dead() const;
     Queue<DTO::GameStateDTO>& get_queue() { return sender_queue; }
 
     ClientHandlerSender(ClientHandlerSender&&) = default;
     ClientHandlerSender& operator=(ClientHandlerSender&&) = default;
 
-    ~ClientHandlerSender() { join(); }
+    ~ClientHandlerSender() {
+        if (is_alive) {
+            kill();
+            join();
+        }
+    }
 };
 
 #endif  // CLIENT_HANDLER_SENDER_H

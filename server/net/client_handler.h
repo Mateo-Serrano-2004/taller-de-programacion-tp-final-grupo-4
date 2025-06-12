@@ -22,7 +22,7 @@ private:
     GameManager& game_manager;
     GameQueue* game_queue;
     std::string username;
-    ClientHandlerSender* sender;
+    std::unique_ptr<ClientHandlerSender> sender;
     uint8_t player_id = 0;
 
     void handle_create_game(const CreateGameEvent& event);
@@ -43,11 +43,16 @@ public:
     void run() override;
     bool is_dead() const;
     void kill();
+    void close();
 
     ClientHandler(ClientHandler&&) = default;
     ClientHandler& operator=(ClientHandler&&) = default;
 
-    ~ClientHandler() = default;
+    ~ClientHandler() {
+        if (is_alive) {
+            close();
+        }
+    }
 };
 
 #endif  // CLIENT_HANDLER_H

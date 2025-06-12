@@ -113,7 +113,6 @@ void Game::handle_pick_role(const uint8_t player_id, const PickRoleEvent& event)
 }
 
 void Game::tick(uint16_t frames_to_process) {
-
     // compenso lo perdido (si hay)
     if(frames_to_process > 1) {
         uint16_t lost_frames = frames_to_process - 1;
@@ -121,48 +120,32 @@ void Game::tick(uint16_t frames_to_process) {
         current_round.update(lost_frames);
 
         if (current_round.has_ended()) {
-
             clear_game_queue();
-
-            //esto ya es lógica pero ver lo de jugadores y ronda
-            //preguntar quien gano, sumarle uno al contador de partida de ronda ganda de ese equipo
-                
             broadcast_game_state();
-
-            //OJO ACA QUE EN LA SIGUIENTE EL RELOJ TE PUEDE PASAR VARIOS FRAMES Y RECIEN ARRANCAS
-            //current_round = Round(180);
             return;  // nuevo round    
         }
     }
 
     // ejecuto el tick actual
     std::pair<uint8_t, GameEventVariant> event_info;
-    while (game_queue.try_pop(event_info)) { //ojo acá
-        uint8_t player_id = event_info.first;
-        GameEventVariant event = event_info.second;
-        handle(player_id, event);
+    try {
+        while (game_queue.try_pop(event_info)) {
+            uint8_t player_id = event_info.first;
+            GameEventVariant event = event_info.second;
+            handle(player_id, event);
+        }
+    } catch (const ClosedQueue&) {
+        // La cola está cerrada, no hay problema
     }
 
-    /*for (auto& [id, player]: players) {
-        player.update_position();
-    }*/
     movement_system.process_movements(players, 1);
-
     current_round.update(1);
 
     gamelogic.process_shooting(players, current_round);
             
     if (current_round.has_ended()) {
-        
         clear_game_queue();
-
-        //esto ya es lógica pero ver lo de jugadores y ronda
-        //preguntar quien gano, sumarle uno al contador de partida de ronda ganda de ese equipo
-
         broadcast_game_state();
-
-        //OJO ACA QUE EN LA SIGUIENTE EL RELOJ TE PUEDE PASAR VARIOS FRAMES Y RECIEN ARRANCAS
-        //current_round = Round(180);
         return;  // nuevo round    
     }
 
@@ -213,4 +196,23 @@ std::string Game::get_map_name() const { return map_name; }
 
 GameQueue& Game::get_queue() { return game_queue; }
 
-void Game::stop() { is_not_finished = false; }
+bool Game::is_dead() const { return !is_not_finished; }
+
+void Game::kill() { is_not_finished = false; }
+
+void Game::close_queues() {
+    try {
+        game_queue.close();
+    } catch (const std::runtime_error& e) {}
+    for (auto& [id, queue]: client_queues) {
+        try {
+            queue->close();
+        } catch (const std::runtime_error& e) {}
+    }
+}
+
+void Game::close() {
+    kill();
+    close_queues();
+    join();
+}
