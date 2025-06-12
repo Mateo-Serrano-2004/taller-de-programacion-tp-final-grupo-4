@@ -15,8 +15,15 @@
 #include "common/DTO/game_info_dto.h"
 #include "common/definitions.h"
 
-
 MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWindow) {
+    musicPlayer = new QMediaPlayer(this);
+    audioOutput = new QAudioOutput(QAudioFormat(), this);
+    audioOutput->setVolume(0.1f);
+    musicPlayer->setMedia(QUrl("qrc:/assets/Menu_Theme.mp3"));
+    musicPlayer->setPlaylist(new QMediaPlaylist());
+    musicPlayer->playlist()->addMedia(QUrl("qrc:/assets/Menu_Theme.mp3"));
+    musicPlayer->playlist()->setPlaybackMode(QMediaPlaylist::Loop);
+    musicPlayer->play();
     setUpWindow();
 }
 
@@ -25,6 +32,8 @@ MainWindow::~MainWindow() {
     if (protocol) {
         delete protocol;
     }
+    delete musicPlayer;
+    delete audioOutput;
 }
 
 void MainWindow::runGame() {
