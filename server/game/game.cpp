@@ -5,7 +5,7 @@
 #include "server/events/overloaded.h"
 
 void Game::run() {
-    current_round = Round();
+    current_round = Round(1,1);
     PeriodicClock clock(GAME_FPS); 
 
     while (is_not_finished) {
@@ -66,9 +66,9 @@ void Game::handle_start_game() {
     if (state != GameState::WaitingStart) return;
     clear_game_queue();  
     state = GameState::Playing;
-    current_round = Round();
+    current_round = Round(1,1);
 }
-
+// EN NINGUN MOMENTO SACO EL PLAYER A LA RONDA
 void Game::handle_leave_game(const uint8_t& player_id) {
     //Ojo ver estado de partida
     auto it = players.find(player_id);
@@ -178,14 +178,14 @@ void Game::broadcast_game_state() {
         queue->push(game_snapshot);
     }
 }
-
+// EN NINGUN MOMENTO AGREGO EL PLAYER A LA RONDA
 //ojo que informo error ahora si la partida ya empezó o terminó
 uint8_t Game::add_player(const std::string& username, ClientQueue& client_queue) {
     if(state == GameState::Playing || state == GameState::Finished){
         return -1;
     }
     const uint8_t new_id = next_player_id++;
-    players.emplace(new_id, FullPlayer(new_id, username));
+    players.emplace(new_id, FullPlayer(new_id, username, Model::TeamID::CT));
     client_queues[new_id] = &client_queue;
 
     if (state == GameState::WaitingPlayers && players.size() >= min_players_to_start) {

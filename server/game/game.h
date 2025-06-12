@@ -72,7 +72,7 @@ private:
 
 public:
     Game(const std::string& party_name, const std::string& map_name):
-            party_name(party_name), map_name(map_name) {
+            party_name(party_name), map_name(map_name), current_round(0,0) {
         start();
     }
 
