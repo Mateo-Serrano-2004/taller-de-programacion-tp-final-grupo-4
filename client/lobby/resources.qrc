@@ -1,0 +1,8 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/">
+        <file>assets/Menu_Theme.mp3</file>
+        <file>assets/logo.png</file>
+        <file>assets/welcome.jpg</file>
+    </qresource>
+</RCC> 

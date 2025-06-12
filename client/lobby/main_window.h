@@ -2,6 +2,9 @@
 #define MAIN_WINDOW_H
 
 #include <QMainWindow>
+#include <QMediaPlayer>
+#include <QMediaPlaylist>
+#include <QAudioOutput>
 
 #include "common/definitions.h"
 
@@ -24,7 +27,7 @@ class MainWindow: public QMainWindow {
 
 public:
     explicit MainWindow(QWidget* parent = nullptr);
-    ~MainWindow();
+    ~MainWindow() override;
 
 protected:
     void resizeEvent(QResizeEvent* event) override;
@@ -36,8 +39,10 @@ private slots:
 
 private:
     Ui::MainWindow* ui;
-    LobbyScene* lobbyScene = nullptr;
+    QMediaPlayer* musicPlayer;
+    QAudioOutput* audioOutput;
     WelcomeScene* welcomeScene = nullptr;
+    LobbyScene* lobbyScene = nullptr;
     GameCreationScene* gameCreationScene = nullptr;
     JoinGameScene* joinGameScene = nullptr;
     Shared<Net::ClientProtocol> protocol = nullptr;

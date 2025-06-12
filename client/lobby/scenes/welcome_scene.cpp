@@ -14,7 +14,7 @@
 WelcomeScene::WelcomeScene(QObject* parent): BackgroundScene(parent) { setUpWelcome(); }
 
 void WelcomeScene::setUpWelcome() {
-    QPixmap logo("client/lobby/assets/logo.png");
+    QPixmap logo(":/assets/logo.png");
     logo = logo.scaledToHeight(100, Qt::SmoothTransformation);
     QGraphicsPixmapItem* logoItem = addPixmap(logo);
     logoItem->setPos(120, 70);

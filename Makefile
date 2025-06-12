@@ -3,9 +3,11 @@
 NAME := cs2d
 
 debug:
-	mkdir -p build/
-	cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Debug
-	cmake --build  build/
+	@if [ ! -d "build" ]; then \
+		mkdir -p build/; \
+		cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Debug; \
+	fi
+	cmake --build build/
 
 install-compile-tools:
 	@echo "Installing dependencies"
@@ -33,6 +35,9 @@ install-sdl2:
 install-qt5:
 	@echo "Installing QT dependencies"
 	@sudo apt-get install -y qtbase5-dev
+	@sudo apt-get install -y qtmultimedia5-dev
+	@sudo apt-get install -y libqt5multimedia5-plugins
+	@sudo apt-get install -y gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly
 
 install: install-compile-tools install-sdl2 install-qt5
 

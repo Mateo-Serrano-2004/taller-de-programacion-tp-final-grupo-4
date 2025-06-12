@@ -55,6 +55,7 @@ endif()
 if(CS2D_CLIENT)
     set(CMAKE_AUTOUIC ON)
     set(CMAKE_AUTOMOC ON)
+    set(CMAKE_AUTORCC ON)
 
     add_executable(cs2d_client)
     add_dependencies(cs2d_client cs2d_common SDL2pp::SDL2pp)
@@ -64,14 +65,14 @@ if(CS2D_CLIENT)
         target_compile_definitions(cs2d_client PRIVATE DEBUG_MODE)
     endif()
 
-    find_package(Qt5 COMPONENTS Widgets REQUIRED)
+    find_package(Qt5 COMPONENTS Widgets Multimedia MultimediaWidgets REQUIRED)
     set_project_warnings(cs2d_client ${CS2D_MAKE_WARNINGS_AS_ERRORS} FALSE)
 
     target_include_directories(cs2d_client PRIVATE ${CMAKE_SOURCE_DIR})
     target_include_directories(cs2d_client PRIVATE ${libSDL2pp_SOURCE_DIR})
     target_include_directories(cs2d_client PRIVATE ${Qt5_INCLUDE_DIRS})
 
-    target_link_libraries(cs2d_client cs2d_common SDL2pp::SDL2pp Qt5::Widgets)
+    target_link_libraries(cs2d_client cs2d_common SDL2pp::SDL2pp Qt5::Widgets Qt5::Multimedia Qt5::MultimediaWidgets)
 endif()
 
 if(CS2D_SERVER)
@@ -89,7 +90,7 @@ if(CS2D_EDITOR)
     set(CMAKE_AUTOMOC ON)
 
     add_executable(cs2d_editor)
-    add_dependencies(cs2d_editor)
+    add_dependencies(cs2d_editor cs2d_common)
     add_subdirectory(editor/)
 
     find_package(Qt5 COMPONENTS Widgets REQUIRED)
