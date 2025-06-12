@@ -120,3 +120,12 @@ void Round::notify_player_left(Model::TeamID team) {
         }
     }
 }
+
+DTO::RoundDTO Round::to_dto(int fps) const {
+    return DTO::RoundDTO(
+        state,
+        this->has_ended(),
+        this->get_ticks_remaining() / fps,
+        this->which_team_won()
+    );
+}

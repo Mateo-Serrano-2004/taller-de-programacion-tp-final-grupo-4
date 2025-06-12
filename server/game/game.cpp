@@ -187,7 +187,7 @@ void Game::tick(uint16_t frames_to_process) {
         clear_game_queue();
     
         if (current_round.was_warmup()) {
-            // capaz broadcasteo especial de inicio de juego
+            //broadcasteo termino de partida
             broadcast_game_state();
             start_new_round();
             return;
@@ -220,41 +220,38 @@ void Game::tick(uint16_t frames_to_process) {
 
 void Game::broadcast_game_state() {
     std::vector<DTO::PlayerDTO> player_dtos;
-    for (const auto& [id, player]: players) {
+    for (const auto& [id, player] : players) {
         player_dtos.push_back(player.to_dto());
     }
 
-    uint16_t round_seconds_left = current_round.get_ticks_remaining() / GAME_FPS;
-    DTO::GameStateDTO game_snapshot(!current_round.was_warmup(), player_dtos, current_round.has_ended(), round_seconds_left);
-    for (auto& [id, queue]: client_queues) {
+    DTO::RoundDTO round_dto = current_round.to_dto(GAME_FPS);
+
+    
+    Model::TeamID winner = Model::TeamID::NONE;
+    if (state == GameState::Finished) {
+        if (ct_rounds_won > tt_rounds_won) winner = Model::TeamID::CT;
+        else if (tt_rounds_won > ct_rounds_won) winner = Model::TeamID::TT;
+    }
+
+    DTO::GameStateDTO game_snapshot(
+        state,
+        player_dtos,
+        state == GameState::Finished,
+        winner,
+        round_dto
+    );
+
+    for (auto& [id, queue] : client_queues) {
         queue->push(game_snapshot);
     }
 }
-// EN NINGUN MOMENTO AGREGO EL PLAYER A LA RONDA
-//ojo que informo error ahora si la partida ya empezó o terminó
-/*
-SI DESACOPLAMOS EL ADD_PLAYER DEL PICK ROLE, ENTONCES ACA DEBERÍA SER Model::TeamID::NONE
-Y AGREGAR LÓGICA QUE IGNORE SI HAY UN NONE EN VARIOS LADOS. 
 
-LO mejor para mi es que primero te llame un metodo consultando a que equipo/s se puede unir
-Luego el add_player lo llama ya con el role y el team asi ya queda en condiciones. 
-*/
-/*
-uint8_t Game::add_player(const std::string& username, ClientQueue& client_queue) {
-    if(state == GameState::Playing || state == GameState::Finished){
-        return -1;
-    }
-    const uint8_t new_id = next_player_id++;
-    players.emplace(new_id, FullPlayer(new_id, username, Model::TeamID::CT));
-    client_queues[new_id] = &client_queue;
 
-    if (state == GameState::WaitingPlayers && players.size() >= min_players_to_start) {
+    /*if (state == GameState::WaitingPlayers && players.size() >= min_players_to_start) {
         state = GameState::WaitingStart;
-    }
+    }*/
 
-    return new_id;
-}*/
-
+// FALTA: ESTO ESTA ARRANCANDO LA RONDA CON 1 SOLO PLAYER, QUE EVENTUALMENTE GANARÍA TODO Y TERMINA
 uint8_t Game::add_player(const std::string& username, ClientQueue& client_queue,
     Model::TeamID team_id, Model::RoleID role_id) {
     if (state != GameState::WaitingStart) {

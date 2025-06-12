@@ -4,13 +4,8 @@
 #include <cstdint>
 #include <iostream>
 #include "common/team.h"
-
-enum class RoundState {
-    Warmup,
-    Buying,
-    Active,
-    Ended
-};
+#include "common/round_state.h"
+#include "common/DTO/round_dto.h"
 
 class Round {
 private:
@@ -42,6 +37,7 @@ public:
     void notify_player_joined(Model::TeamID team);
     void notify_player_left(Model::TeamID team);
     Model::TeamID which_team_won() const;
+    DTO::RoundDTO to_dto(int fps) const;
 };
 
 #endif // ROUND_H

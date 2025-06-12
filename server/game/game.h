@@ -14,6 +14,7 @@
 #include "common/DTO/game_state_dto.h"
 #include "common/queue.h"
 #include "common/thread.h"
+#include "common/game_state.h"
 #include "model/full_player.h"
 #include "server/events/events.h"
 
@@ -23,12 +24,6 @@
 
 using GameQueue = Queue<std::pair<uint8_t, GameEventVariant>>;
 using ClientQueue = Queue<DTO::GameStateDTO>;
-
-enum class GameState {
-    WaitingStart,
-    Playing,
-    Finished
-};
 
 class Game: public Thread {
 private:

@@ -43,6 +43,7 @@ test_shoot:
 	    common/DTO/game_state_dto.cpp \
 	    common/DTO/player_dto.cpp \
 		common/DTO/weapon_dto.cpp \
+		common/DTO/round_dto.cpp \
 	    common/model/vector_2d.cpp \
 	    common/model/player.cpp \
 		common/model/weapon.cpp \

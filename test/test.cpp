@@ -422,6 +422,27 @@ void test_player_can_kill_other_and_earn_money() {
     std::cout << "\n✅ Test de muerte y recompensa completado correctamente" << std::endl;
 }*/
 
+#include <iostream>
+#include <chrono>
+#include <thread>
+#include <cassert>
+
+#include "../server/game/game.h"
+#include "../common/DTO/game_state_dto.h"
+#include "../common/queue.h"
+#include "../common/slot_id.h"
+#include "../common/weapon_id.h"
+
+const char* to_string(RoundState state) {
+    switch (state) {
+        case RoundState::Warmup: return "Warmup";
+        case RoundState::Buying: return "Buying";
+        case RoundState::Active: return "Active";
+        case RoundState::Ended:  return "Ended";
+        default: return "Unknown";
+    }
+}
+
 void test_cambio_ronda() {
     std::cout << "[TEST] - Cambio de ronda" << std::endl;
     using namespace std::chrono;
@@ -433,7 +454,7 @@ void test_cambio_ronda() {
     uint8_t player1_id = game.add_player("Player1", client_queue1, Model::TeamID::CT, Model::RoleID::CT1);
     uint8_t player2_id = game.add_player("Player2", client_queue2, Model::TeamID::TT, Model::RoleID::T1);
 
-    std::this_thread::sleep_for(seconds(12));
+    std::this_thread::sleep_for(seconds(60));
     game.stop();
 
     DTO::GameStateDTO last_printed_dto;
@@ -446,18 +467,39 @@ void test_cambio_ronda() {
         if (!printed_first) {
             should_print = true;
         } else if (
-            current_dto.is_valid != last_printed_dto.is_valid ||
-            current_dto.ended != last_printed_dto.ended
+            current_dto.round.ended != last_printed_dto.round.ended ||
+            current_dto.round.state != last_printed_dto.round.state
         ) {
             should_print = true;
         }
 
         if (should_print) {
             std::cout << "\n[DTO CAMBIADO] ------------------------" << std::endl;
-            std::cout << (current_dto.is_valid ? "✅ RONDA QUE CUENTA" : "❌ RONDA WARMUP") << " | ";
-            std::cout << (current_dto.ended ? "🔴 RONDA TERMINADA" : "🟢 RONDA EN CURSO") << " | ";
-            std::cout << "⏳ Tiempo restante: " << static_cast<int>(current_dto.time_left) << std::endl;
 
+            // RONDA
+            std::cout << (current_dto.round.state == RoundState::Warmup ? "❌ RONDA WARMUP" : "✅ RONDA QUE CUENTA") << " | ";
+            std::cout << (current_dto.round.ended ? "🔴 RONDA TERMINADA" : "🟢 RONDA EN CURSO") << " | ";
+            std::cout << "⏳ Tiempo restante: " << static_cast<int>(current_dto.round.time_left) << "s" << std::endl;
+            std::cout << "📍 Estado de la ronda: " << to_string(current_dto.round.state) << std::endl;
+
+            // GAME
+            std::cout << "🎮 Estado del juego: ";
+            switch (current_dto.game_state) {
+                case GameState::WaitingStart: std::cout << "Esperando inicio"; break;
+                case GameState::Playing:      std::cout << "Jugando"; break;
+                case GameState::Finished:     std::cout << "Finalizado"; break;
+            }
+            std::cout << std::endl;
+
+            std::cout << "🏆 Ganador de la partida: ";
+            switch (current_dto.winner) {
+                case Model::TeamID::CT:   std::cout << "CT"; break;
+                case Model::TeamID::TT:   std::cout << "TT"; break;
+                case Model::TeamID::NONE: std::cout << "Ninguno"; break;
+            }
+            std::cout << std::endl;
+
+            // PLAYERS
             for (const auto& player : current_dto.players) {
                 std::cout << "Player ID: " << static_cast<int>(player.player_id)
                           << " | Nombre: " << player.name
@@ -475,7 +517,6 @@ void test_cambio_ronda() {
         }
     }
 }
-
 
 int main() {
     //test_player_can_shoot_not_automatic_weapon();
