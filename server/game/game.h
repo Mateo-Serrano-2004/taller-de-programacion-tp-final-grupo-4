@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <mutex>
 #include <chrono>
 #include <cmath>
 #include <cstdint>
@@ -33,6 +34,7 @@ enum class GameState {
 
 class Game: public Thread {
 private:
+    std::mutex mutex;
     static constexpr int GAME_FPS = 60;
     uint8_t next_player_id = 0;
     std::string party_name;

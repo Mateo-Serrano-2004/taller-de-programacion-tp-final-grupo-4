@@ -167,5 +167,6 @@ void ServerProtocol::send_games(const std::vector<GameInfoDTO>& games) {
 }
 
 void ServerProtocol::send_player_id(uint8_t player_id) {
+    std::lock_guard<std::mutex> lock(mutex);
     peer.sendall(&player_id, sizeof(player_id));
 }

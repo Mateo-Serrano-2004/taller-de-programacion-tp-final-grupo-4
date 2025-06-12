@@ -22,10 +22,9 @@ void ClientHandler::handle_create_game(const CreateGameEvent& event) {
 
 void ClientHandler::handle_join_game(const JoinGameEvent& event) {
     sender = std::make_unique<ClientHandlerSender>(protocol);
-    std::cout << (int) (event.get_game_id()) << std::endl;
     player_id = game_manager.join_game(event.get_game_id(), username, sender->get_queue());
-    game_queue = game_manager.get_game_queue(event.get_game_id());
     protocol.send_player_id(player_id);
+    game_queue = game_manager.get_game_queue(event.get_game_id());
 }
 
 void ClientHandler::handle_username(const UsernameEvent& event) { username = event.get_username(); }

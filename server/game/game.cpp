@@ -1,5 +1,6 @@
 #include "game.h"
 
+#include <mutex>
 #include <exception>
 
 #include "common/model/vector_2d.h"
@@ -64,6 +65,7 @@ void Game::handle_start_game() {
 
 void Game::handle_leave_game(const uint8_t& player_id) {
     //Ojo ver estado de partida
+    std::lock_guard<std::mutex> lock(mutex);
     auto it = players.find(player_id);
     players.erase(it);
     auto queue_it = client_queues.find(player_id);
@@ -144,6 +146,7 @@ void Game::tick(uint16_t frames_to_process) {
 }
 
 void Game::broadcast_game_state() {
+    std::lock_guard<std::mutex> lock(mutex);
     std::vector<DTO::PlayerDTO> player_dtos;
     for (const auto& [id, player]: players) {
         player_dtos.push_back(player.to_dto());
@@ -154,15 +157,18 @@ void Game::broadcast_game_state() {
     DTO::GameStateDTO game_snapshot(true, player_dtos, current_round.has_ended(), round_seconds_left);
 
     for (auto& [id, queue]: client_queues) {
-        queue->push(game_snapshot);
+        try {
+            queue->push(game_snapshot);
+        } catch (const ClosedQueue&) {}
     }
 }
 
 //ojo que informo error ahora si la partida ya empezó o terminó
 uint8_t Game::add_player(const std::string& username, ClientQueue& client_queue) {
-    if(state == GameState::Playing || state == GameState::Finished){
-        return -1;
-    }
+    // if(state == GameState::Playing || state == GameState::Finished){
+    //     return -1;
+    // }
+    std::lock_guard<std::mutex> lock(mutex);
     const uint8_t new_id = next_player_id++;
     players.emplace(new_id, FullPlayer(new_id, username));
     client_queues[new_id] = &client_queue;
