@@ -47,8 +47,8 @@ EventVariant ServerProtocol::receive_event() {
             uint8_t party_name_size = uint8_t(data[1]);
             uint8_t map_name_size = uint8_t(data[2]);
 
-            std::string party_name(data.data() + 2, party_name_size);
-            std::string map_name(data.data() + 2 + party_name_size, map_name_size);
+            std::string party_name(data.data() + 3, party_name_size);
+            std::string map_name(data.data() + 3 + party_name_size, map_name_size);
 
             return CreateGameEvent(party_name, map_name);
         }
