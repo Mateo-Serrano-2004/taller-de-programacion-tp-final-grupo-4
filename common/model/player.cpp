@@ -8,11 +8,11 @@
 #include "common/DTO/weapon_dto.h"
 #include "common/weapon_id.h"
 
-Model::Player::Player(short_id_t id, const std::string& name, Model::TeamID team)
+Model::Player::Player(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role_id)
 : alive(true),
   shooting(false),
   id(id),
-  role_id(Model::RoleID::NO_ROLE),
+  role_id(role_id),
   angle(0),
   money(0),
   name(name),

@@ -12,8 +12,8 @@
 
 #include "server/game/weapon_factory.h"
 
-FullPlayer::FullPlayer(short_id_t id, const std::string& name, Model::TeamID team)
-: Model::Player(id, name, team),
+FullPlayer::FullPlayer(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role)
+: Model::Player(id, name, team, role),
   movement_direction(0, 0),
   secondary_weapon(WeaponFactory::create(Model::WeaponID::GLOCK)),
   knife(WeaponFactory::create(Model::WeaponID::KNIFE)) {
@@ -143,6 +143,15 @@ void FullPlayer::take_damage(uint8_t damage){
     }
 }
 
-void FullPlayer::add_money(uint16_t money_to_be_added){
+void FullPlayer::add_money(uint16_t money_to_be_added) {
     money += money_to_be_added;
+}
+
+void FullPlayer::reset_for_new_round() {
+    if(!is_alive()){
+        set_alive(true);
+        // acomodar armas a estado defalut falta
+        
+    }
+    health = 100;
 }

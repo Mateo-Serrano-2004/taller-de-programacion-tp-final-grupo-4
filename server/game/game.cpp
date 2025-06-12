@@ -5,7 +5,7 @@
 #include "server/events/overloaded.h"
 
 void Game::run() {
-    current_round = Round(1,1);
+    //current_round = Round(1,1);
     PeriodicClock clock(GAME_FPS); 
 
     while (is_not_finished) {
@@ -61,20 +61,36 @@ void Game::handle_buy_weapon(const uint8_t& player_id, const BuyEvent& event) {
     gamelogic.buy_weapon(it->second, event.get_weapon_id(), current_round);
 }
 
+// Hace el reset de cada player
+void Game::start_new_round() {
+    if (state != GameState::WaitingStart && state != GameState::Playing) return;
+    
+    if(state == GameState::WaitingStart) {
+        state = GameState::Playing;
+    }
 
-void Game::handle_start_game() {
-    if (state != GameState::WaitingStart) return;
-    clear_game_queue();  
-    state = GameState::Playing;
-    current_round = Round(1,1);
+    rounds_played++;
+
+    int ct_count = 0;
+    int tt_count = 0;
+
+    for (auto& [id, player] : players) {
+        player.reset_for_new_round();
+        if (player.get_team() == Model::TeamID::CT) ct_count++;
+        else if (player.get_team() == Model::TeamID::TT) tt_count++;
+    }
+    std::cout << "NUEVA RONDA" << std::endl;
+    current_round = Round(ct_count, tt_count);
 }
-// EN NINGUN MOMENTO SACO EL PLAYER A LA RONDA
+
 void Game::handle_leave_game(const uint8_t& player_id) {
-    //Ojo ver estado de partida
     auto it = players.find(player_id);
+    if (it != players.end()) {
+        current_round.notify_player_left(it->second.get_team());
+    }
     players.erase(it);
     auto queue_it = client_queues.find(player_id);
-    client_queues.erase(queue_it);
+    client_queues.erase(queue_it);   
 }
 
 void Game::handle_movement(const uint8_t& player_id, const MovementEvent& event) {
@@ -103,15 +119,12 @@ void Game::handle_rotation(const uint8_t& player_id, const RotationEvent& event)
     }
 }
 
+// ya no seria necesario esto. LO haces al agregar player
 void Game::handle_pick_role(const uint8_t player_id, const PickRoleEvent& event) {
     auto it = players.find(player_id);
     if (it != players.end()) {
         it->second.set_role_id(event.get_role_id());
     }
-    /*
-    SI DESACOPLAMOS EL ADD_PLAYER DEL PICK ROLE
-    */
-    //current_round.add_player(it->second.get_team()); O TODO ESTO VA AL ELEGIR EL ROLL EN REALIDAD
 }
 
 void Game::tick(uint16_t frames_to_process) {
@@ -121,20 +134,39 @@ void Game::tick(uint16_t frames_to_process) {
         uint16_t lost_frames = frames_to_process - 1;
         movement_system.process_movements(players, lost_frames);
         current_round.update(lost_frames);
+        // falta el shoot actualziar frames 
 
         if (current_round.has_ended()) {
-
             clear_game_queue();
+        
+            if (current_round.was_warmup()) {
+                // capaz broadcasteo especial de inicio de juego
+                broadcast_game_state();
+                start_new_round();
+                return;
+            }
 
-            //esto ya es lógica pero ver lo de jugadores y ronda
-            //preguntar quien gano, sumarle uno al contador de partida de ronda ganda de ese equipo
-                
+            Model::TeamID ganador = current_round.which_team_won();
+
+            if(ganador == Model::TeamID::CT){
+                ct_rounds_won++;
+            } else if (ganador == Model::TeamID::TT){
+                tt_rounds_won++;
+            }
+
+            // FALTA AGREGAR PREMIO DINEOR GANAR UNA RONDA
+
+            if (rounds_played >= MAX_ROUNDS) {
+                state = GameState::Finished;
+                broadcast_game_state();
+                //broadcasteo termino de partida y lógica de terminar
+                return;
+            }
+
             broadcast_game_state();
-
-            //OJO ACA QUE EN LA SIGUIENTE EL RELOJ TE PUEDE PASAR VARIOS FRAMES Y RECIEN ARRANCAS
-            //current_round = Round(180);
-            return;  // nuevo round    
-        }
+            start_new_round();
+            return;
+        }        
     }
 
     // ejecuto el tick actual
@@ -150,19 +182,37 @@ void Game::tick(uint16_t frames_to_process) {
     current_round.update(1);
 
     gamelogic.process_shooting(players, current_round, 1); // ojo frames to process aca!! no 1
-            
-    if (current_round.has_ended()) {
-        
-        clear_game_queue();
 
-        //esto ya es lógica pero ver lo de jugadores y ronda
-        //preguntar quien gano, sumarle uno al contador de partida de ronda ganda de ese equipo
+    if (current_round.has_ended()) {
+        clear_game_queue();
+    
+        if (current_round.was_warmup()) {
+            // capaz broadcasteo especial de inicio de juego
+            broadcast_game_state();
+            start_new_round();
+            return;
+        }
+
+        Model::TeamID ganador = current_round.which_team_won();
+
+        if(ganador == Model::TeamID::CT){
+            ct_rounds_won++;
+        } else if (ganador == Model::TeamID::TT){
+            tt_rounds_won++;
+        }
+
+        // FALTA AGREGAR PREMIO DINEOR GANAR UNA RONDA
+
+        if (rounds_played >= MAX_ROUNDS) {
+            state = GameState::Finished;
+            broadcast_game_state();
+            //broadcasteo termino de partida y lógica de terminar
+            return;
+        }
 
         broadcast_game_state();
-
-        //OJO ACA QUE EN LA SIGUIENTE EL RELOJ TE PUEDE PASAR VARIOS FRAMES Y RECIEN ARRANCAS
-        //current_round = Round(180);
-        return;  // nuevo round    
+        start_new_round();
+        return;
     }
 
     broadcast_game_state();
@@ -175,9 +225,7 @@ void Game::broadcast_game_state() {
     }
 
     uint16_t round_seconds_left = current_round.get_ticks_remaining() / GAME_FPS;
-
-    DTO::GameStateDTO game_snapshot(true, player_dtos, current_round.has_ended(), round_seconds_left);
-
+    DTO::GameStateDTO game_snapshot(!current_round.was_warmup(), player_dtos, current_round.has_ended(), round_seconds_left);
     for (auto& [id, queue]: client_queues) {
         queue->push(game_snapshot);
     }
@@ -191,6 +239,7 @@ Y AGREGAR LÓGICA QUE IGNORE SI HAY UN NONE EN VARIOS LADOS.
 LO mejor para mi es que primero te llame un metodo consultando a que equipo/s se puede unir
 Luego el add_player lo llama ya con el role y el team asi ya queda en condiciones. 
 */
+/*
 uint8_t Game::add_player(const std::string& username, ClientQueue& client_queue) {
     if(state == GameState::Playing || state == GameState::Finished){
         return -1;
@@ -202,6 +251,21 @@ uint8_t Game::add_player(const std::string& username, ClientQueue& client_queue)
     if (state == GameState::WaitingPlayers && players.size() >= min_players_to_start) {
         state = GameState::WaitingStart;
     }
+
+    return new_id;
+}*/
+
+uint8_t Game::add_player(const std::string& username, ClientQueue& client_queue,
+    Model::TeamID team_id, Model::RoleID role_id) {
+    if (state != GameState::WaitingStart) {
+        return -1;
+    }
+
+    const uint8_t new_id = next_player_id++;
+    players.emplace(new_id, FullPlayer(new_id, username, team_id, role_id));
+    client_queues[new_id] = &client_queue;
+
+    current_round.notify_player_joined(team_id);
 
     return new_id;
 }

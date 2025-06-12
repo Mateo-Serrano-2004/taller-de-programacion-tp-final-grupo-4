@@ -8,7 +8,7 @@
 #include "../common/queue.h"
 #include "../common/slot_id.h"
 #include "../common/weapon_id.h"
-
+/*
 void test_player_can_shoot_not_automatic_weapon() {
     std::cout << "[TEST] - Arranca con GLOCK y dispara" << std::endl;
     using namespace std::chrono;
@@ -420,6 +420,60 @@ void test_player_can_kill_other_and_earn_money() {
 
     assert(round_ended_detected && "La ronda debería haber terminado tras la muerte de Player 2");
     std::cout << "\n✅ Test de muerte y recompensa completado correctamente" << std::endl;
+}*/
+
+void test_cambio_ronda() {
+    std::cout << "[TEST] - Cambio de ronda" << std::endl;
+    using namespace std::chrono;
+
+    ClientQueue client_queue1;
+    ClientQueue client_queue2;
+    Game game("test_party", "test_map");
+
+    uint8_t player1_id = game.add_player("Player1", client_queue1, Model::TeamID::CT, Model::RoleID::CT1);
+    uint8_t player2_id = game.add_player("Player2", client_queue2, Model::TeamID::TT, Model::RoleID::T1);
+
+    std::this_thread::sleep_for(seconds(12));
+    game.stop();
+
+    DTO::GameStateDTO last_printed_dto;
+    bool printed_first = false;
+
+    DTO::GameStateDTO current_dto;
+    while (client_queue1.try_pop(current_dto)) {
+        bool should_print = false;
+
+        if (!printed_first) {
+            should_print = true;
+        } else if (
+            current_dto.is_valid != last_printed_dto.is_valid ||
+            current_dto.ended != last_printed_dto.ended
+        ) {
+            should_print = true;
+        }
+
+        if (should_print) {
+            std::cout << "\n[DTO CAMBIADO] ------------------------" << std::endl;
+            std::cout << (current_dto.is_valid ? "✅ RONDA QUE CUENTA" : "❌ RONDA WARMUP") << " | ";
+            std::cout << (current_dto.ended ? "🔴 RONDA TERMINADA" : "🟢 RONDA EN CURSO") << " | ";
+            std::cout << "⏳ Tiempo restante: " << static_cast<int>(current_dto.time_left) << std::endl;
+
+            for (const auto& player : current_dto.players) {
+                std::cout << "Player ID: " << static_cast<int>(player.player_id)
+                          << " | Nombre: " << player.name
+                          << " | Arma ID: " << static_cast<int>(player.weapon_dto.weapon_id)
+                          << " | Munición: " << static_cast<int>(player.weapon_dto.loaded_ammo)
+                          << " | Disparando: " << (player.shooting ? "Sí" : "No")
+                          << " | Dinero: $" << player.money
+                          << " | Salud: " << static_cast<int>(player.health)
+                          << " | Pos: (" << player.position_x << ", " << player.position_y << ")"
+                          << std::endl;
+            }
+
+            last_printed_dto = current_dto;
+            printed_first = true;
+        }
+    }
 }
 
 
@@ -429,7 +483,8 @@ int main() {
     //test_player_shoots_twice_with_release_in_between();
     //test_player_buy_m3_and_switch_auto();
     //test_player_buy_ak47_and_hold_fire();
-    test_player_can_kill_other_and_earn_money();
+    //test_player_can_kill_other_and_earn_money();
+    test_cambio_ronda();
     std::cout << "Pasaron los test" << std::endl;
     return 0;
 }

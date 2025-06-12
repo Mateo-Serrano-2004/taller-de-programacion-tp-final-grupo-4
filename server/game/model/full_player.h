@@ -20,7 +20,7 @@ private:
     Shared<FullWeapon> bomb;
 
 public:
-    FullPlayer(short_id_t id, const std::string& name, Model::TeamID team);
+    FullPlayer(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role);
 
     FullPlayer(FullPlayer&&) = default;
     FullPlayer& operator=(FullPlayer&&) = default;
@@ -42,6 +42,8 @@ public:
     bool can_pay(uint16_t price);
     void substract_money(uint16_t amount);
     Shared<FullWeapon> equip_new_weapon_and_drop_previous(Shared<FullWeapon> new_weapon);
+
+    void reset_for_new_round();
 
     ~FullPlayer() override = default;
 };
