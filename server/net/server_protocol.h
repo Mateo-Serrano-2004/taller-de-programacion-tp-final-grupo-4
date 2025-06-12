@@ -5,6 +5,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <mutex>
 
 #include "common/DTO/game_info_dto.h"
 #include "common/DTO/game_state_dto.h"
@@ -14,6 +15,7 @@
 
 class ServerProtocol {
 private:
+    std::mutex mutex;
     Socket peer;
 
     void send_player_list(const std::vector<DTO::PlayerDTO>& players);
