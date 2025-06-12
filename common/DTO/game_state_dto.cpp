@@ -5,15 +5,21 @@
 DTO::GameStateDTO::GameStateDTO()
     : game_state(GameState::WaitingStart),
       ended(false),
-      winner(Model::TeamID::NONE) {}
+      winner(Model::TeamID::NONE),
+      ct_rounds_won(0),
+      tt_rounds_won(0) {}
 
 DTO::GameStateDTO::GameStateDTO(GameState game_state,
                                  const std::vector<PlayerDTO>& players,
                                  bool ended,
                                  Model::TeamID winner,
-                                 const RoundDTO& round)
+                                 const RoundDTO& round,
+                                 uint8_t ct_rounds_won,
+                                 uint8_t tt_rounds_won)
     : game_state(game_state),
       players(std::move(players)),
       ended(ended),
       winner(winner),
-      round(round) {}
+      round(round),
+      ct_rounds_won(ct_rounds_won),
+      tt_rounds_won(tt_rounds_won) {}

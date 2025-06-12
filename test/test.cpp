@@ -499,6 +499,9 @@ void test_cambio_ronda() {
             }
             std::cout << std::endl;
 
+            std::cout << "🔢 Rondas ganadas - CT: " << static_cast<int>(current_dto.ct_rounds_won)
+                      << " | TT: " << static_cast<int>(current_dto.tt_rounds_won) << std::endl;
+
             // PLAYERS
             for (const auto& player : current_dto.players) {
                 std::cout << "Player ID: " << static_cast<int>(player.player_id)

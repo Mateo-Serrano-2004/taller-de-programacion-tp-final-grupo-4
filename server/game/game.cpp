@@ -248,7 +248,9 @@ void Game::broadcast_game_state() {
         player_dtos,
         state == GameState::Finished,
         winner,
-        round_dto
+        round_dto,
+        ct_rounds_won,
+        tt_rounds_won
     );
 
     for (auto& [id, queue] : client_queues) {
