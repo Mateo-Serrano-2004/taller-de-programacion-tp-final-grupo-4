@@ -444,7 +444,7 @@ const char* to_string(RoundState state) {
 }
 
 void test_cambio_ronda() {
-    std::cout << "[TEST] - Cambio de ronda" << std::endl;
+    std::cout << "[TEST] - 10 rondas de 5 segundos cada una" << std::endl;
     using namespace std::chrono;
 
     ClientQueue client_queue1;
@@ -466,6 +466,7 @@ void test_cambio_ronda() {
     game.stop();
 
     DTO::GameStateDTO last_printed_dto;
+    DTO::GameStateDTO final_dto;
     bool printed_first = false;
 
     DTO::GameStateDTO current_dto;
@@ -510,7 +511,6 @@ void test_cambio_ronda() {
             std::cout << "🔢 Rondas ganadas - CT: " << static_cast<int>(current_dto.ct_rounds_won)
                       << " | TT: " << static_cast<int>(current_dto.tt_rounds_won) << std::endl;
 
-            // PLAYERS
             for (const auto& player : current_dto.players) {
                 std::cout << "Player ID: " << static_cast<int>(player.player_id)
                           << " | Nombre: " << player.name
@@ -526,8 +526,42 @@ void test_cambio_ronda() {
             last_printed_dto = current_dto;
             printed_first = true;
         }
+
+        final_dto = current_dto;  // Guardamos el último DTO recibido
     }
+
+    // Mostrar explícitamente el DTO final
+    std::cout << "\n✅ [ÚLTIMO DTO RECIBIDO] ------------------------" << std::endl;
+    std::cout << "📍 Estado de la ronda: " << to_string(final_dto.round.state) << std::endl;
+    std::cout << "🎮 Estado del juego: " << (final_dto.game_state == GameState::Finished ? "Finalizado" : "Otro") << std::endl;
+    std::cout << "🏆 Ganador de la partida: "
+              << (final_dto.winner == Model::TeamID::CT ? "CT" :
+                 (final_dto.winner == Model::TeamID::TT ? "TT" : "Ninguno")) << std::endl;
+    std::cout << "🔢 Rondas ganadas - CT: " << static_cast<int>(final_dto.ct_rounds_won)
+              << " | TT: " << static_cast<int>(final_dto.tt_rounds_won) << std::endl;
+
+    // Asserts con el DTO más reciente
+    assert(final_dto.round.state == RoundState::Ended && "La ronda final no terminó correctamente");
+    assert(final_dto.game_state == GameState::Finished && "El estado del juego no es 'Finished'");
+    assert(final_dto.winner == Model::TeamID::CT && "El ganador del game debería ser CT");
+    assert(final_dto.ct_rounds_won == 9 && "CT debería haber ganado 10 rondas");
+    assert(final_dto.tt_rounds_won == 1 && "TT debería haber ganado 1 ronda");
+
+    bool found_player1 = false, found_player2 = false;
+    for (const auto& player : final_dto.players) {
+        if (player.player_id == player1_id) {
+            assert(player.money == 10500 && "El jugador 1 (CT) debería tener $10500");
+            found_player1 = true;
+        } else if (player.player_id == player2_id) {
+            assert(player.money == 3300 && "El jugador 2 (TT) debería tener $3300");
+            found_player2 = true;
+        }
+    }
+
+    assert(found_player1 && "No se encontró al jugador 1 en el DTO final");
+    assert(found_player2 && "No se encontró al jugador 2 en el DTO final");
 }
+
 
 int main() {
     //test_player_can_shoot_not_automatic_weapon();
