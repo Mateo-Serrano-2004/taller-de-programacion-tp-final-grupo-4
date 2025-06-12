@@ -51,6 +51,7 @@ test_shoot:
 		server/game/model/full_weapon.cpp \
 	    server/game/game.cpp \
 	    server/game/round.cpp \
+		server/game/shot_manager.cpp \
 		server/game/movement_system.cpp \
 		server/game/weapon_factory.cpp \
 		server/game/game_logic.cpp \
