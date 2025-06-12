@@ -3,6 +3,7 @@
 #include <iostream>
 #include <utility>
 #include <variant>
+#include <exception>
 
 #include "server/events/overloaded.h"
 
@@ -21,6 +22,7 @@ void ClientHandler::handle_create_game(const CreateGameEvent& event) {
 
 void ClientHandler::handle_join_game(const JoinGameEvent& event) {
     sender = std::make_unique<ClientHandlerSender>(protocol);
+    std::cout << (int) (event.get_game_id()) << std::endl;
     player_id = game_manager.join_game(event.get_game_id(), username, sender->get_queue());
     game_queue = game_manager.get_game_queue(event.get_game_id());
     protocol.send_player_id(player_id);
@@ -49,25 +51,36 @@ void ClientHandler::handle_event(const EventVariant& event) {
                event);
 }
 
+void ClientHandler::close() {
+    kill();
+    sender.reset();
+    join();
+}
+
+ClientHandler::ClientHandler(Socket&& skt, GameManager& game_manager)
+: protocol(skt), game_manager(game_manager) {
+    start();
+}
+
+bool ClientHandler::is_dead() const {
+    return !is_alive;
+}
+
+void ClientHandler::kill() {
+    is_alive = false;
+}
+
 void ClientHandler::run() {
     try {
         while (is_alive) {
             EventVariant event = protocol.receive_event();
             handle_event(event);
         }
-    } catch (...) {
+    } catch (const std::exception&) {
         kill();
     }
 }
 
-void ClientHandler::kill() { is_alive = false; }
-
-bool ClientHandler::is_dead() const { return !is_alive; }
-
-void ClientHandler::close() {
-    kill();
-    if (sender) {
-        sender->kill();
-        sender->join();
-    }
+ClientHandler::~ClientHandler() {
+    close();
 }

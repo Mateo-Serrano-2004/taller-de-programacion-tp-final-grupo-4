@@ -12,7 +12,7 @@
 
 Controller::Receiver::Receiver(
     Controller::GameController* controller,
-    Net::ClientProtocol* protocol
+    Shared<Net::ClientProtocol> protocol
 ): controller(controller),
    game_state_manager(controller->get_game_state_manager()),
    protocol(protocol) {

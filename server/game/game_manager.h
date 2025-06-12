@@ -22,17 +22,16 @@ class GameManager {
 private:
     std::mutex mtx;
     GameMap games;
-    std::string game_config_path;
     uint8_t game_counter = 0;
-    
+
     void reap_games();
     void clear_games();
-    
+
     GameManager(const GameManager&) = delete;
     GameManager& operator=(const GameManager&) = delete;
 
 public:
-    explicit GameManager(const std::string& game_config_path): game_config_path(game_config_path) {}
+    GameManager() = default;
 
     uint8_t create_game(const std::string& party_name, const std::string& map_name,
                         const std::string& username, Queue<DTO::GameStateDTO>& client_queue);
@@ -47,9 +46,7 @@ public:
     GameManager(GameManager&&) = default;
     GameManager& operator=(GameManager&&) = default;
 
-    ~GameManager() {
-        clear_games();
-    }
+    ~GameManager();
 };
 
 #endif  // GAME_MANAGER_H

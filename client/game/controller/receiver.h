@@ -17,7 +17,7 @@ class Receiver: public Thread {
 protected:
     GameController* controller;
     Shared<GameStateManager> game_state_manager;
-    Net::ClientProtocol* protocol;
+    Shared<Net::ClientProtocol> protocol;
 
     Receiver(const Receiver&) = delete;
     Receiver& operator=(const Receiver&) = delete;
@@ -25,7 +25,7 @@ protected:
 public:
     Receiver(
         GameController* controller,
-        Net::ClientProtocol* protocol
+        Shared<Net::ClientProtocol> protocol
     );
 
     void run() override;

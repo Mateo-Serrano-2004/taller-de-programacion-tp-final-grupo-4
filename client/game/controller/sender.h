@@ -17,7 +17,7 @@ namespace Controller {
 class Sender: public Thread {
 protected:
     SharedQueue<Model::Event>* sender_queue;
-    Net::ClientProtocol* protocol;
+    Shared<Net::ClientProtocol> protocol;
 
     Sender(const Sender&) = delete;
     Sender& operator=(const Sender&) = delete;
@@ -25,7 +25,7 @@ protected:
 public:
     Sender(
         SharedQueue<Model::Event>* sender_queue,
-        Net::ClientProtocol* protocol
+        Shared<Net::ClientProtocol> protocol
     );
 
     void run() override;

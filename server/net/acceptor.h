@@ -5,18 +5,18 @@
 #include <memory>
 #include <string>
 
+#include "common/definitions.h"
 #include "common/socket.h"
 #include "common/thread.h"
-#include "common/definitions.h"
 #include "server/game/game_manager.h"
 
 #include "client_handler.h"
 
 class Acceptor: public Thread {
 private:
-    Socket &acceptor;
     std::list<Unique<ClientHandler>> clients;
     bool is_alive = true;
+    Socket& acceptor;
     GameManager& game_manager;
 
     void reap();
@@ -24,22 +24,16 @@ private:
 
     Acceptor(const Acceptor&) = delete;
     Acceptor& operator=(const Acceptor&) = delete;
+    Acceptor(Acceptor&&) = delete;
+    Acceptor& operator=(Acceptor&&) = delete;
 
 public:
-    explicit Acceptor(Socket& acceptor, GameManager& game_manager):
-            acceptor(acceptor), game_manager(game_manager) {
-        start();
-    }
+    Acceptor(Socket& acceptor, GameManager& game_manager);
+
     void kill();
     void run() override;
 
-    Acceptor(Acceptor&&) = default;
-    Acceptor& operator=(Acceptor&&) = default;
-
-    ~Acceptor() {
-        clear();
-        join();
-    }
+    ~Acceptor() override;
 };
 
 #endif  // ACCEPTOR_H

@@ -33,7 +33,7 @@ protected:
     void load_generated_textures(Shared<Model::AssetManager> asset_manager, Shared<SDL2pp::Renderer> renderer);
 
 public:
-    CS2DApp(Net::ClientProtocol* protocol);
+    CS2DApp(Shared<Net::ClientProtocol> protocol);
 
     ~CS2DApp() override = default;
 };

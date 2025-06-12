@@ -1,19 +1,10 @@
 #include "game.h"
 
+#include <exception>
+
 #include "common/model/vector_2d.h"
 #include "common/periodic_clock.h"
 #include "server/events/overloaded.h"
-
-void Game::run() {
-    current_round = Round();
-    PeriodicClock clock(GAME_FPS); 
-
-    while (is_not_finished) {
-        uint16_t frames_to_process = clock.sleep_and_get_frames();
-        this->tick(frames_to_process);
-    }
-}
-
 
 void Game::handle(uint8_t player_id, const GameEventVariant& event) {
     std::visit(
@@ -188,6 +179,17 @@ void Game::clear_game_queue() {
     while(game_queue.try_pop(event_info));
 }
 
+void Game::close() {
+    kill();
+    game_queue.close();
+    join();
+}
+
+Game::Game(const std::string& party_name, const std::string& map_name)
+: party_name(party_name), map_name(map_name) {
+    start();
+}
+
 uint8_t Game::get_num_players() const { return players.size(); }
 
 std::string Game::get_party_name() const { return party_name; }
@@ -200,19 +202,16 @@ bool Game::is_dead() const { return !is_not_finished; }
 
 void Game::kill() { is_not_finished = false; }
 
-void Game::close_queues() {
-    try {
-        game_queue.close();
-    } catch (const std::runtime_error& e) {}
-    for (auto& [id, queue]: client_queues) {
-        try {
-            queue->close();
-        } catch (const std::runtime_error& e) {}
+void Game::run() {
+    current_round = Round();
+    PeriodicClock clock(GAME_FPS);
+
+    while (is_not_finished) {
+        uint16_t frames_to_process = clock.sleep_and_get_frames();
+        this->tick(frames_to_process);
     }
 }
 
-void Game::close() {
-    kill();
-    close_queues();
-    join();
+Game::~Game() {
+    close();
 }

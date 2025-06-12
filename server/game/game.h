@@ -66,15 +66,16 @@ private:
     void handle_buy_weapon(const uint8_t& player_id, const BuyEvent& event);
     void handle_start_game();
     void clear_game_queue();
-    
+
+    void close();
+
     Game(const Game&) = delete;
     Game& operator=(const Game&) = delete;
+    Game(Game&&) = delete;
+    Game& operator=(Game&&) = delete;
 
 public:
-    Game(const std::string& party_name, const std::string& map_name):
-            party_name(party_name), map_name(map_name) {
-        start();
-    }
+    Game(const std::string& party_name, const std::string& map_name);
 
     uint8_t get_num_players() const;
     std::string get_party_name() const;
@@ -82,21 +83,13 @@ public:
     GameQueue& get_queue();
     uint8_t add_player(const std::string& username, ClientQueue& client_queue);
 
-    void run() override;
     bool is_dead() const;
+
     void kill();
-    void close();
-    void close_queues();
 
-    Game(Game&&) = default;
-    Game& operator=(Game&&) = default;
+    void run() override;
 
-    ~Game() override {
-        if (is_not_finished) {
-            close_queues();
-        }
-        join();
-    }
+    ~Game() override;
 };
 
 #endif  // GAME_H

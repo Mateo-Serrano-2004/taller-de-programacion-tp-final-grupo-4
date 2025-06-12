@@ -29,7 +29,7 @@ class GameStateManager;
 class GameController: public BaseController {
 protected:
     SharedQueue<Model::Event> sender_queue;
-    Net::ClientProtocol* protocol;
+    Shared<Net::ClientProtocol> protocol;
     Shared<GameStateManager> game_state_manager;
     Sender sender;
     Receiver receiver;
@@ -45,7 +45,7 @@ public:
         Shared<SDL2pp::Renderer> renderer,
         Shared<Model::AssetManager> asset_manager,
         Shared<Context::ContextManager> context_manager,
-        Net::ClientProtocol* protocol
+        Shared<Net::ClientProtocol> protocol
     );
 
     void handle_event(Shared<Model::Event> event) override;

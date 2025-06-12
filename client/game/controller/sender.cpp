@@ -11,7 +11,7 @@
 
 Controller::Sender::Sender(
     SharedQueue<Model::Event>* sender_queue,
-    Net::ClientProtocol* protocol
+    Shared<Net::ClientProtocol> protocol
 ): sender_queue(sender_queue), protocol(protocol) {
     start();
 }

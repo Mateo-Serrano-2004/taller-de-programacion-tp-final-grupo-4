@@ -3,27 +3,30 @@
 
 #include <string>
 
-#include "server_protocol.h"
+#include "common/definitions.h"
+#include "common/socket.h"
 
-namespace Controller {
+#include "server/game/game_manager.h"
+
+#include "acceptor.h"
+
 class Server {
 private:
-    std::string port;
-    std::string game_config_path;
+    GameManager game_manager;
+    Unique<Socket> socket_pointer;
+    Acceptor acceptor;
 
     Server(const Server&) = delete;
     Server& operator=(const Server&) = delete;
+    Server(Server&&) = delete;
+    Server& operator=(Server&&) = delete;
 
 public:
-    Server(const std::string& port, const std::string& game_config_path);
+    Server(const std::string& port);
 
-    void run();
+    void launch();
 
-    Server(Server&&) = default;
-    Server& operator=(Server&&) = default;
-
-    ~Server() = default;
+    ~Server();
 };
-};  // namespace Controller
 
 #endif  // SERVER_H

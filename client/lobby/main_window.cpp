@@ -24,9 +24,6 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWin
 
 MainWindow::~MainWindow() {
     delete ui;
-    if (protocol) {
-        delete protocol;
-    }
 }
 
 void MainWindow::runGame() {
@@ -71,9 +68,12 @@ void MainWindow::showWelcomeScene() {
     ui->mainView->setScene(welcomeScene);
     connect(
             welcomeScene, &WelcomeScene::startClicked, this,
-            [this](QString username, QString ip, QString port) {
-                protocol = new Net::ClientProtocol(ip.toStdString(), port.toStdString());
-                auto usernameEvent = make_shared<Model::UsernameEvent>(username.toStdString());
+            // [this](QString username, QString ip, QString port) {
+            [this] () {
+                // protocol = new Net::ClientProtocol(ip.toStdString(), port.toStdString());
+                std::string username = "user";
+                protocol = make_shared<Net::ClientProtocol>("localhost", "9000");
+                auto usernameEvent = make_shared<Model::UsernameEvent>(username);
                 DTO::EventDTOCreator creator(usernameEvent);
                 protocol->send_event(creator);
 

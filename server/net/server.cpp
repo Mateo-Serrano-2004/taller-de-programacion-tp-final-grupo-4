@@ -1,24 +1,27 @@
 #include "server.h"
 
+#include <string>
+#include <memory>
 #include <utility>
 
-#include "server/game/game_manager.h"
+#include "common/definitions.h"
 
 #include "acceptor.h"
 
 #define EXIT "q"
 
-Controller::Server::Server(const std::string& port, const std::string& game_config_path):
-        port(port), game_config_path(game_config_path) {
-    run();
-}
+Server::Server(
+    const std::string& port
+): socket_pointer(make_unique<Socket>(port.c_str())),
+   acceptor(*socket_pointer, game_manager) {}
 
-void Controller::Server::run() {
-    Socket skt(port.c_str());
-    GameManager game_manager(game_config_path);
-    Acceptor acceptor(skt, game_manager);
+void Server::launch() {
+    acceptor.start();
 
     std::string input;
     while (input != EXIT) std::getline(std::cin, input);
-    skt.shutdown(2);
+}
+
+Server::~Server() {
+    socket_pointer.reset();
 }

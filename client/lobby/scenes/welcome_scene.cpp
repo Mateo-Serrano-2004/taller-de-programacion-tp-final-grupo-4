@@ -22,14 +22,14 @@ void WelcomeScene::setUpWelcome() {
     QLabel* textLabel = new QLabel("¡Bienvenido!");
     textLabel->setStyleSheet("QLabel { color: white; font-size: 16px; font-weight: bold; }");
 
-    nameInput = new StyledLineEdit();
-    nameInput->setPlaceholderText("Ingrese su username");
+    // nameInput = new StyledLineEdit();
+    // nameInput->setPlaceholderText("Ingrese su username");
 
-    ipInput = new StyledLineEdit();
-    ipInput->setPlaceholderText("IP del servidor");
+    // ipInput = new StyledLineEdit();
+    // ipInput->setPlaceholderText("IP del servidor");
 
-    portInput = new StyledLineEdit();
-    portInput->setPlaceholderText("Puerto");
+    // portInput = new StyledLineEdit();
+    // portInput->setPlaceholderText("Puerto");
 
     StyledButton* startButton = new StyledButton("Ingresar");
 
@@ -82,23 +82,23 @@ void WelcomeScene::setUpWelcome() {
     };
 
     connect(startButton, &QPushButton::clicked, this, [this, showError]() {
-        QString username = nameInput->text().trimmed();
-        QString ip = ipInput->text().trimmed();
-        QString port = portInput->text().trimmed();
+        // QString username = nameInput->text().trimmed();
+        // QString ip = ipInput->text().trimmed();
+        // QString port = portInput->text().trimmed();
 
-        if (username.isEmpty() || ip.isEmpty() || port.isEmpty()) {
-            showError("Por favor, complete todos los campos.");
-            return;
-        }
+        // if (username.isEmpty() || ip.isEmpty() || port.isEmpty()) {
+        //     showError("Por favor, complete todos los campos.");
+        //     return;
+        // }
 
-        bool ok;
-        int portNumber = port.toInt(&ok);
-        if (!ok || portNumber <= 0 || portNumber > 65535) {
-            showError("El puerto debe ser un número válido entre 1 y 65535.");
-            return;
-        }
+        // bool ok;
+        // int portNumber = port.toInt(&ok);
+        // if (!ok || portNumber <= 0 || portNumber > 65535) {
+        //     showError("El puerto debe ser un número válido entre 1 y 65535.");
+        //     return;
+        // }
 
-        emit startClicked(username, ip, port);
+        emit startClicked(/* username, ip, port */);
     });
 
     connect(this, &QGraphicsScene::sceneRectChanged, this,

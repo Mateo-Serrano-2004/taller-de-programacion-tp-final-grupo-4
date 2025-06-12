@@ -3,19 +3,17 @@
 #include "common/definitions.h"
 #include "net/server.h"
 
-#define NUM_ARGS 3
+#define NUM_ARGS 2
 
 int main(int argc, char* argv[]) try {
 
     if (argc != NUM_ARGS) {
-        std::cerr << "Please use: " << argv[0] << " <port> <game_config_path>" << std::endl;
+        std::cerr << "Please use: " << argv[0] << " <port>" << std::endl;
         return ERROR;
     }
 
-    std::string port(argv[1]);
-    std::string game_config_path(argv[2]);
-
-    Controller::Server server(port, game_config_path);
+    Server server(argv[1]);
+    server.launch();
 
     return SUCCESS;
 } catch (const std::exception& e) {

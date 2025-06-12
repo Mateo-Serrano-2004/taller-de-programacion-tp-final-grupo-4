@@ -134,7 +134,7 @@ void App::CS2DApp::load_generated_textures(Shared<Model::AssetManager> asset_man
     asset_manager->load_texture(Model::TextureID::FOV, asset_generator.generate_fov());
 }
 
-App::CS2DApp::CS2DApp(Net::ClientProtocol* protocol): App::Application() {
+App::CS2DApp::CS2DApp(Shared<Net::ClientProtocol> protocol): App::Application() {
     auto window = make_shared<SDL2pp::Window>(
         "In Game",
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,

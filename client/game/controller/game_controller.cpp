@@ -23,7 +23,7 @@ Controller::GameController::GameController(
 	Shared<SDL2pp::Renderer> renderer,
 	Shared<Model::AssetManager> asset_manager,
 	Shared<Context::ContextManager> context_manager,
-	Net::ClientProtocol* protocol
+	Shared<Net::ClientProtocol> protocol
 ): Controller::BaseController(window, renderer, asset_manager, context_manager),
    protocol(protocol),
    game_state_manager(make_shared<Controller::GameStateManager>(

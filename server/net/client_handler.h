@@ -4,10 +4,13 @@
 #include <functional>
 #include <map>
 #include <memory>
+#include <atomic>
 #include <string>
 
+#include "common/definitions.h"
 #include "common/queue.h"
 #include "common/thread.h"
+
 #include "server/events/events.h"
 #include "server/game/game.h"
 #include "server/game/game_manager.h"
@@ -17,13 +20,13 @@
 
 class ClientHandler: public Thread {
 private:
-    ServerProtocol protocol;
-    bool is_alive = true;
-    GameManager& game_manager;
-    GameQueue* game_queue;
-    std::string username;
-    std::unique_ptr<ClientHandlerSender> sender;
     uint8_t player_id = 0;
+    std::atomic<bool> is_alive = true;
+    GameQueue* game_queue = nullptr;
+    Unique<ClientHandlerSender> sender = nullptr;
+    std::string username;
+    ServerProtocol protocol;
+    GameManager& game_manager;
 
     void handle_create_game(const CreateGameEvent& event);
     void handle_join_game(const JoinGameEvent& event);
@@ -35,24 +38,21 @@ private:
 
     ClientHandler(const ClientHandler&) = delete;
     ClientHandler& operator=(const ClientHandler&) = delete;
+    ClientHandler(ClientHandler&&) = delete;
+    ClientHandler& operator=(ClientHandler&&) = delete;
 
-public:
-    ClientHandler(Socket&& skt, GameManager& game_manager):
-            protocol(skt), game_manager(game_manager), game_queue(nullptr), sender(nullptr) {}
-
-    void run() override;
-    bool is_dead() const;
-    void kill();
     void close();
 
-    ClientHandler(ClientHandler&&) = default;
-    ClientHandler& operator=(ClientHandler&&) = default;
+public:
+    ClientHandler(Socket&& skt, GameManager& game_manager);
 
-    ~ClientHandler() {
-        if (is_alive) {
-            close();
-        }
-    }
+    bool is_dead() const;
+
+    void kill();
+
+    void run() override;
+
+    ~ClientHandler() override;
 };
 
 #endif  // CLIENT_HANDLER_H

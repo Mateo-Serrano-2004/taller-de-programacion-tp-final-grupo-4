@@ -1,6 +1,7 @@
 #include "event_handler_strategy.h"
 
 #include <memory>
+#include <utility>
 
 #include "controller/base_controller.h"
 
@@ -9,12 +10,12 @@
 
 void Controller::EventHandlerStrategy::handle_quit_event() {
     auto quit_event = make_shared<Model::QuitEvent>();
-    controller.lock()->handle_event(quit_event);
+    controller.lock()->handle_event(std::move(quit_event));
 }
 
 void Controller::EventHandlerStrategy::handle_window_resize_event() {
     auto window_resize_event = make_shared<Model::WindowResizeEvent>();
-    controller.lock()->handle_event(window_resize_event);
+    controller.lock()->handle_event(std::move(window_resize_event));
 }
 
 void Controller::EventHandlerStrategy::handle(Shared<SDL_Event> event) {

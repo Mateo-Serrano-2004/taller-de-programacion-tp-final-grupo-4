@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include "common/definitions.h"
+
 #include "client/net/client_protocol.h"
 #include "scenes/game_creation_scene.h"
 #include "scenes/join_game_scene.h"
@@ -38,7 +40,7 @@ private:
     WelcomeScene* welcomeScene = nullptr;
     GameCreationScene* gameCreationScene = nullptr;
     JoinGameScene* joinGameScene = nullptr;
-    Net::ClientProtocol* protocol = nullptr;
+    Shared<Net::ClientProtocol> protocol = nullptr;
     void setUpWindow();
 
     void clearCurrentScene();
