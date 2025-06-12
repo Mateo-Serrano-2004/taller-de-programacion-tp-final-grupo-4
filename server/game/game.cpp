@@ -64,11 +64,9 @@ void Game::handle_buy_weapon(const uint8_t& player_id, const BuyEvent& event) {
 
 void Game::handle_start_game() {
     if (state != GameState::WaitingStart) return;
-
     clear_game_queue();  
-
-    current_round = Round(180);
     state = GameState::Playing;
+    current_round = Round();
 }
 
 void Game::handle_leave_game(const uint8_t& player_id) {
@@ -143,9 +141,6 @@ void Game::tick(uint16_t frames_to_process) {
         handle(player_id, event);
     }
 
-    /*for (auto& [id, player]: players) {
-        player.update_position();
-    }*/
     movement_system.process_movements(players, 1);
 
     current_round.update(1);
