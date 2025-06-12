@@ -18,8 +18,8 @@
 MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWindow) {
     musicPlayer = new QMediaPlayer(this);
     audioOutput = new QAudioOutput(QAudioFormat(), this);
-    audioOutput->setVolume(0.1f);
     musicPlayer->setMedia(QUrl("qrc:/assets/Menu_Theme.mp3"));
+    musicPlayer->setVolume(40);
     musicPlayer->setPlaylist(new QMediaPlaylist());
     musicPlayer->playlist()->addMedia(QUrl("qrc:/assets/Menu_Theme.mp3"));
     musicPlayer->playlist()->setPlaybackMode(QMediaPlaylist::Loop);
