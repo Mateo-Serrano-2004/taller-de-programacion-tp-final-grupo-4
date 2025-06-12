@@ -154,7 +154,12 @@ void Game::tick(uint16_t frames_to_process) {
                 tt_rounds_won++;
             }
 
-            // FALTA AGREGAR PREMIO DINEOR GANAR UNA RONDA
+            // MUY BASICO AGREGAR PREMIO DINEOR GANAR UNA RONDA
+            for (auto& [player_id, player] : players) {
+                if (player.get_team() == ganador) {
+                    player.add_money(1000);
+                }
+            }
 
             if (rounds_played >= MAX_ROUNDS) {
                 state = GameState::Finished;
@@ -201,7 +206,12 @@ void Game::tick(uint16_t frames_to_process) {
             tt_rounds_won++;
         }
 
-        // FALTA AGREGAR PREMIO DINEOR GANAR UNA RONDA
+        // MUY BASICO AGREGAR PREMIO DINEOR GANAR UNA RONDA
+        for (auto& [player_id, player] : players) {
+            if (player.get_team() == ganador) {
+                player.add_money(1000);
+            }
+        }
 
         if (rounds_played >= MAX_ROUNDS) {
             state = GameState::Finished;
