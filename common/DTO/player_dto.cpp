@@ -9,7 +9,7 @@
 DTO::PlayerDTO::PlayerDTO(short_id_t player_id, short_id_t role_id,
                           angle_t angle, uint16_t money,
                           coord_t position_x, coord_t position_y,
-                          const std::string& name, const DTO::WeaponDTO& weapon_dto, uint8_t shooting):
+                          const std::string& name, const DTO::WeaponDTO& weapon_dto, uint8_t shooting, uint8_t health, short_id_t team):
         player_id(player_id),
         role_id(role_id),
         angle(angle),
@@ -18,13 +18,16 @@ DTO::PlayerDTO::PlayerDTO(short_id_t player_id, short_id_t role_id,
         position_y(position_y),
         name(name),
         weapon_dto(weapon_dto),
-        shooting(shooting) {}
+        shooting(shooting),
+        health(health),
+        team(team) {}
 
 Model::Player DTO::PlayerDTO::to_player() const {
     return Model::Player(
         shooting, player_id, (Model::RoleID) (role_id), angle, money,
         name,
         Physics::Vector2D(position_x, position_y),
-        make_shared<Model::Weapon>(std::move(weapon_dto.to_weapon()))
+        make_shared<Model::Weapon>(std::move(weapon_dto.to_weapon())),
+        health, (Model::TeamID) (team)
     );
 }

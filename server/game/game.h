@@ -15,6 +15,7 @@
 #include "common/DTO/game_state_dto.h"
 #include "common/queue.h"
 #include "common/thread.h"
+#include "common/game_state.h"
 #include "model/full_player.h"
 #include "server/events/events.h"
 
@@ -25,17 +26,11 @@
 using GameQueue = Queue<std::pair<uint8_t, GameEventVariant>>;
 using ClientQueue = Queue<DTO::GameStateDTO>;
 
-enum class GameState {
-    WaitingPlayers,
-    WaitingStart,
-    Playing,
-    Finished
-};
-
 class Game: public Thread {
 private:
     std::mutex mutex;
     static constexpr int GAME_FPS = 60;
+    static constexpr uint8_t MAX_ROUNDS = 10;
     uint8_t next_player_id = 0;
     std::string party_name;
     std::string map_name;
@@ -50,8 +45,11 @@ private:
     bool is_not_finished = true;
     Round current_round;
     MovementSystem movement_system;
-    GameState state = GameState::WaitingPlayers;
+    GameState state = GameState::WaitingStart;
     GameLogic gamelogic;
+    uint8_t ct_rounds_won = 0;
+    uint8_t tt_rounds_won = 0;
+    uint8_t rounds_played = 0;
 
     void tick(uint16_t frames_to_process);  // agregar current_tick
     void broadcast_game_state();
@@ -68,6 +66,7 @@ private:
     void handle_buy_weapon(const uint8_t& player_id, const BuyEvent& event);
     void handle_start_game();
     void clear_game_queue();
+    void start_new_round();
 
     void close();
 
@@ -83,7 +82,7 @@ public:
     std::string get_party_name() const;
     std::string get_map_name() const;
     GameQueue& get_queue();
-    uint8_t add_player(const std::string& username, ClientQueue& client_queue);
+    uint8_t add_player(const std::string& username, ClientQueue& client_queue, Model::TeamID team_id, Model::RoleID role_id);
 
     bool is_dead() const;
 

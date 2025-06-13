@@ -12,8 +12,8 @@
 
 #include "server/game/weapon_factory.h"
 
-FullPlayer::FullPlayer(short_id_t id, const std::string& name)
-: Model::Player(id, name),
+FullPlayer::FullPlayer(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role)
+: Model::Player(id, name, team, role),
   movement_direction(0, 0),
   secondary_weapon(WeaponFactory::create(Model::WeaponID::GLOCK)),
   knife(WeaponFactory::create(Model::WeaponID::KNIFE)) {
@@ -101,11 +101,57 @@ void FullPlayer::stop_using_weapon() {
     std::static_pointer_cast<FullWeapon>(current_weapon)->release_trigger();
     shooting = false;
 }
-
+/*
 void FullPlayer::shoot(uint16_t frames_to_process) {
     if (!current_weapon || !alive) {
         shooting = false;
         return;
     }
     shooting = std::static_pointer_cast<FullWeapon>(current_weapon)->shoot(frames_to_process);
+}*/
+std::optional<ShotInfo> FullPlayer::shoot(uint16_t frames_to_process) {
+    if (!current_weapon || !alive) {
+        shooting = false;
+        return std::nullopt;
+    }
+
+    auto weapon = std::static_pointer_cast<FullWeapon>(current_weapon);
+    auto shot_info = weapon->shoot(frames_to_process);
+
+    if (!shot_info.has_value()) {
+        shooting = false;
+        return std::nullopt;
+    }
+
+    shooting = true;
+    return ShotInfo(
+        id,
+        position,
+        angle,
+        shot_info.value()
+    );
+}
+
+void FullPlayer::take_damage(uint8_t damage){
+    if(!is_alive()) return;
+
+    if(health <= damage){
+        health = 0;
+        alive = false;
+    }else{
+        health -= damage;
+    }
+}
+
+void FullPlayer::add_money(uint16_t money_to_be_added) {
+    money += money_to_be_added;
+}
+
+void FullPlayer::reset_for_new_round() {
+    if(!is_alive()){
+        set_alive(true);
+        // acomodar armas a estado defalut falta
+        
+    }
+    health = 100;
 }

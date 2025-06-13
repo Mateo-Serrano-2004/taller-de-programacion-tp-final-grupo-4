@@ -1,0 +1,24 @@
+#ifndef SERVER_GAME_MODEL_SHOT_INFO_H
+#define SERVER_GAME_MODEL_SHOT_INFO_H
+
+#include "weapon_shot_info.h"
+#include "common/definitions.h"
+#include "common/model/vector_2d.h"
+
+struct ShotInfo {
+    short_id_t shooter_id;
+    Physics::Vector2D origin;
+    float angle;
+    WeaponShotInfo weapon_info;
+
+    ShotInfo(short_id_t shooter_id,
+             const Physics::Vector2D& origin,
+             float angle,
+             const WeaponShotInfo& weapon_info)
+        : shooter_id(shooter_id),
+          origin(origin),
+          angle(angle),
+          weapon_info(weapon_info) {}
+};
+
+#endif // SERVER_GAME_MODEL_SHOT_INFO_H

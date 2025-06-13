@@ -1,9 +1,25 @@
-#include "game_state_dto.h"
+#include "common/DTO/game_state_dto.h"
 
 #include <utility>
 
-DTO::GameStateDTO::GameStateDTO():
-        is_valid(false), ended(true), time_left(0) {}
+DTO::GameStateDTO::GameStateDTO()
+    : game_state(GameState::WaitingStart),
+      ended(false),
+      winner(Model::TeamID::NONE),
+      ct_rounds_won(0),
+      tt_rounds_won(0) {}
 
-DTO::GameStateDTO::GameStateDTO(bool is_valid, const std::vector<PlayerDTO>& players, bool ended, uint16_t time_left):
-        is_valid(is_valid), players(std::move(players)), ended(ended), time_left(time_left) {}
+DTO::GameStateDTO::GameStateDTO(GameState game_state,
+                                 const std::vector<PlayerDTO>& players,
+                                 bool ended,
+                                 Model::TeamID winner,
+                                 const RoundDTO& round,
+                                 uint8_t ct_rounds_won,
+                                 uint8_t tt_rounds_won)
+    : game_state(game_state),
+      players(std::move(players)),
+      ended(ended),
+      winner(winner),
+      round(round),
+      ct_rounds_won(ct_rounds_won),
+      tt_rounds_won(tt_rounds_won) {}

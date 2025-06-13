@@ -7,6 +7,19 @@
 #include "common/periodic_clock.h"
 #include "server/events/overloaded.h"
 
+void Game::run() {
+    PeriodicClock clock(GAME_FPS); 
+
+    while (is_not_finished) {
+        uint16_t frames_to_process = clock.sleep_and_get_frames();
+        this->tick(frames_to_process);
+    }
+
+    // aca debería avisar algo mas? 
+    // lo de la queue y demas lo libera el gamemanager? 
+}
+
+
 void Game::handle(uint8_t player_id, const GameEventVariant& event) {
     std::visit(
             overloaded{[player_id, this](const MovementEvent& e) { handle_movement(player_id, e); },
@@ -53,23 +66,38 @@ void Game::handle_buy_weapon(const uint8_t& player_id, const BuyEvent& event) {
     gamelogic.buy_weapon(it->second, event.get_weapon_id(), current_round);
 }
 
+// Hace el reset de cada player
+void Game::start_new_round() {
+    if (state != GameState::WaitingStart && state != GameState::Playing) return;
+    
+    if(state == GameState::WaitingStart) {
+        state = GameState::Playing;
+    }
 
-void Game::handle_start_game() {
-    if (state != GameState::WaitingStart) return;
+    rounds_played++;
 
-    clear_game_queue();  
+    int ct_count = 0;
+    int tt_count = 0;
 
-    current_round = Round(180);
-    state = GameState::Playing;
+    for (auto& [id, player] : players) {
+        player.reset_for_new_round();
+        if (player.get_team() == Model::TeamID::CT) ct_count++;
+        else if (player.get_team() == Model::TeamID::TT) tt_count++;
+    }
+    std::cout << "NUEVA RONDA" << std::endl;
+    current_round = Round(ct_count, tt_count);
 }
 
 void Game::handle_leave_game(const uint8_t& player_id) {
     //Ojo ver estado de partida
     std::lock_guard<std::mutex> lock(mutex);
     auto it = players.find(player_id);
+    if (it != players.end()) {
+        current_round.notify_player_left(it->second.get_team());
+    }
     players.erase(it);
     auto queue_it = client_queues.find(player_id);
-    client_queues.erase(queue_it);
+    client_queues.erase(queue_it);   
 }
 
 void Game::handle_movement(const uint8_t& player_id, const MovementEvent& event) {
@@ -98,6 +126,7 @@ void Game::handle_rotation(const uint8_t& player_id, const RotationEvent& event)
     }
 }
 
+// ya no seria necesario esto. LO haces al agregar player
 void Game::handle_pick_role(const uint8_t player_id, const PickRoleEvent& event) {
     auto it = players.find(player_id);
     if (it != players.end()) {
@@ -111,12 +140,45 @@ void Game::tick(uint16_t frames_to_process) {
         uint16_t lost_frames = frames_to_process - 1;
         movement_system.process_movements(players, lost_frames);
         current_round.update(lost_frames);
+        // falta el shoot actualziar frames 
 
         if (current_round.has_ended()) {
             clear_game_queue();
+        
+            if (current_round.was_warmup()) {
+                // capaz broadcasteo especial de inicio de juego
+                broadcast_game_state();
+                start_new_round();
+                return;
+            }
+
+            Model::TeamID ganador = current_round.which_team_won();
+
+            if(ganador == Model::TeamID::CT){
+                ct_rounds_won++;
+            } else if (ganador == Model::TeamID::TT){
+                tt_rounds_won++;
+            }
+
+            // MUY BASICO AGREGAR PREMIO DINEOR GANAR UNA RONDA
+            for (auto& [player_id, player] : players) {
+                if (player.get_team() == ganador) {
+                    player.add_money(1000);
+                }
+            }
+
+            if (rounds_played >= MAX_ROUNDS) {
+                state = GameState::Finished;
+                broadcast_game_state();
+                is_not_finished = false;
+                //broadcasteo termino de partida y lógica de terminar
+                return;
+            }
+
             broadcast_game_state();
-            return;  // nuevo round    
-        }
+            start_new_round();
+            return;
+        }        
     }
 
     // ejecuto el tick actual
@@ -135,11 +197,43 @@ void Game::tick(uint16_t frames_to_process) {
     current_round.update(1);
 
     gamelogic.process_shooting(players, current_round, 1); // ojo frames to process aca!! no 1
-            
+
     if (current_round.has_ended()) {
         clear_game_queue();
+    
+        if (current_round.was_warmup()) {
+            //broadcasteo termino de partida
+            broadcast_game_state();
+            start_new_round();
+            return;
+        }
+
+        Model::TeamID ganador = current_round.which_team_won();
+
+        if(ganador == Model::TeamID::CT){
+            ct_rounds_won++;
+        } else if (ganador == Model::TeamID::TT){
+            tt_rounds_won++;
+        }
+
+        // MUY BASICO AGREGAR PREMIO DINEOR GANAR UNA RONDA
+        for (auto& [player_id, player] : players) {
+            if (player.get_team() == ganador) {
+                player.add_money(1000);
+            }
+        }
+
+        if (rounds_played >= MAX_ROUNDS) {
+            state = GameState::Finished;
+            broadcast_game_state();
+            is_not_finished = false;
+            //broadcasteo termino de partida y lógica de terminar
+            return;
+        }
+
         broadcast_game_state();
-        return;  // nuevo round    
+        start_new_round();
+        return;
     }
 
     broadcast_game_state();
@@ -148,13 +242,28 @@ void Game::tick(uint16_t frames_to_process) {
 void Game::broadcast_game_state() {
     std::lock_guard<std::mutex> lock(mutex);
     std::vector<DTO::PlayerDTO> player_dtos;
-    for (const auto& [id, player]: players) {
+    for (const auto& [id, player] : players) {
         player_dtos.push_back(player.to_dto());
     }
 
-    uint16_t round_seconds_left = current_round.get_ticks_remaining() / GAME_FPS;
+    DTO::RoundDTO round_dto = current_round.to_dto(GAME_FPS);
 
-    DTO::GameStateDTO game_snapshot(true, player_dtos, current_round.has_ended(), round_seconds_left);
+    
+    Model::TeamID winner = Model::TeamID::NONE;
+    if (state == GameState::Finished) {
+        if (ct_rounds_won > tt_rounds_won) winner = Model::TeamID::CT;
+        else if (tt_rounds_won > ct_rounds_won) winner = Model::TeamID::TT;
+    }
+
+    DTO::GameStateDTO game_snapshot(
+        state,
+        player_dtos,
+        state == GameState::Finished,
+        winner,
+        round_dto,
+        ct_rounds_won,
+        tt_rounds_won
+    );
 
     for (auto& [id, queue]: client_queues) {
         try {
@@ -163,19 +272,24 @@ void Game::broadcast_game_state() {
     }
 }
 
-//ojo que informo error ahora si la partida ya empezó o terminó
-uint8_t Game::add_player(const std::string& username, ClientQueue& client_queue) {
-    // if(state == GameState::Playing || state == GameState::Finished){
-    //     return -1;
-    // }
+
+    /*if (state == GameState::WaitingPlayers && players.size() >= min_players_to_start) {
+        state = GameState::WaitingStart;
+    }*/
+
+// FALTA: ESTO ESTA ARRANCANDO LA RONDA CON 1 SOLO PLAYER, QUE EVENTUALMENTE GANARÍA TODO Y TERMINA
+uint8_t Game::add_player(const std::string& username, ClientQueue& client_queue,
+    Model::TeamID team_id, Model::RoleID role_id) {
+    if (state != GameState::WaitingStart) {
+        return -1;
+    }
     std::lock_guard<std::mutex> lock(mutex);
+
     const uint8_t new_id = next_player_id++;
-    players.emplace(new_id, FullPlayer(new_id, username));
+    players.emplace(new_id, FullPlayer(new_id, username, team_id, role_id));
     client_queues[new_id] = &client_queue;
 
-    if (state == GameState::WaitingPlayers && players.size() >= min_players_to_start) {
-        state = GameState::WaitingStart;
-    }
+    current_round.notify_player_joined(team_id);
 
     return new_id;
 }

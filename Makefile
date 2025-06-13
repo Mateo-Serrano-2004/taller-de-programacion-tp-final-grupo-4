@@ -48,6 +48,7 @@ test_shoot:
 	    common/DTO/game_state_dto.cpp \
 	    common/DTO/player_dto.cpp \
 		common/DTO/weapon_dto.cpp \
+		common/DTO/round_dto.cpp \
 	    common/model/vector_2d.cpp \
 	    common/model/player.cpp \
 		common/model/weapon.cpp \
@@ -56,6 +57,7 @@ test_shoot:
 		server/game/model/full_weapon.cpp \
 	    server/game/game.cpp \
 	    server/game/round.cpp \
+		server/game/shot_manager.cpp \
 		server/game/movement_system.cpp \
 		server/game/weapon_factory.cpp \
 		server/game/game_logic.cpp \

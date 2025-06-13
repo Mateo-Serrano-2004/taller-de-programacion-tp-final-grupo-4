@@ -20,18 +20,8 @@ void FullWeapon::release_trigger() {
     trigger_blocked = false;
 }
 /*
-bool FullWeapon::shoot(){
-    if(!triggered || trigger_blocked) return false;
-    uint8_t ammo = get_loaded_ammo();
-    if(ammo == 0) return false;
-    ammo--;
-    set_loaded_ammo(ammo);
-    if(!automatic) trigger_blocked = true;
-    return true;
-}
-*/
 bool FullWeapon::shoot(uint16_t ticks_to_process) {
-    if (!triggered || trigger_blocked) {
+    if (!triggered || trigger_blocked){
         ticks_remaining = (ticks_to_process >= ticks_remaining) ? 0 : ticks_remaining - ticks_to_process;
         return false;
     }
@@ -53,4 +43,34 @@ bool FullWeapon::shoot(uint16_t ticks_to_process) {
         trigger_blocked = true;
 
     return true;
+}*/
+std::optional<WeaponShotInfo> FullWeapon::shoot(uint16_t ticks_to_process) {
+    if (!triggered || trigger_blocked){
+        ticks_remaining = (ticks_to_process >= ticks_remaining) ? 0 : ticks_remaining - ticks_to_process;
+        return std::nullopt;
+    }
+
+    if (ticks_to_process < ticks_remaining) {
+        ticks_remaining -= ticks_to_process;
+        return std::nullopt;
+    }
+
+    uint8_t ammo = get_loaded_ammo();
+    if (ammo == 0) return std::nullopt;
+
+    ammo--;
+    set_loaded_ammo(ammo);
+    ticks_remaining = cooldown_ticks;
+
+    if (!automatic)
+        trigger_blocked = true;
+
+    //WeaponShotInfo genérico
+    return WeaponShotInfo(
+        1,          // bullets_fired
+        30.0f,      // max_damage
+        0.9f,       // precision
+        0.1f,       // dispersion (radianes)
+        0.05f       // damage_falloff
+    );
 }
