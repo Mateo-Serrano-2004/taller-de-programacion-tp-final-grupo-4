@@ -4,7 +4,7 @@
 #include <memory>
 #include <cstdint>
 #include <utility>
-
+#include <iostream>
 #include "common/definitions.h"
 #include "common/weapon_id.h"
 #include "common/slot_id.h"
@@ -102,10 +102,10 @@ void FullPlayer::stop_using_weapon() {
     shooting = false;
 }
 
-void FullPlayer::shoot() {
+void FullPlayer::shoot(uint16_t frames_to_process) {
     if (!current_weapon || !alive) {
         shooting = false;
         return;
     }
-    shooting = std::static_pointer_cast<FullWeapon>(current_weapon)->shoot();
+    shooting = std::static_pointer_cast<FullWeapon>(current_weapon)->shoot(frames_to_process);
 }

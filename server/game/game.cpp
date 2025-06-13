@@ -134,7 +134,7 @@ void Game::tick(uint16_t frames_to_process) {
     movement_system.process_movements(players, 1);
     current_round.update(1);
 
-    gamelogic.process_shooting(players, current_round);
+    gamelogic.process_shooting(players, current_round, 1); // ojo frames to process aca!! no 1
             
     if (current_round.has_ended()) {
         clear_game_queue();

@@ -21,11 +21,11 @@ void GameLogic::stop_using_weapon(FullPlayer& player) const {
     player.stop_using_weapon();
 }
 
-void GameLogic::process_shooting(std::map<uint8_t, FullPlayer>& players, Round& round) const {
-    if (!round.is_active_phase()) return;
+void GameLogic::process_shooting(std::map<uint8_t, FullPlayer>& players, Round& round, uint16_t frames_to_process) const {
+    //if (!round.is_active_phase()) return; //podria llegar a cambiar??
     for (auto& [id, player] : players) {
         if (!player.is_alive()) continue;
         //if (!player.is_using_weapon()) continue; // aca el player no avisa esto, pero podes delegarlo al shoot
-        player.shoot();
+        player.shoot(frames_to_process);
     }
 }
