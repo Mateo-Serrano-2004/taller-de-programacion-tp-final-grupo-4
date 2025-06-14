@@ -44,7 +44,7 @@ void Game::handle_leave_game(const uint8_t& player_id) {
     }
     players.erase(it);
     auto queue_it = client_queues.find(player_id);
-    client_queues.erase(queue_it);   
+    client_queues.erase(queue_it);
 }
 
 void Game::handle_movement(const uint8_t& player_id, const MovementEvent& event) {

@@ -87,7 +87,6 @@ void Round::notify_on_one_player_less(Model::TeamID team) {
         if (--number_of_ct_alive <= 0) {
             winner_team = Model::TeamID::TT;
             state = RoundState::Ended;
-            count_of_rounds++;
         }
     } else if (team == Model::TeamID::TT) {
         if (--number_of_tt_alive <= 0) {
@@ -95,7 +94,6 @@ void Round::notify_on_one_player_less(Model::TeamID team) {
 
             winner_team = Model::TeamID::CT;
             state = RoundState::Ended;
-            count_of_rounds++;
         }
     }
 }
