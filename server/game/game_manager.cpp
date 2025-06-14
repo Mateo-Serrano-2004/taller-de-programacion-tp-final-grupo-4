@@ -61,7 +61,7 @@ std::vector<GameInfoDTO> GameManager::get_games() {
     std::vector<GameInfoDTO> games_info;
     for (const auto& game: games) {
         GameInfoDTO game_info = {game.first, game.second->get_party_name(),
-                                 game.second->get_num_players(), game.second->get_map_name()};
+                                 game.second->get_number_of_players(), game.second->get_map_name()};
         games_info.push_back(game_info);
     }
     return games_info;
