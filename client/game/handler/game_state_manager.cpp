@@ -91,7 +91,7 @@ void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
         if (player->is_shooting()) add_player_shooting(player);
     }
 
-    new_game_state->set_time_left(0);
+    new_game_state->set_time_left(game_state_dto.round.time_left);
 
     std::lock_guard<std::mutex> lock(mutex);
     game_state = new_game_state;

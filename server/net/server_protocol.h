@@ -20,6 +20,7 @@ private:
 
     void send_player_list(const std::vector<DTO::PlayerDTO>& players);
     void send_weapon(const DTO::PlayerDTO& player_dto);
+    void send_round(const DTO::RoundDTO& round_dto);
 
     ServerProtocol(const ServerProtocol&) = delete;
     ServerProtocol& operator=(const ServerProtocol&) = delete;

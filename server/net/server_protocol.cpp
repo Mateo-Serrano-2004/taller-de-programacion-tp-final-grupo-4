@@ -124,13 +124,23 @@ void ServerProtocol::send_weapon(const DTO::PlayerDTO& player_dto) {
     peer.sendall(&total_ammo, sizeof(total_ammo));
 }
 
+void ServerProtocol::send_round(const DTO::RoundDTO& round_dto) {
+    uint16_t time_left = htons(round_dto.time_left);
+    peer.sendall(&round_dto.state, sizeof(round_dto.state));
+    peer.sendall(&round_dto.ended, sizeof(round_dto.ended));
+    peer.sendall(&time_left, sizeof(time_left));
+    peer.sendall(&round_dto.winner, sizeof(round_dto.winner));
+}
+
 void ServerProtocol::send_game_state(const DTO::GameStateDTO& game_state_dto) {
     std::lock_guard<std::mutex> lock(mutex);
-    peer.sendall(&game_state_dto.round.ended, sizeof(game_state_dto.round.ended));
+    peer.sendall(&game_state_dto.game_state, sizeof(game_state_dto.game_state));
+    peer.sendall(&game_state_dto.ended, sizeof(game_state_dto.ended));
+    peer.sendall(&game_state_dto.winner, sizeof(game_state_dto.winner));
+    peer.sendall(&game_state_dto.ct_rounds_won, sizeof(game_state_dto.ct_rounds_won));
+    peer.sendall(&game_state_dto.tt_rounds_won, sizeof(game_state_dto.tt_rounds_won));
+    send_round(game_state_dto.round);
     send_player_list(game_state_dto.players);
-
-    uint16_t time_left = htons(game_state_dto.round.time_left);
-    peer.sendall(&time_left, sizeof(time_left));
 }
 
 void ServerProtocol::send_all_maps_names(const std::vector<std::string>& maps) {

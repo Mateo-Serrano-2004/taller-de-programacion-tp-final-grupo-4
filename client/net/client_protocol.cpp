@@ -63,16 +63,30 @@ DTO::WeaponDTO Net::ClientProtocol::receive_weapon() {
     return DTO::WeaponDTO(weapon_id, loaded_ammo, total_ammo);
 }
 
+DTO::RoundDTO Net::ClientProtocol::receive_round(DTO::RoundDTO& round) {
+    skt.recvall(&round.state, sizeof(round.state));
+    skt.recvall(&round.ended, sizeof(round.ended));
+    skt.recvall(&round.time_left, sizeof(round.time_left));
+    skt.recvall(&round.winner, sizeof(round.winner));
+
+    round.time_left = htons(round.time_left);
+
+    return round;
+}
+
 DTO::GameStateDTO Net::ClientProtocol::receive_match_state() {
-    DTO::GameStateDTO match;
+    DTO::GameStateDTO game_state_dto;
 
-    skt.recvall(&match.round.ended, sizeof(match.round.ended));
-    receive_player_list(match.players);
-    skt.recvall(&match.round.time_left, sizeof(match.round.time_left));
+    skt.recvall(&game_state_dto.game_state, sizeof(game_state_dto.game_state));
+    skt.recvall(&game_state_dto.ended, sizeof(game_state_dto.ended));
+    skt.recvall(&game_state_dto.winner, sizeof(game_state_dto.winner));
+    skt.recvall(&game_state_dto.ct_rounds_won, sizeof(game_state_dto.ct_rounds_won));
+    skt.recvall(&game_state_dto.tt_rounds_won, sizeof(game_state_dto.tt_rounds_won));
 
-    match.round.time_left = ntohs(match.round.time_left);
+    receive_round(game_state_dto.round);
+    receive_player_list(game_state_dto.players);
 
-    return match;
+    return game_state_dto;
 }
 
 std::list<GameInfoDTO> Net::ClientProtocol::receive_game_list() {
