@@ -8,19 +8,29 @@ Round::Round(int ct_alive, int tt_alive, int duration_in_ticks, int buying_ticks
     tt_alive(tt_alive),
     warmup(is_warmup) {}
 
-Round::Round(int ct_alive, int tt_alive, int duration_in_ticks, int buying_ticks)
-    : Round(ct_alive, tt_alive, duration_in_ticks, buying_ticks,
-    RoundState::Buying, false) {}
+Round::Round()
+: state(RoundState::Warmup),
+  buying_ticks_remaining(0),
+  active_ticks_remaining(3600),
+  ct_alive(0),
+  tt_alive(0),
+  warmup(true) {}
 
-Round Round::create_warmup_round() {
-    std::cout << "RONDA WARMUP CREADA" << std::endl;
-    return Round(0, 0, 300, 0, RoundState::Warmup, true);
-}
+Round::Round(int ct_alive, int tt_alive, int duration_in_ticks, int buying_ticks):
+        Round(ct_alive, tt_alive, duration_in_ticks, buying_ticks, RoundState::Buying, false) {}
+
+bool Round::is_warmup() const { return state == RoundState::Warmup; }
+
+bool Round::is_buying() const { return state == RoundState::Buying; }
+
+bool Round::is_active() const { return state == RoundState::Active; }
+
+bool Round::ended() const { return state == RoundState::Ended; }
 
 void Round::update(int frames_to_process) {
-    if (state == RoundState::Ended) return;
+    if (ended()) return;
 
-    if (state == RoundState::Warmup) {
+    if (is_warmup()) {
         if (frames_to_process < active_ticks_remaining) {
             active_ticks_remaining -= frames_to_process;
         } else {
@@ -30,7 +40,7 @@ void Round::update(int frames_to_process) {
         }
     }
     
-    if (state == RoundState::Buying) {
+    if (is_buying()) {
         if (frames_to_process < buying_ticks_remaining) {
             buying_ticks_remaining -= frames_to_process;
             return;
@@ -41,7 +51,7 @@ void Round::update(int frames_to_process) {
         }
     }
     
-    if (state == RoundState::Active) {
+    if (is_active()) {
         if (frames_to_process < active_ticks_remaining) {
             active_ticks_remaining -= frames_to_process;
         } else {

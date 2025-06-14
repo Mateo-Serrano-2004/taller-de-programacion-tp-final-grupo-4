@@ -9,21 +9,27 @@
 
 class Round {
 private:
+    bool warmup = false;
+    bool tt_won = false;
+    bool ct_won = false;
+
     RoundState state;
     int buying_ticks_remaining;
     int active_ticks_remaining;
     int ct_alive;
     int tt_alive;
-    bool warmup = false;
-    bool tt_won = false;
-    bool ct_won = false;
 
     Round(int ct_alive, int tt_alive, int duration_in_ticks, int buying_ticks, RoundState initial_state, bool is_warmup);
 
 public:
-    explicit Round(int ct_alive, int tt_alive, int duration_in_ticks = 7200, int buying_ticks = 600);// default: 60s @ 60FPS
+    // Builds a wormup round
+    Round();
+    Round(int ct_alive, int tt_alive, int duration_in_ticks = 7200, int buying_ticks = 600);// default: 60s @ 60FPS
 
-    static Round create_warmup_round();
+    bool is_warmup() const;
+    bool is_buying() const;
+    bool is_active() const;
+    bool ended() const;
 
     void update(int frames_to_process);
     bool has_ended() const;
