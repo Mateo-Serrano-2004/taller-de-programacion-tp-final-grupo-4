@@ -3,8 +3,8 @@
 #include <utility>
 
 DTO::GameStateDTO::GameStateDTO()
-    : game_state(GameState::WaitingStart),
-      ended(false),
+    : game_state(GameState::Finished),
+      ended(true),
       winner(Model::TeamID::NONE),
       ct_rounds_won(0),
       tt_rounds_won(0) {}
