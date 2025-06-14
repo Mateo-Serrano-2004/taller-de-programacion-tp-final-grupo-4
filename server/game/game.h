@@ -49,11 +49,11 @@ private:
     std::vector<uint8_t> dropped_weapons;
     MovementSystem movement_system;
     GameLogic gamelogic;
+    Round round;
 
     // Non-default constructible attributes
     std::string party_name;
     std::string map_name;
-    Round current_round;
 
     void handle_leave_game(const uint8_t& player_id);
     void handle_use_weapon(const uint8_t& player_id);

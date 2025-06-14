@@ -4,7 +4,7 @@
 #include "common/weapon_id.h"
 
 void GameLogic::buy_weapon(FullPlayer& player, Model::WeaponID weapon_id, const Round& round) const {
-    if (!round.is_buying_phase()) return;
+    if (!round.is_buying()) return;
     if (!player.is_alive()) return;
     // FALTA: Cuando este mapa ver si el jugador está en zona de compra
 
@@ -12,7 +12,7 @@ void GameLogic::buy_weapon(FullPlayer& player, Model::WeaponID weapon_id, const 
 }
 
 void GameLogic::start_using_weapon(FullPlayer& player, const Round& round) const {
-    if (!round.is_active_phase()) return;
+    if (!round.is_active()) return;
     if (!player.is_alive()) return;
     player.start_using_weapon();
 }
@@ -38,7 +38,7 @@ void GameLogic::process_shooting(std::map<uint8_t, FullPlayer>& players, Round& 
 void GameLogic::apply_impacts(const std::vector<Impact>& impacts, Round& round, std::map<uint8_t, FullPlayer>& players) const {
     // te puede matar un muerto, la bala quedo viajando. 
     for (const auto& impact : impacts) {
-        if (!round.is_active_phase()) return;
+        if (!round.is_active()) return;
 
         auto shooter = players.find(impact.shooter_id);
         if (shooter == players.end()) continue;
@@ -52,7 +52,7 @@ void GameLogic::apply_impacts(const std::vector<Impact>& impacts, Round& round, 
 
         if (!victim->second.is_alive()) {
             
-            round.notify_player_death(victim->second.get_team());
+            round.notify_on_one_player_less(victim->second.get_team());
 
             //victim->second.register_death(); // podría ir en take_damage si ahí se setea muerto
             //shooter->second.register_kill();

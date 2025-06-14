@@ -9,40 +9,49 @@
 
 class Round {
 private:
-    bool warmup = false;
-    bool tt_won = false;
-    bool ct_won = false;
+    Model::TeamID winner_team = Model::TeamID::NONE;
+    int count_of_rounds = 0;
 
     RoundState state;
-    int buying_ticks_remaining;
-    int active_ticks_remaining;
-    int ct_alive;
-    int tt_alive;
+    int number_of_ct_alive;
+    int number_of_tt_alive;
 
-    Round(int ct_alive, int tt_alive, int duration_in_ticks, int buying_ticks, RoundState initial_state, bool is_warmup);
+    // X seconds = N frames / M FPS
+    // For 60FPS, X seconds = N frames / 60FPS
+    int ticks_for_warmup_phase;
+    int ticks_for_buying_phase;
+    int ticks_for_playing_phase;
+
+    int active_ticks_remaining;
+
+    void update_if_finished_warmup();
+    void update_if_finished_buying();
+    void update_if_finished_playing();
 
 public:
-    // Builds a wormup round
+    // Builds a base round in warmup state
     Round();
-    Round(int ct_alive, int tt_alive, int duration_in_ticks = 7200, int buying_ticks = 600);// default: 60s @ 60FPS
 
+    Model::TeamID get_winner_team() const;
+    int get_count_of_rounds() const;
+    RoundState get_state() const;
     bool is_warmup() const;
     bool is_buying() const;
     bool is_active() const;
     bool ended() const;
-
-    void update(int frames_to_process);
-    bool has_ended() const;
-    RoundState get_state() const;
     uint16_t get_ticks_remaining() const;
-    bool is_buying_phase() const;
-    bool is_active_phase() const;
-    bool was_warmup() const;
+
+    void set_ticks_for_warmup_phase(int ticks);
+    void set_ticks_for_buying_phase(int ticks);
+    void set_ticks_for_playing_phase(int ticks);
+
+    void to_buying_phase();
+    void update(int frames_to_process);
+
     // Si la bomba está plantada, NO debe terminar la ronda falta esa lógica
-    void notify_player_death(Model::TeamID team);
+    void notify_on_one_player_less(Model::TeamID team);
     void notify_player_joined(Model::TeamID team);
-    void notify_player_left(Model::TeamID team);
-    Model::TeamID which_team_won() const;
+
     DTO::RoundDTO to_dto(int fps) const;
 };
 

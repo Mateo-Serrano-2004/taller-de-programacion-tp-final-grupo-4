@@ -11,7 +11,7 @@ void Game::handle_use_weapon(const uint8_t& player_id) {
     if (this->state != GameState::Playing) return;
     auto it = players.find(player_id);
     if (it == players.end()) return;
-    gamelogic.start_using_weapon(it->second, current_round);
+    gamelogic.start_using_weapon(it->second, round);
 }
 
 void Game::handle_stop_using_weapon(const uint8_t& player_id) {
@@ -32,7 +32,7 @@ void Game::handle_buy_weapon(const uint8_t& player_id, const BuyEvent& event) {
 
     auto it = players.find(player_id);
     if (it == players.end()) return;
-    gamelogic.buy_weapon(it->second, event.get_weapon_id(), current_round);
+    gamelogic.buy_weapon(it->second, event.get_weapon_id(), round);
 }
 
 void Game::handle_leave_game(const uint8_t& player_id) {
@@ -40,7 +40,7 @@ void Game::handle_leave_game(const uint8_t& player_id) {
     std::lock_guard<std::mutex> lock(mutex);
     auto it = players.find(player_id);
     if (it != players.end()) {
-        current_round.notify_player_left(it->second.get_team());
+        round.notify_on_one_player_less(it->second.get_team());
     }
     players.erase(it);
     auto queue_it = client_queues.find(player_id);
@@ -105,13 +105,7 @@ void Game::clear_game_queue() {
 
 // Resets players
 void Game::start_new_round() {
-    if (state != GameState::WaitingStart && state != GameState::Playing) return;
-
-    if (state == GameState::WaitingStart) {
-        state = GameState::Playing;
-    }
-
-    rounds_played++;
+    state = GameState::Playing;
 
     int ct_count = 0;
     int tt_count = 0;
@@ -119,14 +113,14 @@ void Game::start_new_round() {
     for (auto& [id, player] : players) {
         player.reset_for_new_round();
         if (player.get_team() == Model::TeamID::CT) ct_count++;
-        else if (player.get_team() == Model::TeamID::TT) tt_count++;
+        else tt_count++;
     }
     std::cout << "NUEVA RONDA" << std::endl;
-    current_round = Round(ct_count, tt_count);
+    round.to_buying_phase();
 }
 
 void Game::update_players_that_won() {
-    Model::TeamID ganador = current_round.which_team_won();
+    Model::TeamID ganador = round.get_winner_team();
 
     if (ganador == Model::TeamID::NONE) return;
 
@@ -145,20 +139,20 @@ void Game::update_players_that_won() {
 
 void Game::process_frames(uint16_t frames_to_process) {
     movement_system.process_movements(players, frames_to_process);
-    current_round.update(frames_to_process);
-    gamelogic.process_shooting(players, current_round, frames_to_process);
+    round.update(frames_to_process);
+    gamelogic.process_shooting(players, round, frames_to_process);
 
-    if (current_round.has_ended()) {
+    if (round.ended()) {
         clear_game_queue();
 
-        if (current_round.was_warmup()) {
+        if (round.is_warmup()) {
             start_new_round();
             return;
         }
 
         update_players_that_won();
 
-        if (rounds_played >= MAX_ROUNDS) {
+        if (round.get_count_of_rounds() == MAX_ROUNDS) {
             state = GameState::Finished;
             is_not_finished = false;
             return;
@@ -175,10 +169,10 @@ void Game::broadcast_game_state() {
         player_dtos.push_back(player.to_dto());
     }
 
-    DTO::RoundDTO round_dto = current_round.to_dto(GAME_FPS);
+    DTO::RoundDTO round_dto = round.to_dto(GAME_FPS);
 
     Model::TeamID winner = Model::TeamID::NONE;
-    bool ended = state == GameState::Finished;
+    bool ended = (state == GameState::Finished);
     if (ended) {
         if (ct_rounds_won > tt_rounds_won) winner = Model::TeamID::CT;
         else if (tt_rounds_won > ct_rounds_won) winner = Model::TeamID::TT;
@@ -265,7 +259,7 @@ uint8_t Game::add_player(
     players.emplace(new_id, FullPlayer(new_id, username, team_id, role_id));
     client_queues[new_id] = &client_queue;
 
-    current_round.notify_player_joined(team_id);
+    round.notify_player_joined(team_id);
 
     return new_id;
 }
