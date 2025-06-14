@@ -13,7 +13,7 @@ DTO::GameStateDTO::GameStateDTO(GameState game_state,
                                  const std::vector<PlayerDTO>& players,
                                  bool ended,
                                  Model::TeamID winner,
-                                 const RoundDTO& round,
+                                 const DTO::RoundDTO& round,
                                  uint8_t ct_rounds_won,
                                  uint8_t tt_rounds_won)
     : game_state(game_state),

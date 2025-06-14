@@ -21,7 +21,7 @@ private:
     Round(int ct_alive, int tt_alive, int duration_in_ticks, int buying_ticks, RoundState initial_state, bool is_warmup);
 
 public:
-    explicit Round(int ct_alive, int tt_alive, int duration_in_ticks = 230, int buying_ticks = 70);// default: 60s @ 60FPS
+    explicit Round(int ct_alive, int tt_alive, int duration_in_ticks = 7200, int buying_ticks = 600);// default: 60s @ 60FPS
 
     static Round create_warmup_round();
 

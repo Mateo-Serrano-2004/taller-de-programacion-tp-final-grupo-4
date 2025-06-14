@@ -29,7 +29,8 @@ public:
               angle_t angle, uint16_t money,
               coord_t position_x, coord_t position_y,
               const std::string& name,
-              const DTO::WeaponDTO& weapon_dto, uint8_t shooting, uint8_t health, short_id_t team);
+              const DTO::WeaponDTO& weapon_dto,
+              uint8_t shooting, uint8_t health, short_id_t team);
 
     Model::Player to_player() const;
 };

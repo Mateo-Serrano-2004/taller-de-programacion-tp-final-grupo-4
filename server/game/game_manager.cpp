@@ -30,7 +30,9 @@ uint8_t GameManager::create_game(const std::string& party_name, const std::strin
                                  Queue<DTO::GameStateDTO>& client_queue) {
     std::lock_guard<std::mutex> lock(mtx);
     games[game_counter] = std::move(std::make_unique<Game>(party_name, map_name));
-    games[game_counter]->add_player(username, client_queue);
+    games[game_counter]->add_player(
+        username, client_queue, Model::TeamID::CT, Model::RoleID::CT1
+    );
     return game_counter++;
 }
 
@@ -39,7 +41,10 @@ uint8_t GameManager::join_game(const uint8_t& game_id, const std::string& userna
     std::lock_guard<std::mutex> lock(mtx);
     auto it = games.find(game_id);
     if (it == games.end()) throw std::runtime_error("Invalid game id: " + std::to_string(game_id));
-    return it->second->add_player(username, client_queue);
+    return it->second->add_player(
+        username, client_queue,
+        Model::TeamID::CT, Model::RoleID::CT2
+    );
 }
 
 GameQueue* GameManager::get_game_queue(const uint8_t& game_id) {

@@ -24,7 +24,7 @@ void Controller::Receiver::run() {
     while (keep_running) {
         try {
             DTO::GameStateDTO game_state_dto = protocol->receive_match_state();
-            if (!game_state_dto.is_valid) {
+            if (game_state_dto.round.ended) {
                 keep_running = false;
             } else {
                 game_state_manager->update(std::move(game_state_dto));

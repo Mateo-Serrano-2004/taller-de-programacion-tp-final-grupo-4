@@ -8,13 +8,13 @@
 namespace DTO {
 struct RoundDTO {
 public:
-    RoundState state;      // Warmup, Buying, Active, Ended
+    RoundState state;
     bool ended;
     uint16_t time_left;
-    Model::TeamID winner;    // En segundos
+    Model::TeamID winner;
 
-    RoundDTO();  // default
-    RoundDTO(RoundState state, bool ended, uint16_t time_left,Model::TeamID winner );
+    RoundDTO();
+    RoundDTO(RoundState state, bool ended, uint16_t time_left, Model::TeamID winner);
 };
 } 
 

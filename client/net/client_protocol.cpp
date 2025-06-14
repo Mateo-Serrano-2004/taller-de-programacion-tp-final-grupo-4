@@ -45,7 +45,8 @@ void Net::ClientProtocol::receive_player_list(std::vector<DTO::PlayerDTO>& playe
         DTO::WeaponDTO weapon_dto = receive_weapon();
 
         players.emplace_back(player_id, role_id, angle, money, position_x, position_y,
-                             std::string(name.begin(), name.end()), weapon_dto, shooting);
+                             std::string(name.begin(), name.end()), weapon_dto, shooting,
+                            0, 0);
     }
 }
 
@@ -65,11 +66,11 @@ DTO::WeaponDTO Net::ClientProtocol::receive_weapon() {
 DTO::GameStateDTO Net::ClientProtocol::receive_match_state() {
     DTO::GameStateDTO match;
 
-    skt.recvall(&match.is_valid, sizeof(match.is_valid));
+    skt.recvall(&match.round.ended, sizeof(match.round.ended));
     receive_player_list(match.players);
-    skt.recvall(&match.time_left, sizeof(match.time_left));
+    skt.recvall(&match.round.time_left, sizeof(match.round.time_left));
 
-    match.time_left = ntohs(match.time_left);
+    match.round.time_left = ntohs(match.round.time_left);
 
     return match;
 }

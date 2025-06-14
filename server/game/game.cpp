@@ -7,19 +7,6 @@
 #include "common/periodic_clock.h"
 #include "server/events/overloaded.h"
 
-void Game::run() {
-    PeriodicClock clock(GAME_FPS); 
-
-    while (is_not_finished) {
-        uint16_t frames_to_process = clock.sleep_and_get_frames();
-        this->tick(frames_to_process);
-    }
-
-    // aca debería avisar algo mas? 
-    // lo de la queue y demas lo libera el gamemanager? 
-}
-
-
 void Game::handle(uint8_t player_id, const GameEventVariant& event) {
     std::visit(
             overloaded{[player_id, this](const MovementEvent& e) { handle_movement(player_id, e); },
@@ -69,8 +56,8 @@ void Game::handle_buy_weapon(const uint8_t& player_id, const BuyEvent& event) {
 // Hace el reset de cada player
 void Game::start_new_round() {
     if (state != GameState::WaitingStart && state != GameState::Playing) return;
-    
-    if(state == GameState::WaitingStart) {
+
+    if (state == GameState::WaitingStart) {
         state = GameState::Playing;
     }
 
@@ -136,7 +123,7 @@ void Game::handle_pick_role(const uint8_t player_id, const PickRoleEvent& event)
 
 void Game::tick(uint16_t frames_to_process) {
     // compenso lo perdido (si hay)
-    if(frames_to_process > 1) {
+    if (frames_to_process > 1) {
         uint16_t lost_frames = frames_to_process - 1;
         movement_system.process_movements(players, lost_frames);
         current_round.update(lost_frames);
@@ -154,13 +141,13 @@ void Game::tick(uint16_t frames_to_process) {
 
             Model::TeamID ganador = current_round.which_team_won();
 
-            if(ganador == Model::TeamID::CT){
+            if (ganador == Model::TeamID::CT){
                 ct_rounds_won++;
             } else if (ganador == Model::TeamID::TT){
                 tt_rounds_won++;
             }
 
-            // MUY BASICO AGREGAR PREMIO DINEOR GANAR UNA RONDA
+            // MUY BASICO AGREGAR PREMIO DINERO GANAR UNA RONDA
             for (auto& [player_id, player] : players) {
                 if (player.get_team() == ganador) {
                     player.add_money(1000);
@@ -171,7 +158,7 @@ void Game::tick(uint16_t frames_to_process) {
                 state = GameState::Finished;
                 broadcast_game_state();
                 is_not_finished = false;
-                //broadcasteo termino de partida y lógica de terminar
+                // broadcasteo termino de partida y lógica de terminar
                 return;
             }
 
@@ -189,9 +176,7 @@ void Game::tick(uint16_t frames_to_process) {
             GameEventVariant event = event_info.second;
             handle(player_id, event);
         }
-    } catch (const ClosedQueue&) {
-        // La cola está cerrada, no hay problema
-    }
+    } catch (const ClosedQueue&) {}
 
     movement_system.process_movements(players, 1);
     current_round.update(1);
@@ -306,7 +291,7 @@ void Game::close() {
 }
 
 Game::Game(const std::string& party_name, const std::string& map_name)
-: party_name(party_name), map_name(map_name) {
+: party_name(party_name), map_name(map_name), current_round(Round::create_warmup_round()) {
     start();
 }
 
@@ -323,8 +308,7 @@ bool Game::is_dead() const { return !is_not_finished; }
 void Game::kill() { is_not_finished = false; }
 
 void Game::run() {
-    current_round = Round();
-    PeriodicClock clock(GAME_FPS);
+    PeriodicClock clock(GAME_FPS); 
 
     while (is_not_finished) {
         uint16_t frames_to_process = clock.sleep_and_get_frames();

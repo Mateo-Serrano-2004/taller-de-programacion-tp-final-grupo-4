@@ -126,10 +126,10 @@ void ServerProtocol::send_weapon(const DTO::PlayerDTO& player_dto) {
 
 void ServerProtocol::send_game_state(const DTO::GameStateDTO& game_state_dto) {
     std::lock_guard<std::mutex> lock(mutex);
-    peer.sendall(&game_state_dto.is_valid, sizeof(game_state_dto.is_valid));
+    peer.sendall(&game_state_dto.round.ended, sizeof(game_state_dto.round.ended));
     send_player_list(game_state_dto.players);
 
-    uint16_t time_left = htons(game_state_dto.time_left);
+    uint16_t time_left = htons(game_state_dto.round.time_left);
     peer.sendall(&time_left, sizeof(time_left));
 }
 

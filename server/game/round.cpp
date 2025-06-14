@@ -20,13 +20,13 @@ Round Round::create_warmup_round() {
 void Round::update(int frames_to_process) {
     if (state == RoundState::Ended) return;
 
-    if(state== RoundState::Warmup){
+    if (state == RoundState::Warmup) {
         if (frames_to_process < active_ticks_remaining) {
             active_ticks_remaining -= frames_to_process;
         } else {
             std::cout << "TERMINÓ RONDA WARMUP" << std::endl;
             active_ticks_remaining = 0;
-            state = RoundState::Ended;
+            state = RoundState::Buying;
         }
     }
     
@@ -55,8 +55,8 @@ void Round::update(int frames_to_process) {
 }
 
 Model::TeamID Round::which_team_won() const {
-    if(ct_won) return Model::TeamID::CT;
-    else if(tt_won) return Model::TeamID::TT;
+    if (ct_won) return Model::TeamID::CT;
+    else if (tt_won) return Model::TeamID::TT;
     else return Model::TeamID::NONE;
 }
 
