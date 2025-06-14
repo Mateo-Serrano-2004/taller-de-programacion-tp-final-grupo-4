@@ -22,8 +22,9 @@ class ClientProtocol {
 private:
     Socket skt;
 
+    void receive_weapon(DTO::WeaponDTO& weapon);
+    void receive_player(DTO::PlayerDTO& player);
     void receive_player_list(std::vector<DTO::PlayerDTO>& players);
-    DTO::WeaponDTO receive_weapon();
     DTO::RoundDTO receive_round(DTO::RoundDTO& round);
 
     ClientProtocol(const ClientProtocol&) = delete;

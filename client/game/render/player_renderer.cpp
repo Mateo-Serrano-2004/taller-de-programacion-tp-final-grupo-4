@@ -13,7 +13,7 @@
 #include <SDL2pp/Color.hh>
 #include <SDL2pp/Font.hh>
 
-#include "camera.h"
+#include "common/team.h"
 
 #include "controller/game_controller.h"
 
@@ -24,6 +24,8 @@
 #include "handler/game_state_manager.h"
 
 #include "model/rendered_player.h"
+
+#include "camera.h"
 
 SDL2pp::Point View::PlayerRenderer::get_sprite_top_left_corner(short_id_t sprite_piece) {
     uint16_t sprite_row = sprite_piece ? static_cast<uint16_t>(sprite_piece / 2) : 0;
@@ -119,10 +121,14 @@ void View::PlayerRenderer::set_name_to_be_rendered(
     const SDL2pp::Point& camera_view,
     const SDL2pp::Point& player_display_size
 ) {
+    Model::TeamID team = player->get_team();
+    SDL2pp::Color name_color = (team == Model::TeamID::CT) ?
+        SDL2pp::Color(0, 0, 255, 255) :
+        SDL2pp::Color(255, 0, 0, 255);
     Shared<SDL2pp::Texture> text = asset_manager->apply_font_to_text(
         font,
         player->get_name(),
-        SDL2pp::Color(255, 255, 255, 255)
+        name_color
     );
     SDL2pp::Point position(
         camera_view.GetX() - (text->GetWidth()) / 2,
@@ -222,7 +228,7 @@ View::PlayerRenderer::PlayerRenderer(
 
     game_state_manager = controller_locked->get_game_state_manager();
     font = asset_manager->generate_font("liberationsans", 16);
-    background.set_background_color(255, 0, 255, 100);
+    background.set_background_color(0, 255, 0, 100);
     background.set_draw_background(true);
 }
 

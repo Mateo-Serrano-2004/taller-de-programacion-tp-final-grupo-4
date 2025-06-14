@@ -6,11 +6,21 @@
 
 #include "common/role_id.h"
 
-DTO::PlayerDTO::PlayerDTO(short_id_t player_id, short_id_t role_id,
-                          angle_t angle, uint16_t money,
-                          coord_t position_x, coord_t position_y,
-                          const std::string& name, const DTO::WeaponDTO& weapon_dto,
-                          uint8_t shooting, uint8_t health, short_id_t team):
+DTO::PlayerDTO::PlayerDTO()
+: player_id(0),
+  role_id(0),
+  angle(0),
+  money(0),
+  position_x(0),
+  position_y(0),
+  shooting(0),
+  health(0),
+  team(0) {}
+
+DTO::PlayerDTO::PlayerDTO(short_id_t player_id, short_id_t role_id, angle_t angle, uint16_t money,
+                          coord_t position_x, coord_t position_y, const std::string& name,
+                          const DTO::WeaponDTO& weapon_dto, uint8_t shooting, uint8_t health,
+                          short_id_t team):
         player_id(player_id),
         role_id(role_id),
         angle(angle),

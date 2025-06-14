@@ -6,10 +6,41 @@
 
 #include "common/DTO/event_dto.h"
 
-void Net::ClientProtocol::send_event(const DTO::EventDTOCreator& event_dto_creator) {
-    DTO::EventDTO event_dto = event_dto_creator.to_dto();
-    skt.sendall(&event_dto.size, sizeof(event_dto.size));
-    skt.sendall(event_dto.data.data(), event_dto.size);
+void Net::ClientProtocol::receive_weapon(DTO::WeaponDTO& weapon) {
+    skt.recvall(&weapon.weapon_id, sizeof(weapon.weapon_id));
+    skt.recvall(&weapon.loaded_ammo, sizeof(weapon.loaded_ammo));
+    skt.recvall(&weapon.total_ammo, sizeof(weapon.total_ammo));
+
+    weapon.total_ammo = ntohs(weapon.total_ammo);
+}
+
+void Net::ClientProtocol::receive_player(DTO::PlayerDTO& player) {
+    uint8_t name_size = 0;
+
+    skt.recvall(&player.player_id, sizeof(player.player_id));
+    skt.recvall(&player.role_id, sizeof(player.role_id));
+    skt.recvall(&player.shooting, sizeof(player.shooting));
+    skt.recvall(&player.health, sizeof(player.health));
+    skt.recvall(&player.team, sizeof(player.team));
+
+    skt.recvall(&player.angle, sizeof(player.angle));
+    player.angle = ntohs(player.angle);
+
+    skt.recvall(&player.money, sizeof(player.money));
+    player.money = ntohs(player.money);
+
+    skt.recvall(&player.position_x, sizeof(player.position_x));
+    player.position_x = ntohs(player.position_x);
+
+    skt.recvall(&player.position_y, sizeof(player.position_y));
+    player.position_y = ntohs(player.position_y);
+
+    skt.recvall(&name_size, sizeof(name_size));
+    player.name.resize(name_size);
+    skt.recvall(player.name.data(), name_size);
+
+    DTO::WeaponDTO weapon;
+    receive_weapon(weapon);
 }
 
 void Net::ClientProtocol::receive_player_list(std::vector<DTO::PlayerDTO>& players) {
@@ -17,50 +48,10 @@ void Net::ClientProtocol::receive_player_list(std::vector<DTO::PlayerDTO>& playe
     skt.recvall(&players_size, sizeof(players_size));
 
     for (uint8_t i = 0; i < players_size; i++) {
-        uint8_t name_size;
-        std::vector<char> name;
-        short_id_t player_id;
-        short_id_t role_id;
-        uint8_t shooting;
-        angle_t angle;
-        uint16_t money;
-        coord_t position_x;
-        coord_t position_y;
-
-        skt.recvall(&player_id, sizeof(player_id));
-        skt.recvall(&role_id, sizeof(role_id));
-        skt.recvall(&shooting, sizeof(shooting));
-        skt.recvall(&angle, sizeof(angle));
-        angle = ntohs(angle);
-        skt.recvall(&money, sizeof(money));
-        money = ntohs(money);
-        skt.recvall(&position_x, sizeof(position_x));
-        position_x = ntohs(position_x);
-        skt.recvall(&position_y, sizeof(position_y));
-        position_y = ntohs(position_y);
-        skt.recvall(&name_size, sizeof(name_size));
-        name.resize(name_size);
-        skt.recvall(name.data(), name_size);
-
-        DTO::WeaponDTO weapon_dto = receive_weapon();
-
-        players.emplace_back(player_id, role_id, angle, money, position_x, position_y,
-                             std::string(name.begin(), name.end()), weapon_dto, shooting,
-                            0, 0);
+        DTO::PlayerDTO player;
+        receive_player(player);
+        players.push_back(player);
     }
-}
-
-DTO::WeaponDTO Net::ClientProtocol::receive_weapon() {
-    uint8_t weapon_id = 0;
-    uint8_t loaded_ammo = 0;
-    uint16_t total_ammo = 0;
-
-    skt.recvall(&weapon_id, sizeof(weapon_id));
-    skt.recvall(&loaded_ammo, sizeof(loaded_ammo));
-    skt.recvall(&total_ammo, sizeof(total_ammo));
-    total_ammo = ntohs(total_ammo);
-
-    return DTO::WeaponDTO(weapon_id, loaded_ammo, total_ammo);
 }
 
 DTO::RoundDTO Net::ClientProtocol::receive_round(DTO::RoundDTO& round) {
@@ -87,6 +78,12 @@ DTO::GameStateDTO Net::ClientProtocol::receive_match_state() {
     receive_player_list(game_state_dto.players);
 
     return game_state_dto;
+}
+
+void Net::ClientProtocol::send_event(const DTO::EventDTOCreator& event_dto_creator) {
+    DTO::EventDTO event_dto = event_dto_creator.to_dto();
+    skt.sendall(&event_dto.size, sizeof(event_dto.size));
+    skt.sendall(event_dto.data.data(), event_dto.size);
 }
 
 std::list<GameInfoDTO> Net::ClientProtocol::receive_game_list() {

@@ -14,6 +14,8 @@ public:
 
     WeaponDTO(const WeaponDTO&) = default;
 
+    WeaponDTO();
+
     WeaponDTO(
         uint8_t weapon_id,
         uint8_t loaded_ammo,

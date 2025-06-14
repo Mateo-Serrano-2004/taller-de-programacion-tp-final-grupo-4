@@ -81,6 +81,11 @@ void View::HUDRenderer::render_time() {
 }
 
 void View::HUDRenderer::render_life_points(Shared<RenderedPlayer> player) {
+    auto units = get_units(player->get_health());
+    for (size_t i = 0; i < units.size(); i++) {
+        render_number(units[i], 22 + (i * 22), renderer->GetViewport().GetH() - 33);
+    }
+
     render_hud_symbol(0, 0, renderer->GetViewport().GetH() - 33);
 }
 

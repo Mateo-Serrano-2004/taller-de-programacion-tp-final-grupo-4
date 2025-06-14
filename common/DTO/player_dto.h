@@ -25,6 +25,8 @@ public:
 
     WeaponDTO weapon_dto;
 
+    PlayerDTO();
+
     PlayerDTO(short_id_t player_id, short_id_t role_id,
               angle_t angle, uint16_t money,
               coord_t position_x, coord_t position_y,

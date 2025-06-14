@@ -89,39 +89,43 @@ EventVariant ServerProtocol::receive_event() {
     }
 }
 
-void ServerProtocol::send_player_list(const std::vector<DTO::PlayerDTO>& players) {
-    uint8_t players_size = players.size();
-    peer.sendall(&players_size, sizeof(players_size));
-
-    for (const auto& p: players) {
-        uint8_t name_size = static_cast<uint8_t>(p.name.size());
-        angle_t angle = htons(p.angle);
-        uint16_t money = htons(p.money);
-        coord_t position_x = htons(p.position_x);
-        coord_t position_y = htons(p.position_y);
-
-        peer.sendall(&p.player_id, sizeof(p.player_id));
-        peer.sendall(&p.role_id, sizeof(p.role_id));
-        peer.sendall(&p.shooting, sizeof(p.shooting));
-        peer.sendall(&angle, sizeof(angle));
-        peer.sendall(&money, sizeof(money));
-        peer.sendall(&position_x, sizeof(position_x));
-        peer.sendall(&position_y, sizeof(position_y));
-        peer.sendall(&name_size, sizeof(name_size));
-        peer.sendall(p.name.c_str(), name_size);
-
-        send_weapon(p);
-    }
-}
-
-void ServerProtocol::send_weapon(const DTO::PlayerDTO& player_dto) {
-    DTO::WeaponDTO weapon_dto = player_dto.weapon_dto;
-
+void ServerProtocol::send_weapon(const DTO::WeaponDTO& weapon_dto) {
     uint16_t total_ammo = htons(weapon_dto.total_ammo);
 
     peer.sendall(&weapon_dto.weapon_id, sizeof(weapon_dto.weapon_id));
     peer.sendall(&weapon_dto.loaded_ammo, sizeof(weapon_dto.loaded_ammo));
     peer.sendall(&total_ammo, sizeof(total_ammo));
+}
+
+void ServerProtocol::send_player(const DTO::PlayerDTO& player) {
+    uint8_t name_size = static_cast<uint8_t>(player.name.size());
+    angle_t angle = htons(player.angle);
+    uint16_t money = htons(player.money);
+    coord_t position_x = htons(player.position_x);
+    coord_t position_y = htons(player.position_y);
+
+    peer.sendall(&player.player_id, sizeof(player.player_id));
+    peer.sendall(&player.role_id, sizeof(player.role_id));
+    peer.sendall(&player.shooting, sizeof(player.shooting));
+    peer.sendall(&player.health, sizeof(player.health));
+    peer.sendall(&player.team, sizeof(player.team));
+    peer.sendall(&angle, sizeof(angle));
+    peer.sendall(&money, sizeof(money));
+    peer.sendall(&position_x, sizeof(position_x));
+    peer.sendall(&position_y, sizeof(position_y));
+    peer.sendall(&name_size, sizeof(name_size));
+    peer.sendall(player.name.c_str(), name_size);
+
+    send_weapon(player.weapon_dto);
+}
+
+void ServerProtocol::send_player_list(const std::vector<DTO::PlayerDTO>& players) {
+    uint8_t players_size = players.size();
+    peer.sendall(&players_size, sizeof(players_size));
+
+    for (const auto& p: players) {
+        send_player(p);
+    }
 }
 
 void ServerProtocol::send_round(const DTO::RoundDTO& round_dto) {
