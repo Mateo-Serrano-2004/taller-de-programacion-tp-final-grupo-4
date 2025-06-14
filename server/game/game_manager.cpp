@@ -43,7 +43,7 @@ uint8_t GameManager::join_game(const uint8_t& game_id, const std::string& userna
     if (it == games.end()) throw std::runtime_error("Invalid game id: " + std::to_string(game_id));
     return it->second->add_player(
         username, client_queue,
-        Model::TeamID::CT, Model::RoleID::CT2
+        Model::TeamID::TT, Model::RoleID::T4
     );
 }
 

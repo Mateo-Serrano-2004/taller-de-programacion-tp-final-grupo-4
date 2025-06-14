@@ -28,7 +28,7 @@ void Game::handle_switch_weapon(const uint8_t& player_id, const SwitchWeaponEven
 }
 
 void Game::handle_buy_weapon(const uint8_t& player_id, const BuyEvent& event) {
-    if (this->state != GameState::Playing) return;
+    if (state != GameState::Playing) return;
 
     auto it = players.find(player_id);
     if (it == players.end()) return;

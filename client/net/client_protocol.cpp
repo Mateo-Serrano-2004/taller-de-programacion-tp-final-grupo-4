@@ -39,8 +39,7 @@ void Net::ClientProtocol::receive_player(DTO::PlayerDTO& player) {
     player.name.resize(name_size);
     skt.recvall(player.name.data(), name_size);
 
-    DTO::WeaponDTO weapon;
-    receive_weapon(weapon);
+    receive_weapon(player.weapon_dto);
 }
 
 void Net::ClientProtocol::receive_player_list(std::vector<DTO::PlayerDTO>& players) {

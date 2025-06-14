@@ -8,6 +8,7 @@ std::vector<Impact> ShotManager::calculate_shot_impacts(
     std::vector<Impact> impacts;
 
     for (const auto& [id, player] : players) {
+        // TODO: Prevent friendly fire
         if (id == shot_info.shooter_id || !player.is_alive()) continue;
 
         // Impacto dummy: 50 de daño fijo

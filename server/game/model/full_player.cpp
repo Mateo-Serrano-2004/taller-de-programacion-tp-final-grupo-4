@@ -148,10 +148,9 @@ void FullPlayer::add_money(uint16_t money_to_be_added) {
 }
 
 void FullPlayer::reset_for_new_round() {
-    if(!is_alive()){
+    if (!is_alive()){
         set_alive(true);
         // acomodar armas a estado defalut falta
-        
     }
     health = 100;
 }
