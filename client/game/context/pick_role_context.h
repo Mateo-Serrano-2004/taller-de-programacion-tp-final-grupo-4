@@ -44,16 +44,12 @@ protected:
     View::Button pick_role_4_button;
 
     void build_button(View::Button& button, Model::TextureID texture_id);
-    void update_size();
 
     void render() override;
     void dispatch_events() override;
 
 public:
     PickRoleContext(Weak<Controller::GameController> controller);
-
-    void handle_event(Shared<Model::Event> event) override;
-
     ~PickRoleContext() override = default;
 };
 };

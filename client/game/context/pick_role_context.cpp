@@ -30,10 +30,7 @@ void Context::PickRoleContext::build_button(View::Button& button, Model::Texture
     button.set_draw_texture(true);
     button.set_texture(texture_id);
     button.set_texture_slice(SDL2pp::Rect(0, 0, 32, 32));
-    button.set_apply_scalation(true);
-    button.set_keep_aspect_ratio(true);
-    button.set_min_size(SDL2pp::Point(96, 96));
-    button.set_max_size(SDL2pp::Point(160, 160));
+    button.set_size(SDL2pp::Point(96, 96));
 
     auto composite_command = make_unique<Command::CompositeCommand>(controller);
     composite_command->add_command(make_unique<Command::PickRoleCommand>(
@@ -42,11 +39,6 @@ void Context::PickRoleContext::build_button(View::Button& button, Model::Texture
     composite_command->add_command(make_unique<Command::SwitchContextCommand>("in-game"));
 
     button.set_command(std::move(composite_command));
-}
-
-void Context::PickRoleContext::update_size() {
-    vertical_pane.set_max_size(renderer->GetViewport().GetSize());
-    vertical_pane.set_size(renderer->GetViewport().GetSize());
 }
 
 void Context::PickRoleContext::render() {
@@ -77,24 +69,8 @@ Context::PickRoleContext::PickRoleContext(Weak<Controller::GameController> contr
 
     label.set_text("Choose your skin");
 
-    background.set_apply_scalation(true);
-    background.set_keep_aspect_ratio(true);
-    background.set_max_size(SDL2pp::Point(655, 160));
-    background.set_min_size(SDL2pp::Point(399, 96));
-    background.set_min_bounds(SDL2pp::Point(640, 480));
-
     build_button(pick_role_1_button, Model::TextureID::SPRITE_CT1);
     build_button(pick_role_2_button, Model::TextureID::SPRITE_CT2);
     build_button(pick_role_3_button, Model::TextureID::SPRITE_CT3);
     build_button(pick_role_4_button, Model::TextureID::SPRITE_CT4);
 }
-
-void Context::PickRoleContext::handle_event(Shared<Model::Event> event) {
-    Model::EventType event_type = event->get_type();
-    if (
-        event_type == Model::EventType::SWITCH_CONTEXT || 
-        event_type == Model::EventType::WINDOW_RESIZE 
-    ) {
-        update_size();
-    }
-} 

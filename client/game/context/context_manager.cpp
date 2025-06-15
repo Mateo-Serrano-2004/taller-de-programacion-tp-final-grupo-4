@@ -27,11 +27,3 @@ void Context::ContextManager::update_current_context() {
     }
     contexts.at(current_context_name)->update();
 }
-
-void Context::ContextManager::propage_event(Shared<Model::Event> event) {
-    if (event->get_type() == Model::EventType::SWITCH_CONTEXT) {
-        auto switch_context_event = std::static_pointer_cast<Model::SwitchContextEvent>(event);
-        set_current_context(switch_context_event->get_new_context_name());
-    }
-    contexts.at(current_context_name)->handle_event(event);
-}

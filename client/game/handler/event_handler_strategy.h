@@ -14,7 +14,6 @@ protected:
     Weak<BaseController> controller;
 
     void handle_quit_event();
-    void handle_window_resize_event();
     virtual void handle_switch_context_event(Shared<SDL_Event> event) = 0;
 
 public:

@@ -34,8 +34,6 @@ protected:
     View::VerticalPane background;
     View::Button exit_button;
 
-    void update_size();
-
     void render() override;
     void dispatch_events() override;
 
@@ -44,8 +42,6 @@ protected:
 
 public:
     MenuContext(Weak<Controller::GameController> controller);
-
-    void handle_event(Shared<Model::Event> event) override;
 
     MenuContext(MenuContext&&) = default;
     MenuContext& operator=(MenuContext&&) = default;

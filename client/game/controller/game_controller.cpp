@@ -14,8 +14,12 @@
 #include "client/exception/closed_app.h"
 
 #include "context/context_manager.h"
+
 #include "handler/game_state_manager.h"
+
 #include "asset/asset_manager.h"
+
+#include "event/switch_context_event.h"
 
 Controller::GameController::GameController(
 	Shared<SDL2pp::Window> window,
@@ -37,12 +41,9 @@ Controller::GameController::GameController(
 
 void Controller::GameController::process_event(Shared<Model::Event> event) {
 	auto event_type = event->get_type();
-	if (event->get_type() == Model::EventType::WINDOW_RESIZE) {
-		context_manager->propage_event(event);
-    } else if (
-        event_type == Model::EventType::SWITCH_CONTEXT
-    ) {
-        context_manager->propage_event(event);
+	if (event_type == Model::EventType::SWITCH_CONTEXT) {
+		auto switch_context_event = std::static_pointer_cast<Model::SwitchContextEvent>(event);
+        context_manager->set_current_context(switch_context_event->get_new_context_name());
     } else {
 		try {
 			sender_queue.push(event);

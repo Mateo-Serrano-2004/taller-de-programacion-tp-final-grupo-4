@@ -68,8 +68,8 @@ void View::Label::render() {
             *text_texture,
             SDL2pp::NullOpt,
             SDL2pp::Point(
-                absolute_position.GetX() + (current_size.GetX() - text_texture->GetWidth()) / 2,
-                absolute_position.GetY() + (current_size.GetY() - text_texture->GetHeight()) / 2
+                absolute_position.GetX() + (size.GetX() - text_texture->GetWidth()) / 2,
+                absolute_position.GetY() + (size.GetY() - text_texture->GetHeight()) / 2
             )
         );
     }

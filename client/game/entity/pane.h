@@ -11,8 +11,6 @@
 #include "asset/texture_id.h"
 
 #include "rendered.h"
-#include "scalable.h"
-#include "aligner.h"
 
 namespace SDL2pp {
 class Texture;
@@ -24,12 +22,13 @@ class BaseController;
 };
 
 namespace View {
-class Pane: public Rendered, public Scalable {
+class Pane: public Rendered {
 protected:
     std::list<Pane*> children;
     bool draw_background;
     Shared<SDL2pp::Texture> background;
     SDL2pp::Point position;
+    SDL2pp::Point size;
     Pane* parent;
 
     void render_texture(Shared<SDL2pp::Texture> texture);
@@ -42,6 +41,9 @@ public:
     SDL2pp::Point get_position() const;
     int get_x() const;
     int get_y() const;
+    SDL2pp::Point get_size() const;
+    int get_height() const;
+    int get_width() const;
     SDL2pp::Point get_absolute_position() const;
     Pane* get_parent() const;
 

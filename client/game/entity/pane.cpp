@@ -16,7 +16,7 @@ void View::Pane::render_texture(Shared<SDL2pp::Texture> texture) {
     renderer->Copy(
         *texture,
         texture_slice,
-        SDL2pp::Rect(absolute_position, current_size),
+        SDL2pp::Rect(absolute_position, size),
         angle,
         rotation_point
     );
@@ -24,15 +24,9 @@ void View::Pane::render_texture(Shared<SDL2pp::Texture> texture) {
 
 View::Pane::Pane(Weak<Controller::BaseController> controller):
 View::Rendered(controller),
-View::Scalable(SDL2pp::Point(2, 2), SDL2pp::Point(1, 1)),
 draw_background(false), position(0, 0), parent(nullptr) {
-    SDL_Rect bounds;
-    SDL_GetDisplayBounds(0, &bounds);
-    set_max_bounds_height(bounds.h);
-    set_max_bounds_width(bounds.w);
     background = asset_manager->generate_background(SDL2pp::Color(0, 0, 0, 255));
-    max_size = max_bounds;
-    current_size = window->GetSize();
+    size = renderer->GetLogicalSize();
 }
 
 bool View::Pane::get_draw_background() const { return draw_background; }
@@ -48,6 +42,12 @@ int View::Pane::get_x() const {
 int View::Pane::get_y() const {
     return position.GetY();
 }
+
+SDL2pp::Point View::Pane::get_size() const { return size; }
+
+int View::Pane::get_height() const { return size.GetY(); }
+
+int View::Pane::get_width() const { return size.GetX(); }
 
 SDL2pp::Point View::Pane::get_absolute_position() const {
     if (!parent) return position;
@@ -87,18 +87,15 @@ void View::Pane::set_y(int new_y) {
 }
 
 void View::Pane::set_width(int new_width) {
-    int real_width = std::min(std::max(new_width, min_size.GetX()), max_size.GetX());
-    current_size.SetX(real_width);
+    size.SetX(new_width);
 }
 
 void View::Pane::set_height(int new_height) {
-    int real_height = std::min(std::max(new_height, min_size.GetY()), max_size.GetY());
-    current_size.SetY(real_height);
+    size.SetY(new_height);
 }
 
 void View::Pane::set_size(const SDL2pp::Point& new_size) {
-    set_width(new_size.GetX());
-    set_height(new_size.GetY());
+    size = new_size;
 }
 
 void View::Pane::set_parent(View::Pane* new_parent) {
@@ -117,8 +114,6 @@ void View::Pane::clear_children() {
 }
 
 void View::Pane::render() {
-    scalate(window->GetSize());
-
     if (draw_background && background) render_texture(background);
     if (draw_texture && texture) render_texture(texture);
 

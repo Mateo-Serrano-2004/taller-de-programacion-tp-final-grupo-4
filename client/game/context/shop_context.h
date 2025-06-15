@@ -38,15 +38,11 @@ protected:
     View::Button buy_m3;
     View::Button buy_awp;
 
-    void update_size();
-
     void render() override;
     void dispatch_events() override;
 
 public:
     ShopContext(Weak<Controller::GameController> controller);
-
-    void handle_event(Shared<Model::Event> event) override;
 
     ~ShopContext() override = default;
 };

@@ -26,8 +26,6 @@ protected:
     View::HUDRenderer hud_renderer;
     Controller::InGameEventHandlerStrategy event_handler_strategy;
 
-    void update_size();
-
     void render() override;
     void dispatch_events() override;
 
@@ -36,8 +34,6 @@ protected:
 
 public:
     InGameContext(Weak<Controller::GameController> controller);
-
-    void handle_event(Shared<Model::Event> event) override;
 
     InGameContext(InGameContext&&) = default;
     InGameContext& operator=(InGameContext&&) = default;

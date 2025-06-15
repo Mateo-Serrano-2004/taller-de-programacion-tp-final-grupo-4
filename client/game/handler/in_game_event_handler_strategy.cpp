@@ -64,13 +64,6 @@ void Controller::InGameEventHandlerStrategy::handle_movement_event(Shared<SDL_Ev
     controller.lock()->push_event(std::move(movement_event));
 }
 
-void Controller::InGameEventHandlerStrategy::handle_window_event(Shared<SDL_Event> event) {
-    if (event->window.event == SDL_WINDOWEVENT_RESIZED) {
-        auto window_resize_event = make_shared<Model::WindowResizeEvent>();
-        controller.lock()->push_event(std::move(window_resize_event));
-    }
-}
-
 void Controller::InGameEventHandlerStrategy::handle_switch_weapon_event(Shared<SDL_Event> event) {
     if (handler_state.switching_weapon) return;
 
@@ -199,8 +192,6 @@ void Controller::InGameEventHandlerStrategy::handle(Shared<SDL_Event> event) {
         handle_keydown_event(event);
     } else if (event_type == SDL_KEYUP) {
         handle_keyup_event(event);
-    } else if (event_type == SDL_WINDOWEVENT) {
-        handle_window_event(event);
     } else if (event_type == SDL_MOUSEBUTTONDOWN) {
         handle_click();
     } else if (event_type == SDL_MOUSEBUTTONUP) {

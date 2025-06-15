@@ -19,7 +19,6 @@ protected:
     Model::HandlerState handler_state;
 
     void handle_movement_event(Shared<SDL_Event> event);
-    void handle_window_event(Shared<SDL_Event> event);
     void handle_switch_weapon_event(Shared<SDL_Event> event);
     void handle_switch_context_event(Shared<SDL_Event> event) override;
 

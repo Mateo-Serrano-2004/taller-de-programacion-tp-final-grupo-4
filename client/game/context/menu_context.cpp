@@ -14,11 +14,6 @@ void Context::MenuContext::trigger_buttons(Shared<SDL_Event> event) {
     exit_button.trigger(event);
 }
 
-void Context::MenuContext::update_size() {
-    background.set_max_size(renderer->GetViewport().GetSize());
-    background.set_size(renderer->GetViewport().GetSize());
-}
-
 void Context::MenuContext::render() {
     player_renderer.render();
 
@@ -51,14 +46,4 @@ exit_button(controller) {
     exit_button.set_width(exit_button.get_width() + 8);
 
     exit_button.set_command(make_unique<Command::QuitCommand>());
-}
-
-void Context::MenuContext::handle_event(Shared<Model::Event> event) {
-    Model::EventType event_type = event->get_type();
-    if (
-        event_type == Model::EventType::SWITCH_CONTEXT || 
-        event_type == Model::EventType::WINDOW_RESIZE 
-    ) {
-        update_size();
-    }
 }

@@ -37,7 +37,6 @@ public:
     void set_current_context(const std::string& context_name);
 
     void update_current_context();
-    void propage_event(Shared<Model::Event> event);
 
     ContextManager(ContextManager&&) = default;
     ContextManager& operator=(ContextManager&&) = default;

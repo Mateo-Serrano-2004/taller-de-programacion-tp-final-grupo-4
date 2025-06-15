@@ -37,7 +37,6 @@ public:
     const std::string& get_name() const;
     
     void update();
-    virtual void handle_event(Shared<Model::Event> event) = 0;
 
     BaseContext(BaseContext&&) = default;
     BaseContext& operator=(BaseContext&&) = default;
