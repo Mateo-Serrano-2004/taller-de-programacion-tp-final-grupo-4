@@ -10,8 +10,8 @@
 struct TileData {
     int x;
     int y;
+    std::string name;
     std::string type;
-    std::string path;
 };
 
 class YamlParser {

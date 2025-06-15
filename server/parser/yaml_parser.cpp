@@ -19,21 +19,19 @@ void YamlParser::parseYaml(const std::string& yamlPath) {
     int mapHeight = mapMaxHeight - mapMinHeight + 1;
 
     tileMatrix.resize(mapHeight, std::vector<std::string>(mapWidth, ""));
-    typeMatrix.resize(mapHeight, std::vector<TileType>(mapWidth, UNKNOWN));
+    typeMatrix.resize(mapHeight, std::vector<TileType>(mapWidth, COLLIDABLE));
 
     for (const auto& tile : root["tiles"]) {
         int initialX = tile["x"].as<int>();
         int initialY = tile["y"].as<int>();
-        std::string path = tile["path"].as<std::string>();
+        std::string name = tile["name"].as<std::string>();
         std::string type = tile["type"].as<std::string>();
 
         int resizedX = initialX - mapMinWidth;
         int resizedY = initialY - mapMinHeight;
 
-        //std::string filename = path.substr(path.find_last_of('/') + 1);
-
         if (resizedX >= 0 && resizedX < mapWidth && resizedY >= 0 && resizedY < mapHeight) {
-            tileMatrix[resizedY][resizedX] = path;
+            tileMatrix[resizedY][resizedX] = type + "/" + name;
             typeMatrix[resizedY][resizedX] = stringToTileType(type);
         }
 
@@ -50,10 +48,8 @@ std::vector<std::vector<TileType>> YamlParser::getTypeMatrix() const{
 }
 
 TileType YamlParser::stringToTileType(const std::string& typeStr) {
-    if (typeStr == "background") return BACKGROUND;
-    if (typeStr == "wall") return WALL;
-    if (typeStr == "box" || typeStr == "car") return WALL;
-    if (typeStr == "site" || typeStr == "bomb") return BOMB_SITE;
-    if (typeStr == "spawn") return SPAWN;
-    return UNKNOWN;
+    if (typeStr == "Backgrounds" || typeStr == "Sites") return NOT_COLLIDABLE;
+    if (typeStr == "Boxes" || typeStr == "Cars" || typeStr == "Walls") return COLLIDABLE;
+    if (typeStr == "Sites") return BOMB_SITE;
+    return NOT_COLLIDABLE;  
 }
