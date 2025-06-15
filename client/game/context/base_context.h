@@ -35,7 +35,7 @@ public:
     BaseContext(const std::string& name, Weak<Controller::BaseController> controller);
 
     const std::string& get_name() const;
-    
+
     void update();
 
     BaseContext(BaseContext&&) = default;

@@ -20,6 +20,7 @@
 #include "asset/asset_manager.h"
 
 #include "event/switch_context_event.h"
+#include "event/quit_event.h"
 
 Controller::GameController::GameController(
 	Shared<SDL2pp::Window> window,
@@ -44,19 +45,22 @@ void Controller::GameController::process_event(Shared<Model::Event> event) {
 	if (event_type == Model::EventType::SWITCH_CONTEXT) {
 		auto switch_context_event = std::static_pointer_cast<Model::SwitchContextEvent>(event);
         context_manager->set_current_context(switch_context_event->get_new_context_name());
-    } else {
+    } else if (event_type == Model::EventType::END_OF_GAME) {
+		context_manager->set_current_context("end-of-game");
+	} else {
 		try {
 			sender_queue.push(event);
-		} catch (const ClosedQueue&) {
-			// Just wait, controller will end later
-		}
+		} catch (const ClosedQueue&) {}
 	}
 
 	if (event_type == Model::EventType::QUIT) {
 		std::cout << "Received a QUIT event\n";
-		// Sender will always terminate itself
 		receiver.reset();
 		throw ClosedAppException("Closed app"); 
+	}
+
+	if (event_type == Model::EventType::END_OF_GAME) {
+		std::cout << "Received a END_OF_GAME event\n";
 	}
 }
 

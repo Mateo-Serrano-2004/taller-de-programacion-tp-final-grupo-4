@@ -30,7 +30,7 @@ enum EventType {
 
     // Internal client events
     SWITCH_CONTEXT = 0xA0,
-    WINDOW_RESIZE = 0xA1
+    END_OF_GAME = 0xA1
 };
 };
 

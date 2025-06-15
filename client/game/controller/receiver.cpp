@@ -11,7 +11,7 @@
 
 #include "handler/game_state_manager.h"
 
-#include "event/quit_event.h"
+#include "event/end_of_game_event.h"
 
 Controller::Receiver::Receiver(
     Controller::GameController* controller,
@@ -30,7 +30,7 @@ void Controller::Receiver::run() {
             if (game_state_dto.ended) {
                 keep_running = false;
                 try {
-                    controller->push_event(make_shared<Model::QuitEvent>());
+                    controller->push_event(make_shared<Model::EndOfGameEvent>());
                 } catch (const std::exception&) {}
             } else {
                 game_state_manager->update(std::move(game_state_dto));

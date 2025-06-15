@@ -18,7 +18,6 @@
 #include "event/movement_event.h"
 #include "event/stop_movement_event.h"
 #include "event/rotation_event.h"
-#include "event/window_resize_event.h"
 #include "event/switch_weapon_event.h"
 #include "event/switch_context_event.h"
 #include "event/use_weapon_event.h"

@@ -21,6 +21,7 @@
 #include "context/menu_context.h"
 #include "context/pick_role_context.h"
 #include "context/shop_context.h"
+#include "context/end_of_game_context.h"
 
 #include "asset/asset_manager.h"
 #include "asset/asset_generator.h"
@@ -179,10 +180,17 @@ App::CS2DApp::CS2DApp(Shared<Net::ClientProtocol> protocol): App::Application() 
         )
     );
 
+    auto end_of_game_context = make_shared<Context::EndOfGameContext>(
+        Weak<Controller::GameController>(
+            std::static_pointer_cast<Controller::GameController>(controller)
+        )
+    );
+
     context_manager->add_context(in_game_context);
     context_manager->add_context(menu_context);
     context_manager->add_context(pick_role_context);
     context_manager->add_context(shop_context);
+    context_manager->add_context(end_of_game_context);
 
     context_manager->set_current_context("pick-role");
 }
