@@ -10,9 +10,9 @@
 
 #include "asset/texture_id.h"
 
-#include "rendered.h"
-#include "textured.h"
-#include "rotated.h"
+#include "interface/rendered.h"
+#include "interface/textured.h"
+#include "interface/rotated.h"
 
 namespace SDL2pp {
 class Texture;

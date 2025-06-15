@@ -5,8 +5,9 @@
 
 #include "common/definitions.h"
 
+#include "interface/aligner.h"
+
 #include "pane.h"
-#include "aligner.h"
 
 namespace Controller {
 class BaseController;

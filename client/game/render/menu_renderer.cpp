@@ -10,7 +10,7 @@
 #include "controller/game_controller.h"
 #include "asset/asset_manager.h"
 
-#include "entity/rendered.h"
+#include "interface/rendered.h"
 
 View::MenuRenderer::MenuRenderer(
     Weak<Controller::GameController> controller

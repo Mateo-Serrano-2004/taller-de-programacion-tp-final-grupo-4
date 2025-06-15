@@ -3,8 +3,9 @@
 
 #include "common/definitions.h"
 
+#include "interface/gapped.h"
+
 #include "smart_pane.h"
-#include "gapped.h"
 
 namespace Controller {
 class BaseController;

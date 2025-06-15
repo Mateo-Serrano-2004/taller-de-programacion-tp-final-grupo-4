@@ -8,8 +8,9 @@
 
 #include "common/definitions.h"
 
+#include "interface/padded.h"
+
 #include "pane.h"
-#include "padded.h"
 
 namespace SDL2pp {
 class Font;
