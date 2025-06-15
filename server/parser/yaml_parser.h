@@ -19,7 +19,7 @@ class YamlParser {
 private:
     std::string yaml;
     void parseYaml(const std::string& yamlPath);
-    TileType stringToTileType(const std::string& typeStr);
+    TileType stringToTileType(const std::string& typeStr, const std::string& nameStr);
 
     int mapMinWidth;
     int mapMaxWidth;

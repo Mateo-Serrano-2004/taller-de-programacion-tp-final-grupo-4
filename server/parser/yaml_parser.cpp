@@ -32,7 +32,7 @@ void YamlParser::parseYaml(const std::string& yamlPath) {
 
         if (resizedX >= 0 && resizedX < mapWidth && resizedY >= 0 && resizedY < mapHeight) {
             tileMatrix[resizedY][resizedX] = type + "/" + name;
-            typeMatrix[resizedY][resizedX] = stringToTileType(type);
+            typeMatrix[resizedY][resizedX] = stringToTileType(type, name);
         }
 
     }
@@ -47,9 +47,11 @@ std::vector<std::vector<TileType>> YamlParser::getTypeMatrix() const{
     return typeMatrix;
 }
 
-TileType YamlParser::stringToTileType(const std::string& typeStr) {
+TileType YamlParser::stringToTileType(const std::string& typeStr, const std::string& nameStr) {
     if (typeStr == "Backgrounds" || typeStr == "Sites") return NOT_COLLIDABLE;
     if (typeStr == "Boxes" || typeStr == "Cars" || typeStr == "Walls") return COLLIDABLE;
     if (typeStr == "Sites") return BOMB_SITE;
+    if (nameStr.find("ct") != std::string::npos) return CT_SPAWN;
+    if (nameStr.find("tt") != std::string::npos) return TT_SPAWN;
     return NOT_COLLIDABLE;  
 }
