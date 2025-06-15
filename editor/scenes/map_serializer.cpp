@@ -51,9 +51,9 @@ void MapSerializer::saveToYaml(QGraphicsScene* scene, const QString& filePath) {
     }
 
     out << YAML::Key << "minWidth" << YAML::Value << (minX);
-    out << YAML::Key << "maxwidth" << YAML::Value << (maxX);
+    out << YAML::Key << "maxWidth" << YAML::Value << (maxX);
     out << YAML::Key << "minHeight" << YAML::Value << (minY);
-    out << YAML::Key << "maxheight" << YAML::Value << (maxY);
+    out << YAML::Key << "maxHeight" << YAML::Value << (maxY);
     out << YAML::Key << "tiles" << YAML::Value << YAML::BeginSeq;
 
     for (const auto& tile : tiles) {
