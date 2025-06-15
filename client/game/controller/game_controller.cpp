@@ -38,7 +38,6 @@ Controller::GameController::GameController(
 void Controller::GameController::process_event(Shared<Model::Event> event) {
 	auto event_type = event->get_type();
 	if (event->get_type() == Model::EventType::WINDOW_RESIZE) {
-        game_state_manager->update_camera();
 		context_manager->propage_event(event);
     } else if (
         event_type == Model::EventType::SWITCH_CONTEXT
@@ -54,6 +53,7 @@ void Controller::GameController::process_event(Shared<Model::Event> event) {
 
 	if (event_type == Model::EventType::QUIT) {
 		std::cout << "Received a QUIT event\n";
+		// Sender will always terminate itself
 		receiver.reset();
 		throw ClosedAppException("Closed app"); 
 	}

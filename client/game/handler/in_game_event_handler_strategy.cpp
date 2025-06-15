@@ -6,6 +6,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Window.hh>
+#include <SDL2pp/Renderer.hh>
 
 #include "common/slot_id.h"
 
@@ -22,6 +23,8 @@
 #include "event/switch_context_event.h"
 #include "event/use_weapon_event.h"
 #include "event/stop_using_weapon_event.h"
+
+#include "utils/mouse_coords_translator.h"
 
 #include "exception/closed_window.h"
 
@@ -206,12 +209,13 @@ void Controller::InGameEventHandlerStrategy::handle(Shared<SDL_Event> event) {
 }
 
 void Controller::InGameEventHandlerStrategy::handle_current_game_state() {
-    int mouse_x, mouse_y;
-    (void) SDL_GetMouseState(&mouse_x, &mouse_y);
-    SDL2pp::Point viewport = game_state_manager->get_camera().get_viewport();
+    auto renderer = controller.lock()->get_renderer();
+    auto mouse_coords = MouseCoordsTranslator::get_logical_coords(renderer);
 
-    coord_t dy = mouse_y - (viewport.GetY() / 2);
-    coord_t dx = mouse_x - (viewport.GetX() / 2);
+    SDL2pp::Point screen_size = controller.lock()->get_renderer()->GetLogicalSize();
+
+    coord_t dy = mouse_coords.GetY() - (screen_size.GetY() / 2);
+    coord_t dx = mouse_coords.GetX() - (screen_size.GetX() / 2);
 
     double angle_rad = std::atan2(dy, dx);
     double angle_deg = angle_rad * 180.0 / M_PI;
