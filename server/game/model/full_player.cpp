@@ -133,12 +133,12 @@ std::optional<ShotInfo> FullPlayer::shoot(uint16_t frames_to_process) {
 }
 
 void FullPlayer::take_damage(uint8_t damage){
-    if(!is_alive()) return;
+    if (!is_alive()) return;
 
-    if(health <= damage){
+    if (health <= damage) {
         health = 0;
         alive = false;
-    }else{
+    } else {
         health -= damage;
     }
 }
@@ -148,9 +148,6 @@ void FullPlayer::add_money(uint16_t money_to_be_added) {
 }
 
 void FullPlayer::reset_for_new_round() {
-    if (!is_alive()){
-        set_alive(true);
-        // acomodar armas a estado defalut falta
-    }
+    alive = true;
     health = 100;
 }

@@ -87,12 +87,12 @@ private:
 public:
     Game(const std::string& party_name, const std::string& map_name);
 
-    uint8_t get_number_of_players() const;
-    std::string get_party_name() const;
-    std::string get_map_name() const;
+    uint8_t get_number_of_players();
+    std::string get_party_name();
+    std::string get_map_name();
     GameQueue& get_queue();
 
-    bool is_dead() const;
+    bool is_dead();
 
     uint8_t add_player(const std::string& username, ClientQueue& client_queue, Model::TeamID team_id, Model::RoleID role_id);
 

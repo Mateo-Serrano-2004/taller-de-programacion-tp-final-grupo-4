@@ -64,15 +64,21 @@ void Round::set_ticks_for_playing_phase(int ticks) {
     ticks_for_playing_phase = ticks;
 }
 
+void Round::set_ct_count(int count) {
+    number_of_ct_alive = count;
+}
+
+void Round::set_tt_count(int count) {
+    number_of_tt_alive = count;
+}
+
 void Round::to_buying_phase() {
     active_ticks_remaining = ticks_for_buying_phase;
     state = RoundState::Buying;
 }
 
 void Round::update(int frames_to_process) {
-    if (ended()) return;
-
-    if (frames_to_process < active_ticks_remaining) {
+    if (active_ticks_remaining > frames_to_process) {
         active_ticks_remaining -= frames_to_process;
         return;
     }
@@ -84,16 +90,22 @@ void Round::update(int frames_to_process) {
 
 void Round::notify_on_one_player_less(Model::TeamID team) {
     if (team == Model::TeamID::CT) {
-        if (--number_of_ct_alive <= 0) {
+        number_of_ct_alive--;
+        if (number_of_ct_alive == 0) {
             winner_team = Model::TeamID::TT;
             state = RoundState::Ended;
+            active_ticks_remaining = 0;
+            count_of_rounds++;
         }
     } else if (team == Model::TeamID::TT) {
-        if (--number_of_tt_alive <= 0) {
+        number_of_tt_alive;
+        if (number_of_tt_alive == 0) {
             // TOOD: Add bomb logic and prevent end of game if it is still planted
 
             winner_team = Model::TeamID::CT;
             state = RoundState::Ended;
+            active_ticks_remaining = 0;
+            count_of_rounds++;
         }
     }
 }

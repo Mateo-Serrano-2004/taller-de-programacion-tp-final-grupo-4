@@ -33,9 +33,8 @@ void GameLogic::process_shooting(std::map<uint8_t, FullPlayer>& players, Round& 
         }
     }
 }
-// ojo que muere y no estamos dropeando cosas todavía.
+
 void GameLogic::apply_impacts(const std::vector<Impact>& impacts, Round& round, std::map<uint8_t, FullPlayer>& players) const {
-    // te puede matar un muerto, la bala quedo viajando. 
     for (const auto& impact : impacts) {
         if (!round.is_active()) return;
 
@@ -45,17 +44,14 @@ void GameLogic::apply_impacts(const std::vector<Impact>& impacts, Round& round, 
         auto victim = players.find(impact.victim_id);
         if (victim == players.end()) continue;
         if (victim->second.get_team() == shooter->second.get_team()) continue;
-        if(!victim->second.is_alive()) continue; // no podes matar a un muerto, si no te sumaria una kill que no es tuya
+        if (!victim->second.is_alive()) continue;
 
         victim->second.take_damage(impact.damage);
 
         if (!victim->second.is_alive()) {
-            
-            round.notify_on_one_player_less(victim->second.get_team());
 
-            //victim->second.register_death(); // podría ir en take_damage si ahí se setea muerto
-            //shooter->second.register_kill();
-            shooter->second.add_money(800); // suponiendo constante definida por YAML
+            round.notify_on_one_player_less(victim->second.get_team());
+            shooter->second.add_money(800);
         }
     }
 }

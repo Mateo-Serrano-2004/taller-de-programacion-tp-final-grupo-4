@@ -37,7 +37,6 @@ void Game::handle_buy_weapon(const uint8_t& player_id, const BuyEvent& event) {
 
 void Game::handle_leave_game(const uint8_t& player_id) {
     // TODO: Check game/round state
-    std::lock_guard<std::mutex> lock(mutex);
     auto it = players.find(player_id);
     if (it != players.end()) {
         round.notify_on_one_player_less(it->second.get_team());
@@ -112,26 +111,32 @@ void Game::start_new_round() {
 
     for (auto& [id, player] : players) {
         player.reset_for_new_round();
+        handle_stop_using_weapon(id);
         if (player.get_team() == Model::TeamID::CT) ct_count++;
         else tt_count++;
     }
     std::cout << "NUEVA RONDA" << std::endl;
+    round.set_ct_count(ct_count);
+    round.set_tt_count(tt_count);
+
+    std::cout << (int) (ct_count) << "-" << (int) (tt_count);
+
     round.to_buying_phase();
 }
 
 void Game::update_players_that_won() {
-    Model::TeamID ganador = round.get_winner_team();
+    Model::TeamID winner = round.get_winner_team();
 
-    if (ganador == Model::TeamID::NONE) return;
+    if (winner == Model::TeamID::NONE) return;
 
-    if (ganador == Model::TeamID::CT) {
+    if (winner == Model::TeamID::CT) {
         ct_rounds_won++;
-    } else if (ganador == Model::TeamID::TT) {
+    } else if (winner == Model::TeamID::TT) {
         tt_rounds_won++;
     }
 
     for (auto& [player_id, player] : players) {
-        if (player.get_team() == ganador) {
+        if (player.get_team() == winner) {
             player.add_money(1000);
         }
     }
@@ -144,13 +149,9 @@ void Game::process_frames(uint16_t frames_to_process) {
 
     if (round.ended()) {
         clear_game_queue();
-
-        if (round.is_warmup()) {
-            start_new_round();
-            return;
-        }
-
         update_players_that_won();
+
+        std::cout << (int) (round.get_count_of_rounds()) << std::endl;
 
         if (round.get_count_of_rounds() == MAX_ROUNDS) {
             state = GameState::Finished;
@@ -163,7 +164,6 @@ void Game::process_frames(uint16_t frames_to_process) {
 }
 
 void Game::broadcast_game_state() {
-    std::lock_guard<std::mutex> lock(mutex);
     std::vector<DTO::PlayerDTO> player_dtos;
     for (const auto& [id, player] : players) {
         player_dtos.push_back(player.to_dto());
@@ -195,11 +195,6 @@ void Game::broadcast_game_state() {
     }
 }
 
-
-    /*if (state == GameState::WaitingPlayers && players.size() >= min_players_to_start) {
-        state = GameState::WaitingStart;
-    }*/
-
 void Game::update_game_with_events() {
     std::pair<uint8_t, GameEventVariant> event_info;
     try {
@@ -212,6 +207,7 @@ void Game::update_game_with_events() {
 }
 
 void Game::tick(uint16_t frames_to_process) {
+    std::lock_guard<std::mutex> lock(mutex);
     if (frames_to_process > 1) {
         process_frames(frames_to_process - 1);
     }
@@ -232,15 +228,30 @@ Game::Game(const std::string& party_name, const std::string& map_name)
     start();
 }
 
-uint8_t Game::get_number_of_players() const { return players.size(); }
+uint8_t Game::get_number_of_players() {
+    std::lock_guard<std::mutex> lock(mutex);
+    return players.size();
+}
 
-std::string Game::get_party_name() const { return party_name; }
+std::string Game::get_party_name() {
+    std::lock_guard<std::mutex> lock(mutex);
+    return party_name;
+}
 
-std::string Game::get_map_name() const { return map_name; }
+std::string Game::get_map_name() {
+    std::lock_guard<std::mutex> lock(mutex);
+    return map_name;
+}
 
-GameQueue& Game::get_queue() { return game_queue; }
+GameQueue& Game::get_queue() {
+    std::lock_guard<std::mutex> lock(mutex);
+    return game_queue;
+}
 
-bool Game::is_dead() const { return !is_not_finished; }
+bool Game::is_dead() {
+    std::lock_guard<std::mutex> lock(mutex);
+    return !is_not_finished;
+}
 
 // FALTA: ESTO ESTA ARRANCANDO LA RONDA CON 1 SOLO PLAYER, QUE EVENTUALMENTE GANARÍA TODO Y TERMINA
 uint8_t Game::add_player(
@@ -264,7 +275,10 @@ uint8_t Game::add_player(
     return new_id;
 }
 
-void Game::kill() { is_not_finished = false; }
+void Game::kill() {
+    std::lock_guard<std::mutex> lock(mutex);
+    is_not_finished = false;
+}
 
 void Game::run() {
     PeriodicClock clock(GAME_FPS); 

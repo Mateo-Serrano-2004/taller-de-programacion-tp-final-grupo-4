@@ -3,10 +3,8 @@
 NAME := cs2d
 
 debug:
-	@if [ ! -d "build" ]; then \
-		mkdir -p build/; \
-		cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Debug; \
-	fi
+	mkdir -p build/
+	cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Debug
 	cmake --build build/
 
 install-compile-tools:

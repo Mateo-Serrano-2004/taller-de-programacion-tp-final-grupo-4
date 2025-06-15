@@ -45,6 +45,9 @@ public:
     void set_ticks_for_buying_phase(int ticks);
     void set_ticks_for_playing_phase(int ticks);
 
+    void set_ct_count(int count);
+    void set_tt_count(int count);
+
     void to_buying_phase();
     void update(int frames_to_process);
 
