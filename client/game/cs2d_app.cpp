@@ -16,6 +16,8 @@
 
 #include "common/definitions.h"
 
+#include "client/net/client_protocol.h"
+
 #include "context/context_manager.h"
 #include "context/in_game_context.h"
 #include "context/menu_context.h"
@@ -31,7 +33,7 @@
 #include "controller/game_controller.h"
 #include "controller/base_controller.h"
 
-#include "client/net/client_protocol.h"
+#include "utils/enum_translator.h"
 
 const std::vector<std::string> player_sprites = {
     "ct1.bmp", "ct2.bmp", "ct3.bmp",
@@ -137,6 +139,7 @@ void App::CS2DApp::load_generated_textures(Shared<Model::AssetManager> asset_man
 }
 
 App::CS2DApp::CS2DApp(Shared<Net::ClientProtocol> protocol): App::Application() {
+    Model::EnumTranslator::build();
     auto window = make_shared<SDL2pp::Window>(
         "In Game",
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
@@ -145,7 +148,7 @@ App::CS2DApp::CS2DApp(Shared<Net::ClientProtocol> protocol): App::Application() 
     );
     auto renderer = make_shared<SDL2pp::Renderer>(*window, -1, SDL_RENDERER_ACCELERATED);
     renderer->SetLogicalSize(640, 480);
-    
+
     auto asset_manager = make_shared<Model::AssetManager>(renderer);
     load_weapon_sprites(asset_manager);
     load_player_sprites(asset_manager);
@@ -157,8 +160,7 @@ App::CS2DApp::CS2DApp(Shared<Net::ClientProtocol> protocol): App::Application() 
         window, renderer, asset_manager, context_manager, protocol
     );
     auto weak_game_controller = Weak<Controller::GameController>(game_controller);
-    game_controller->set_self_pointer(weak_game_controller);
-    game_controller->build_game_state_manager();
+    game_controller->build_game_state_manager(weak_game_controller);
 
     auto in_game_context = make_shared<Context::InGameContext>(weak_game_controller);
     auto menu_context = make_shared<Context::MenuContext>(weak_game_controller);

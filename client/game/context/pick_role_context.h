@@ -18,8 +18,6 @@
 #include "entity/label.h"
 #include "entity/button.h"
 
-#include "utils/enum_translator.h"
-
 namespace Controller {
 class GameController;
 };
@@ -33,7 +31,6 @@ private:
 
 protected:
     SDL_Event placeholder;
-    Model::EnumTranslator enum_translator;
     Controller::PickRoleEventHandlerStrategy strategy;
     View::VerticalPane vertical_pane;
     View::Label label;

@@ -41,18 +41,12 @@ protected:
     Shared<Controller::GameStateManager> game_state_manager;
     Shared<SDL2pp::Font> font;
 
-    SDL2pp::Point get_sprite_top_left_corner(short_id_t sprite_piece);
-
-    void render_weapon(const SDL2pp::Point& player_center, angle_t player_angle, Model::TextureID texture_id);
-    void render_name(const SDL2pp::Point& player_center, const std::string& player);
-    void render_player(Camera& camera, Shared<View::RenderedPlayer>& player);
-    void render_fov(angle_t angle);
+    void render_fov(angle_t angle, const Camera& camera);
 
 public:
     PlayerRenderer(Weak<Controller::GameController> controller);
 
     void render() override;
-    void update_size();
 
     ~PlayerRenderer() = default;
 };

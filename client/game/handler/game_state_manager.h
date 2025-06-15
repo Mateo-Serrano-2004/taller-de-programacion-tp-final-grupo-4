@@ -35,11 +35,10 @@ class GameStateManager {
 private:
     std::mutex mutex;
     std::list<Shared<View::RenderedPlayer>> pending_weapon_usages;
-    Model::EnumTranslator enum_translator;
     Shared<Model::GameState> game_state;
+    View::Camera camera;
     Weak<GameController> controller;
     short_id_t reference_player_id;
-    View::Camera camera;
 
     void add_player_shooting(Shared<View::RenderedPlayer> player);
 
@@ -49,16 +48,9 @@ public:
         short_id_t reference_player_id
     );
 
-    View::Camera get_camera();
-
     short_id_t get_reference_player_id() const;
     Shared<View::RenderedPlayer> get_reference_player();
 
-    void update_player_sprite(Model::TextureID texture_id);
-
-    void map_function_on_players(
-        const std::function<void(Shared<View::RenderedPlayer>&)>& func
-    );
     void call_function_on_players(
         const std::function<void(std::map<short_id_t, Shared<View::RenderedPlayer>>&)>& func
     );
@@ -67,6 +59,7 @@ public:
     );
 
     uint16_t get_time_left();
+    View::Camera get_camera();
 
     void update(DTO::GameStateDTO&& game_state_dto);
 

@@ -45,7 +45,6 @@ std::vector<uint8_t> View::HUDRenderer::get_units_of_time_left(uint16_t seconds_
 
 void View::HUDRenderer::render_hud_symbol(uint8_t symbol_number, coord_t pos_x, coord_t pos_y) {
     auto hud_symbol = asset_manager->get_texture(Model::TextureID::HUD_SYMBOLS);
-    auto viewport = renderer->GetViewport();
     renderer->Copy(
         *hud_symbol,
         SDL2pp::Rect(symbol_number * 64, 0, 64, 64),

@@ -30,7 +30,6 @@ class GameStateManager;
 
 class GameController: public BaseController {
 protected:
-    Weak<GameController> self;
     Shared<GameStateManager> game_state_manager;
     SharedQueue<Model::Event> sender_queue;
     Shared<Net::ClientProtocol> protocol;
@@ -52,8 +51,7 @@ public:
     );
 
     Shared<GameStateManager> get_game_state_manager();
-    void set_self_pointer(Weak<GameController> new_self);
-    void build_game_state_manager();
+    void build_game_state_manager(Weak<GameController> self);
 
     GameController(GameController&&) = default;
     GameController& operator=(GameController&&) = default;

@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <string>
 
+#include <SDL2pp/Point.hh>
+
 #include "common/definitions.h"
 #include "common/role_id.h"
 #include "common/weapon_id.h"
@@ -11,27 +13,49 @@
 #include "common/model/weapon.h"
 #include "common/model/vector_2d.h"
 
+#include "render/camera.h"
+
 #include "asset/texture_id.h"
 
+#include "interface/rendered.h"
+
+namespace SDL2pp {
+class Renderer;
+class Point;
+};
+
+namespace Model {
+class AssetManager;
+};
+
+namespace Controller {
+class GameController;
+};
+
 namespace View {
-class RenderedPlayer: public Model::Player {
+class RenderedPlayer: public Rendered, public Model::Player {
 protected:
+    Shared<Model::AssetManager> asset_manager;
+    Camera camera;
+
     Model::TextureID sprite_id;
     short_id_t sprite_piece;
     Model::TextureID weapon_sprite_id;
 
     short_id_t get_sprite_piece_from_weapon();
 
+    SDL2pp::Point get_sprite_top_left_corner();
+    void render_weapon(const SDL2pp::Point& player_center);
+    void render_name(const SDL2pp::Point& player_center);
+
 public:
-    RenderedPlayer(Model::Player&& player);
+    RenderedPlayer(
+        Weak<Controller::GameController> controller,
+        Model::Player&& player,
+        const Camera& camera
+    );
 
-    Model::TextureID get_sprite_id() const;
-    short_id_t get_sprite_piece() const;
-    Model::TextureID get_weapon_sprite_id() const;
-
-    void set_sprite_id(Model::TextureID new_sprite_id);
-    void set_sprite_piece(short_id_t new_sprite_piece);
-    void set_weapon_sprite_id(Model::TextureID new_weapon_sprite_id);
+    void render() override;
 
     ~RenderedPlayer() override = default;
 };

@@ -18,6 +18,8 @@
 
 #include "asset/texture_id.h"
 
+#include "utils/enum_translator.h"
+
 void Context::PickRoleContext::trigger_buttons(Shared<SDL_Event> event) {
     if (pick_role_1_button.trigger(event)) ;
     else if (pick_role_2_button.trigger(event)) ;
@@ -34,7 +36,7 @@ void Context::PickRoleContext::build_button(View::Button& button, Model::Texture
 
     auto composite_command = make_unique<Command::CompositeCommand>(controller);
     composite_command->add_command(make_unique<Command::PickRoleCommand>(
-        enum_translator.get_role_from_texture(texture_id)
+        Model::EnumTranslator::get_role_from_texture(texture_id)
     ));
     composite_command->add_command(make_unique<Command::SwitchContextCommand>("in-game"));
 
