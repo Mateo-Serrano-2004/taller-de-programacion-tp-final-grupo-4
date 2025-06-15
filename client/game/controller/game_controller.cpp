@@ -23,14 +23,13 @@ Controller::GameController::GameController(
 	Shared<Context::ContextManager> context_manager,
 	Shared<Net::ClientProtocol> protocol
 ): Controller::BaseController(window, renderer, asset_manager, context_manager),
-   keep_running(true),
    protocol(protocol),
    game_state_manager(make_shared<Controller::GameStateManager>(
 	protocol->receive_player_id(),
 	Weak<SDL2pp::Window>(window)
    )),
-   sender(keep_running, &sender_queue, protocol),
-   receiver(keep_running, this, protocol) {}
+   sender(&sender_queue, protocol),
+   receiver(this, protocol) {}
 
 void Controller::GameController::process_event(Shared<Model::Event> event) {
 	auto event_type = event->get_type();

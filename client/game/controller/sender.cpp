@@ -1,7 +1,6 @@
 #include "sender.h"
 
 #include <iostream>
-#include <atomic>
 
 #include "common/event_type.h"
 
@@ -11,14 +10,14 @@
 #include "client/net/client_protocol.h"
 
 Controller::Sender::Sender(
-    std::atomic<bool>& keep_running,
     SharedQueue<Model::Event>* sender_queue,
     Shared<Net::ClientProtocol> protocol
-): keep_running(keep_running), sender_queue(sender_queue), protocol(protocol) {
+): sender_queue(sender_queue), protocol(protocol) {
     start();
 }
 
 void Controller::Sender::run() {
+    bool keep_running = true;
     while (keep_running) {
         try {
             Shared<Model::Event> event = sender_queue->pop();

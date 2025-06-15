@@ -1,7 +1,6 @@
 #include "receiver.h"
 
 #include <iostream>
-#include <atomic>
 #include <exception>
 
 #include "common/DTO/game_state_dto.h"
@@ -15,17 +14,16 @@
 #include "event/quit_event.h"
 
 Controller::Receiver::Receiver(
-    std::atomic<bool>& keep_running,
     Controller::GameController* controller,
     Shared<Net::ClientProtocol> protocol
-): keep_running(keep_running),
-   controller(controller),
+): controller(controller),
    game_state_manager(controller->get_game_state_manager()),
    protocol(protocol) {
     start();
 }
 
 void Controller::Receiver::run() {
+    bool keep_running = true;
     while (keep_running) {
         try {
             DTO::GameStateDTO game_state_dto = protocol->receive_match_state();
