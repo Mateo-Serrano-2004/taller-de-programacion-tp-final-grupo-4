@@ -36,7 +36,7 @@ bool MapEditorWidget::isValidMap() {
         if (path.contains("site")) hasBombSite++;
     }
 
-    if (hasSpawnCT != 1 || hasSpawnTT != 1 || hasBombSite < 1)   
+    if (hasSpawnCT != 5 || hasSpawnTT != 5 || hasBombSite < 1)   
         return false;
     return true;
 }
@@ -97,7 +97,7 @@ MapEditorWidget::MapEditorWidget(QWidget* parent) : QWidget(parent) {
         if (!isValidMap()) {
             QMessageBox msgBox(this);
             msgBox.setWindowTitle("Mapa inválido");
-            msgBox.setText("El mapa debe tener un spawn CT, un spawn TT y al menos un bombsite.");
+            msgBox.setText("El mapa debe tener 5 spawn points para los CT y TT, y al menos un bombsite.");
             msgBox.setStyleSheet("QLabel{ color : white; }");
             msgBox.setIcon(QMessageBox::Warning);
             msgBox.exec();
