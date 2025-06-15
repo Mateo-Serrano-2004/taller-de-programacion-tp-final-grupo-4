@@ -9,16 +9,17 @@
 #include "controller/game_controller.h"
 
 #include "command/quit_command.h"
+#include "command/switch_context_command.h"
 
 void Context::MenuContext::trigger_buttons(Shared<SDL_Event> event) {
-    exit_button.trigger(event);
+    if (exit_button.trigger(event)) ;
+    else if (return_game_button.trigger(event));
 }
 
 void Context::MenuContext::render() {
     player_renderer.render();
 
-    background.render();
-    exit_button.render();
+    viewport.render();
 }
 
 void Context::MenuContext::dispatch_events() {
@@ -27,22 +28,49 @@ void Context::MenuContext::dispatch_events() {
     }
 }
 
+void Context::MenuContext::build_button(View::Button& button) {
+    button.set_background_color(78, 107, 60, 255);
+    button.set_draw_background(true);
+    button.set_font_size(16);
+    button.set_padding(8);
+}
+
 Context::MenuContext::MenuContext(Weak<Controller::GameController> controller):
 Context::BaseContext("menu", controller),
 strategy(controller, this),
 player_renderer(controller),
+viewport(controller),
 background(controller),
+ask_to_leave_label(controller),
+buttons(controller),
+return_game_button(controller),
 exit_button(controller) {
+    viewport.add_child(&background);
+
+    background.add_child(&ask_to_leave_label);
+    background.add_child(&buttons);
+
+    buttons.add_child(&return_game_button);
+    buttons.add_child(&exit_button);
+
     background.set_background_color(31, 45, 31, 255);
     background.set_draw_background(true);
-    background.add_child(&exit_button);
-    background.set_horizontal_alignment(0.3);
+    background.set_size(SDL2pp::Point(300, 200));
+    background.set_gap_y(15);
 
-    exit_button.set_background_color(78, 107, 60, 255);
-    exit_button.set_draw_background(true);
+    buttons.set_height(60);
+    buttons.set_gap_x(5);
+
+    ask_to_leave_label.set_text("Leave game?");
+    ask_to_leave_label.set_font_size(16);
+    ask_to_leave_label.set_padding(8);
+
+    build_button(exit_button);
+    build_button(return_game_button);
+
     exit_button.set_text("Exit");
-    exit_button.set_font_size(16);
-    exit_button.set_padding(8);
+    return_game_button.set_text("Return game");
 
     exit_button.set_command(make_unique<Command::QuitCommand>());
+    return_game_button.set_command(make_unique<Command::SwitchContextCommand>("in-game"));
 }

@@ -12,6 +12,8 @@
 #include "event/event.h"
 
 #include "entity/vertical_pane.h"
+#include "entity/horizontal_pane.h"
+#include "entity/label.h"
 #include "entity/button.h"
 
 #include "render/player_renderer.h"
@@ -31,11 +33,17 @@ protected:
     SDL_Event placeholder;
     Controller::MenuEventHandlerStrategy strategy;
     View::PlayerRenderer player_renderer;
+    View::VerticalPane viewport;
     View::VerticalPane background;
+    View::Label ask_to_leave_label;
+    View::HorizontalPane buttons;
+    View::Button return_game_button;
     View::Button exit_button;
 
     void render() override;
     void dispatch_events() override;
+
+    void build_button(View::Button& button);
 
     MenuContext(const MenuContext&) = delete;
     MenuContext& operator=(const MenuContext&) = delete;
