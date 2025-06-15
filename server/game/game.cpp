@@ -119,8 +119,7 @@ void Game::start_new_round() {
     round.set_ct_count(ct_count);
     round.set_tt_count(tt_count);
 
-    std::cout << (int) (ct_count) << "-" << (int) (tt_count) << std::endl;
-
+    // round = new_buying_round();
     round.to_buying_phase();
 }
 
@@ -150,8 +149,6 @@ void Game::process_frames(uint16_t frames_to_process) {
     if (round.ended()) {
         clear_game_queue();
         update_players_that_won();
-
-        std::cout << (int) (round.get_count_of_rounds()) << std::endl;
 
         if (round.get_count_of_rounds() == MAX_ROUNDS) {
             state = GameState::Finished;

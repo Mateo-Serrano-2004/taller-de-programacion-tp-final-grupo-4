@@ -10,7 +10,7 @@ Shared<FullWeapon> WeaponFactory::create(Model::WeaponID id) {
         case Model::WeaponID::GLOCK:
             return make_shared<FullWeapon>(id, Model::SlotID::SECONDARY_WEAPON, 20, 20, false, 0);
         case Model::WeaponID::AK47:
-            return make_shared<FullWeapon>(id, Model::SlotID::PRIMARY_WEAPON, 45, 45, true, 5);
+            return make_shared<FullWeapon>(id, Model::SlotID::PRIMARY_WEAPON, 45, 45, true, 30);
         case Model::WeaponID::M3:
             return make_shared<FullWeapon>(id, Model::SlotID::PRIMARY_WEAPON, 8, 8, false, 0);
         case Model::WeaponID::AWP:

@@ -91,7 +91,6 @@ void Round::update(int frames_to_process) {
 }
 
 void Round::notify_on_one_player_less(Model::TeamID team) {
-    std::cout << "One player less\n";
     if (team == Model::TeamID::CT) {
         number_of_ct_alive--;
         if (number_of_ct_alive == 0) {
@@ -103,7 +102,7 @@ void Round::notify_on_one_player_less(Model::TeamID team) {
     } else if (team == Model::TeamID::TT) {
         number_of_tt_alive--;
         if (number_of_tt_alive == 0) {
-            // TOOD: Add bomb logic and prevent end of game if it is still planted
+            // TODO: Add bomb logic and prevent end of game if it is still planted
 
             winner_team = Model::TeamID::CT;
             state = RoundState::Ended;
@@ -111,8 +110,6 @@ void Round::notify_on_one_player_less(Model::TeamID team) {
             count_of_rounds++;
         }
     }
-
-    std::cout << "**" << (int) (number_of_ct_alive) << "-" << (int) (number_of_tt_alive) << std::endl;
 }
 
 void Round::notify_player_joined(Model::TeamID team) {
