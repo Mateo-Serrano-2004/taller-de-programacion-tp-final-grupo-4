@@ -24,6 +24,8 @@ void View::Pane::render_texture(Shared<SDL2pp::Texture> texture) {
 
 View::Pane::Pane(Weak<Controller::BaseController> controller):
 View::Rendered(controller),
+View::Textured(controller),
+View::Rotated(0),
 draw_background(false), position(0, 0), parent(nullptr) {
     background = asset_manager->generate_background(SDL2pp::Color(0, 0, 0, 255));
     size = renderer->GetLogicalSize();

@@ -11,6 +11,8 @@
 #include "asset/texture_id.h"
 
 #include "rendered.h"
+#include "textured.h"
+#include "rotated.h"
 
 namespace SDL2pp {
 class Texture;
@@ -22,7 +24,7 @@ class BaseController;
 };
 
 namespace View {
-class Pane: public Rendered {
+class Pane: public Rendered, public Textured, public Rotated {
 protected:
     std::list<Pane*> children;
     bool draw_background;

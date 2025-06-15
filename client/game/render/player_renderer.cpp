@@ -165,9 +165,10 @@ View::PlayerRenderer::PlayerRenderer(
 void View::PlayerRenderer::render() {
     background.render();
     auto camera = game_state_manager->get_camera();
+    angle_t angle = 0;
 
     game_state_manager->call_function_on_players(
-        [this, &camera] (std::map<short_id_t, Shared<View::RenderedPlayer>>& map) {
+        [this, &camera, &angle] (std::map<short_id_t, Shared<View::RenderedPlayer>>& map) {
             Shared<View::RenderedPlayer> reference_player = nullptr;
             short_id_t reference_player_id = game_state_manager->get_reference_player_id();
 
@@ -178,11 +179,11 @@ void View::PlayerRenderer::render() {
                     render_player(camera, pair.second);
                 }
             }
-
-            render_fov(reference_player->get_angle());
+            angle = reference_player->get_angle();
             render_player(camera, reference_player);
         }
     );
+    render_fov(angle);
 
     game_state_manager->map_function_on_pending_weapon_usages(
         [this, &camera] (Shared<View::RenderedPlayer>& player) {
