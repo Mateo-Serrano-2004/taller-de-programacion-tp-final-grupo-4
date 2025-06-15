@@ -9,6 +9,8 @@
 #include <QDebug>
 #include <vector>
 
+#include "common/definitions.h"
+
 #include "constants.h"
 
 void MapSerializer::saveToYaml(QGraphicsScene* scene, const QString& filePath) {
@@ -19,8 +21,8 @@ void MapSerializer::saveToYaml(QGraphicsScene* scene, const QString& filePath) {
     
     struct Tile {
         int x, y;
+        QString name;
         QString type;
-        QString asset;
     };
 
     std::vector<Tile> tiles;
@@ -37,11 +39,11 @@ void MapSerializer::saveToYaml(QGraphicsScene* scene, const QString& filePath) {
         int y = static_cast<int>(pos.y()) / TILE_SIZE;
 
 
-        QString assetPath = tileItem->data(0).toString();
+        QString name = tileItem->data(0).toString();
         QString type = tileItem->data(1).toString();
-        if (type.isEmpty() || assetPath.isEmpty()) continue;
+        if (type.isEmpty() || name.isEmpty()) continue;
 
-        tiles.push_back(Tile{x, y, type, assetPath});
+        tiles.push_back(Tile{x, y, name, type});
 
         if (x > maxX) maxX = x;
         if (y > maxY) maxY = y;
@@ -60,8 +62,8 @@ void MapSerializer::saveToYaml(QGraphicsScene* scene, const QString& filePath) {
         out << YAML::BeginMap;
         out << YAML::Key << "x" << YAML::Value << tile.x;
         out << YAML::Key << "y" << YAML::Value << tile.y;
+        out << YAML::Key << "name" << YAML::Value << tile.name.toStdString();
         out << YAML::Key << "type" << YAML::Value << tile.type.toStdString();
-        out << YAML::Key << "asset" << YAML::Value << tile.asset.toStdString();
         out << YAML::EndMap;
     }
 
@@ -90,18 +92,18 @@ void MapSerializer::loadFromYaml(const QString& filePath, QGraphicsScene* scene)
     for (const auto& tile : root["map"]["tiles"]) {
         int x = tile["x"].as<int>();
         int y = tile["y"].as<int>();
-        QString assetPath = QString::fromStdString(tile["asset"].as<std::string>());
+        QString name = QString::fromStdString(tile["name"].as<std::string>());
         QString type = QString::fromStdString(tile["type"].as<std::string>());
 
         QListWidgetItem tempItem;
-        tempItem.setData(Qt::UserRole, assetPath);
+        tempItem.setData(Qt::UserRole, name);
         tempItem.setData(Qt::UserRole + 1, type);
-        tempItem.setIcon(QIcon(assetPath));
+        tempItem.setIcon(QIcon(TILES_PATH + type + "/" + name));
 
         QIcon icon = tempItem.icon();
         QPixmap pixmap = icon.pixmap(TILE_SIZE, TILE_SIZE);
         if (pixmap.isNull()) {
-            qWarning() << "No se pudo cargar imagen:" << assetPath;
+            qWarning() << "No se pudo cargar imagen:" << name;
             continue;
         }
         QGraphicsPixmapItem* pixmapItem = new QGraphicsPixmapItem(pixmap);

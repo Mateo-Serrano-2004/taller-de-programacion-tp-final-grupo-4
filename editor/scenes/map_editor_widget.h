@@ -25,7 +25,7 @@ private:
     void setUpRightPanel();
     void setUpGrid();
     void loadAssets();
-    void addCategory(const QString& title, const QString& path, const QString& type);
+    void addCategory(const QString& title);
     void removeTileAt(int x, int y);
     void placeTileAt(int x, int y, QListWidgetItem* item);
     void drawGridLines(int width, int height);

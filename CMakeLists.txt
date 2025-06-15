@@ -88,15 +88,14 @@ if(CS2D_EDITOR)
     set(CMAKE_AUTOMOC ON)
 
     add_executable(cs2d_editor)
-    #add_dependencies(cs2d_editor)
+    add_dependencies(cs2d_editor cs2d_common)
     add_subdirectory(editor/)
 
     find_package(Qt5 COMPONENTS Widgets REQUIRED)
     set_project_warnings(cs2d_editor ${CS2D_MAKE_WARNINGS_AS_ERRORS} FALSE)
     find_package(yaml-cpp REQUIRED)
 
-    #target_link_libraries(cs2d_editor Qt5::Widgets)
-    target_link_libraries(cs2d_editor PRIVATE yaml-cpp Qt5::Widgets)
+    target_link_libraries(cs2d_editor cs2d_common yaml-cpp Qt5::Widgets)
 endif()
 
 

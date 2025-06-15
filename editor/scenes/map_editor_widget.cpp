@@ -15,10 +15,12 @@
 #include <QApplication>
 #include <QFileDialog>
 
-#include "map_serializer.h"
 #include "../widgets/styled_button.h"
-#include "grid_view.h"
 #include "../widgets/styled_file_dialog.h"
+
+#include "common/definitions.h"
+#include "grid_view.h"
+#include "map_serializer.h"
 #include "constants.h"
 
 bool MapEditorWidget::isValidMap() {
@@ -168,7 +170,7 @@ void MapEditorWidget::drawGridLines(int width, int height) {
         gridScene->addLine(0, y, width, y, gridPen);
 }
 
-void MapEditorWidget::addCategory(const QString& title, const QString& path, const QString& type) {
+void MapEditorWidget::addCategory(const QString& title) {
     QListWidgetItem* titleItem = new QListWidgetItem(title);
     titleItem->setBackground(QBrush(QColor("#222222")));
     QFont titleFont = titleItem->font();
@@ -177,12 +179,12 @@ void MapEditorWidget::addCategory(const QString& title, const QString& path, con
     titleItem->setFlags(Qt::NoItemFlags);
     assetsList->addItem(titleItem);
 
-    QDir dir(path);
+    QDir dir(TILES_PATH + title);
     QStringList files = dir.entryList(QStringList() << "*.png", QDir::Files);
     for (const QString& fileName : files) {
         QListWidgetItem* item = new QListWidgetItem(QIcon(dir.filePath(fileName)), fileName);
-        item->setData(Qt::UserRole, dir.filePath(fileName));
-        item->setData(Qt::UserRole + 1, type);
+        item->setData(Qt::UserRole, fileName);
+        item->setData(Qt::UserRole + 1, title);
 
         assetsList->addItem(item);
     }
@@ -192,12 +194,12 @@ void MapEditorWidget::loadAssets() {
     assetsList->clear();
     assetsList->setStyleSheet("background: #FFFFFF;");
 
-    addCategory("Backgrounds", "assets/gfx/tiles/Backgrounds", "background");
-    addCategory("Walls", "assets/gfx/tiles/Walls", "wall");
-    addCategory("Boxes", "assets/gfx/tiles/Boxes", "box");
-    addCategory("Sites", "assets/gfx/tiles/Sites", "site");
-    addCategory("Cars", "assets/gfx/tiles/Cars", "car");
-    addCategory("Spawns", "assets/gfx/tiles/Spawns", "spawn");
+    addCategory("Backgrounds");
+    addCategory("Walls");
+    addCategory("Boxes");
+    addCategory("Sites");
+    addCategory("Cars");
+    addCategory("Spawns");
 }
 
 void MapEditorWidget::removeTileAt(int x, int y) {
