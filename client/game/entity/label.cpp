@@ -15,7 +15,9 @@
 
 View::Label::Label(
     Weak<Controller::BaseController> controller
-): View::Pane(controller), text(""), font_size(12), color(255, 255, 255, 255),
+): View::Pane(controller),
+   View::Padded(),
+   text(""), font_size(12), color(255, 255, 255, 255),
    font(nullptr), text_texture(nullptr) {
     font = asset_manager->generate_font("liberationsans", font_size);
 }
@@ -60,6 +62,26 @@ void View::Label::set_font_color(uint8_t red, uint8_t green, uint8_t blue, uint8
     }
 }
 
+void View::Label::set_size(const SDL2pp::Point& new_size) {
+    size = new_size;
+    size.SetX(size.GetX() + (2 * padding));
+    size.SetY(size.GetY() + (2 * padding));
+}
+
+void View::Label::set_height(int new_height) {
+    size.SetY(new_height + (2 * padding));
+}
+
+void View::Label::set_width(int new_width) {
+    size.SetX(new_width + (2 * padding));
+}
+
+void View::Label::set_padding(int new_padding) {
+    padding = new_padding;
+    size.SetX(size.GetX() + (2 * padding));
+    size.SetY(size.GetY() + (2 * padding));
+}
+
 void View::Label::render() {
     View::Pane::render();
     if (!empty()) {
@@ -68,8 +90,8 @@ void View::Label::render() {
             *text_texture,
             SDL2pp::NullOpt,
             SDL2pp::Point(
-                absolute_position.GetX() + (size.GetX() - text_texture->GetWidth()) / 2,
-                absolute_position.GetY() + (size.GetY() - text_texture->GetHeight()) / 2
+                absolute_position.GetX() + (get_width() - text_texture->GetWidth()) / 2,
+                absolute_position.GetY() + (get_height() - text_texture->GetHeight()) / 2
             )
         );
     }

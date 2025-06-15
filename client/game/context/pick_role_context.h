@@ -18,7 +18,7 @@
 #include "entity/label.h"
 #include "entity/button.h"
 
-#include "enum/enum_translator.h"
+#include "utils/enum_translator.h"
 
 namespace Controller {
 class GameController;

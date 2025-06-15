@@ -53,9 +53,9 @@ public:
     void set_position(const SDL2pp::Point& new_position);
     void set_x(int new_x);
     void set_y(int new_y);
-    void set_width(int new_width);
-    void set_height(int new_height);
-    void set_size(const SDL2pp::Point& new_size);
+    virtual void set_width(int new_width);
+    virtual void set_height(int new_height);
+    virtual void set_size(const SDL2pp::Point& new_size);
     void set_parent(Pane* new_parent);
 
     void add_child(Pane* new_child);

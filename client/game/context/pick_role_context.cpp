@@ -69,6 +69,8 @@ Context::PickRoleContext::PickRoleContext(Weak<Controller::GameController> contr
 
     label.set_text("Choose your skin");
 
+    background.set_size(SDL2pp::Point(300, 200));
+
     build_button(pick_role_1_button, Model::TextureID::SPRITE_CT1);
     build_button(pick_role_2_button, Model::TextureID::SPRITE_CT2);
     build_button(pick_role_3_button, Model::TextureID::SPRITE_CT3);

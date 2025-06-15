@@ -10,7 +10,7 @@
 
 #include "asset/texture_id.h"
 
-#include "enum/enum_translator.h"
+#include "utils/enum_translator.h"
 
 #include "render/camera.h"
 

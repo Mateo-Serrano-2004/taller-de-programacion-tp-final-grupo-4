@@ -19,6 +19,7 @@ void Context::ShopContext::build_button(View::Button& button, const std::string&
     button.set_draw_background(true);
     button.set_font_size(16);
     button.set_text(weapon_name);
+    button.set_padding(6);
 
     button.set_command(
         std::move(make_unique<Command::BuyWeaponCommand>(weapon_id))

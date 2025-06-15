@@ -9,6 +9,7 @@
 #include "common/definitions.h"
 
 #include "pane.h"
+#include "padded.h"
 
 namespace SDL2pp {
 class Font;
@@ -20,7 +21,7 @@ class BaseController;
 };
 
 namespace View {
-class Label: public Pane {
+class Label: public Pane, public Padded {
 protected:
     std::string text;
     uint8_t font_size;
@@ -40,6 +41,12 @@ public:
     void set_text(const std::string& new_text);
     void set_font_size(uint8_t new_font_size);
     void set_font_color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
+
+    void set_size(const SDL2pp::Point& new_size) override;
+    void set_height(int new_height) override;
+    void set_width(int new_width) override;
+
+    void set_padding(int new_padding) override;
 
     void render() override;
 
