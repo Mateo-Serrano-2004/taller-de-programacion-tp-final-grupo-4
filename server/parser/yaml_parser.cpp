@@ -48,7 +48,7 @@ std::vector<std::vector<TileType>> YamlParser::getTypeMatrix() const{
 }
 
 TileType YamlParser::stringToTileType(const std::string& typeStr, const std::string& nameStr) {
-    if (typeStr == "Backgrounds" || typeStr == "Sites") return NOT_COLLIDABLE;
+    if (typeStr == "Backgrounds") return NOT_COLLIDABLE;
     if (typeStr == "Boxes" || typeStr == "Cars" || typeStr == "Walls") return COLLIDABLE;
     if (typeStr == "Sites") return BOMB_SITE;
     if (nameStr.find("ct") != std::string::npos) return CT_SPAWN;
