@@ -14,11 +14,11 @@
 #include "event/end_of_game_event.h"
 
 Controller::Receiver::Receiver(
-    Controller::GameController* controller,
+    Weak<GameController> controller,
     Shared<Net::ClientProtocol> protocol
 ): keep_running(true),
    controller(controller),
-   game_state_manager(controller->get_game_state_manager()),
+   game_state_manager(controller.lock()->get_game_state_manager()),
    protocol(protocol) {
     start();
 }
@@ -30,7 +30,7 @@ void Controller::Receiver::run() {
             if (game_state_dto.ended) {
                 keep_running = false;
                 try {
-                    controller->push_event(make_shared<Model::EndOfGameEvent>());
+                    controller.lock()->push_event(make_shared<Model::EndOfGameEvent>());
                 } catch (const std::exception&) {}
             } else {
                 game_state_manager->update(std::move(game_state_dto));

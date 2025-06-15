@@ -67,5 +67,5 @@ void Controller::GameController::set_self_pointer(Weak<Controller::GameControlle
 
 void Controller::GameController::build_game_state_manager() {
 	game_state_manager = make_shared<Controller::GameStateManager>(self, protocol->receive_player_id());
-	receiver = make_unique<Controller::Receiver>(this, protocol);
+	receiver = make_unique<Controller::Receiver>(self, protocol);
 }

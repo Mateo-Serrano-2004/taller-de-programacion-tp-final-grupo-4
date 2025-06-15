@@ -17,7 +17,7 @@ class GameStateManager;
 class Receiver: public Thread {
 protected:
     std::atomic<bool> keep_running;
-    GameController* controller;
+    Weak<GameController> controller;
     Shared<GameStateManager> game_state_manager;
     Shared<Net::ClientProtocol> protocol;
 
@@ -26,7 +26,7 @@ protected:
 
 public:
     Receiver(
-        GameController* controller,
+        Weak<GameController> controller,
         Shared<Net::ClientProtocol> protocol
     );
 
