@@ -1,10 +1,11 @@
 #ifndef YAML_PARSER_H
 #define YAML_PARSER_H
 
-#include <unordered_set>
+#include <yaml-cpp/yaml.h>
+#include "types.h"
 #include <string>
 #include <vector>
-#include <tuple>
+
 
 struct TileData {
     int x;
@@ -18,20 +19,20 @@ class YamlParser {
 private:
     std::string yaml;
     void parseYaml(const std::string& yamlPath);
+    TileType stringToTileType(const std::string& typeStr);
 
-    bool isCollidable(std::string type);
-    bool isABomb(std::string type);
-
-    int mapWidth = 0;
-    int mapHeight = 0;
+    int mapMinWidth;
+    int mapMaxWidth;
+    int mapMinHeight;
+    int mapMaxHeight;
     std::vector<std::vector<std::string>> tileMatrix;
-    std::vector<std::pair<int, int>, std::string> collidables;
+    std::vector<std::vector<TileType>> typeMatrix;
 
 
 public:
     explicit YamlParser(const std::string& yamlPath);
-    std::vector<std::vector<std::string>> getYamlTiles();
-    //std::vector<std::pair<int, int>> getCollidables() const;
+    std::vector<std::vector<std::string>> getTileMatrix() const;
+    std::vector<std::vector<TileType>> getTypeMatrix() const;
     int getMapWidth() const;
     int getMapHeight() const;
 };
