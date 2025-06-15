@@ -14,10 +14,6 @@
 
 #include "render/camera.h"
 
-namespace SDL2pp {
-class Window;
-};
-
 namespace DTO {
 class GameStateDTO;
 };
@@ -32,6 +28,8 @@ class RenderedPlayer;
 };
 
 namespace Controller {
+class GameController;
+
 class GameStateManager {
 
 private:
@@ -39,16 +37,16 @@ private:
     std::list<Shared<View::RenderedPlayer>> pending_weapon_usages;
     Model::EnumTranslator enum_translator;
     Shared<Model::GameState> game_state;
+    Weak<GameController> controller;
     short_id_t reference_player_id;
-    Weak<SDL2pp::Window> window;
     View::Camera camera;
 
     void add_player_shooting(Shared<View::RenderedPlayer> player);
 
 public:
     GameStateManager(
-        short_id_t reference_player_id,
-        Weak<SDL2pp::Window> window
+        Weak<GameController> controller,
+        short_id_t reference_player_id
     );
 
     View::Camera get_camera();
@@ -67,8 +65,6 @@ public:
     void map_function_on_pending_weapon_usages(
         const std::function<void(Shared<View::RenderedPlayer>&)>& func
     );
-
-    void update_camera();
 
     uint16_t get_time_left();
 

@@ -29,15 +29,8 @@ Controller::GameController::GameController(
 	Shared<Context::ContextManager> context_manager,
 	Shared<Net::ClientProtocol> protocol
 ): Controller::BaseController(window, renderer, asset_manager, context_manager),
-   protocol(protocol),
-   game_state_manager(
-		make_shared<Controller::GameStateManager>(
-			protocol->receive_player_id(),
-			Weak<SDL2pp::Window>(window)
-		)
-   ) {
+   protocol(protocol) {
 	sender = make_unique<Controller::Sender>(&sender_queue, protocol);
-	receiver = make_unique<Controller::Receiver>(this, protocol);
 }
 
 void Controller::GameController::process_event(Shared<Model::Event> event) {
@@ -66,4 +59,13 @@ void Controller::GameController::process_event(Shared<Model::Event> event) {
 
 Shared<Controller::GameStateManager> Controller::GameController::get_game_state_manager() {
     return game_state_manager;
+}
+
+void Controller::GameController::set_self_pointer(Weak<Controller::GameController> new_self) {
+	self = new_self;
+}
+
+void Controller::GameController::build_game_state_manager() {
+	game_state_manager = make_shared<Controller::GameStateManager>(self, protocol->receive_player_id());
+	receiver = make_unique<Controller::Receiver>(this, protocol);
 }

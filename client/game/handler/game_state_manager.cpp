@@ -6,11 +6,13 @@
 #include <utility>
 #include <map>
 
-#include <SDL2pp/Window.hh>
+#include <SDL2pp/Renderer.hh>
 #include <SDL2pp/Point.hh>
 
 #include "common/model/player.h"
 #include "common/DTO/game_state_dto.h"
+
+#include "controller/game_controller.h"
 
 #include "model/game_state.h"
 #include "model/rendered_player.h"
@@ -20,11 +22,10 @@ void Controller::GameStateManager::add_player_shooting(Shared<View::RenderedPlay
 }
 
 Controller::GameStateManager::GameStateManager(
-    short_id_t reference_player_id,
-    Weak<SDL2pp::Window> window
-): reference_player_id(reference_player_id),
-   window(window) {
-    SDL2pp::Point viewport_size = window.lock()->GetSize();
+    Weak<Controller::GameController> controller,
+    short_id_t reference_player_id
+): controller(controller), reference_player_id(reference_player_id) {
+    SDL2pp::Point viewport_size = controller.lock()->get_renderer()->GetLogicalSize();
     camera.set_viewport_size(viewport_size.GetX(), viewport_size.GetY());
 }
 
@@ -65,11 +66,6 @@ void Controller::GameStateManager::map_function_on_pending_weapon_usages(
         func(player);
     }
     pending_weapon_usages.clear();
-}
-
-void Controller::GameStateManager::update_camera() {
-    auto new_viewport_size = window.lock()->GetSize();
-    camera.set_viewport_size(new_viewport_size.GetX(), new_viewport_size.GetY());
 }
 
 uint16_t Controller::GameStateManager::get_time_left() {

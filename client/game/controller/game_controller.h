@@ -1,6 +1,8 @@
 #ifndef CLIENT_GAME_CONTROLLER_GAME_CONTROLLER_H
 #define CLIENT_GAME_CONTROLLER_GAME_CONTROLLER_H
 
+#include "common/definitions.h"
+
 #include "base_controller.h"
 #include "receiver.h"
 #include "sender.h"
@@ -28,9 +30,10 @@ class GameStateManager;
 
 class GameController: public BaseController {
 protected:
+    Weak<GameController> self;
+    Shared<GameStateManager> game_state_manager;
     SharedQueue<Model::Event> sender_queue;
     Shared<Net::ClientProtocol> protocol;
-    Shared<GameStateManager> game_state_manager;
     Unique<Sender> sender;
     Unique<Receiver> receiver;
 
@@ -49,6 +52,8 @@ public:
     );
 
     Shared<GameStateManager> get_game_state_manager();
+    void set_self_pointer(Weak<GameController> new_self);
+    void build_game_state_manager();
 
     GameController(GameController&&) = default;
     GameController& operator=(GameController&&) = default;

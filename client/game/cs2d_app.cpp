@@ -29,6 +29,7 @@
 #include "asset/font_id.h"
 
 #include "controller/game_controller.h"
+#include "controller/base_controller.h"
 
 #include "client/net/client_protocol.h"
 
@@ -152,39 +153,18 @@ App::CS2DApp::CS2DApp(Shared<Net::ClientProtocol> protocol): App::Application() 
     load_generated_textures(asset_manager, renderer);
 
     context_manager = make_shared<Context::ContextManager>();
-    controller = make_shared<Controller::GameController>(
+    auto game_controller = make_shared<Controller::GameController>(
         window, renderer, asset_manager, context_manager, protocol
     );
+    auto weak_game_controller = Weak<Controller::GameController>(game_controller);
+    game_controller->set_self_pointer(weak_game_controller);
+    game_controller->build_game_state_manager();
 
-    auto in_game_context = make_shared<Context::InGameContext>(
-        Weak<Controller::GameController>(
-            std::static_pointer_cast<Controller::GameController>(controller)
-        )
-    );
-
-    auto menu_context = make_shared<Context::MenuContext>(
-        Weak<Controller::GameController>(
-            std::static_pointer_cast<Controller::GameController>(controller)
-        )
-    );
-
-    auto pick_role_context = make_shared<Context::PickRoleContext>(
-        Weak<Controller::GameController>(
-            std::static_pointer_cast<Controller::GameController>(controller)
-        )
-    );
-
-    auto shop_context = make_shared<Context::ShopContext>(
-        Weak<Controller::GameController>(
-            std::static_pointer_cast<Controller::GameController>(controller)
-        )
-    );
-
-    auto end_of_game_context = make_shared<Context::EndOfGameContext>(
-        Weak<Controller::GameController>(
-            std::static_pointer_cast<Controller::GameController>(controller)
-        )
-    );
+    auto in_game_context = make_shared<Context::InGameContext>(weak_game_controller);
+    auto menu_context = make_shared<Context::MenuContext>(weak_game_controller);
+    auto pick_role_context = make_shared<Context::PickRoleContext>(weak_game_controller);
+    auto shop_context = make_shared<Context::ShopContext>(weak_game_controller);
+    auto end_of_game_context = make_shared<Context::EndOfGameContext>(weak_game_controller);
 
     context_manager->add_context(in_game_context);
     context_manager->add_context(menu_context);
@@ -193,4 +173,6 @@ App::CS2DApp::CS2DApp(Shared<Net::ClientProtocol> protocol): App::Application() 
     context_manager->add_context(end_of_game_context);
 
     context_manager->set_current_context("pick-role");
+
+    controller = std::static_pointer_cast<Controller::BaseController>(game_controller);
 }
