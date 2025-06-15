@@ -14,12 +14,30 @@
 #include <QMimeData>
 #include <QApplication>
 #include <QFileDialog>
-#include "map_serializer.h"
 
+#include "map_serializer.h"
 #include "../widgets/styled_button.h"
 #include "grid_view.h"
 #include "../widgets/styled_file_dialog.h"
 #include "constants.h"
+
+bool MapEditorWidget::isValidMap() {
+    int hasSpawnCT = 0; 
+    int hasSpawnTT = 0; 
+    int hasBombSite = 0;
+    for(auto item : gridScene->items()) {
+        auto pix = dynamic_cast<QGraphicsPixmapItem*>(item);
+        if (!pix) continue;
+        QString path = pix->data(0).toString();
+        if (path.contains("ct")) hasSpawnCT++;
+        if (path.contains("tt")) hasSpawnTT++;
+        if (path.contains("site")) hasBombSite++;
+    }
+
+    if (hasSpawnCT != 1 || hasSpawnTT != 1 || hasBombSite < 1)   
+        return false;
+    return true;
+}
 
 void MapEditorWidget::setUpLeftPanel() {
     leftPanel = new QWidget(this);
@@ -74,6 +92,15 @@ MapEditorWidget::MapEditorWidget(QWidget* parent) : QWidget(parent) {
     });
 
     connect(saveButton, &QPushButton::clicked, this, [this]() {
+        if (!isValidMap()) {
+            QMessageBox msgBox(this);
+            msgBox.setWindowTitle("Mapa inválido");
+            msgBox.setText("El mapa debe tener un spawn CT, un spawn TT y al menos un bombsite.");
+            msgBox.setStyleSheet("QLabel{ color : white; }");
+            msgBox.setIcon(QMessageBox::Warning);
+            msgBox.exec();
+            return;
+        }
         StyledFileDialog fileDialog(this);
         fileDialog.setAcceptMode(QFileDialog::AcceptSave);
         fileDialog.setNameFilter("YAML files (*.yaml *.yml)");
@@ -154,8 +181,8 @@ void MapEditorWidget::addCategory(const QString& title, const QString& path, con
     QStringList files = dir.entryList(QStringList() << "*.png", QDir::Files);
     for (const QString& fileName : files) {
         QListWidgetItem* item = new QListWidgetItem(QIcon(dir.filePath(fileName)), fileName);
-        item->setData(Qt::UserRole, type);
-        item->setData(Qt::UserRole + 1, dir.filePath(fileName)); //here we save the full asset path
+        item->setData(Qt::UserRole, dir.filePath(fileName));
+        item->setData(Qt::UserRole + 1, type);
 
         assetsList->addItem(item);
     }
@@ -192,9 +219,8 @@ void MapEditorWidget::placeTileAt(int x, int y, QListWidgetItem* item) {
     removeTileAt(x, y);
     QGraphicsPixmapItem* tileItem = new QGraphicsPixmapItem(pixmap);
     tileItem->setPos(x * TILE_SIZE, y * TILE_SIZE);
-
-    //save asset path in the item data
-    tileItem->setData(0, item->data(Qt::UserRole + 1));
+    tileItem->setData(0, item->data(Qt::UserRole).toString());
+    tileItem->setData(1, item->data(Qt::UserRole + 1).toString());
 
     gridScene->addItem(tileItem);
 }

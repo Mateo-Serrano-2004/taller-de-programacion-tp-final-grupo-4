@@ -3,9 +3,11 @@
 NAME := cs2d
 
 debug:
-	mkdir -p build/
-	cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Debug
-	cmake --build  build/
+	@if [ ! -d "build" ]; then \
+		mkdir -p build/; \
+		cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Debug; \
+	fi
+	cmake --build build/
 
 install-compile-tools:
 	@echo "Installing dependencies"
@@ -33,12 +35,34 @@ install-sdl2:
 install-qt5:
 	@echo "Installing QT dependencies"
 	@sudo apt-get install -y qtbase5-dev
+	@sudo apt-get install -y qtmultimedia5-dev
+	@sudo apt-get install -y libqt5multimedia5-plugins
+	@sudo apt-get install -y gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly
 
-install-yaml:
-	@echo "Installing YAML dependencies"
-	@sudo apt-get install -y libyaml-cpp-dev
+install: install-compile-tools install-sdl2 install-qt5
 
-install: install-compile-tools install-sdl2 install-qt5 install-yaml install-yaml
+test_shoot:
+	mkdir -p build
+	g++ -std=c++20 -I. \
+	    test/test.cpp \
+	    common/DTO/game_state_dto.cpp \
+	    common/DTO/player_dto.cpp \
+		common/DTO/weapon_dto.cpp \
+	    common/model/vector_2d.cpp \
+	    common/model/player.cpp \
+		common/model/weapon.cpp \
+	    common/periodic_clock.cpp \
+	    server/game/model/full_player.cpp \
+		server/game/model/full_weapon.cpp \
+	    server/game/game.cpp \
+	    server/game/round.cpp \
+		server/game/movement_system.cpp \
+		server/game/weapon_factory.cpp \
+		server/game/game_logic.cpp \
+		server/game/shop.cpp \
+	    -o build/test_shoot \
+	    -lpthread
+
 
 clean:
 	rm -Rf ./build

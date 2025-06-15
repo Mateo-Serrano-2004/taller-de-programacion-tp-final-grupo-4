@@ -20,6 +20,7 @@ protected:
     bool eventFilter(QObject* obj, QEvent* event) override;
 
 private:
+    bool isValidMap();
     void setUpLeftPanel();
     void setUpRightPanel();
     void setUpGrid();

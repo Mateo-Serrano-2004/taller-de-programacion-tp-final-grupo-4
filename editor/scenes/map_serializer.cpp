@@ -1,9 +1,11 @@
 #include "map_serializer.h"
+
 #include <yaml-cpp/yaml.h>
 #include <QGraphicsPixmapItem>
 #include <QFile>
-#include <algorithm>
 #include <QTextStream>
+#include <QListWidgetItem>
+#include <QIcon>
 #include <QDebug>
 #include <vector>
 
@@ -14,8 +16,7 @@ void MapSerializer::saveToYaml(QGraphicsScene* scene, const QString& filePath) {
     out << YAML::BeginMap;
     out << YAML::Key << "map" << YAML::Value;
     out << YAML::BeginMap;
-    out << YAML::Key << "tiles" << YAML::Value << YAML::BeginSeq;
-
+    
     struct Tile {
         int x, y;
         QString type;
@@ -23,42 +24,37 @@ void MapSerializer::saveToYaml(QGraphicsScene* scene, const QString& filePath) {
     };
 
     std::vector<Tile> tiles;
+    int minX = std::numeric_limits<int>::max();
+    int minY = std::numeric_limits<int>::max();
+    int maxX = 0, maxY = 0;
 
     for (QGraphicsItem* item : scene->items()) {
-        auto pixItem = dynamic_cast<QGraphicsPixmapItem*>(item);
-        if (!pixItem) continue;
+        auto tileItem = dynamic_cast<QGraphicsPixmapItem*>(item);
+        if (!tileItem) continue;
 
-        QPointF pos = pixItem->pos();
+        QPointF pos = tileItem->pos();
         int x = static_cast<int>(pos.x()) / TILE_SIZE;
         int y = static_cast<int>(pos.y()) / TILE_SIZE;
 
-        QString assetPath = pixItem->data(0).toString();
-        if (assetPath.isEmpty()) continue;
 
-        QString type;
-        if (assetPath.contains("/Walls/")) type = "wall";
-        else if (assetPath.contains("/Backgrounds/")) type = "background";
-        else if (assetPath.contains("/Boxes/")) type = "box";
-        else if (assetPath.contains("/Sites/")) type = "site";
-        else if (assetPath.contains("/Cars/")) type = "car";
-        else if (assetPath.contains("/Spawns/")) type = "spawn";
+        QString assetPath = tileItem->data(0).toString();
+        QString type = tileItem->data(1).toString();
+        if (type.isEmpty() || assetPath.isEmpty()) continue;
 
-        else type = "unknown";
+        tiles.push_back(Tile{x, y, type, assetPath});
 
-        tiles.push_back({x, y, type, assetPath});
-        /*
-        out << YAML::BeginMap;
-        out << YAML::Key << "x" << YAML::Value << x;
-        out << YAML::Key << "y" << YAML::Value << y;
-        out << YAML::Key << "type" << YAML::Value << type.toStdString();
-        out << YAML::Key << "asset" << YAML::Value << assetPath.toStdString();
-        out << YAML::EndMap;*/
+        if (x > maxX) maxX = x;
+        if (y > maxY) maxY = y;
+        if (x < minX) minX = x;
+        if (y < minY) minY = y;
+    
     }
-    //sorted tiles by y then by x
-    std::sort(tiles.begin(), tiles.end(), [](const Tile& a, const Tile& b) {
-        if (a.y == b.y) return a.x < b.x;
-        return a.y < b.y;
-    });
+
+    out << YAML::Key << "minWidth" << YAML::Value << (minX);
+    out << YAML::Key << "maxwidth" << YAML::Value << (maxX);
+    out << YAML::Key << "minHeight" << YAML::Value << (minY);
+    out << YAML::Key << "maxheight" << YAML::Value << (maxY);
+    out << YAML::Key << "tiles" << YAML::Value << YAML::BeginSeq;
 
     for (const auto& tile : tiles) {
         out << YAML::BeginMap;
@@ -73,6 +69,7 @@ void MapSerializer::saveToYaml(QGraphicsScene* scene, const QString& filePath) {
     out << YAML::EndMap;
     out << YAML::EndMap;
 
+
     QFile file(filePath);
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QTextStream stream(&file);
@@ -82,41 +79,35 @@ void MapSerializer::saveToYaml(QGraphicsScene* scene, const QString& filePath) {
 }
 
 void MapSerializer::loadFromYaml(const QString& filePath, QGraphicsScene* scene) {
-    scene->clear();
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qWarning("No se pudo abrir el archivo YAML.");
         return;
     }
-
+    
     YAML::Node root = YAML::LoadFile(filePath.toStdString());
-    std::map<QString, QList <YAML::Node>> groupedTiles;
-
 
     for (const auto& tile : root["map"]["tiles"]) {
+        int x = tile["x"].as<int>();
+        int y = tile["y"].as<int>();
+        QString assetPath = QString::fromStdString(tile["asset"].as<std::string>());
         QString type = QString::fromStdString(tile["type"].as<std::string>());
-        groupedTiles[type].append(tile);
-    }
 
-    QStringList orderedLayers = {"background", "wall", "box", "site", "car", "unknown"};
+        QListWidgetItem tempItem;
+        tempItem.setData(Qt::UserRole, assetPath);
+        tempItem.setData(Qt::UserRole + 1, type);
+        tempItem.setIcon(QIcon(assetPath));
 
-    for (const QString& layer : orderedLayers) {
-        for (const auto& tile : groupedTiles[layer]) {
-            int x = tile["x"].as<int>();
-            int y = tile["y"].as<int>();
-            QString assetPath = QString::fromStdString(tile["asset"].as<std::string>());
-
-            QPixmap pix(assetPath);
-            if (pix.isNull()) {
-                qWarning() << "No se pudo cargar imagen:" << assetPath;
-                continue;
-            }
-
-            QGraphicsPixmapItem* pixmapItem = new QGraphicsPixmapItem(pix);
-            pixmapItem->setPos(x * TILE_SIZE, y * TILE_SIZE);
-            pixmapItem->setData(0, assetPath);
-            scene->addItem(pixmapItem);
+        QIcon icon = tempItem.icon();
+        QPixmap pixmap = icon.pixmap(TILE_SIZE, TILE_SIZE);
+        if (pixmap.isNull()) {
+            qWarning() << "No se pudo cargar imagen:" << assetPath;
+            continue;
         }
-        
+        QGraphicsPixmapItem* pixmapItem = new QGraphicsPixmapItem(pixmap);
+        pixmapItem->setPos(x * TILE_SIZE, y * TILE_SIZE);
+        pixmapItem->setData(0, tempItem.data(Qt::UserRole).toString());
+        pixmapItem->setData(1, tempItem.data(Qt::UserRole + 1).toString());
+        scene->addItem(pixmapItem);
     }
 }
