@@ -58,13 +58,13 @@ void Controller::InGameEventHandlerStrategy::handle_movement_event(Shared<SDL_Ev
         return;
     }
 
-    controller.lock()->handle_event(std::move(movement_event));
+    controller.lock()->push_event(std::move(movement_event));
 }
 
 void Controller::InGameEventHandlerStrategy::handle_window_event(Shared<SDL_Event> event) {
     if (event->window.event == SDL_WINDOWEVENT_RESIZED) {
         auto window_resize_event = make_shared<Model::WindowResizeEvent>();
-        controller.lock()->handle_event(std::move(window_resize_event));
+        controller.lock()->push_event(std::move(window_resize_event));
     }
 }
 
@@ -94,17 +94,17 @@ void Controller::InGameEventHandlerStrategy::handle_switch_weapon_event(Shared<S
     handler_state.switching_weapon = true;
     switch_weapon_event = make_shared<Model::SwitchWeaponEvent>(slot_id);
 
-    controller.lock()->handle_event(std::move(switch_weapon_event));
+    controller.lock()->push_event(std::move(switch_weapon_event));
 }
 
 void Controller::InGameEventHandlerStrategy::handle_switch_context_event(Shared<SDL_Event> event) {
     auto key_symbol = event->key.keysym.sym;
     if (key_symbol == SDLK_ESCAPE) {
         auto switch_to_menu = make_shared<Model::SwitchContextEvent>("menu");
-        controller.lock()->handle_event(std::move(switch_to_menu));
+        controller.lock()->push_event(std::move(switch_to_menu));
     } else {
         auto switch_to_shop = make_shared<Model::SwitchContextEvent>("shop");
-        controller.lock()->handle_event(std::move(switch_to_shop));
+        controller.lock()->push_event(std::move(switch_to_shop));
     }
 }
 
@@ -131,7 +131,7 @@ void Controller::InGameEventHandlerStrategy::handle_stop_movement_event(Shared<S
 
     stop_movement_event = make_shared<Model::StopMovementEvent>(is_horizontal);
 
-    controller.lock()->handle_event(std::move(stop_movement_event));
+    controller.lock()->push_event(std::move(stop_movement_event));
 }
 
 void Controller::InGameEventHandlerStrategy::handle_stop_switching_weapon_event() {
@@ -142,14 +142,14 @@ void Controller::InGameEventHandlerStrategy::handle_click() {
     if (handler_state.is_shooting) return;
     auto use_weapon_event = make_shared<Model::UseWeaponEvent>();
     handler_state.is_shooting = true;
-    controller.lock()->handle_event(std::move(use_weapon_event));
+    controller.lock()->push_event(std::move(use_weapon_event));
 }
 
 void Controller::InGameEventHandlerStrategy::handle_click_release() {
     if (!handler_state.is_shooting) return;
     auto stop_using_weapon_event = make_shared<Model::StopUsingWeaponEvent>();
     handler_state.is_shooting = false;
-    controller.lock()->handle_event(std::move(stop_using_weapon_event));
+    controller.lock()->push_event(std::move(stop_using_weapon_event));
 }
 
 void Controller::InGameEventHandlerStrategy::handle_keydown_event(Shared<SDL_Event> event) {
@@ -225,5 +225,5 @@ void Controller::InGameEventHandlerStrategy::handle_current_game_state() {
 
     auto rotation_event = make_shared<Model::RotationEvent>(angle);
 
-    controller.lock()->handle_event(std::move(rotation_event));
+    controller.lock()->push_event(std::move(rotation_event));
 }

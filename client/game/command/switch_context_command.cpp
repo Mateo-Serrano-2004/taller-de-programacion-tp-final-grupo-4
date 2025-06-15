@@ -14,6 +14,6 @@ Command::SwitchContextCommand::SwitchContextCommand(
 void Command::SwitchContextCommand::execute() {
     if (auto controller_locked = controller.lock()) {
         auto switch_context_event = make_shared<Model::SwitchContextEvent>(new_context_name);
-        controller_locked->handle_event(std::move(switch_context_event));
+        controller_locked->push_event(std::move(switch_context_event));
     }
 }

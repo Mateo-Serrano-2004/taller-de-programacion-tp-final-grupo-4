@@ -1,6 +1,7 @@
 #include "sender.h"
 
 #include <iostream>
+#include <atomic>
 
 #include "common/event_type.h"
 
@@ -10,18 +11,19 @@
 #include "client/net/client_protocol.h"
 
 Controller::Sender::Sender(
+    std::atomic<bool>& keep_running,
     SharedQueue<Model::Event>* sender_queue,
     Shared<Net::ClientProtocol> protocol
-): sender_queue(sender_queue), protocol(protocol) {
+): keep_running(keep_running), sender_queue(sender_queue), protocol(protocol) {
     start();
 }
 
 void Controller::Sender::run() {
-    bool keep_running = true;
     while (keep_running) {
         try {
             Shared<Model::Event> event = sender_queue->pop();
             if (event->get_type() == Model::EventType::QUIT) {
+                std::cout << "Received a QUIT event in Sender\n";
                 keep_running = false;
             }
             DTO::EventDTOCreator event_dto_creator(event);
@@ -33,9 +35,9 @@ void Controller::Sender::run() {
             keep_running = false;
         }
     }
+    std::cout << "Finishing sender\n";
 }
 
 Controller::Sender::~Sender() {
-    stop();
     join();
 }

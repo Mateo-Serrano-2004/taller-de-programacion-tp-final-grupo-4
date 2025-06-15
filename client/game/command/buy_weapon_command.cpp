@@ -14,6 +14,6 @@ Command::BuyWeaponCommand::BuyWeaponCommand(
 void Command::BuyWeaponCommand::execute() {
     if (auto controller_locked = controller.lock()) {
         auto buy_weapon_event = make_shared<Model::BuyWeaponEvent>(weapon_id);
-        controller_locked->handle_event(std::move(buy_weapon_event));
+        controller_locked->push_event(std::move(buy_weapon_event));
     }
 }

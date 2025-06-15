@@ -1,8 +1,9 @@
 #ifndef CLIENT_GAME_CONTROLLER_RECEIVER_H
 #define CLIENT_GAME_CONTROLLER_RECEIVER_H
 
+#include <atomic>
+
 #include "common/definitions.h"
-#include "common/queue.h"
 #include "common/thread.h"
 
 namespace Net {
@@ -15,6 +16,7 @@ class GameStateManager;
 
 class Receiver: public Thread {
 protected:
+    std::atomic<bool>& keep_running;
     GameController* controller;
     Shared<GameStateManager> game_state_manager;
     Shared<Net::ClientProtocol> protocol;
@@ -24,6 +26,7 @@ protected:
 
 public:
     Receiver(
+        std::atomic<bool>& keep_running,
         GameController* controller,
         Shared<Net::ClientProtocol> protocol
     );

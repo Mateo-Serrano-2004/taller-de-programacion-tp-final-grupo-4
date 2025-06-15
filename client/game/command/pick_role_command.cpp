@@ -14,6 +14,6 @@ Command::PickRoleCommand::PickRoleCommand(
 void Command::PickRoleCommand::execute() {
     if (auto controller_locked = controller.lock()) {
         auto pick_role_event = make_shared<Model::PickRoleEvent>(role_id);
-        controller_locked->handle_event(std::move(pick_role_event));
+        controller_locked->push_event(std::move(pick_role_event));
     }
 }

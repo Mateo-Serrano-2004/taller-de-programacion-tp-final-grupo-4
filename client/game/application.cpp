@@ -17,6 +17,7 @@ void App::Application::launch() {
         try {
             (void) clock.sleep_and_get_frames();
             context_manager->update_current_context();
+            controller->handle_events();
         } catch (const App::ClosedWindowException&) {
             keep_running = false;
         }

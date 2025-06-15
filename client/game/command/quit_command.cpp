@@ -12,7 +12,6 @@ Command::QuitCommand::QuitCommand(
 
 void Command::QuitCommand::execute() {
     if (auto controller_locked = controller.lock()) {
-        auto quit_event = make_shared<Model::QuitEvent>();
-        controller_locked->handle_event(std::move(quit_event));
+        controller_locked->push_event(make_shared<Model::QuitEvent>());
     }
 }

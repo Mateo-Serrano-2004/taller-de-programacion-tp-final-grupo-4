@@ -1,5 +1,7 @@
 #include "round.h"
 
+#include <iostream>
+
 void Round::update_if_finished_warmup() {
     std::cout << "Fin de la etapa de warmup" << std::endl;
     active_ticks_remaining = 0;
@@ -89,6 +91,7 @@ void Round::update(int frames_to_process) {
 }
 
 void Round::notify_on_one_player_less(Model::TeamID team) {
+    std::cout << "One player less\n";
     if (team == Model::TeamID::CT) {
         number_of_ct_alive--;
         if (number_of_ct_alive == 0) {
@@ -98,7 +101,7 @@ void Round::notify_on_one_player_less(Model::TeamID team) {
             count_of_rounds++;
         }
     } else if (team == Model::TeamID::TT) {
-        number_of_tt_alive;
+        number_of_tt_alive--;
         if (number_of_tt_alive == 0) {
             // TOOD: Add bomb logic and prevent end of game if it is still planted
 
@@ -108,6 +111,8 @@ void Round::notify_on_one_player_less(Model::TeamID team) {
             count_of_rounds++;
         }
     }
+
+    std::cout << "**" << (int) (number_of_ct_alive) << "-" << (int) (number_of_tt_alive) << std::endl;
 }
 
 void Round::notify_player_joined(Model::TeamID team) {

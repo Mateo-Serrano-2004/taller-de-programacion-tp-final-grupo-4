@@ -2,8 +2,6 @@
 #define CLIENT_GAME_CONTROLLER_BASE_CONTROLLER_H
 
 #include "common/definitions.h"
-#include "common/queue.h"
-#include "common/thread.h"
 
 namespace SDL2pp {
 class Window;
@@ -20,7 +18,7 @@ class AssetManager;
 };
 
 namespace Controller {
-class BaseController: public Thread {
+class BaseController {
 protected:
     SharedQueue<Model::Event> processor_event_queue;
     Shared<SDL2pp::Window> window;
@@ -46,14 +44,13 @@ public:
     Shared<Model::AssetManager> get_asset_manager();
     Weak<Context::ContextManager> get_context_manager();
 
-    virtual void handle_event(Shared<Model::Event> event);
-
-    void run() override;
+    void handle_events();
+    void push_event(Shared<Model::Event> event);
 
     BaseController(BaseController&&) = default;
     BaseController& operator=(BaseController&&) = default;
 
-    virtual ~BaseController() override;
+    virtual ~BaseController() = default;
 };
 };
 

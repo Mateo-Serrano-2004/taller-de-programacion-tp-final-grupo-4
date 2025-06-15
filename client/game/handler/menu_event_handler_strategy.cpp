@@ -15,7 +15,7 @@
 
 void Controller::MenuEventHandlerStrategy::handle_switch_context_event(Shared<SDL_Event>) {
     auto switch_context_event = make_shared<Model::SwitchContextEvent>("in-game");
-    controller.lock()->handle_event(std::move(switch_context_event));
+    controller.lock()->push_event(std::move(switch_context_event));
 }
 
 void Controller::MenuEventHandlerStrategy::handle_click(Shared<SDL_Event> event) {

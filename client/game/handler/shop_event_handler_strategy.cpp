@@ -15,10 +15,10 @@ void Controller::ShopEventHandlerStrategy::handle_switch_context_event(Shared<SD
 
     if (key_symbol == SDLK_ESCAPE) {
         auto switch_to_menu = make_shared<Model::SwitchContextEvent>("menu");
-        controller.lock()->handle_event(switch_to_menu);
+        controller.lock()->push_event(switch_to_menu);
     } else if (key_symbol == SDLK_b) {
         auto switch_to_game = make_shared<Model::SwitchContextEvent>("in-game");
-        controller.lock()->handle_event(switch_to_game);
+        controller.lock()->push_event(switch_to_game);
     }
 }
 

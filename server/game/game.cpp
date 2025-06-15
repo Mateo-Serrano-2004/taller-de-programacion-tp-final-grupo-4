@@ -119,7 +119,7 @@ void Game::start_new_round() {
     round.set_ct_count(ct_count);
     round.set_tt_count(tt_count);
 
-    std::cout << (int) (ct_count) << "-" << (int) (tt_count);
+    std::cout << (int) (ct_count) << "-" << (int) (tt_count) << std::endl;
 
     round.to_buying_phase();
 }

@@ -23,9 +23,7 @@ Controller::BaseController::BaseController(
     Shared<SDL2pp::Renderer> renderer,
     Shared<Model::AssetManager> asset_manager,
     Shared<Context::ContextManager> context_manager
-): window(window), renderer(renderer), asset_manager(asset_manager), context_manager(context_manager) {
-    start();
-}
+): window(window), renderer(renderer), asset_manager(asset_manager), context_manager(context_manager) {}
 
 Shared<SDL2pp::Window> Controller::BaseController::get_window() {
     return window;
@@ -43,40 +41,13 @@ Weak<Context::ContextManager> Controller::BaseController::get_context_manager() 
     return Weak<Context::ContextManager>(context_manager);
 }
 
-void Controller::BaseController::handle_event(Shared<Model::Event> event) {
-    Model::EventType event_type = event->get_type();
-    if (
-        event_type == Model::EventType::SWITCH_CONTEXT ||
-        event_type == Model::EventType::WINDOW_RESIZE
-    ) {
-        context_manager->propage_event(event);
-    } else {
-        processor_event_queue.push(event);
-
-        if (event->get_type() == Model::EventType::QUIT) {
-            throw ClosedAppException("Close app");
-        }
-    }
-}
-
-void Controller::BaseController::run() {
-    bool running = true;
-    while (running) {
-        // Nor the main thread nor the event processor
-        // closes the queue, so we can safely
-        // call pop() without checking if the queue is closed.
-
-        Shared<Model::Event> event = processor_event_queue.pop();
-
-        if (event->get_type() == Model::EventType::QUIT) {
-            running = false;
-        }
-
+void Controller::BaseController::handle_events() {
+    Shared<Model::Event> event;
+    while (processor_event_queue.try_pop(event)) {
         process_event(event);
     }
 }
 
-Controller::BaseController::~BaseController() {
-    stop();
-    join();
+void Controller::BaseController::push_event(Shared<Model::Event> event) {
+    processor_event_queue.push(event);
 }

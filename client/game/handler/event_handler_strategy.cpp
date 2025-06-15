@@ -9,13 +9,11 @@
 #include "event/window_resize_event.h"
 
 void Controller::EventHandlerStrategy::handle_quit_event() {
-    auto quit_event = make_shared<Model::QuitEvent>();
-    controller.lock()->handle_event(std::move(quit_event));
+    controller.lock()->push_event(make_shared<Model::QuitEvent>());
 }
 
 void Controller::EventHandlerStrategy::handle_window_resize_event() {
-    auto window_resize_event = make_shared<Model::WindowResizeEvent>();
-    controller.lock()->handle_event(std::move(window_resize_event));
+    controller.lock()->push_event(make_shared<Model::WindowResizeEvent>());
 }
 
 void Controller::EventHandlerStrategy::handle(Shared<SDL_Event> event) {
