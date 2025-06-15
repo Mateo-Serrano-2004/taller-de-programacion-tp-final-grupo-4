@@ -1,8 +1,6 @@
 #ifndef CLIENT_GAME_CONTROLLER_GAME_CONTROLLER_H
 #define CLIENT_GAME_CONTROLLER_GAME_CONTROLLER_H
 
-#include <atomic>
-
 #include "base_controller.h"
 #include "receiver.h"
 #include "sender.h"
@@ -31,11 +29,10 @@ class GameStateManager;
 class GameController: public BaseController {
 protected:
     SharedQueue<Model::Event> sender_queue;
-    std::atomic<bool> keep_running;
     Shared<Net::ClientProtocol> protocol;
     Shared<GameStateManager> game_state_manager;
-    Sender sender;
-    Receiver receiver;
+    Unique<Sender> sender;
+    Unique<Receiver> receiver;
 
     GameController(const GameController&) = delete;
     GameController& operator=(const GameController&) = delete;

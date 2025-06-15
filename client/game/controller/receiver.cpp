@@ -16,14 +16,14 @@
 Controller::Receiver::Receiver(
     Controller::GameController* controller,
     Shared<Net::ClientProtocol> protocol
-): controller(controller),
+): keep_running(true),
+   controller(controller),
    game_state_manager(controller->get_game_state_manager()),
    protocol(protocol) {
     start();
 }
 
 void Controller::Receiver::run() {
-    bool keep_running = true;
     while (keep_running) {
         try {
             DTO::GameStateDTO game_state_dto = protocol->receive_match_state();
@@ -44,5 +44,6 @@ void Controller::Receiver::run() {
 }
 
 Controller::Receiver::~Receiver() {
+    keep_running = false;
     join();
 }

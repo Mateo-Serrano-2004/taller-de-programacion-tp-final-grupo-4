@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <utility>
+#include <atomic>
 
 #include <SDL2pp/Window.hh>
 #include <SDL2pp/Renderer.hh>
@@ -24,12 +25,15 @@ Controller::GameController::GameController(
 	Shared<Net::ClientProtocol> protocol
 ): Controller::BaseController(window, renderer, asset_manager, context_manager),
    protocol(protocol),
-   game_state_manager(make_shared<Controller::GameStateManager>(
-	protocol->receive_player_id(),
-	Weak<SDL2pp::Window>(window)
-   )),
-   sender(&sender_queue, protocol),
-   receiver(this, protocol) {}
+   game_state_manager(
+		make_shared<Controller::GameStateManager>(
+			protocol->receive_player_id(),
+			Weak<SDL2pp::Window>(window)
+		)
+   ) {
+	sender = make_unique<Controller::Sender>(&sender_queue, protocol);
+	receiver = make_unique<Controller::Receiver>(this, protocol);
+}
 
 void Controller::GameController::process_event(Shared<Model::Event> event) {
 	auto event_type = event->get_type();
@@ -50,7 +54,7 @@ void Controller::GameController::process_event(Shared<Model::Event> event) {
 
 	if (event_type == Model::EventType::QUIT) {
 		std::cout << "Received a QUIT event\n";
-		sender_queue.close();
+		receiver.reset();
 		throw ClosedAppException("Closed app"); 
 	}
 }

@@ -12,12 +12,11 @@
 Controller::Sender::Sender(
     SharedQueue<Model::Event>* sender_queue,
     Shared<Net::ClientProtocol> protocol
-): sender_queue(sender_queue), protocol(protocol) {
+): keep_running(true), sender_queue(sender_queue), protocol(protocol) {
     start();
 }
 
 void Controller::Sender::run() {
-    bool keep_running = true;
     while (keep_running) {
         try {
             Shared<Model::Event> event = sender_queue->pop();
@@ -38,5 +37,6 @@ void Controller::Sender::run() {
 }
 
 Controller::Sender::~Sender() {
+    keep_running = false;
     join();
 }

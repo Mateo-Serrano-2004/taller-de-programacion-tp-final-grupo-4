@@ -35,7 +35,6 @@ void ClientHandler::handle_game_event(const GameEventVariant& event) {
     game_queue->push(std::make_pair(player_id, event));
 
     if (std::holds_alternative<LeaveGameEvent>(event)) {
-        protocol.send_game_state(DTO::GameStateDTO());
         close();
     }
 }
