@@ -35,6 +35,7 @@ public:
     void send_game_state(const DTO::GameStateDTO& game_state);
     void send_all_maps_names(const std::vector<std::string>& maps);
     void send_games(const std::vector<GameInfoDTO>& games);
+    void send_map(const std::vector<std::vector<std::string>>& map);
 
     ServerProtocol(ServerProtocol&&) = default;
     ServerProtocol& operator=(ServerProtocol&&) = default;

@@ -149,3 +149,26 @@ uint8_t Net::ClientProtocol::receive_team() {
 
     return team;
 }
+
+std::vector<std::vector<std::string>> Net::ClientProtocol::receive_map() {
+    uint8_t map_size;
+    skt.recvall(&map_size, sizeof(map_size));
+
+    uint8_t row_size;
+    skt.recvall(&row_size, sizeof(row_size));
+
+    std::vector<std::vector<std::string>> map(map_size, std::vector<std::string>(row_size));
+
+    for (uint8_t i = 0; i < map_size; i++) {
+        for (uint8_t j = 0; j < row_size; j++) {
+            uint8_t tile_size;
+            skt.recvall(&tile_size, sizeof(tile_size));
+
+            std::vector<char> tile(tile_size);
+            skt.recvall(tile.data(), tile_size);
+            map[i][j] = std::string(tile.begin(), tile.end());
+        }
+    }
+
+    return map;
+}
