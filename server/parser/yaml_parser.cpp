@@ -2,11 +2,12 @@
 #include <yaml-cpp/yaml.h>
 #include <iostream>
 
-YamlParser::YamlParser(const std::string& yamlPath) {
-    parseYaml(yamlPath);
+YamlParser::YamlParser(const std::string& yamlMapPath, const std::string& yamlGameConfigPath) {
+    parseMapYaml(yamlMapPath);
+    parseGameConfigYaml(yamlGameConfigPath);
 }
 
-void YamlParser::parseYaml(const std::string& yamlPath) {
+void YamlParser::parseMapYaml(const std::string& yamlPath) {
     YAML::Node root = YAML::LoadFile(yamlPath);
     
     mapMinWidth = root["map"]["minWidht"].as<int>();
@@ -38,10 +39,58 @@ void YamlParser::parseYaml(const std::string& yamlPath) {
     }
 }
 
+void YamlParser::parseGameConfigYaml(const std::string& yamlPath) {
+    YAML::Node config = YAML::LoadFile(yamlGameConfigPath);
+
+    // Game
+    const auto& game = config["game"];
+    gameConfig.game.title = game["title"].as<std::string>();
+    gameConfig.game.rounds = game["rounds"].as<int>();
+    gameConfig.game.prepareTime = game["prepare_time"].as<int>();
+    gameConfig.game.killPoints = game["kill_points"].as<int>();
+    gameConfig.game.roundWonPoints = game["round_won_points"].as<int>();
+    gameConfig.game.roundLostPoints = game["round_lost_points"].as<int>();
+    gameConfig.game.bombExplotionTime = game["bomb_explotion_time"].as<int>();
+
+    // Players
+    //Terrorists
+    const auto& players = config["player"];
+    const auto& terrorist = players["terrorist"];
+    gameConfig.terrorist.health = terrorist["health"].as<int>();
+    gameConfig.terrorist.moneyPoints = terrorist["money_points"].as<int>();
+    gameConfig.terrorist.maxWeapons = terrorist["max_weapons"].as<int>();
+    gameConfig.terrorist.movementSpeed = terrorist["movement_speed"].as<float>();
+    gameConfig.terrorist.killsCounter = terrorist["kills_counter"].as<int>();
+    //Anti-Terrorists
+    const auto& antiTerrorist = players["anti-terrorist"];
+    gameConfig.antiTerrorist.health = antiTerrorist["health"].as<int>();
+    gameConfig.antiTerrorist.moneyPoints = antiTerrorist["money_points"].as<int>();
+    gameConfig.antiTerrorist.maxWeapons = antiTerrorist["max_weapons"].as<int>();
+    gameConfig.antiTerrorist.movementSpeed = antiTerrorist["movement_speed"].as<float>();
+    gameConfig.antiTerrorist.killsCounter = antiTerrorist["kills_counter"].as<int>();
+
+    // Weapons
+    const auto& weapons = config["weapons"];
+    for (const auto& weapon : weapons) {
+        std::string name = weapon.first.as<std::string>();
+        const auto& w = weapon.second;
+
+        WeaponConfig wc;
+        wc.minDamage = w["min_damage"].as<int>();
+        wc.maxDamage = w["max_damage"].as<int>();
+        wc.precision = w["precision"].as<float>();
+        wc.cost = w["cost"].as<int>();
+        wc.range = w["range"].as<int>();
+        wc.bulletsPerShot = w["bullets_per_shot"].as<int>();
+        wc.fireRate = w["fire_rate"] ? w["fire_rate"].as<float>() : 0.0f;
+
+        gameConfig.weapons[name] = wc;
+    }
+}
+
 std::vector<std::vector<std::string>> YamlParser::getTileMatrix() const{
     return tileMatrix;
 }
-
 
 std::vector<std::vector<TileType>> YamlParser::getTypeMatrix() const{
     return typeMatrix;
@@ -54,4 +103,8 @@ TileType YamlParser::stringToTileType(const std::string& typeStr, const std::str
     if (nameStr.find("ct") != std::string::npos) return CT_SPAWN;
     if (nameStr.find("tt") != std::string::npos) return TT_SPAWN;
     return NOT_COLLIDABLE;  
+}
+
+const ConfigData& YamlParser::getConfigData() const {
+    return gameConfig;
 }

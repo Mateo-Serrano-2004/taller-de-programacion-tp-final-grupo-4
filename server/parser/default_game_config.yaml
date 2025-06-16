@@ -1,0 +1,84 @@
+#game
+game:
+  title: "Counter-Strike 2D"
+  rounds: 10
+  prepare_time: 45
+  kill_points: 300
+  round_won_points: 500
+  round_lost_points: 250
+  bomb_explotion_time: 30
+
+
+#players
+player:
+  terrorist:
+    health: 100
+    money_points: 0
+    max_weapons: 4
+    movement_speed: 1.0
+    kills_counter: 0
+
+  anti-terrorist:
+    health: 100
+    money_points: 0
+    max_weapons: 3
+    movement_speed: 1.0
+    kills_counter: 0
+
+#weapons
+weapons:
+  knife:
+    min_damage: 15
+    max_damage: 15 
+    precision: 1.0
+    cost: 0  #default
+    range: 1
+    bullets_per_shot: 0 #no bullets
+
+  glock:
+    min_damage: 15
+    max_damage: 25
+    precision: 0.8
+    cost: 0 #default
+    range: 5
+    bullets_per_shot: 1
+    fire_rate: 0.8
+
+  ak-47:
+    min_damage: 10
+    max_damage: 20
+    precision: 0.6
+    cost: 700
+    range: 3
+    bullets_per_shot: 3
+    fire_rate: 0.4
+
+  m3:
+    min_damage: 20
+    max_damage: 35
+    precision: 0.8
+    cost: 1000
+    range: 3
+    bullets_per_shot: 1
+    fire_rate: 0.8
+    
+  awp:
+    min_damage: 100
+    max_damage: 100
+    precision: 1.0
+    cost: 2000
+    range: 10
+    bullets_per_shot: 1
+    fire_rate: 1.0
+
+
+# Interfaz
+#display:
+#  mode: "fullscreen"
+#  resolution:
+#    width: 640
+#    height: 400
+
+# Server
+#server:
+#  port: 9000
