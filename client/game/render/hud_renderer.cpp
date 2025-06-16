@@ -1,5 +1,6 @@
 #include "hud_renderer.h"
 
+#include <iostream>
 #include <cstdint>
 #include <cmath>
 #include <list>
@@ -15,6 +16,9 @@
 #include "handler/game_state_manager.h"
 
 #include "model/rendered_player.h"
+
+#include "entity/pane.h"
+#include "entity/horizontal_pane.h"
 
 #include "asset/asset_manager.h"
 #include "asset/texture_id.h"
@@ -43,68 +47,121 @@ std::vector<uint8_t> View::HUDRenderer::get_units_of_time_left(uint16_t seconds_
     return units_of_time_left;
 }
 
-void View::HUDRenderer::render_hud_symbol(uint8_t symbol_number, coord_t pos_x, coord_t pos_y) {
-    auto hud_symbol = asset_manager->get_texture(Model::TextureID::HUD_SYMBOLS);
-    renderer->Copy(
-        *hud_symbol,
-        SDL2pp::Rect(symbol_number * 64, 0, 64, 64),
-        SDL2pp::Rect(pos_x, pos_y, 22, 33)
-    );
+void View::HUDRenderer::load_separator(
+    std::list<View::Pane>& numbers,
+    View::HorizontalPane& parent
+) {
+    View::Pane separator(controller);
+    separator.set_draw_texture(true);
+    separator.set_texture(hud_numbers);
+    separator.set_texture_slice(SDL2pp::Rect(440, 0, 12, 66));
+    separator.set_size(SDL2pp::Point(6, 33));
+    numbers.push_back(separator);
+    parent.add_child(&numbers.back());
+    parent.set_width(parent.get_width() + 6);
 }
 
-void View::HUDRenderer::render_number(uint8_t number, coord_t pos_x, coord_t pos_y) {
-    renderer->Copy(
-        *hud_numbers,
-        SDL2pp::Rect(number * 44, 0, 44, 66),
-        SDL2pp::Rect(pos_x, pos_y, 22, 33)
-    );
+void View::HUDRenderer::render_hud_symbol(std::list<View::Pane>& numbers,
+                                          View::HorizontalPane& parent, uint8_t symbol_number) {
+    View::Pane symbol_pane(controller);
+    symbol_pane.set_draw_texture(true);
+    symbol_pane.set_texture(hud_symbols);
+    symbol_pane.set_texture_slice(SDL2pp::Rect(symbol_number * 64, 0, 64, 64));
+    symbol_pane.set_size(SDL2pp::Point(37, 37));
+    numbers.push_back(symbol_pane);
+    parent.add_child(&numbers.back());
+    parent.set_width(parent.get_width() + 37);
+}
+
+void View::HUDRenderer::render_number(
+    std::list<View::Pane>& numbers,
+    View::HorizontalPane& parent,
+    uint8_t number
+) {
+    View::Pane number_pane(controller);
+    number_pane.set_draw_texture(true);
+    number_pane.set_texture(hud_numbers);
+    number_pane.set_texture_slice(SDL2pp::Rect(number * 44, 0, 44, 66));
+    number_pane.set_size(SDL2pp::Point(22, 33));
+    numbers.push_back(number_pane);
+    parent.add_child(&numbers.back());
+    parent.set_width(parent.get_width() + 22);
 }
 
 void View::HUDRenderer::render_time() {
     uint16_t seconds_left = game_state_manager->get_time_left();
     auto units = get_units_of_time_left(seconds_left);
 
-    render_number(units[0], 22, 0);
-    render_number(units[1], 44, 0);
+    time.clear_children();
+    time.set_width(0);
 
-    renderer->Copy(
-        *hud_numbers,
-        SDL2pp::Rect(440, 0, 12, 66),
-        SDL2pp::Rect(66, 0, 6, 33)
-    );
-
-    render_number(units[2], 72, 0);
-    render_number(units[3], 94, 0);
-
-    render_hud_symbol(2, 0, 0);
+    render_hud_symbol(time_numbers, time, 2);
+    render_number(time_numbers, time, units[0]);
+    render_number(time_numbers, time, units[1]);
+    load_separator(time_numbers, time);
+    render_number(time_numbers, time, units[2]);
+    render_number(time_numbers, time, units[3]);
 }
 
 void View::HUDRenderer::render_life_points(Shared<RenderedPlayer> player) {
     auto units = get_units(player->get_health());
-    for (size_t i = 0; i < units.size(); i++) {
-        render_number(units[i], 22 + (i * 22), renderer->GetViewport().GetH() - 33);
-    }
 
-    render_hud_symbol(0, 0, renderer->GetViewport().GetH() - 33);
+    health.clear_children();
+    health.set_width(0);
+
+    render_hud_symbol(health_numbers, health, 0);
+
+    for (size_t i = 0; i < units.size(); i++) {
+        render_number(health_numbers, health, units[i]);
+    }
 }
 
 void View::HUDRenderer::render_money(Shared<View::RenderedPlayer> player) {
     auto units = get_units(player->get_money());
-    for (size_t i = 0; i < units.size(); i++) {
-        render_number(units[i], 122 + (i * 22), renderer->GetViewport().GetH() - 33);
-    }
 
-    render_hud_symbol(7, 100, renderer->GetViewport().GetH() - 33);
+    money.clear_children();
+    money.set_width(0);
+
+    render_hud_symbol(money_numbers, money, 7);
+
+    for (size_t i = 0; i < units.size(); i++) {
+        render_number(money_numbers, money, units[i]);
+    }
 }
 
-View::HUDRenderer::HUDRenderer(Weak<Controller::GameController> controller):
-        View::Renderer(controller),
-        game_state_manager(controller.lock()->get_game_state_manager()),
-        hud_numbers(asset_manager->get_texture(Model::TextureID::HUD_NUMS)) {}
+View::HUDRenderer::HUDRenderer(Weak<Controller::GameController> controller)
+: View::Renderer(controller),
+  controller(controller),
+  game_state_manager(controller.lock()->get_game_state_manager()),
+  hud_numbers(asset_manager->get_texture(Model::TextureID::HUD_NUMS)),
+  hud_symbols(asset_manager->get_texture(Model::TextureID::HUD_SYMBOLS)),
+  viewport(controller),
+  time(controller),
+  stats(controller),
+  health(controller),
+  money(controller) {
+    viewport.add_child(&time);
+    viewport.add_child(&stats);
+    stats.add_child(&health);
+    stats.add_child(&money);
+
+    std::cout << (int) (viewport.get_height()) << std::endl;
+
+    time.set_height(37);
+    time.set_horizontal_alignment(0);
+
+    stats.set_horizontal_alignment(0);
+    stats.set_vertical_alignment(1);
+    stats.set_gap_x(10);
+
+    health.set_height(37);
+    money.set_height(37);
+}
 
 void View::HUDRenderer::render() {
     auto player = game_state_manager->get_reference_player();
     render_time();
     render_money(player);
     render_life_points(player);
+    viewport.render();
 }
