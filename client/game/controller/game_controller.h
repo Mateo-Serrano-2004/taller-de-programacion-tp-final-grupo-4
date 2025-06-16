@@ -16,7 +16,7 @@ class ContextManager;
 };
 
 namespace Model {
-class Event;
+class TransferedEvent;
 class AssetManager;
 };
 
@@ -31,7 +31,7 @@ class GameStateManager;
 class GameController: public BaseController {
 protected:
     Shared<GameStateManager> game_state_manager;
-    SharedQueue<Model::Event> sender_queue;
+    SharedQueue<Model::TransferedEvent> sender_queue;
     Shared<Net::ClientProtocol> protocol;
     Unique<Sender> sender;
     Unique<Receiver> receiver;

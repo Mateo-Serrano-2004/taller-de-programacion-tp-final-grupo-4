@@ -3,11 +3,15 @@
 
 #include <cstdint>
 
-#include "event.h"
 #include "common/definitions.h"
+#include "common/DTO/event_dto.h"
+
+#include "dto_handler/dto_creator_visitor.h"
+
+#include "transfered_event.h"
 
 namespace Model {
-class RotationEvent: public Event {
+class RotationEvent: public TransferedEvent {
 private:
     angle_t angle_in_degrees;
 
@@ -15,6 +19,8 @@ public:
     explicit RotationEvent(angle_t angle_in_degrees);
 
     angle_t get_angle_in_degrees() const;
+
+    DTO::EventDTO as_dto() override;
 
     ~RotationEvent() override = default;
 };

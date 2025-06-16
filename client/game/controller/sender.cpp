@@ -4,13 +4,12 @@
 
 #include "common/event_type.h"
 
-#include "dto_handler/event_dto_creator.h"
 #include "event/event.h"
 
 #include "client/net/client_protocol.h"
 
 Controller::Sender::Sender(
-    SharedQueue<Model::Event>* sender_queue,
+    SharedQueue<Model::TransferedEvent>* sender_queue,
     Shared<Net::ClientProtocol> protocol
 ): keep_running(true), sender_queue(sender_queue), protocol(protocol) {
     start();
@@ -19,13 +18,12 @@ Controller::Sender::Sender(
 void Controller::Sender::run() {
     while (keep_running) {
         try {
-            Shared<Model::Event> event = sender_queue->pop();
+            Shared<Model::TransferedEvent> event = sender_queue->pop();
             if (event->get_type() == Model::EventType::QUIT) {
                 std::cout << "Received a QUIT event in Sender\n";
                 keep_running = false;
             }
-            DTO::EventDTOCreator event_dto_creator(event);
-            protocol->send_event(event_dto_creator);
+            protocol->send_event(event->as_dto());
         } catch (const ClosedQueue& e) {
             keep_running = false;
         } catch (const std::exception& e) {

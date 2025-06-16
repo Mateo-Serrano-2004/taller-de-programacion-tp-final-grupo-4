@@ -7,6 +7,8 @@
 #include "common/thread.h"
 #include "common/queue.h"
 
+#include "event/transfered_event.h"
+
 namespace Net {
 class ClientProtocol;
 };
@@ -19,7 +21,7 @@ namespace Controller {
 class Sender: public Thread {
 protected:
     std::atomic<bool> keep_running;
-    SharedQueue<Model::Event>* sender_queue;
+    SharedQueue<Model::TransferedEvent>* sender_queue;
     Shared<Net::ClientProtocol> protocol;
 
     Sender(const Sender&) = delete;
@@ -27,7 +29,7 @@ protected:
 
 public:
     Sender(
-        SharedQueue<Model::Event>* sender_queue,
+        SharedQueue<Model::TransferedEvent>* sender_queue,
         Shared<Net::ClientProtocol> protocol
     );
 

@@ -2,13 +2,19 @@
 #define CLIENT_GAME_EVENT_REQUEST_GAMES_LIST_EVENT_H
 
 #include "common/event_type.h"
+#include "common/DTO/event_dto.h"
 
-#include "event.h"
+#include "dto_handler/dto_creator_visitor.h"
+
+#include "transfered_event.h"
 
 namespace Model {
-class RequestGamesListEvent: public Event {
+class RequestGamesListEvent: public TransferedEvent {
 public:
-    RequestGamesListEvent(): Event(EventType::REQUEST_GAMES_LIST) {}
+    RequestGamesListEvent(): TransferedEvent(EventType::REQUEST_GAMES_LIST) {}
+
+    DTO::EventDTO as_dto() override;
+
     RequestGamesListEvent(const RequestGamesListEvent&) = default;
 };
 };  // namespace Model

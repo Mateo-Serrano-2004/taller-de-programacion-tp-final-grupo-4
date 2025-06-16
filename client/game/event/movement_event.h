@@ -3,12 +3,16 @@
 
 #include <cstdint>
 
-#include "common/model/vector_2d.h"
 #include "common/definitions.h"
-#include "event.h"
+#include "common/model/vector_2d.h"
+#include "common/DTO/event_dto.h"
+
+#include "dto_handler/dto_creator_visitor.h"
+
+#include "transfered_event.h"
 
 namespace Model {
-class MovementEvent: public Event {
+class MovementEvent: public TransferedEvent {
 private:
     Physics::Vector2D direction;
 
@@ -16,6 +20,8 @@ public:
     MovementEvent(coord_t x, coord_t y);
 
     Physics::Vector2D get_direction() const;
+
+    DTO::EventDTO as_dto() override;
 
     ~MovementEvent() override = default;
 };

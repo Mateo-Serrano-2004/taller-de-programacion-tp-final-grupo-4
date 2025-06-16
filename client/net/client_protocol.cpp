@@ -79,8 +79,7 @@ DTO::GameStateDTO Net::ClientProtocol::receive_match_state() {
     return game_state_dto;
 }
 
-void Net::ClientProtocol::send_event(const DTO::EventDTOCreator& event_dto_creator) {
-    DTO::EventDTO event_dto = event_dto_creator.to_dto();
+void Net::ClientProtocol::send_event(const DTO::EventDTO& event_dto) {
     skt.sendall(&event_dto.size, sizeof(event_dto.size));
     skt.sendall(event_dto.data.data(), event_dto.size);
 }

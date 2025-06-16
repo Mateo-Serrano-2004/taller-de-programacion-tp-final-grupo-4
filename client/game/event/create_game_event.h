@@ -4,21 +4,26 @@
 #include <string>
 
 #include "common/event_type.h"
+#include "common/DTO/event_dto.h"
 
-#include "event.h"
+#include "dto_handler/dto_creator_visitor.h"
+
+#include "transfered_event.h"
 
 namespace Model {
-class CreateGameEvent: public Event {
+class CreateGameEvent: public TransferedEvent {
 private:
     std::string party_name;
     std::string map_name;
 
 public:
     CreateGameEvent(const std::string& party_name, const std::string& map_name):
-            Event(EventType::CREATE_GAME), party_name(party_name), map_name(map_name) {}
+            TransferedEvent(EventType::CREATE_GAME), party_name(party_name), map_name(map_name) {}
 
     std::string get_party_name() const;
     std::string get_map_name() const;
+
+    DTO::EventDTO as_dto() override;
 
     ~CreateGameEvent() override = default;
 };

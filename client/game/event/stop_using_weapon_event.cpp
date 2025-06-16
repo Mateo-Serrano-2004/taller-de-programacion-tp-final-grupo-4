@@ -3,4 +3,8 @@
 #include "common/event_type.h"
 
 Model::StopUsingWeaponEvent::StopUsingWeaponEvent()
-: Model::Event(Model::EventType::STOP_USING_WEAPON) {}
+: Model::TransferedEvent(Model::EventType::STOP_USING_WEAPON) {}
+
+DTO::EventDTO Model::StopUsingWeaponEvent::as_dto() {
+    return DTO::DTOCreatorVisitor::visit_stop_using_weapon_event();
+}

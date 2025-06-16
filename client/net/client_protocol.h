@@ -7,7 +7,6 @@
 #include <utility>
 #include <vector>
 
-#include "client/game/dto_handler/event_dto_creator.h"
 #include "common/DTO/event_dto.h"
 #include "common/DTO/game_info_dto.h"
 #include "common/DTO/game_state_dto.h"
@@ -36,7 +35,7 @@ public:
 
     explicit ClientProtocol(Socket& socket): skt(std::move(socket)) {}
 
-    void send_event(const DTO::EventDTOCreator& event_dto_creator);
+    void send_event(const DTO::EventDTO& event_dto);
 
     DTO::GameStateDTO receive_match_state();
     std::list<GameInfoDTO> receive_game_list();

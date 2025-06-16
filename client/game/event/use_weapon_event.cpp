@@ -3,4 +3,8 @@
 #include "common/event_type.h"
 
 Model::UseWeaponEvent::UseWeaponEvent()
-: Model::Event(Model::EventType::USE_WEAPON) {}
+: Model::TransferedEvent(Model::EventType::USE_WEAPON) {}
+
+DTO::EventDTO Model::UseWeaponEvent::as_dto() {
+    return DTO::DTOCreatorVisitor::visit_use_weapon_event();
+}

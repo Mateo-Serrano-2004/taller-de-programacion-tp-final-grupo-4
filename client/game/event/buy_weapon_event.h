@@ -2,11 +2,14 @@
 #define CLIENT_EVENT_BUY_WEAPON_EVENT_H
 
 #include "common/weapon_id.h"
+#include "common/DTO/event_dto.h"
 
-#include "event.h"
+#include "dto_handler/dto_creator_visitor.h"
+
+#include "transfered_event.h"
 
 namespace Model {
-class BuyWeaponEvent: public Event {
+class BuyWeaponEvent: public TransferedEvent {
 private:
     Model::WeaponID weapon_id;
 
@@ -14,6 +17,8 @@ public:
     BuyWeaponEvent(Model::WeaponID weapon_id);
 
     Model::WeaponID get_weapon_id() const;
+
+    DTO::EventDTO as_dto() override;
 
     ~BuyWeaponEvent() override = default;
 };

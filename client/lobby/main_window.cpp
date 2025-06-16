@@ -9,7 +9,6 @@
 #include "common/definitions.h"
 
 #include "client/game/cs2d_app.h"
-#include "client/game/dto_handler/event_dto_creator.h"
 #include "client/game/event/create_game_event.h"
 #include "client/game/event/join_game_event.h"
 #include "client/game/event/request_games_list_event.h"
@@ -19,21 +18,11 @@
 #include "client/exception/closed_app.h"
 
 MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWindow) {
-    musicPlayer = new QMediaPlayer(this);
-    audioOutput = new QAudioOutput(QAudioFormat(), this);
-    musicPlayer->setMedia(QUrl("qrc:/assets/Menu_Theme.mp3"));
-    musicPlayer->setVolume(40);
-    musicPlayer->setPlaylist(new QMediaPlaylist());
-    musicPlayer->playlist()->addMedia(QUrl("qrc:/assets/Menu_Theme.mp3"));
-    musicPlayer->playlist()->setPlaybackMode(QMediaPlaylist::Loop);
-    musicPlayer->play();
     setUpWindow();
 }
 
 MainWindow::~MainWindow() {
     delete ui;
-    delete musicPlayer;
-    delete audioOutput;
 }
 
 void MainWindow::runGame() {
@@ -52,8 +41,7 @@ void MainWindow::runGame() {
 
 void MainWindow::loadGames() {
     auto requestGamesListEvent = make_shared<Model::RequestGamesListEvent>();
-    DTO::EventDTOCreator creator(requestGamesListEvent);
-    protocol->send_event(creator);
+    protocol->send_event(requestGamesListEvent->as_dto());
 
     std::list<GameInfoDTO> games = protocol->receive_game_list();
     joinGameScene->setAvailableGames(games);
@@ -84,8 +72,7 @@ void MainWindow::showWelcomeScene() {
                 std::string username = "user";
                 protocol = make_shared<Net::ClientProtocol>("localhost", "9000");
                 auto usernameEvent = make_shared<Model::UsernameEvent>(username);
-                DTO::EventDTOCreator creator(usernameEvent);
-                protocol->send_event(creator);
+                protocol->send_event(usernameEvent->as_dto());
 
                 showLobbyScene();
             },
@@ -113,15 +100,13 @@ void MainWindow::showGameCreationScene() {
             [this](const QString& gameName, const QString& selectedMap) {
                 auto createGameEvent = std::make_shared<Model::CreateGameEvent>(
                         gameName.toStdString(), selectedMap.toStdString());
-                DTO::EventDTOCreator creator(createGameEvent);
-                protocol->send_event(creator);
+                protocol->send_event(createGameEvent->as_dto());
                 runGame();
             },
             Qt::QueuedConnection);
 
     auto requestMapsEvent = std::make_shared<Model::RequestMapsEvent>();
-    DTO::EventDTOCreator creator(requestMapsEvent);
-    protocol->send_event(creator);
+    protocol->send_event(requestMapsEvent->as_dto());
 
     std::list<std::string> maps = protocol->receive_map_list();
     QStringList qMaps;
@@ -143,8 +128,7 @@ void MainWindow::showJoinGameScene() {
                 int partida_id = joinGameScene->selectedGameId();
                 if (partida_id != -1) {
                     auto joinGameEvent = make_shared<Model::JoinGameEvent>(partida_id);
-                    DTO::EventDTOCreator creator(joinGameEvent);
-                    protocol->send_event(creator);
+                    protocol->send_event(joinGameEvent->as_dto());
                     runGame();
                 }
             },

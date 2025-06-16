@@ -21,6 +21,7 @@
 
 #include "event/switch_context_event.h"
 #include "event/quit_event.h"
+#include "event/transfered_event.h"
 
 Controller::GameController::GameController(
 	Shared<SDL2pp::Window> window,
@@ -42,7 +43,8 @@ void Controller::GameController::process_event(Shared<Model::Event> event) {
 		context_manager->set_current_context("end-of-game");
 	} else {
 		try {
-			sender_queue.push(event);
+			auto transfered_event = std::static_pointer_cast<Model::TransferedEvent>(event);
+			sender_queue.push(transfered_event);
 		} catch (const ClosedQueue&) {}
 	}
 

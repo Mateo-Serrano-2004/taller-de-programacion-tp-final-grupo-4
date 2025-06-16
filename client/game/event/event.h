@@ -1,5 +1,5 @@
-#ifndef COMMON_EVENT_EVENT_H
-#define COMMON_EVENT_EVENT_H
+#ifndef CLIENT_GAME_EVENT_EVENT_H
+#define CLIENT_GAME_EVENT_EVENT_H
 
 #include <cstdint>
 
@@ -8,15 +8,15 @@
 namespace Model {
 class Event {
 private:
-    const EventType type;
+    EventType type;
 
 public:
-    explicit Event(const EventType type): type(type) {}
+    explicit Event(EventType type);
 
-    EventType get_type() const { return type; }
+    EventType get_type() const;
 
     virtual ~Event() = default;
 };
 }  // namespace Model
 
-#endif  // COMMON_EVENT_EVENT_H
+#endif  // CLIENT_GAME_EVENT_EVENT_H

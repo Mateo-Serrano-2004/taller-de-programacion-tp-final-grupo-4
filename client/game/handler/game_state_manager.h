@@ -34,13 +34,10 @@ class GameStateManager {
 
 private:
     std::mutex mutex;
-    std::list<Shared<View::RenderedPlayer>> pending_weapon_usages;
     Shared<Model::GameState> game_state;
     View::Camera camera;
     Weak<GameController> controller;
     short_id_t reference_player_id;
-
-    void add_player_shooting(Shared<View::RenderedPlayer> player);
 
 public:
     GameStateManager(
@@ -53,9 +50,6 @@ public:
 
     void call_function_on_players(
         const std::function<void(std::map<short_id_t, Shared<View::RenderedPlayer>>&)>& func
-    );
-    void map_function_on_pending_weapon_usages(
-        const std::function<void(Shared<View::RenderedPlayer>&)>& func
     );
 
     uint16_t get_time_left();

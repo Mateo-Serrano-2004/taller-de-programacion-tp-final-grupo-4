@@ -1,12 +1,19 @@
 #ifndef CLIENT_EVENT_QUIT_EVENT_H
 #define CLIENT_EVENT_QUIT_EVENT_H
 
-#include "event.h"
+#include "common/DTO/event_dto.h"
+
+#include "dto_handler/dto_creator_visitor.h"
+
+#include "transfered_event.h"
 
 namespace Model {
-class QuitEvent: public Event {
+class QuitEvent: public TransferedEvent {
 public:
-    QuitEvent(): Event(EventType::QUIT) {}
+    QuitEvent(): TransferedEvent(EventType::QUIT) {}
+
+    DTO::EventDTO as_dto() override;
+
     ~QuitEvent() override = default;
 };
 };  // namespace Model
