@@ -17,10 +17,6 @@
 #include "model/game_state.h"
 #include "model/rendered_player.h"
 
-void Controller::GameStateManager::add_player_shooting(Shared<View::RenderedPlayer> player) {
-    pending_weapon_usages.push_back(player);
-}
-
 Controller::GameStateManager::GameStateManager(
     Weak<Controller::GameController> controller,
     short_id_t reference_player_id
@@ -46,15 +42,6 @@ void Controller::GameStateManager::call_function_on_players(
     func(game_state->get_players());
 }
 
-void Controller::GameStateManager::map_function_on_pending_weapon_usages(
-        const std::function<void(Shared<View::RenderedPlayer>&)>& func) {
-    std::lock_guard<std::mutex> lock(mutex);
-    for (auto& player: pending_weapon_usages) {
-        func(player);
-    }
-    pending_weapon_usages.clear();
-}
-
 uint16_t Controller::GameStateManager::get_time_left() {
     std::lock_guard<std::mutex> lock(mutex);
     return game_state->get_time_left();
@@ -74,7 +61,6 @@ void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
             camera
         );
         new_game_state->register_player(player);
-        if (player->is_shooting()) add_player_shooting(player);
     }
 
     new_game_state->set_time_left(game_state_dto.round.time_left);

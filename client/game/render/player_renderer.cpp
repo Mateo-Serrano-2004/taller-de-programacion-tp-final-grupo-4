@@ -6,7 +6,6 @@
 #include <SDL2pp/SDL2pp.hh>
 #include <SDL2pp/Window.hh>
 #include <SDL2pp/Renderer.hh>
-#include <SDL2pp/Mixer.hh>
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Rect.hh>
 #include <SDL2pp/Color.hh>
@@ -60,8 +59,6 @@ void View::PlayerRenderer::render_fov(angle_t angle, const Camera& camera) {
 View::PlayerRenderer::PlayerRenderer(
     Weak<Controller::GameController> controller
 ): View::Renderer(controller),
-   mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096),
-   chunk("assets/sfx/weapons/fiveseven.wav"),
    background(controller) {
     auto controller_locked = controller.lock();
     game_state_manager = controller_locked->get_game_state_manager();
@@ -93,10 +90,4 @@ void View::PlayerRenderer::render() {
         }
     );
     render_fov(angle, camera);
-
-    game_state_manager->map_function_on_pending_weapon_usages(
-        [this, &camera] (Shared<View::RenderedPlayer>&) {
-            (void) mixer.PlayChannel(-1, chunk);
-        }
-    );
 };

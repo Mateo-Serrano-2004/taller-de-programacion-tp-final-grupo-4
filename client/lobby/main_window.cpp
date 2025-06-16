@@ -19,21 +19,11 @@
 #include "client/exception/closed_app.h"
 
 MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWindow) {
-    musicPlayer = new QMediaPlayer(this);
-    audioOutput = new QAudioOutput(QAudioFormat(), this);
-    musicPlayer->setMedia(QUrl("qrc:/assets/Menu_Theme.mp3"));
-    musicPlayer->setVolume(40);
-    musicPlayer->setPlaylist(new QMediaPlaylist());
-    musicPlayer->playlist()->addMedia(QUrl("qrc:/assets/Menu_Theme.mp3"));
-    musicPlayer->playlist()->setPlaybackMode(QMediaPlaylist::Loop);
-    musicPlayer->play();
     setUpWindow();
 }
 
 MainWindow::~MainWindow() {
     delete ui;
-    delete musicPlayer;
-    delete audioOutput;
 }
 
 void MainWindow::runGame() {
