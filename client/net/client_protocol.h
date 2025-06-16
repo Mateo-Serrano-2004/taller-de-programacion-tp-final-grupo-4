@@ -40,7 +40,9 @@ public:
     DTO::GameStateDTO receive_match_state();
     std::list<GameInfoDTO> receive_game_list();
     std::list<std::string> receive_map_list();
+    std::vector<std::vector<std::string>> receive_map();
     uint8_t receive_player_id();
+    uint8_t receive_team();
 
     ClientProtocol(ClientProtocol&&) = default;
     ClientProtocol& operator=(ClientProtocol&&) = default;

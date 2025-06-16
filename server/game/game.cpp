@@ -1,82 +1,91 @@
 #include "game.h"
 
+#include <iostream>
 #include <mutex>
 #include <exception>
+#include <optional>
+#include <functional>
 
 #include "common/model/vector_2d.h"
 #include "common/periodic_clock.h"
+
 #include "server/events/overloaded.h"
+#include "server/exception/invalid_game_exception.h"
+#include "server/exception/invalid_player_exception.h"
+
+Maybe<Ref<FullPlayer>> Game::find_player_by_id(short_id_t player_id) {
+    auto it = players.find(player_id);
+    if (it == players.end()) return std::nullopt;
+    return it->second;
+}
 
 void Game::handle_use_weapon(const uint8_t& player_id) {
     if (this->state != GameState::Playing) return;
-    auto it = players.find(player_id);
-    if (it == players.end()) return;
-    gamelogic.start_using_weapon(it->second, round);
+    auto player = find_player_by_id(player_id);
+    if (!player.has_value()) return;
+    gamelogic.start_using_weapon(player->get(), round);
 }
 
 void Game::handle_stop_using_weapon(const uint8_t& player_id) {
-    auto it = players.find(player_id);
-    if (it == players.end()) return;
-    gamelogic.stop_using_weapon(it->second);
+    auto player = find_player_by_id(player_id);
+    if (!player.has_value()) return;
+    gamelogic.stop_using_weapon(player->get());
 }
 
 void Game::handle_switch_weapon(const uint8_t& player_id, const SwitchWeaponEvent& event) {
-    auto it = players.find(player_id);
-    if (it != players.end()) {
-        it->second.equip_weapon_by_type(event.get_slot_id());
-    }
+    auto player = find_player_by_id(player_id);
+    if (!player.has_value()) return;
+    player->get().equip_weapon_by_type(event.get_slot_id());
 }
 
 void Game::handle_buy_weapon(const uint8_t& player_id, const BuyEvent& event) {
     if (state != GameState::Playing) return;
 
-    auto it = players.find(player_id);
-    if (it == players.end()) return;
-    gamelogic.buy_weapon(it->second, event.get_weapon_id(), round);
+    auto player = find_player_by_id(player_id);
+    if (!player.has_value()) return;
+    gamelogic.buy_weapon(player->get(), event.get_weapon_id(), round);
 }
 
 void Game::handle_leave_game(const uint8_t& player_id) {
     // TODO: Check game/round state
-    auto it = players.find(player_id);
-    if (it != players.end()) {
-        round.notify_on_one_player_less(it->second.get_team());
-    }
-    players.erase(it);
+    auto player = find_player_by_id(player_id);
+    if (!player.has_value()) return;
+    auto& actual_player = player->get();
+    round.notify_on_one_player_less(actual_player.get_team());
+    players.erase(actual_player.get_id());
     auto queue_it = client_queues.find(player_id);
     client_queues.erase(queue_it);
 }
 
 void Game::handle_movement(const uint8_t& player_id, const MovementEvent& event) {
-    auto it = players.find(player_id);
-    if (it != players.end()) {
-        it->second.update_movement_direction_by_merge(event.get_direction());
-    }
+    auto player = find_player_by_id(player_id);
+    if (!player.has_value()) return;
+    player->get().update_movement_direction_by_merge(event.get_direction());
 }
 
 void Game::handle_stop_movement(const uint8_t& player_id, const StopMovementEvent& event) {
-    auto it = players.find(player_id);
-    if (it != players.end()) {
-        if (event.is_movement_horizontal()) {
-            it->second.stop_horizontal_movement();
-        } else {
-            it->second.stop_vertical_movement();
-        }
+    auto player = find_player_by_id(player_id);
+    if (!player.has_value()) return;
+    if (event.is_movement_horizontal()) {
+        player->get().stop_horizontal_movement();
+    } else {
+        player->get().stop_vertical_movement();
     }
 }
 
 void Game::handle_rotation(const uint8_t& player_id, const RotationEvent& event) {
-    auto it = players.find(player_id);
-    if (it != players.end()) {
-        it->second.set_angle(event.get_angle_in_degrees());
-    }
+    auto player = find_player_by_id(player_id);
+    if (!player.has_value()) return;
+    player->get().set_angle(event.get_angle_in_degrees());
 }
 
 // TODO: Update GameManager so this is not needed
 void Game::handle_pick_role(const uint8_t player_id, const PickRoleEvent& event) {
-    auto it = players.find(player_id);
-    if (it != players.end()) {
-        it->second.set_role_id(event.get_role_id());
+    auto player = find_player_by_id(player_id);
+    if (!player.has_value()) {
+        std::cout << "Could not find player\n";
     }
+    player->get().set_role_id(event.get_role_id());
 }
 
 void Game::handle(uint8_t player_id, const GameEventVariant& event) {
@@ -90,8 +99,8 @@ void Game::handle(uint8_t player_id, const GameEventVariant& event) {
                        [player_id, this](const SwitchWeaponEvent& e) { handle_switch_weapon(player_id, e); },
                        [player_id, this](const BuyEvent& e) { handle_buy_weapon(player_id, e); },
                        [this](const DropWeaponEvent&) {},
-                       [player_id, this](const UseWeaponEvent&) {handle_use_weapon(player_id); }, 
-                       [player_id, this](const StopUsingWeaponEvent&) {handle_stop_using_weapon(player_id); }, 
+                       [player_id, this](const UseWeaponEvent&) { handle_use_weapon(player_id); }, 
+                       [player_id, this](const StopUsingWeaponEvent&) { handle_stop_using_weapon(player_id); }, 
                        [this](const DefuseBombEvent&) {},
                        [this](const ReloadWeaponEvent&) {}, [this](const BuyAmmoEvent&) {}},
             event);
@@ -150,7 +159,7 @@ void Game::process_frames(uint16_t frames_to_process) {
         clear_game_queue();
         update_players_that_won();
 
-        if (round.get_count_of_rounds() == MAX_ROUNDS) {
+        if (round.get_count_of_rounds() == max_rounds) {
             state = GameState::Finished;
             is_not_finished = false;
             return;
@@ -163,7 +172,9 @@ void Game::process_frames(uint16_t frames_to_process) {
 void Game::broadcast_game_state() {
     std::vector<DTO::PlayerDTO> player_dtos;
     for (const auto& [id, player] : players) {
-        player_dtos.push_back(player.to_dto());
+        if (player.get_role_id() != Model::RoleID::NO_ROLE) {
+            player_dtos.push_back(player.to_dto());
+        }
     }
 
     DTO::RoundDTO round_dto = round.to_dto(GAME_FPS);
@@ -186,9 +197,11 @@ void Game::broadcast_game_state() {
     );
 
     for (auto& [id, queue]: client_queues) {
-        try {
-            queue->push(game_snapshot);
-        } catch (const ClosedQueue&) {}
+        if (players.at(id).get_role_id() != Model::RoleID::NO_ROLE) {
+            try {
+                queue->push(game_snapshot);
+            } catch (const ClosedQueue&) {}
+        }
     }
 }
 
@@ -251,25 +264,23 @@ bool Game::is_dead() {
 }
 
 // FALTA: ESTO ESTA ARRANCANDO LA RONDA CON 1 SOLO PLAYER, QUE EVENTUALMENTE GANARÍA TODO Y TERMINA
-uint8_t Game::add_player(
+void Game::add_player(
     const std::string& username,
     ClientQueue& client_queue,
+    short_id_t player_id,
     Model::TeamID team_id,
     Model::RoleID role_id
 ) {
     std::lock_guard<std::mutex> lock(mutex);
 
-    if (state != GameState::WaitingStart) {
-        return -1;
-    }
+    if (state != GameState::WaitingStart || players.size() == max_players) {
+        throw InvalidGameException("Game no longer accepts players");
+    } 
 
-    const uint8_t new_id = next_player_id++;
-    players.emplace(new_id, FullPlayer(new_id, username, team_id, role_id));
-    client_queues[new_id] = &client_queue;
+    players.emplace(player_id, FullPlayer(player_id, username, team_id, role_id));
+    client_queues[player_id] = &client_queue;
 
     round.notify_player_joined(team_id);
-
-    return new_id;
 }
 
 void Game::kill() {

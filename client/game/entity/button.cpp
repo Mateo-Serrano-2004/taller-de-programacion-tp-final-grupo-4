@@ -37,6 +37,10 @@ void View::Button::set_command(Unique<Command::BaseCommand> new_command) {
     if (!command->is_executable()) command->set_controller(controller);
 }
 
+void View::Button::clear_command() {
+    command.reset();
+}
+
 bool View::Button::trigger(Shared<SDL_Event> event) {
     bool triggered_event = check_click(event);
     if (triggered_event && command) {

@@ -1,6 +1,8 @@
 #ifndef CLIENT_GAME_CONTROLLER_GAME_CONTROLLER_H
 #define CLIENT_GAME_CONTROLLER_GAME_CONTROLLER_H
 
+#include <iostream>
+
 #include "common/definitions.h"
 
 #include "base_controller.h"
@@ -51,12 +53,14 @@ public:
     );
 
     Shared<GameStateManager> get_game_state_manager();
-    void build_game_state_manager(Weak<GameController> self);
+    void build_game_state_manager(Weak<GameController> self, short_id_t player_id);
 
     GameController(GameController&&) = default;
     GameController& operator=(GameController&&) = default;
 
-    ~GameController() override = default;
+    ~GameController() override {
+        std::cout << "Destroying controller\n";
+    }
 };
 };
 

@@ -184,3 +184,24 @@ void ServerProtocol::send_player_id(uint8_t player_id) {
     std::lock_guard<std::mutex> lock(mutex);
     peer.sendall(&player_id, sizeof(player_id));
 }
+
+void ServerProtocol::send_team(uint8_t team_id) {
+    std::lock_guard<std::mutex> lock(mutex);
+    peer.sendall(&team_id, sizeof(team_id));
+}
+
+void ServerProtocol::send_map(const std::vector<std::vector<std::string>>& map) {
+    uint8_t map_size = map.size();
+    peer.sendall(&map_size, sizeof(map_size));
+
+    uint8_t row_size = static_cast<uint8_t>(map[0].size());
+    peer.sendall(&row_size, sizeof(row_size));
+
+    for (const auto& row: map) {
+        for (const auto& tile: row) {
+            uint8_t tile_size = static_cast<uint8_t>(tile.size());
+            peer.sendall(&tile_size, sizeof(tile_size));
+            peer.sendall(tile.c_str(), tile_size);
+        }
+    }
+}

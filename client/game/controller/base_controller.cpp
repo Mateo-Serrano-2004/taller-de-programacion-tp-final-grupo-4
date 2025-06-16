@@ -37,10 +37,6 @@ Shared<Model::AssetManager> Controller::BaseController::get_asset_manager() {
     return asset_manager;
 }
 
-Weak<Context::ContextManager> Controller::BaseController::get_context_manager() {
-    return Weak<Context::ContextManager>(context_manager);
-}
-
 void Controller::BaseController::handle_events() {
     Shared<Model::Event> event;
     while (processor_event_queue.try_pop(event)) {

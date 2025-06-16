@@ -42,7 +42,6 @@ public:
     Shared<SDL2pp::Window> get_window();
     Shared<SDL2pp::Renderer> get_renderer();
     Shared<Model::AssetManager> get_asset_manager();
-    Weak<Context::ContextManager> get_context_manager();
 
     void handle_events();
     void push_event(Shared<Model::Event> event);

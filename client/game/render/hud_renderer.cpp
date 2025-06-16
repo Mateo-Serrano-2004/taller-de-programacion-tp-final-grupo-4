@@ -157,9 +157,11 @@ View::HUDRenderer::HUDRenderer(Weak<Controller::GameController> controller)
 }
 
 void View::HUDRenderer::render() {
-    auto player = game_state_manager->get_reference_player();
     render_time();
-    render_money(player);
-    render_life_points(player);
+    auto player = game_state_manager->get_reference_player();
+    if (player) {
+        render_money(player);
+        render_life_points(player);
+    }
     viewport.render();
 }

@@ -1,6 +1,8 @@
 #include "application.h"
 
 #include <SDL2/SDL.h>
+#include <exception>
+#include <iostream>
 
 #include "common/periodic_clock.h"
 
@@ -18,7 +20,7 @@ void App::Application::launch() {
             (void) clock.sleep_and_get_frames();
             context_manager->update_current_context();
             controller->handle_events();
-        } catch (const App::ClosedWindowException&) {
+        } catch (const App::ClosedWindowException& e) {
             keep_running = false;
         }
     }

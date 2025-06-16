@@ -74,6 +74,7 @@ void View::PlayerRenderer::render() {
 
     game_state_manager->call_function_on_players(
         [this, &angle] (std::map<short_id_t, Shared<View::RenderedPlayer>>& map) {
+            if (map.empty()) return;
             Shared<View::RenderedPlayer> reference_player = nullptr;
             short_id_t reference_player_id = game_state_manager->get_reference_player_id();
 

@@ -37,4 +37,6 @@ void Controller::Sender::run() {
 Controller::Sender::~Sender() {
     keep_running = false;
     join();
+
+    std::cout << "SENDER DESTROYED\n";
 }

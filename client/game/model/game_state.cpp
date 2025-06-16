@@ -12,7 +12,9 @@ std::map<short_id_t, Shared<View::RenderedPlayer>>& Model::GameState::get_player
 }
 
 Shared<View::RenderedPlayer> Model::GameState::get_player_by_id(short_id_t id) {
-    return players.at(id);
+    auto it = players.find(id);
+    if (it == players.end()) return nullptr;
+    return it->second;
 }
 
 void Model::GameState::register_player(Shared<View::RenderedPlayer> player) {
