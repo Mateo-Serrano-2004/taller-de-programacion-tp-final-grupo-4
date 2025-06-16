@@ -2,9 +2,6 @@
 #define MAIN_WINDOW_H
 
 #include <QMainWindow>
-#include <QMediaPlayer>
-#include <QMediaPlaylist>
-#include <QAudioOutput>
 
 #include "common/definitions.h"
 
@@ -39,8 +36,6 @@ private slots:
 
 private:
     Ui::MainWindow* ui;
-    QMediaPlayer* musicPlayer;
-    QAudioOutput* audioOutput;
     WelcomeScene* welcomeScene = nullptr;
     LobbyScene* lobbyScene = nullptr;
     GameCreationScene* gameCreationScene = nullptr;
