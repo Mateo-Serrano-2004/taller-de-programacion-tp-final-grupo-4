@@ -145,8 +145,6 @@ View::HUDRenderer::HUDRenderer(Weak<Controller::GameController> controller)
     stats.add_child(&health);
     stats.add_child(&money);
 
-    std::cout << (int) (viewport.get_height()) << std::endl;
-
     time.set_height(37);
     time.set_horizontal_alignment(0);
 
