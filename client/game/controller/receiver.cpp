@@ -46,4 +46,6 @@ void Controller::Receiver::run() {
 Controller::Receiver::~Receiver() {
     keep_running = false;
     join();
+
+    std::cout << "RECEIVER DESTROYED\n";
 }

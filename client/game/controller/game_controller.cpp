@@ -49,6 +49,8 @@ void Controller::GameController::process_event(Shared<Model::Event> event) {
 	if (event_type == Model::EventType::QUIT) {
 		std::cout << "Received a QUIT event\n";
 		receiver.reset();
+		sender_queue.close();
+		sender.reset();
 		throw ClosedAppException("Closed app"); 
 	}
 
@@ -61,7 +63,10 @@ Shared<Controller::GameStateManager> Controller::GameController::get_game_state_
     return game_state_manager;
 }
 
-void Controller::GameController::build_game_state_manager(Weak<Controller::GameController> self) {
-	game_state_manager = make_shared<Controller::GameStateManager>(self, protocol->receive_player_id());
+void Controller::GameController::build_game_state_manager(
+	Weak<Controller::GameController> self,
+	short_id_t player_id
+) {
+	game_state_manager = make_shared<Controller::GameStateManager>(self, player_id);
 	receiver = make_unique<Controller::Receiver>(self, protocol);
 }

@@ -184,3 +184,8 @@ void ServerProtocol::send_player_id(uint8_t player_id) {
     std::lock_guard<std::mutex> lock(mutex);
     peer.sendall(&player_id, sizeof(player_id));
 }
+
+void ServerProtocol::send_team(uint8_t team_id) {
+    std::lock_guard<std::mutex> lock(mutex);
+    peer.sendall(&team_id, sizeof(team_id));
+}

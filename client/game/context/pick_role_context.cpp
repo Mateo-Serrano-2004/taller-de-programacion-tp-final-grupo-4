@@ -8,6 +8,7 @@
 #include <SDL2pp/Renderer.hh>
 
 #include "common/event_type.h"
+#include "common/team.h"
 
 #include "controller/game_controller.h"
 #include "controller/base_controller.h"
@@ -27,20 +28,42 @@ void Context::PickRoleContext::trigger_buttons(Shared<SDL_Event> event) {
     else if (pick_role_4_button.trigger(event)) ;
 }
 
-void Context::PickRoleContext::build_button(View::Button& button, Model::TextureID texture_id) {
+void Context::PickRoleContext::build_button(View::Button& button) {
     background.add_child(&button);
     button.set_draw_texture(true);
-    button.set_texture(texture_id);
     button.set_texture_slice(SDL2pp::Rect(0, 0, 32, 32));
     button.set_size(SDL2pp::Point(96, 96));
+}
+
+void Context::PickRoleContext::set_role_for_button(
+    View::Button& button,
+    Model::TextureID role_texture_id
+) {
+    button.clear_command();
+
+    button.set_texture(role_texture_id);
 
     auto composite_command = make_unique<Command::CompositeCommand>(controller);
     composite_command->add_command(make_unique<Command::PickRoleCommand>(
-        Model::EnumTranslator::get_role_from_texture(texture_id)
+        Model::EnumTranslator::get_role_from_texture(role_texture_id)
     ));
     composite_command->add_command(make_unique<Command::SwitchContextCommand>("in-game"));
 
     button.set_command(std::move(composite_command));
+}
+
+void Context::PickRoleContext::set_buttons_for_ct() {
+    set_role_for_button(pick_role_1_button, Model::TextureID::SPRITE_CT1);
+    set_role_for_button(pick_role_2_button, Model::TextureID::SPRITE_CT2);
+    set_role_for_button(pick_role_3_button, Model::TextureID::SPRITE_CT3);
+    set_role_for_button(pick_role_4_button, Model::TextureID::SPRITE_CT4);
+}
+
+void Context::PickRoleContext::set_buttons_for_tt() {
+    set_role_for_button(pick_role_1_button, Model::TextureID::SPRITE_T1);
+    set_role_for_button(pick_role_2_button, Model::TextureID::SPRITE_T2);
+    set_role_for_button(pick_role_3_button, Model::TextureID::SPRITE_T3);
+    set_role_for_button(pick_role_4_button, Model::TextureID::SPRITE_T4);
 }
 
 void Context::PickRoleContext::render() {
@@ -53,7 +76,10 @@ void Context::PickRoleContext::dispatch_events() {
     }
 }
 
-Context::PickRoleContext::PickRoleContext(Weak<Controller::GameController> controller)
+Context::PickRoleContext::PickRoleContext(
+    Weak<Controller::GameController> controller,
+    short_id_t team_id
+)
 : Context::BaseContext("pick-role", controller),
   strategy(controller, this),
   vertical_pane(controller, 10),
@@ -73,8 +99,18 @@ Context::PickRoleContext::PickRoleContext(Weak<Controller::GameController> contr
 
     background.set_size(SDL2pp::Point(300, 200));
 
-    build_button(pick_role_1_button, Model::TextureID::SPRITE_CT1);
-    build_button(pick_role_2_button, Model::TextureID::SPRITE_CT2);
-    build_button(pick_role_3_button, Model::TextureID::SPRITE_CT3);
-    build_button(pick_role_4_button, Model::TextureID::SPRITE_CT4);
+    build_button(pick_role_1_button);
+    build_button(pick_role_2_button);
+    build_button(pick_role_3_button);
+    build_button(pick_role_4_button);
+
+    update_team(team_id);
+}
+
+void Context::PickRoleContext::update_team(short_id_t new_team) {
+    if (new_team) {
+        set_buttons_for_tt();
+    } else {
+        set_buttons_for_ct();
+    }
 }

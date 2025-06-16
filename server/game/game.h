@@ -11,13 +11,16 @@
 #include <utility>
 #include <vector>
 
-#include "common/DTO/game_info_dto.h"
-#include "common/DTO/game_state_dto.h"
+#include "common/definitions.h"
 #include "common/queue.h"
 #include "common/thread.h"
 #include "common/game_state.h"
-#include "model/full_player.h"
+#include "common/DTO/game_state_dto.h"
+#include "common/DTO/game_info_dto.h"
+
 #include "server/events/events.h"
+
+#include "model/full_player.h"
 
 #include "movement_system.h" 
 #include "round.h"
@@ -32,7 +35,7 @@ private:
 
     // Pre-initialized attributes
     const int GAME_FPS = 60;
-    const uint8_t MAX_ROUNDS = 2;
+    const uint8_t max_rounds = 2;
     const uint8_t max_players = 10;
     const uint8_t min_players_to_start = 2;
     GameState state = GameState::WaitingStart;
@@ -40,12 +43,11 @@ private:
     uint8_t ct_rounds_won = 0;
     uint8_t tt_rounds_won = 0;
     uint8_t rounds_played = 0;
-    uint8_t next_player_id = 0;
 
     // Default constructible attributes
     GameQueue game_queue;
-    std::map<uint8_t, FullPlayer> players;
-    std::map<uint8_t, ClientQueue*> client_queues;
+    std::map<short_id_t, FullPlayer> players;
+    std::map<short_id_t, ClientQueue*> client_queues;
     std::vector<uint8_t> dropped_weapons;
     MovementSystem movement_system;
     GameLogic gamelogic;
@@ -54,6 +56,8 @@ private:
     // Non-default constructible attributes
     std::string party_name;
     std::string map_name;
+
+    Maybe<Ref<FullPlayer>> find_player_by_id(short_id_t player_id);
 
     void handle_leave_game(const uint8_t& player_id);
     void handle_use_weapon(const uint8_t& player_id);
@@ -94,7 +98,13 @@ public:
 
     bool is_dead();
 
-    uint8_t add_player(const std::string& username, ClientQueue& client_queue, Model::TeamID team_id, Model::RoleID role_id);
+    void add_player(
+        const std::string& username,
+        ClientQueue& client_queue,
+        short_id_t player_id,
+        Model::TeamID team_id,
+        Model::RoleID role_id
+    );
 
     void kill();
     void run() override;

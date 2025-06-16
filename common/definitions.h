@@ -13,6 +13,7 @@
 #include <cstdint>
 #include <memory>
 #include <functional>
+#include <optional>
 #include <tuple>
 #include <string>
 
@@ -46,5 +47,12 @@ using long_id_t = uint16_t;
 // Colors
 using color_tuple = std::tuple<uint8_t, uint8_t, uint8_t, uint8_t>;
 using font_tuple = std::tuple<std::string, uint8_t>;
+
+// Utils
+template <typename T>
+using Maybe = std::optional<T>;
+
+template <typename T>
+using Ref = std::reference_wrapper<T>;
 
 #endif  // COMMON_DEFINITIONS_H

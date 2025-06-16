@@ -5,7 +5,11 @@
 #include <variant>
 #include <exception>
 
+#include "common/team.h"
+#include "common/DTO/game_state_dto.h"
+
 #include "server/events/overloaded.h"
+#include "server/exception/invalid_game_exception.h"
 
 void ClientHandler::handle_map_request() {
     protocol.send_all_maps_names(game_manager.get_name_maps());
@@ -18,13 +22,21 @@ void ClientHandler::handle_create_game(const CreateGameEvent& event) {
     player_id = 0;
     game_queue = game_manager.get_game_queue(game_id);
     protocol.send_player_id(player_id);
+    protocol.send_team((uint8_t) Model::TeamID::CT);
 }
 
 void ClientHandler::handle_join_game(const JoinGameEvent& event) {
-    sender = std::make_unique<ClientHandlerSender>(protocol);
-    player_id = game_manager.join_game(event.get_game_id(), username, sender->get_queue());
-    protocol.send_player_id(player_id);
-    game_queue = game_manager.get_game_queue(event.get_game_id());
+    try {
+        sender = std::make_unique<ClientHandlerSender>(protocol);
+        player_id = game_manager.join_game(event.get_game_id(), username, sender->get_queue());
+        game_queue = game_manager.get_game_queue(event.get_game_id());
+        protocol.send_player_id(player_id);
+        protocol.send_team(player_id % 2);
+    } catch (const InvalidGameException& e) {
+        std::cout << "An exception happend\n";
+        protocol.send_game_state(DTO::GameStateDTO());
+        close();
+    }
 }
 
 void ClientHandler::handle_username(const UsernameEvent& event) { username = event.get_username(); }

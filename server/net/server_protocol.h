@@ -31,6 +31,7 @@ public:
 
     EventVariant receive_event();
     void send_player_id(uint8_t player_id);
+    void send_team(uint8_t team_id);
     void send_game_state(const DTO::GameStateDTO& game_state);
     void send_all_maps_names(const std::vector<std::string>& maps);
     void send_games(const std::vector<GameInfoDTO>& games);

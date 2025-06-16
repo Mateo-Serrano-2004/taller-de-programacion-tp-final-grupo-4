@@ -8,11 +8,12 @@
 #include <utility>
 #include <vector>
 
+#include "common/definitions.h"
 #include "common/DTO/game_info_dto.h"
 #include "common/DTO/game_state_dto.h"
 #include "common/queue.h"
+
 #include "server/events/events.h"
-#include "common/definitions.h"
 
 #include "game.h"
 
@@ -22,7 +23,6 @@ class GameManager {
 private:
     std::mutex mtx;
     GameMap games;
-    uint8_t game_counter = 0;
 
     void reap_games();
     void clear_games();
@@ -39,6 +39,7 @@ public:
                       Queue<DTO::GameStateDTO>& client_queue);
 
     GameQueue* get_game_queue(const uint8_t& game_id);
+    uint8_t get_number_of_games();
     std::vector<GameInfoDTO> get_games();
     std::vector<std::string> get_name_maps();
     std::string get_game_map(const uint8_t& game_id);

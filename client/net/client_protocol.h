@@ -42,6 +42,7 @@ public:
     std::list<GameInfoDTO> receive_game_list();
     std::list<std::string> receive_map_list();
     uint8_t receive_player_id();
+    uint8_t receive_team();
 
     ClientProtocol(ClientProtocol&&) = default;
     ClientProtocol& operator=(ClientProtocol&&) = default;

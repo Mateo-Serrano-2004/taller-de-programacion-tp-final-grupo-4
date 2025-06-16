@@ -29,6 +29,7 @@ public:
     bool check_click(Shared<SDL_Event> event) const;
 
     void set_command(Unique<Command::BaseCommand> new_command);
+    void clear_command();
 
     bool trigger(Shared<SDL_Event> event);
 

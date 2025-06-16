@@ -25,6 +25,7 @@ Controller::GameStateManager::GameStateManager(
     Weak<Controller::GameController> controller,
     short_id_t reference_player_id
 ): controller(controller), reference_player_id(reference_player_id) {
+    game_state = make_shared<Model::GameState>();
     SDL2pp::Point viewport_size = controller.lock()->get_renderer()->GetLogicalSize();
     camera.set_viewport_size(viewport_size.GetX(), viewport_size.GetY());
 }

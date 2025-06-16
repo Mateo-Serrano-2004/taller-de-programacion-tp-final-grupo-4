@@ -142,3 +142,10 @@ uint8_t Net::ClientProtocol::receive_player_id() {
 
     return player_id;
 }
+
+uint8_t Net::ClientProtocol::receive_team() {
+    uint8_t team;
+    skt.recvall(&team, sizeof(team));
+
+    return team;
+}

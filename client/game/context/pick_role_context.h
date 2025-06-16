@@ -40,13 +40,22 @@ protected:
     View::Button pick_role_3_button;
     View::Button pick_role_4_button;
 
-    void build_button(View::Button& button, Model::TextureID texture_id);
+    void build_button(View::Button& button);
+    void set_role_for_button(View::Button& button, Model::TextureID role_texture_id);
+    void set_buttons_for_ct();
+    void set_buttons_for_tt();
 
     void render() override;
     void dispatch_events() override;
 
 public:
-    PickRoleContext(Weak<Controller::GameController> controller);
+    PickRoleContext(
+        Weak<Controller::GameController> controller,
+        short_id_t team_id
+    );
+
+    void update_team(short_id_t new_team);
+
     ~PickRoleContext() override = default;
 };
 };
