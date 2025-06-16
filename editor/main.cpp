@@ -1,3 +1,9 @@
-#include "common/foo.h"
+#include <QApplication>
+#include "menu/main_window.h"
 
-int main() { return foo(4); }
+int main(int argc, char* argv[]) {
+    QApplication app(argc, argv);
+    MainWindow w;
+    w.show();
+    return app.exec();
+}

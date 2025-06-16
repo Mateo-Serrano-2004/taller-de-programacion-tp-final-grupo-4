@@ -9,6 +9,10 @@
 #define ERROR 1
 #endif  // ERROR
 
+#ifndef TILES_PATH  
+#define TILES_PATH "assets/gfx/tiles/"
+#endif  // TILES_PATH
+
 #include <chrono>
 #include <cstdint>
 #include <memory>
