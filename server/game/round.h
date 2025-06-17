@@ -6,6 +6,8 @@
 #include "common/team.h"
 #include "common/round_state.h"
 #include "common/DTO/round_dto.h"
+#include "common/model/vector_2d.h"
+
 
 class Round {
 private:
@@ -16,17 +18,24 @@ private:
     int number_of_ct_alive;
     int number_of_tt_alive;
 
+    bool bomb_planted;
+    bool bomb_defused;
+    Physics::Vector2D bomb_position;
+
     // X seconds = N frames / M FPS
     // For 60FPS, X seconds = N frames / 60FPS
     int ticks_for_warmup_phase;
     int ticks_for_buying_phase;
     int ticks_for_playing_phase;
+    int bomb_total_ticks;
 
     int active_ticks_remaining;
 
     void update_if_finished_warmup();
     void update_if_finished_buying();
     void update_if_finished_playing();
+
+    void reset();
 
 public:
     // Builds a base round in warmup state
@@ -39,6 +48,7 @@ public:
     bool is_buying() const;
     bool is_active() const;
     bool ended() const;
+    bool bomb_is_planted() const;
     uint16_t get_ticks_remaining() const;
 
     void set_ticks_for_warmup_phase(int ticks);
@@ -54,6 +64,8 @@ public:
     // Si la bomba está plantada, NO debe terminar la ronda falta esa lógica
     void notify_on_one_player_less(Model::TeamID team);
     void notify_player_joined(Model::TeamID team);
+
+    void notify_bomb_planted(Physics::Vector2D position);
 
     DTO::RoundDTO to_dto(int fps) const;
 };

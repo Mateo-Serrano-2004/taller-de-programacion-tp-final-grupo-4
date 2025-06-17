@@ -125,6 +125,9 @@ void Game::start_new_round() {
         else tt_count++;
     }
     std::cout << "NUEVA RONDA" << std::endl;
+
+    gamelogic.assign_bomb_to_random_tt(players);
+
     round.set_ct_count(ct_count);
     round.set_tt_count(tt_count);
 

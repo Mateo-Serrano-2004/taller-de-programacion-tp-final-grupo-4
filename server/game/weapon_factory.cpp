@@ -1,23 +1,34 @@
 #include "weapon_factory.h"
-
-#include <memory>
-
-#include "common/slot_id.h"
-#include "common/model/weapon.h"
+#include <iostream>
+#include "model/glock.h"
+#include "model/ak47.h"
+#include "model/m3.h"
+#include "model/awp.h"
+#include "model/knife.h"
+#include "model/bomb.h"
 
 Shared<FullWeapon> WeaponFactory::create(Model::WeaponID id) {
     switch (id) {
         case Model::WeaponID::GLOCK:
-            return make_shared<FullWeapon>(id, Model::SlotID::SECONDARY_WEAPON, 20, 20, false, 0);
+            return make_shared<Glock>();
+
         case Model::WeaponID::AK47:
-            return make_shared<FullWeapon>(id, Model::SlotID::PRIMARY_WEAPON, 45, 45, true, 30);
+            return make_shared<AK47>();
+
         case Model::WeaponID::M3:
-            return make_shared<FullWeapon>(id, Model::SlotID::PRIMARY_WEAPON, 8, 8, false, 0);
+            return make_shared<M3>();
+
         case Model::WeaponID::AWP:
-            return make_shared<FullWeapon>(id, Model::SlotID::PRIMARY_WEAPON, 30, 30, false, 0);
+            return make_shared<AWP>();
+
         case Model::WeaponID::KNIFE:
-            return make_shared<FullWeapon>(id, Model::SlotID::KNIFE_SLOT, 0, 0, false, 0);
+            return make_shared<Knife>();
+
         case Model::WeaponID::BOMB:
-            return make_shared<FullWeapon>(id, Model::SlotID::BOMB_SLOT, 0, 0, false, 0);
+            // Por ahora puede tirar un assert o nullptr si no está implementada
+            std::cout << "ENTRA EN BOMB" << std::endl;
+            return make_shared<Bomb>();
     }
+
+    return nullptr;
 }

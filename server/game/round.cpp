@@ -6,6 +6,7 @@ void Round::update_if_finished_warmup() {
     std::cout << "Fin de la etapa de warmup" << std::endl;
     active_ticks_remaining = 0;
     state = RoundState::Ended;
+    reset();
 }
 
 void Round::update_if_finished_buying() {
@@ -15,21 +16,28 @@ void Round::update_if_finished_buying() {
 }
 
 void Round::update_if_finished_playing() {
-    std::cout << "Tiempo agotado: Empate\n";
-
-    // TODO: Implement logic bomb and update this part
+    if(bomb_planted && !bomb_defused){
+        winner_team = Model::TeamID::TT;
+    }else{
+        winner_team = Model::TeamID::CT;
+    }
     count_of_rounds++;
     active_ticks_remaining = 0;
     state = RoundState::Ended;
+    reset();
 }
 
 Round::Round()
 : state(RoundState::Warmup),
   number_of_ct_alive(0),
   number_of_tt_alive(0),
+  bomb_planted(false),
+  bomb_defused(false),
+  bomb_position(0, 0),
   ticks_for_warmup_phase(600),
   ticks_for_buying_phase(600),
   ticks_for_playing_phase(3600),
+  bomb_total_ticks(360),
   active_ticks_remaining(600) {}
 
 Model::TeamID Round::get_winner_team() const {
@@ -79,6 +87,12 @@ void Round::to_buying_phase() {
     state = RoundState::Buying;
 }
 
+void Round::reset() {
+    bomb_defused = false;
+    bomb_planted = false;
+    bomb_position = Physics::Vector2D(0, 0);
+}
+
 void Round::update(int frames_to_process) {
     if (active_ticks_remaining > frames_to_process) {
         active_ticks_remaining -= frames_to_process;
@@ -98,16 +112,18 @@ void Round::notify_on_one_player_less(Model::TeamID team) {
             state = RoundState::Ended;
             active_ticks_remaining = 0;
             count_of_rounds++;
+            reset();
         }
     } else if (team == Model::TeamID::TT) {
         number_of_tt_alive--;
         if (number_of_tt_alive == 0) {
-            // TODO: Add bomb logic and prevent end of game if it is still planted
-
-            winner_team = Model::TeamID::CT;
-            state = RoundState::Ended;
-            active_ticks_remaining = 0;
-            count_of_rounds++;
+            if(!bomb_planted){
+                winner_team = Model::TeamID::CT;
+                state = RoundState::Ended;
+                active_ticks_remaining = 0;
+                count_of_rounds++;
+                reset();
+            }
         }
     }
 }
@@ -118,11 +134,23 @@ void Round::notify_player_joined(Model::TeamID team) {
     else number_of_tt_alive++;
 }
 
+bool Round::bomb_is_planted() const { return bomb_planted; }
+
+void Round::notify_bomb_planted(Physics::Vector2D position){
+    if(!is_active() || bomb_planted) return;
+    bomb_planted = true;
+    bomb_position = position;
+    active_ticks_remaining = bomb_total_ticks;
+}
+
 DTO::RoundDTO Round::to_dto(int fps) const {
     return DTO::RoundDTO(
         state,
         this->ended(),
         this->get_ticks_remaining() / fps,
-        this->get_winner_team()
+        this->get_winner_team(),
+        this->bomb_planted,
+        this->bomb_defused,
+        this->bomb_position
     );
 }

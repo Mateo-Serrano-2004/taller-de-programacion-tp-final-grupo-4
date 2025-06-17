@@ -4,7 +4,7 @@
 #include <cstdint>
 
 #include "common/definitions.h"
-
+#include "common/weapon_id.h"
 #include "model/full_weapon.h"
 
 namespace Model {

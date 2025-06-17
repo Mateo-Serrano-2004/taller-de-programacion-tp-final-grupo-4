@@ -2,8 +2,10 @@
 #define SERVER_GAME_VECTOR_2D_H
 
 #include "common/definitions.h"
+#include <cmath>
 
 namespace Physics {
+
 class Vector2D {
 private:
     coord_t x;
@@ -24,8 +26,18 @@ public:
     bool operator==(const Vector2D& other) const;
     bool operator!=(const Vector2D& other) const;
 
+    Vector2D operator*(float scalar) const;
+    float distance_to(const Vector2D& other) const;
+    Vector2D normalized() const;
+
+    static bool segments_intersect(
+        const Vector2D& p1, const Vector2D& p2,
+        const Vector2D& q1, const Vector2D& q2
+    );
+
     ~Vector2D() = default;
 };
-};  // namespace Physics
+
+}  // namespace Physics
 
 #endif  // SERVER_GAME_VECTOR_2D_H

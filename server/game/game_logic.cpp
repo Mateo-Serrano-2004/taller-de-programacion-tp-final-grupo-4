@@ -1,6 +1,7 @@
 #include "game_logic.h"
 
 #include <cstdint>
+#include <random>
 #include "common/weapon_id.h"
 
 void GameLogic::buy_weapon(FullPlayer& player, Model::WeaponID weapon_id, const Round& round) const {
@@ -11,9 +12,18 @@ void GameLogic::buy_weapon(FullPlayer& player, Model::WeaponID weapon_id, const 
     shop.process_weapon_purchase(player, weapon_id);
 }
 
+//dummy por ahora
+bool GameLogic::is_in_bomb_zone(Physics::Vector2D player_position) const {
+    return true;
+}
+
 void GameLogic::start_using_weapon(FullPlayer& player, const Round& round) const {
     if (!round.is_active()) return;
     if (!player.is_alive()) return;
+
+    if(player.has_bomb_equipped()){
+        if(!is_in_bomb_zone(player.get_position())) return;
+    }
     player.start_using_weapon();
 }
 
@@ -25,8 +35,26 @@ void GameLogic::process_shooting(std::map<uint8_t, FullPlayer>& players, Round& 
     for (auto& [id, player] : players) {
         if (!player.is_alive()) continue;
 
+        // la idea es vovler a chequear que tiene que seguir en la zona de plantado.
+        if(player.has_bomb_equipped()){
+            if(!is_in_bomb_zone(player.get_position())){
+                player.stop_using_weapon(); // si se fue para que reinicie
+                continue;
+            } 
+        }
+
         auto shot_info = player.shoot(frames_to_process);
+        
         if (!shot_info.has_value()) continue;
+
+        if (shot_info->weapon_id == Model::WeaponID::BOMB) {
+            if(!round.bomb_is_planted()){
+                round.notify_bomb_planted(player.get_position());
+                player.remove_bomb();
+            }
+            continue;
+        }
+
         std::vector<Impact> impacts = ShotManager::calculate_shot_impacts(shot_info.value(), players);
         if (!impacts.empty()) {
             apply_impacts(impacts, round, players);
@@ -43,7 +71,9 @@ void GameLogic::apply_impacts(const std::vector<Impact>& impacts, Round& round, 
 
         auto victim = players.find(impact.victim_id);
         if (victim == players.end()) continue;
+
         if (victim->second.get_team() == shooter->second.get_team()) continue;
+
         if (!victim->second.is_alive()) continue;
 
         victim->second.take_damage(impact.damage);
@@ -53,5 +83,25 @@ void GameLogic::apply_impacts(const std::vector<Impact>& impacts, Round& round, 
             round.notify_on_one_player_less(victim->second.get_team());
             shooter->second.add_money(800);
         }
+    }
+}
+
+void GameLogic::assign_bomb_to_random_tt(std::map<uint8_t, FullPlayer>& players) {
+    std::vector<FullPlayer*> tts;
+
+    for (auto& [id, player] : players) {
+        if (player.get_team() == Model::TeamID::TT && player.is_alive()) {
+            tts.push_back(&player);
+        }
+    }
+
+    if (!tts.empty()) {
+        static std::default_random_engine generator(std::random_device{}());
+        std::uniform_int_distribution<size_t> distribution(0, tts.size() - 1);
+        size_t random_index = distribution(generator);
+
+        auto bomb = WeaponFactory::create(Model::WeaponID::BOMB);
+        tts[random_index]->give_bomb(bomb);
+
     }
 }
