@@ -6,11 +6,13 @@
 #include <arpa/inet.h>
 #include <string.h>
 #include <exception>
+#include <variant>
 
-#include "common/DTO/game_state_dto.h"
 #include "common/DTO/player_dto.h"
 #include "common/DTO/weapon_dto.h"
+#include "common/DTO/dto_code.h"
 #include "common/definitions.h"
+#include "common/overloaded.h"
 #include "common/event_type.h"
 #include "common/slot_id.h"
 #include "common/role_id.h"
@@ -89,6 +91,17 @@ EventVariant ServerProtocol::receive_event() {
     }
 }
 
+void ServerProtocol::send_variant(const DTO::DTOVariant& variant) {
+    std::visit(
+        overloaded{[this](const DTO::GameStateDTO& d) { send_game_state(d); },
+                    [this](const DTO::PlayerIDDTO& d) { send_player_id(d); },
+                    [this](const DTO::TeamIDDTO& d) { send_team_id(d); },
+                    [this](const DTO::MapDTO& d) { send_map(d); },
+                    [this](const DTO::MapNameListDTO& d) { send_all_maps_names(d); },
+                    [this](const DTO::GameListDTO& d) { send_games(d); }},
+            variant);
+}
+
 void ServerProtocol::send_weapon(const DTO::WeaponDTO& weapon_dto) {
     uint16_t total_ammo = htons(weapon_dto.total_ammo);
 
@@ -123,9 +136,7 @@ void ServerProtocol::send_player_list(const std::vector<DTO::PlayerDTO>& players
     uint8_t players_size = players.size();
     peer.sendall(&players_size, sizeof(players_size));
 
-    for (const auto& p: players) {
-        send_player(p);
-    }
+    for (const auto& p: players) send_player(p);
 }
 
 void ServerProtocol::send_round(const DTO::RoundDTO& round_dto) {
@@ -137,7 +148,8 @@ void ServerProtocol::send_round(const DTO::RoundDTO& round_dto) {
 }
 
 void ServerProtocol::send_game_state(const DTO::GameStateDTO& game_state_dto) {
-    std::lock_guard<std::mutex> lock(mutex);
+    // DTO::DTOCode code = DTO::DTOCode::GAME_STATE;
+    // peer.sendall(&code, sizeof(code));
     peer.sendall(&game_state_dto.game_state, sizeof(game_state_dto.game_state));
     peer.sendall(&game_state_dto.ended, sizeof(game_state_dto.ended));
     peer.sendall(&game_state_dto.winner, sizeof(game_state_dto.winner));
@@ -147,25 +159,32 @@ void ServerProtocol::send_game_state(const DTO::GameStateDTO& game_state_dto) {
     send_player_list(game_state_dto.players);
 }
 
-void ServerProtocol::send_all_maps_names(const std::vector<std::string>& maps) {
-    uint8_t maps_size = maps.size();
-    peer.sendall(&maps_size, sizeof(maps_size));
+void ServerProtocol::send_all_maps_names(const DTO::MapNameListDTO& maps) {
+    // DTO::DTOCode code = DTO::DTOCode::MAP_NAMES_LIST;
+    // peer.sendall(&code, sizeof(code));
 
-    for (const auto& map: maps) {
-        uint8_t map_name_size = map.size();
+    uint8_t size = static_cast<uint8_t>(maps.maps_names.size());
+
+    peer.sendall(&size, sizeof(size));
+
+    for (const auto& map: maps.maps_names) {
+        uint8_t map_name_size = static_cast<uint8_t>(map.size());
         peer.sendall(&map_name_size, sizeof(map_name_size));
         peer.sendall(map.c_str(), map_name_size);
     }
 }
 
-void ServerProtocol::send_games(const std::vector<GameInfoDTO>& games) {
-    uint8_t games_size = games.size();
-    peer.sendall(&games_size, sizeof(games_size));
+void ServerProtocol::send_games(const DTO::GameListDTO& game_list_dto) {
+    // DTO::DTOCode code = DTO::DTOCode::GAMES_LIST;
+    // peer.sendall(&code, sizeof(code));
 
-    for (const auto& game: games) {
+    uint8_t size = static_cast<uint8_t>(game_list_dto.games.size());
+    peer.sendall(&size, sizeof(size));
+
+    for (const auto& game: game_list_dto.games) {
         uint8_t game_id = game.id;
-        uint8_t game_name = game.name.size();
-        uint8_t map_name_size = game.map_name.size();
+        uint8_t game_name = static_cast<uint8_t>(game.name.size());
+        uint8_t map_name_size = static_cast<uint8_t>(game.map_name.size());
 
         peer.sendall(&game_id, sizeof(game_id));
 
@@ -180,28 +199,34 @@ void ServerProtocol::send_games(const std::vector<GameInfoDTO>& games) {
     }
 }
 
-void ServerProtocol::send_player_id(uint8_t player_id) {
-    std::lock_guard<std::mutex> lock(mutex);
-    peer.sendall(&player_id, sizeof(player_id));
+void ServerProtocol::send_player_id(const DTO::PlayerIDDTO& player_id_dto) {
+    // DTO::DTOCode code = DTO::DTOCode::PLAYER_ID;
+    // peer.sendall(&code, sizeof(code));
+    peer.sendall(&player_id_dto.id, sizeof(player_id_dto.id));
 }
 
-void ServerProtocol::send_team(uint8_t team_id) {
-    std::lock_guard<std::mutex> lock(mutex);
-    peer.sendall(&team_id, sizeof(team_id));
+void ServerProtocol::send_team_id(const DTO::TeamIDDTO& team_id_dto) {
+    // DTO::DTOCode code = DTO::DTOCode::TEAM_ID;
+    // peer.sendall(&code, sizeof(code));
+    peer.sendall(&team_id_dto.id, sizeof(team_id_dto.id));
 }
 
-void ServerProtocol::send_map(const std::vector<std::vector<std::string>>& map) {
-    uint8_t map_size = map.size();
-    peer.sendall(&map_size, sizeof(map_size));
+void ServerProtocol::send_map(const DTO::MapDTO& map_dto) {
+    // DTO::DTOCode code = DTO::DTOCode::MAP;
+    // peer.sendall(&code, sizeof(code));
 
-    uint8_t row_size = static_cast<uint8_t>(map[0].size());
-    peer.sendall(&row_size, sizeof(row_size));
+    auto map = map_dto.map;
+    uint8_t cols = map_dto.count_of_columns;
+    uint8_t rows = map_dto.count_of_rows;
+
+    peer.sendall(&cols, sizeof(cols));
+    peer.sendall(&rows, sizeof(rows));
 
     for (const auto& row: map) {
-        for (const auto& tile: row) {
-            uint8_t tile_size = static_cast<uint8_t>(tile.size());
-            peer.sendall(&tile_size, sizeof(tile_size));
-            peer.sendall(tile.c_str(), tile_size);
+        for (const auto& path: row) {
+            uint8_t path_size = static_cast<uint8_t>(path.size());
+            peer.sendall(&path_size, sizeof(path_size));
+            peer.sendall(path.c_str(), path_size);
         }
     }
 }

@@ -17,6 +17,7 @@
 #include "common/game_state.h"
 #include "common/DTO/game_state_dto.h"
 #include "common/DTO/game_info_dto.h"
+#include "common/DTO/dto_variant.h"
 
 #include "server/events/events.h"
 
@@ -27,7 +28,7 @@
 #include "game_logic.h"
 
 using GameQueue = Queue<std::pair<uint8_t, GameEventVariant>>;
-using ClientQueue = Queue<DTO::GameStateDTO>;
+using ClientQueue = Queue<DTO::DTOVariant>;
 
 class Game: public Thread {
 private:

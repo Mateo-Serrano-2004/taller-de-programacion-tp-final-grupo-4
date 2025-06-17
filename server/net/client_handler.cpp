@@ -6,42 +6,40 @@
 #include <exception>
 
 #include "common/team.h"
-#include "common/DTO/game_state_dto.h"
+#include "common/overloaded.h"
+#include "common/DTO/dto_variant.h"
 
-#include "server/events/overloaded.h"
 #include "server/exception/invalid_game_exception.h"
 
 void ClientHandler::handle_map_request() {
-    protocol.send_all_maps_names(game_manager.get_name_maps());
+    sender->get_queue().push(DTO::MapNameListDTO(game_manager.get_name_maps()));
 }
 
 void ClientHandler::handle_create_game(const CreateGameEvent& event) {
-    sender = std::make_unique<ClientHandlerSender>(protocol);
-    uint8_t game_id = game_manager.create_game(event.get_party_name(), event.get_map_name(),
+    game_queue = game_manager.create_game(event.get_party_name(), event.get_map_name(),
                                                username, sender->get_queue());
     player_id = 0;
-    game_queue = game_manager.get_game_queue(game_id);
-    protocol.send_player_id(player_id);
-    protocol.send_team((uint8_t) Model::TeamID::CT);
+    sender->get_queue().push(DTO::PlayerIDDTO(player_id));
+    sender->get_queue().push(DTO::TeamIDDTO((short_id_t)Model::TeamID::CT));
 }
 
 void ClientHandler::handle_join_game(const JoinGameEvent& event) {
     try {
-        sender = std::make_unique<ClientHandlerSender>(protocol);
-        player_id = game_manager.join_game(event.get_game_id(), username, sender->get_queue());
-        game_queue = game_manager.get_game_queue(event.get_game_id());
-        protocol.send_player_id(player_id);
-        protocol.send_team(player_id % 2);
+        auto pair = game_manager.join_game(event.get_game_id(), username, sender->get_queue());
+        player_id = pair.first;
+        game_queue = pair.second;
+        sender->get_queue().push(DTO::PlayerIDDTO(player_id));
+        sender->get_queue().push(DTO::TeamIDDTO(player_id % 2));
     } catch (const InvalidGameException& e) {
         std::cout << "An exception happend\n";
-        protocol.send_game_state(DTO::GameStateDTO());
+        sender->get_queue().push(DTO::GameStateDTO());
         close();
     }
 }
 
 void ClientHandler::handle_username(const UsernameEvent& event) { username = event.get_username(); }
 
-void ClientHandler::handle_list_games() { protocol.send_games(game_manager.get_games()); }
+void ClientHandler::handle_list_games() { sender->get_queue().push(DTO::GameListDTO(game_manager.get_games())); }
 
 void ClientHandler::handle_game_event(const GameEventVariant& event) {
     game_queue->push(std::make_pair(player_id, event));
@@ -69,6 +67,7 @@ void ClientHandler::close() {
 ClientHandler::ClientHandler(Socket&& skt, GameManager& game_manager)
 : protocol(skt), game_manager(game_manager) {
     start();
+    sender = make_unique<ClientHandlerSender>(protocol);
 }
 
 bool ClientHandler::is_dead() const {

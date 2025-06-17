@@ -9,8 +9,7 @@
 #include <vector>
 
 #include "common/definitions.h"
-#include "common/DTO/game_info_dto.h"
-#include "common/DTO/game_state_dto.h"
+#include "common/DTO/dto_variant.h"
 #include "common/queue.h"
 
 #include "server/events/events.h"
@@ -33,12 +32,11 @@ private:
 public:
     GameManager() = default;
 
-    uint8_t create_game(const std::string& party_name, const std::string& map_name,
-                        const std::string& username, Queue<DTO::GameStateDTO>& client_queue);
-    uint8_t join_game(const uint8_t& game_id, const std::string& username,
-                      Queue<DTO::GameStateDTO>& client_queue);
+    GameQueue* create_game(const std::string& party_name, const std::string& map_name,
+                        const std::string& username, Queue<DTO::DTOVariant>& client_queue);
+    std::pair<short_id_t, GameQueue*> join_game(const uint8_t& game_id, const std::string& username,
+                      Queue<DTO::DTOVariant>& client_queue);
 
-    GameQueue* get_game_queue(const uint8_t& game_id);
     uint8_t get_number_of_games();
     std::vector<GameInfoDTO> get_games();
     std::vector<std::string> get_name_maps();

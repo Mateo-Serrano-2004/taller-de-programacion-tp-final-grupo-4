@@ -1,0 +1,18 @@
+#ifndef COMMON_DTO_MAP_NAME_LIST_DTO_H
+#define COMMON_DTO_MAP_NAME_LIST_DTO_H
+
+#include <vector>
+#include <string>
+
+#include "common/definitions.h"
+
+namespace DTO {
+struct MapNameListDTO {
+public:
+    std::vector<std::string> maps_names;
+
+    MapNameListDTO(const std::vector<std::string> maps_names) : maps_names(maps_names) {}
+};
+};
+
+#endif // COMMON_DTO_MAP_NAME_LIST_DTO_H

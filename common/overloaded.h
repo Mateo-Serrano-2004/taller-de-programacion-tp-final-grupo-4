@@ -1,5 +1,5 @@
-#ifndef OVERLOADED_H
-#define OVERLOADED_H
+#ifndef COMMON_OVERLOADED_H
+#define COMMON_OVERLOADED_H
 
 template <class... Ts>
 struct overloaded: Ts... {
@@ -9,4 +9,4 @@ struct overloaded: Ts... {
 template <class... Ts>
 overloaded(Ts...) -> overloaded<Ts...>;
 
-#endif  // OVERLOADED_H
+#endif  // COMMON_OVERLOADED_H

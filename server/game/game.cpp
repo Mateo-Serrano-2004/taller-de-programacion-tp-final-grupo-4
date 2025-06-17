@@ -6,10 +6,10 @@
 #include <optional>
 #include <functional>
 
-#include "common/model/vector_2d.h"
 #include "common/periodic_clock.h"
+#include "common/overloaded.h"
+#include "common/model/vector_2d.h"
 
-#include "server/events/overloaded.h"
 #include "server/exception/invalid_game_exception.h"
 #include "server/exception/invalid_player_exception.h"
 

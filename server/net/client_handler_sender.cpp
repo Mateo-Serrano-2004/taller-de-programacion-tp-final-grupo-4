@@ -9,7 +9,7 @@ ClientHandlerSender::ClientHandlerSender(ServerProtocol& protocol)
 
 bool ClientHandlerSender::is_dead() const { return !is_alive; }
 
-Queue<DTO::GameStateDTO>& ClientHandlerSender::get_queue() { return sender_queue; }
+Queue<DTO::DTOVariant>& ClientHandlerSender::get_queue() { return sender_queue; }
 
 void ClientHandlerSender::kill() { is_alive = false; }
 
@@ -20,8 +20,8 @@ void ClientHandlerSender::close() {
 void ClientHandlerSender::run() {
     while (is_alive) {
         try {
-            DTO::GameStateDTO game = sender_queue.pop();
-            protocol.send_game_state(game);
+            DTO::DTOVariant game = sender_queue.pop();
+            protocol.send_variant(game);
         } catch (const std::exception&) {
             kill();
         }
