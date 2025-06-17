@@ -71,13 +71,17 @@ weapons:
     bullets_per_shot: 1
     fire_rate: 1.0
 
+#Field of View
+fov:
+  angle: 90
+  ratio: 35
 
-# Interfaz
-#display:
-#  mode: "fullscreen"
-#  resolution:
-#    width: 640
-#    height: 400
+# Interface
+display:
+  resolution:
+    width: 640
+    height: 400
+
 
 # Server
 #server:

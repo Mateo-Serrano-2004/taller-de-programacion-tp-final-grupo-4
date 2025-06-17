@@ -86,6 +86,12 @@ void YamlParser::parseGameConfigYaml(const std::string& yamlPath) {
 
         gameConfig.weapons[name] = wc;
     }
+    // FOV 
+    gameConfig.fov.angle = config["fov"]["angle"].as<int>();
+    gameConfig.fov.ratio = config["fov"]["ratio"].as<int>();
+    // Display
+    gameConfig.display.widht = config["display"]["widht"].as<int>();
+    gameConfig.display.height = config["display"]["height"].as<int>();
 }
 
 std::vector<std::vector<std::string>> YamlParser::getTileMatrix() const{

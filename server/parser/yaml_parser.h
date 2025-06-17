@@ -42,12 +42,26 @@ struct WeaponConfig {
     float fireRate;
 };
 
+struct FovConfig {
+    int angle;
+    int ratio;
+};
+
+struct DisplayConfig {
+    int widht;
+    int height;
+};
+
 struct ConfigData {
     GameConfig game;
     PlayerConfig terrorist;
     PlayerConfig antiTerrorist;
     std::map<std::string, WeaponConfig> weapons;
+    FovConfig fov;
+    DisplayConfig display;
 };
+
+
 
 class YamlParser {
 
