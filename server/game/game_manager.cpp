@@ -3,10 +3,16 @@
 #include <string>
 #include <mutex>
 #include <algorithm>
+#include <iostream>
 
 #include "common/team.h"
 
 #include "server/exception/invalid_game_exception.h"
+
+GameManager::GameManager(const std::string& config_file, const std::vector<std::string>& maps_names):
+    yamlAddresser(), yamlParser(yamlAddresser.get_config_path(config_file)) {
+    this->maps_names = maps_names;
+}
 
 void GameManager::clear_games() {
     std::lock_guard<std::mutex> lock(mtx);
@@ -68,14 +74,15 @@ std::vector<DTO::GameInfoDTO> GameManager::get_games() {
 }
 
 std::vector<std::string> GameManager::get_name_maps() {
-    return {
-        "de_dust2",
-        "de_mirage",
-        "de_inferno",
-        "de_nuke",
-        "de_overpass",
-        "de_train"
-    };
+    // return {
+    //     "de_dust2",
+    //     "de_mirage",
+    //     "de_inferno",
+    //     "de_nuke",
+    //     "de_overpass",
+    //     "de_train"
+    // };
+    return maps_names;
 }
 
 std::string GameManager::get_game_map(const uint8_t& game_id) {
@@ -83,6 +90,11 @@ std::string GameManager::get_game_map(const uint8_t& game_id) {
     auto it = games.find(game_id);
     if (it == games.end()) throw InvalidGameException("Invalid game id");
     return it->second->get_map_name();
+}
+
+DTO::MapDTO GameManager::get_map(const std::string& map_name) {
+    yamlParser.parseMapYaml(yamlAddresser.get_map_path(map_name));
+    return DTO::MapDTO(yamlParser.getTileMatrix());
 }
 
 GameManager::~GameManager() {

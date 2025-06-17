@@ -3,16 +3,18 @@
 #include "common/definitions.h"
 #include "net/server.h"
 
-#define NUM_ARGS 2
+#define MIN_ARGS 2
+#define MAX_ARGS 3
+#define DEFAULT_CONFIG_FILE "game_config.yaml"
 
 int main(int argc, char* argv[]) try {
 
-    if (argc != NUM_ARGS) {
-        std::cerr << "Please use: " << argv[0] << " <port>" << std::endl;
+    if (argc < MIN_ARGS || argc > MAX_ARGS) {
+        std::cerr << "Please use: " << argv[0] << " <port> [config_file_path](optional)" << std::endl;
         return ERROR;
     }
 
-    Server server(argv[1]);
+    Server server(argv[1], argc == MAX_ARGS ? argv[2] : DEFAULT_CONFIG_FILE);
     server.launch();
 
     return SUCCESS;

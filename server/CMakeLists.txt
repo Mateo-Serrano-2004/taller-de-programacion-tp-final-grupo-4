@@ -9,3 +9,4 @@ target_sources(cs2d_server
 add_subdirectory(net/)
 add_subdirectory(game/)
 add_subdirectory(events/)
+add_subdirectory(parser/)

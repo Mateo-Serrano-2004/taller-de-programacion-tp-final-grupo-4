@@ -2,8 +2,7 @@
 
 #include <yaml-cpp/yaml.h>
 
-YamlParser::YamlParser(const std::string& yamlMapPath, const std::string& yamlGameConfigPath) {
-    parseMapYaml(yamlMapPath);
+YamlParser::YamlParser(const std::string& yamlGameConfigPath) {
     parseGameConfigYaml(yamlGameConfigPath);
 }
 

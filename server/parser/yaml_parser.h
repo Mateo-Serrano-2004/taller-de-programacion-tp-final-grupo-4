@@ -74,26 +74,19 @@ struct ConfigData {
 class YamlParser {
 
 private:
-    std::string yamlMapPath, yamlGameConfigPath;
     ConfigData gameConfig;
-
-    void parseMapYaml(const std::string& yamlMapPath);
-    void parseGameConfigYaml(const std::string& yamlGameConfigPath);
-
-    TileType stringToTileType(const std::string& typeStr, const std::string& nameStr);
-
     int mapMinWidth, mapMaxWidth, mapMinHeight, mapMaxHeight;
-
     std::vector<std::vector<std::string>> tileMatrix;
     std::vector<std::vector<TileType>> typeMatrix;
 
+    void parseGameConfigYaml(const std::string& yamlGameConfigPath);
+    TileType stringToTileType(const std::string& typeStr, const std::string& nameStr);
 
 public:
-    YamlParser(const std::string& yamlMapPath, const std::string& yamlGameConfigPath);
+    YamlParser(const std::string& yamlGameConfigPath);
+    void parseMapYaml(const std::string& yamlMapPath);
     std::vector<std::vector<std::string>> getTileMatrix() const;
     std::vector<std::vector<TileType>> getTypeMatrix() const;
     const ConfigData& getConfigData() const;
-    int getMapWidth() const;
-    int getMapHeight() const;
 };
 #endif // YAML_PARSER_H

@@ -14,12 +14,10 @@ struct MapDTO {
 public:
     uint8_t count_of_columns;
     uint8_t count_of_rows;
-
     PathMap map;
 
-    MapDTO(): count_of_columns(0), count_of_rows(0) {}
-    MapDTO(uint8_t count_of_columns, uint8_t count_of_rows, const PathMap& map) :
-        count_of_columns(count_of_columns), count_of_rows(count_of_rows), map(map) {}
+    MapDTO() : count_of_columns(0), count_of_rows(0) {}
+    MapDTO(const PathMap& map) : map(map), count_of_columns(map.size()), count_of_rows(map[0].size()) {}
 };
 };
 

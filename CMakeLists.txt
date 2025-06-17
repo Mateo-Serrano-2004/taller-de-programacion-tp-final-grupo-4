@@ -19,7 +19,7 @@ project(counter_strike_2d
 option(CS2D_TESTS "Enable / disable tests." OFF)
 option(CS2D_CLIENT "Enable / disable client program." ON)
 option(CS2D_SERVER "Enable / disable server program." ON)
-option(CS2D_EDITOR "Enable / disable editor program." ON)
+option(CS2D_EDITOR "Enable / disable editor program." OFF)
 option(CS2D_MAKE_WARNINGS_AS_ERRORS "Enable / disable warnings as errors." OFF)
 
 message(CMAKE_CXX_COMPILER_ID="${CMAKE_CXX_COMPILER_ID}")
@@ -78,8 +78,13 @@ if(CS2D_SERVER)
     add_subdirectory(server/)
 
     set_project_warnings(cs2d_server ${CS2D_MAKE_WARNINGS_AS_ERRORS} FALSE)
+    find_package(yaml-cpp REQUIRED)
 
-    target_link_libraries(cs2d_server cs2d_common)
+    target_link_libraries(cs2d_server cs2d_common yaml-cpp)
+
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        target_compile_definitions(cs2d_server PRIVATE DEBUG_MODE)
+    endif()
 endif()
 
 if(CS2D_EDITOR)
