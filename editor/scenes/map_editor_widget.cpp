@@ -144,6 +144,25 @@ MapEditorWidget::MapEditorWidget(QWidget* parent) : QWidget(parent) {
         QListWidgetItem* item = assetsList->item(assetIndex);
         placeTileAt(x, y, item);
     });
+
+    connect(static_cast<GridView*>(gridView), &GridView::cellTileSelected, this, [this](int x, int y) {
+        for (QGraphicsItem* item : gridScene->items(QRectF(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE))) {
+            if (auto pix = dynamic_cast<QGraphicsPixmapItem*>(item)) {
+                if (pix->pos() == QPointF(x*TILE_SIZE, y*TILE_SIZE)) {
+                    QString fileName = pix->data(0).toString();
+                    QString category = pix->data(1).toString();
+                    for (int i = 0; i < assetsList->count(); ++i) {
+                        QListWidgetItem* asset = assetsList->item(i);
+                        if ((asset->data(Qt::UserRole).toString() == fileName) && (asset->data(Qt::UserRole + 1).toString() == category)) {
+                            assetsList->setCurrentRow(i);
+                            selectedAsset = i;
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    });
 }
 
 void MapEditorWidget::setUpGrid() {

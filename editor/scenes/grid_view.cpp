@@ -11,7 +11,11 @@ void GridView::mousePressEvent(QMouseEvent* event) {
     int tileX = static_cast<int>(pos.x()) / TILE_SIZE;
     int tileY = static_cast<int>(pos.y()) / TILE_SIZE;
     if (tileX >= 0 && tileX < MAP_WIDTH && tileY >= 0 && tileY < MAP_HEIGHT) {
-        emit cellClicked(tileX, tileY, event->button());
+        if (event->button() == Qt::MiddleButton) {
+            emit cellTileSelected(tileX, tileY);
+        } else {
+            emit cellClicked(tileX, tileY, event->button());
+        }
     }
     QGraphicsView::mousePressEvent(event);
 }
@@ -61,6 +65,13 @@ void GridView::mouseMoveEvent(QMouseEvent* event) {
         int tileY = static_cast<int>(pos.y()) / TILE_SIZE;
         if (tileX >= 0 && tileX < MAP_WIDTH && tileY >= 0 && tileY < MAP_HEIGHT) {
             emit cellClicked(tileX, tileY, Qt::LeftButton);
+        }
+    } else if (event->buttons() & Qt::RightButton) {
+        QPointF pos = mapToScene(event->pos());
+        int tileX = static_cast<int>(pos.x()) / TILE_SIZE;
+        int tileY = static_cast<int>(pos.y()) / TILE_SIZE;
+        if (tileX >= 0 && tileX < MAP_WIDTH && tileY >= 0 && tileY < MAP_HEIGHT) {
+            emit cellClicked(tileX, tileY, Qt::RightButton);
         }
     }
     QGraphicsView::mouseMoveEvent(event);
