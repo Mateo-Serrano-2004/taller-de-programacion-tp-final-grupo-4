@@ -88,6 +88,5 @@ fov:
   ratio: 32
 
 display:
-  resolution:
-    width: 640
-    height: 400
+  widht: 640
+  height: 400
