@@ -39,7 +39,7 @@ void YamlParser::parseMapYaml(const std::string& yamlPath) {
     }
 }
 
-void YamlParser::parseGameConfigYaml(const std::string& yamlPath) {
+void YamlParser::parseGameConfigYaml(const std::string& yamlGameConfigPath) {
     YAML::Node config = YAML::LoadFile(yamlGameConfigPath);
 
     const auto& game = config["game"];
@@ -60,10 +60,10 @@ void YamlParser::parseGameConfigYaml(const std::string& yamlPath) {
     gameConfig.game.bombDefuseMoney = game["bomb_defuse_money"].as<int>();
 
 
-    const auto& players = config["player"];
-    gameConfig.player.health = players["health"].as<int>();
-    gameConfig.player.initialMoney = players["initial_money"].as<int>();
-    gameConfig.player.movementSpeed = players["movement_speed"].as<float>();
+    const auto& player = config["player"];
+    gameConfig.player.health = player["health"].as<int>();
+    gameConfig.player.initialMoney = player["initial_money"].as<int>();
+    gameConfig.player.movementSpeed = player["movement_speed"].as<float>();
 
     const auto& weapons = config["weapons"];
     for (const auto& weapon : weapons) {

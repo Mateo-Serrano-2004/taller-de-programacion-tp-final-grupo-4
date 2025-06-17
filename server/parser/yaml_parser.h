@@ -65,8 +65,7 @@ struct DisplayConfig {
 
 struct ConfigData {
     GameConfig game;
-    PlayerConfig terrorist;
-    PlayerConfig antiTerrorist;
+    PlayerConfig player;
     std::map<std::string, WeaponConfig> weapons;
     FovConfig fov;
     DisplayConfig display;
