@@ -2,6 +2,7 @@
 #define YAML_PARSER_H
 
 #include <yaml-cpp/yaml.h>
+
 #include "types.h"
 #include <string>
 #include <vector>
@@ -17,29 +18,39 @@ struct TileData {
 struct GameConfig {
     std::string title;
     int rounds;
-    int prepareTime;
-    int killPoints;
-    int roundWonPoints;
-    int roundLostPoints;
-    int bombExplotionTime; //time will always be measeured in seconds
+    int roundsToWin;
+    int roundsPerSide;
+    int buyTime;
+    int warmupTime;
+    int roundTime;
+    int roundWonMoney;
+    int roundLostMoney;
+    int bombExplotionTime;
+    int bombExplotionRadius;
+    int bombExplotionDamage;
+    int bombPlantTime;
+    int bombDefuseTime;
+    int bombPlantMoney;
+    int bombDefuseMoney;
 };
 
 struct PlayerConfig {
     int health;
-    int moneyPoints;
-    int maxWeapons;
+    int initialMoney;
     float movementSpeed;
-    int killsCounter;
 };
 
 struct WeaponConfig {
-    int minDamage;
-    int maxDamage;
+    int damagePerBullet;
+    int maxAmmo;
+    int initialAmmo;
     float precision;
     int cost;
     int range;
     int bulletsPerShot;
     float fireRate;
+    int bountyMoney;
+    float reloadTime;
 };
 
 struct FovConfig {
@@ -60,8 +71,6 @@ struct ConfigData {
     FovConfig fov;
     DisplayConfig display;
 };
-
-
 
 class YamlParser {
 

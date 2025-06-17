@@ -1,6 +1,6 @@
 #include "yaml_parser.h"
+
 #include <yaml-cpp/yaml.h>
-#include <iostream>
 
 YamlParser::YamlParser(const std::string& yamlMapPath, const std::string& yamlGameConfigPath) {
     parseMapYaml(yamlMapPath);
@@ -42,54 +42,52 @@ void YamlParser::parseMapYaml(const std::string& yamlPath) {
 void YamlParser::parseGameConfigYaml(const std::string& yamlPath) {
     YAML::Node config = YAML::LoadFile(yamlGameConfigPath);
 
-    // Game
     const auto& game = config["game"];
-    gameConfig.game.title = game["title"].as<std::string>();
     gameConfig.game.rounds = game["rounds"].as<int>();
-    gameConfig.game.prepareTime = game["prepare_time"].as<int>();
-    gameConfig.game.killPoints = game["kill_points"].as<int>();
-    gameConfig.game.roundWonPoints = game["round_won_points"].as<int>();
-    gameConfig.game.roundLostPoints = game["round_lost_points"].as<int>();
+    gameConfig.game.roundsToWin = game["rounds_to_win"].as<int>();
+    gameConfig.game.roundsPerSide = game["rounds_per_side"].as<int>();
+    gameConfig.game.buyTime = game["buy_time"].as<int>();
+    gameConfig.game.warmupTime = game["warmup_time"].as<int>();
+    gameConfig.game.roundTime = game["round_time"].as<int>();
+    gameConfig.game.roundWonMoney = game["round_won_money"].as<int>();
+    gameConfig.game.roundLostMoney = game["round_lost_money"].as<int>();
     gameConfig.game.bombExplotionTime = game["bomb_explotion_time"].as<int>();
+    gameConfig.game.bombExplotionRadius = game["bomb_explotion_radius"].as<int>();
+    gameConfig.game.bombExplotionDamage = game["bomb_explotion_damage"].as<int>();
+    gameConfig.game.bombPlantTime = game["bomb_plant_time"].as<int>();
+    gameConfig.game.bombDefuseTime = game["bomb_defuse_time"].as<int>();
+    gameConfig.game.bombPlantMoney = game["bomb_plant_money"].as<int>();
+    gameConfig.game.bombDefuseMoney = game["bomb_defuse_money"].as<int>();
 
-    // Players
-    //Terrorists
+
     const auto& players = config["player"];
-    const auto& terrorist = players["terrorist"];
-    gameConfig.terrorist.health = terrorist["health"].as<int>();
-    gameConfig.terrorist.moneyPoints = terrorist["money_points"].as<int>();
-    gameConfig.terrorist.maxWeapons = terrorist["max_weapons"].as<int>();
-    gameConfig.terrorist.movementSpeed = terrorist["movement_speed"].as<float>();
-    gameConfig.terrorist.killsCounter = terrorist["kills_counter"].as<int>();
-    //Anti-Terrorists
-    const auto& antiTerrorist = players["anti-terrorist"];
-    gameConfig.antiTerrorist.health = antiTerrorist["health"].as<int>();
-    gameConfig.antiTerrorist.moneyPoints = antiTerrorist["money_points"].as<int>();
-    gameConfig.antiTerrorist.maxWeapons = antiTerrorist["max_weapons"].as<int>();
-    gameConfig.antiTerrorist.movementSpeed = antiTerrorist["movement_speed"].as<float>();
-    gameConfig.antiTerrorist.killsCounter = antiTerrorist["kills_counter"].as<int>();
+    gameConfig.player.health = players["health"].as<int>();
+    gameConfig.player.initialMoney = players["initial_money"].as<int>();
+    gameConfig.player.movementSpeed = players["movement_speed"].as<float>();
 
-    // Weapons
     const auto& weapons = config["weapons"];
     for (const auto& weapon : weapons) {
         std::string name = weapon.first.as<std::string>();
         const auto& w = weapon.second;
 
         WeaponConfig wc;
-        wc.minDamage = w["min_damage"].as<int>();
-        wc.maxDamage = w["max_damage"].as<int>();
+        wc.damagePerBullet = w["damage_per_bullet"].as<int>();
+        wc.maxAmmo = w["max_ammo"].as<int>();
+        wc.initialAmmo = w["initial_ammo"].as<int>();
         wc.precision = w["precision"].as<float>();
         wc.cost = w["cost"].as<int>();
         wc.range = w["range"].as<int>();
         wc.bulletsPerShot = w["bullets_per_shot"].as<int>();
         wc.fireRate = w["fire_rate"] ? w["fire_rate"].as<float>() : 0.0f;
+        wc.bountyMoney = w["bounty_money"].as<int>();
+        wc.reloadTime = w["reload_time"].as<float>();
 
         gameConfig.weapons[name] = wc;
     }
-    // FOV 
+
     gameConfig.fov.angle = config["fov"]["angle"].as<int>();
     gameConfig.fov.ratio = config["fov"]["ratio"].as<int>();
-    // Display
+
     gameConfig.display.widht = config["display"]["widht"].as<int>();
     gameConfig.display.height = config["display"]["height"].as<int>();
 }
