@@ -10,8 +10,8 @@ enum TextureID {
     SPRITE_CT4 = 0x03,
     SPRITE_T1 = 0x04,
     SPRITE_T2 = 0x05,
-    SPRITE_T3 = 0x05,
-    SPRITE_T4 = 0x06,
+    SPRITE_T3 = 0x06,
+    SPRITE_T4 = 0x07,
 
     // Weapons from 0x10
     SPRITE_GLOCK = 0x10,
