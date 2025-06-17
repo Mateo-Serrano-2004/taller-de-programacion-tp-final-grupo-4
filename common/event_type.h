@@ -31,7 +31,7 @@ enum EventType {
     // Internal client events
     SWITCH_CONTEXT = 0xA0,
     END_OF_GAME = 0xA1,
-    INITIALIZE_GAME_STATE = 0xA2,
+    UPDATE_PLAYER_ID = 0xA2,
     UPDATE_ROLE = 0xA3
 };
 };

@@ -16,6 +16,7 @@
 #include "handler/game_state_manager.h"
 
 #include "event/end_of_game_event.h"
+#include "event/update_player_id_event.h"
 #include "event/update_role_event.h"
 
 void Controller::Receiver::update_game_state(DTO::GameStateDTO&& dto) {
@@ -27,6 +28,12 @@ void Controller::Receiver::update_game_state(DTO::GameStateDTO&& dto) {
     } else if (game_state_manager) {
         game_state_manager->update(std::move(dto));
     }
+}
+
+void Controller::Receiver::update_player_id(DTO::PlayerIDDTO&& dto) {
+    try {
+        controller.lock()->push_event(make_shared<Model::UpdatePlayerIDEvent>(dto.id));
+    } catch (const std::exception&) {}
 }
 
 void Controller::Receiver::update_current_team(DTO::TeamIDDTO&& dto) {
@@ -42,8 +49,8 @@ void Controller::Receiver::receive_server_info() {
     std::visit(
         overloaded {
             [this](DTO::GameStateDTO&& d) { update_game_state(std::move(d)); },
+            [this](DTO::PlayerIDDTO&& d) { update_player_id(std::move(d)); },
             [this](DTO::TeamIDDTO&& d) { update_current_team(std::move(d)); },
-            [this](DTO::PlayerIDDTO&&) {},
             // TODO: Fix this
             [](DTO::MapDTO&&) {},
             [](DTO::MapNameListDTO&&) {},

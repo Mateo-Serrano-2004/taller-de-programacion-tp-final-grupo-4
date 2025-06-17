@@ -53,7 +53,7 @@ public:
     );
 
     Shared<GameStateManager> get_game_state_manager();
-    void build_game_state_manager(Weak<GameController> self, short_id_t player_id);
+    void set_self_pointer(Weak<GameController> self);
 
     GameController(GameController&&) = default;
     GameController& operator=(GameController&&) = default;

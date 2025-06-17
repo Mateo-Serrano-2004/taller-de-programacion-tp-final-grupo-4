@@ -17,17 +17,16 @@
 #include "model/game_state.h"
 #include "model/rendered_player.h"
 
-Controller::GameStateManager::GameStateManager(
-    Weak<Controller::GameController> controller,
-    short_id_t reference_player_id
-): controller(controller), reference_player_id(reference_player_id) {
-    game_state = make_shared<Model::GameState>();
-    SDL2pp::Point viewport_size = controller.lock()->get_renderer()->GetLogicalSize();
-    camera.set_viewport_size(viewport_size.GetX(), viewport_size.GetY());
+Controller::GameStateManager::GameStateManager(Weak<Controller::GameController> controller)
+: reference_player_id(std::nullopt),
+  game_state(make_shared<Model::GameState>()),
+  controller(controller) {
+  SDL2pp::Point viewport_size = controller.lock()->get_renderer()->GetLogicalSize();
+  camera.set_viewport_size(viewport_size.GetX(), viewport_size.GetY());
 }
 
-short_id_t Controller::GameStateManager::get_reference_player_id() const {
-    return reference_player_id;
+Shared<View::RenderedPlayer> Controller::GameStateManager::get_reference_player_unsafe() {
+    return game_state->get_player_by_id(reference_player_id);
 }
 
 Shared<View::RenderedPlayer> Controller::GameStateManager::get_reference_player() {
@@ -46,10 +45,15 @@ uint16_t Controller::GameStateManager::get_time_left() {
     std::lock_guard<std::mutex> lock(mutex);
     return game_state->get_time_left();
 }
+
 View::Camera Controller::GameStateManager::get_camera() {
     std::lock_guard<std::mutex> lock(mutex);
     return camera;
 };
+
+void Controller::GameStateManager::update_player_id(short_id_t new_id) {
+    reference_player_id = new_id;
+}
 
 void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
     auto new_game_state = make_shared<Model::GameState>();
@@ -67,9 +71,12 @@ void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
 
     std::lock_guard<std::mutex> lock(mutex);
     game_state = new_game_state;
-    auto reference_player_position = game_state->get_player_by_id(reference_player_id)->get_position();
-    camera.set_center(
-        reference_player_position.get_x(),
-        reference_player_position.get_y()
-    );
+    auto ref_player = game_state->get_player_by_id(reference_player_id);
+    if (ref_player) {
+        auto reference_player_position = ref_player->get_position();
+        camera.set_center(
+            reference_player_position.get_x(),
+            reference_player_position.get_y()
+        );
+    }
 }

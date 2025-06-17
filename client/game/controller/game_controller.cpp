@@ -22,6 +22,7 @@
 
 #include "event/switch_context_event.h"
 #include "event/quit_event.h"
+#include "event/update_player_id_event.h"
 #include "event/update_role_event.h"
 #include "event/transfered_event.h"
 
@@ -43,6 +44,9 @@ void Controller::GameController::process_event(Shared<Model::Event> event) {
         context_manager->set_current_context(switch_context_event->get_new_context_name());
     } else if (event_type == Model::EventType::END_OF_GAME) {
 		context_manager->set_current_context("end-of-game");
+	} else if (event_type == Model::EventType::UPDATE_PLAYER_ID) {
+		auto update_player_id_event = std::static_pointer_cast<Model::UpdatePlayerIDEvent>(event);
+		game_state_manager->update_player_id(update_player_id_event->get_new_id());
 	} else if (event_type == Model::EventType::UPDATE_ROLE) {
 		auto update_role_event = std::static_pointer_cast<Model::UpdateRoleEvent>(event);
 		auto pick_role_context = context_manager->get_context("pick-role");
@@ -71,10 +75,7 @@ Shared<Controller::GameStateManager> Controller::GameController::get_game_state_
     return game_state_manager;
 }
 
-void Controller::GameController::build_game_state_manager(
-	Weak<Controller::GameController> self,
-	short_id_t player_id
-) {
-	game_state_manager = make_shared<Controller::GameStateManager>(self, player_id);
+void Controller::GameController::set_self_pointer(Weak<Controller::GameController> self) {
+	game_state_manager = make_shared<Controller::GameStateManager>(self);
 	receiver = make_unique<Controller::Receiver>(self, protocol);
 }

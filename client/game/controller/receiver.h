@@ -29,7 +29,7 @@ protected:
     Receiver& operator=(const Receiver&) = delete;
 
     void update_game_state(DTO::GameStateDTO&& dto);
-    void initialize_game_state(DTO::PlayerIDDTO&& dto);
+    void update_player_id(DTO::PlayerIDDTO&& dto);
     void update_current_team(DTO::TeamIDDTO&& dto);
 
     void receive_server_info();

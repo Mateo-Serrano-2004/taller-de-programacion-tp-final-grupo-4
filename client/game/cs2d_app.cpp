@@ -157,14 +157,12 @@ App::CS2DApp::CS2DApp(Shared<Net::ClientProtocol> protocol): App::Application() 
     load_hud_textures(asset_manager, renderer);
     load_generated_textures(asset_manager, renderer);
 
-    short_id_t player_id = std::get<DTO::PlayerIDDTO>(protocol->receive_variant()).id;
-
     context_manager = make_shared<Context::ContextManager>();
     auto game_controller = make_shared<Controller::GameController>(
         window, renderer, asset_manager, context_manager, protocol
     );
     auto weak_game_controller = Weak<Controller::GameController>(game_controller);
-    game_controller->build_game_state_manager(weak_game_controller, player_id);
+    game_controller->set_self_pointer(weak_game_controller);
 
     auto in_game_context = make_shared<Context::InGameContext>(weak_game_controller);
     auto menu_context = make_shared<Context::MenuContext>(weak_game_controller);
