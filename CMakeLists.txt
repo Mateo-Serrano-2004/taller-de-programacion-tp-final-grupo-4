@@ -29,11 +29,21 @@ set_target_properties(cs2d_common PROPERTIES LINKER_LANGUAGE CXX)
 
 add_subdirectory(common/)
 
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_compile_definitions(cs2d_common PRIVATE DEBUG_MODE)
+endif()
+
 include(cmake/CompilerWarnings.cmake)
 set_project_warnings(cs2d_common ${CS2D_MAKE_WARNINGS_AS_ERRORS} FALSE)
 target_include_directories(cs2d_common PUBLIC .)
 
+# Program section
+# ---------------
 if(CS2D_CLIENT)
+    set(CMAKE_AUTOUIC ON)
+    set(CMAKE_AUTOMOC ON)
+    set(CMAKE_AUTORCC ON)
+
     set(SDL2PP_WITH_IMAGE YES)
     set(SDL2PP_WITH_MIXER YES)
     set(SDL2PP_WITH_TTF YES)
@@ -47,30 +57,19 @@ if(CS2D_CLIENT)
     )
 
     FetchContent_MakeAvailable(libSDL2pp)
-endif()
-
-# Program section
-# ---------------
-if(CS2D_CLIENT)
-    set(CMAKE_AUTOUIC ON)
-    set(CMAKE_AUTOMOC ON)
 
     add_executable(cs2d_client)
     add_dependencies(cs2d_client cs2d_common SDL2pp::SDL2pp)
     add_subdirectory(client/)
 
-    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-        target_compile_definitions(cs2d_client PRIVATE DEBUG_MODE)
-    endif()
-
-    find_package(Qt5 COMPONENTS Widgets REQUIRED)
+    find_package(Qt5 COMPONENTS Widgets Multimedia MultimediaWidgets REQUIRED)
     set_project_warnings(cs2d_client ${CS2D_MAKE_WARNINGS_AS_ERRORS} FALSE)
 
     target_include_directories(cs2d_client PRIVATE ${CMAKE_SOURCE_DIR})
     target_include_directories(cs2d_client PRIVATE ${libSDL2pp_SOURCE_DIR})
     target_include_directories(cs2d_client PRIVATE ${Qt5_INCLUDE_DIRS})
 
-    target_link_libraries(cs2d_client cs2d_common SDL2pp::SDL2pp Qt5::Widgets)
+    target_link_libraries(cs2d_client cs2d_common SDL2pp::SDL2pp Qt5::Widgets Qt5::Multimedia Qt5::MultimediaWidgets)
 endif()
 
 if(CS2D_SERVER)
