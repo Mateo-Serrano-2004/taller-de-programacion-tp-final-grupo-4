@@ -150,6 +150,8 @@ App::CS2DApp::CS2DApp(Shared<Net::ClientProtocol> protocol): App::Application() 
     auto renderer = make_shared<SDL2pp::Renderer>(*window, -1, SDL_RENDERER_ACCELERATED);
     renderer->SetLogicalSize(640, 480);
 
+    std::cout << SDL_GetCurrentAudioDriver() << std::endl;
+
     auto asset_manager = make_shared<Model::AssetManager>(renderer);
     load_weapon_sprites(asset_manager);
     load_player_sprites(asset_manager);
