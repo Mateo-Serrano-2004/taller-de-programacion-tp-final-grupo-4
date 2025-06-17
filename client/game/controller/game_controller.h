@@ -22,6 +22,7 @@ class ContextManager;
 namespace Model {
 class TransferedEvent;
 class AssetManager;
+class AssetLoader;
 };
 
 namespace SDL2pp {
@@ -58,6 +59,7 @@ public:
         Shared<SDL2pp::Window> window,
         Shared<SDL2pp::Renderer> renderer,
         Shared<Model::AssetManager> asset_manager,
+        Shared<Model::AssetLoader> asset_loader,
         Shared<Context::ContextManager> context_manager,
         Shared<Net::ClientProtocol> protocol
     );

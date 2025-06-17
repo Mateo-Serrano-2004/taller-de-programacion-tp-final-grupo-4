@@ -52,7 +52,9 @@ void Controller::Receiver::receive_server_info() {
             [this](DTO::PlayerIDDTO&& d) { update_player_id(std::move(d)); },
             [this](DTO::TeamIDDTO&& d) { update_current_team(std::move(d)); },
             // TODO: Fix this
-            [](DTO::MapDTO&&) {},
+            [](DTO::MapDTO&&) {
+                std::cout << "\n\nRECEIVED MAP\n\n";
+            },
             [](DTO::MapNameListDTO&&) {},
             [](DTO::GameListDTO&&) {}
         },

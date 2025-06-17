@@ -52,6 +52,7 @@ View::Camera Controller::GameStateManager::get_camera() {
 };
 
 void Controller::GameStateManager::update_player_id(short_id_t new_id) {
+    std::lock_guard<std::mutex> lock(mutex);
     reference_player_id = new_id;
 }
 

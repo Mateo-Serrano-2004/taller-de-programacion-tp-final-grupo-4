@@ -11,6 +11,7 @@
 #include "context/context_manager.h"
 
 #include "asset/asset_manager.h"
+#include "asset/asset_loader.h"
 
 #include "event/event.h"
 #include "event/switch_context_event.h"
@@ -22,9 +23,10 @@ Controller::BaseController::BaseController(
     Shared<SDL2pp::Window> window,
     Shared<SDL2pp::Renderer> renderer,
     Shared<Model::AssetManager> asset_manager,
+    Shared<Model::AssetLoader> asset_loader,
     Shared<Context::ContextManager> context_manager
 ): window(window), renderer(renderer), asset_manager(asset_manager),
-   context_manager(context_manager) {}
+   asset_loader(asset_loader), context_manager(context_manager) {}
 
 Shared<SDL2pp::Window> Controller::BaseController::get_window() {
     return window;

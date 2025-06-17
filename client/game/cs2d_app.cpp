@@ -11,13 +11,8 @@
 #include <SDL2pp/SDL2pp.hh>
 #include <SDL2pp/Window.hh>
 #include <SDL2pp/Renderer.hh>
-#include <SDL2pp/Texture.hh>
-#include <SDL2pp/Surface.hh>
-#include <SDL2pp/Color.hh>
-#include <SDL2pp/Point.hh>
 
 #include "common/definitions.h"
-#include "common/asset_addresser.h"
 
 #include "client/net/client_protocol.h"
 
@@ -28,10 +23,8 @@
 #include "context/shop_context.h"
 #include "context/end_of_game_context.h"
 
-#include "asset/asset_loader.h"
 #include "asset/asset_manager.h"
-#include "asset/asset_generator.h"
-#include "asset/font_id.h"
+#include "asset/asset_loader.h"
 
 #include "controller/game_controller.h"
 #include "controller/base_controller.h"
@@ -55,7 +48,7 @@ App::CS2DApp::CS2DApp(Shared<Net::ClientProtocol> protocol): App::Application() 
 
     context_manager = make_shared<Context::ContextManager>();
     auto game_controller = make_shared<Controller::GameController>(
-        window, renderer, asset_manager, context_manager, protocol
+        window, renderer, asset_manager, asset_loader, context_manager, protocol
     );
 
     auto weak_game_controller = Weak<Controller::GameController>(game_controller);

@@ -18,6 +18,7 @@
 #include "handler/game_state_manager.h"
 
 #include "asset/asset_manager.h"
+#include "asset/asset_loader.h"
 
 #include "event/switch_context_event.h"
 #include "event/quit_event.h"
@@ -29,9 +30,10 @@ Controller::GameController::GameController(
 	Shared<SDL2pp::Window> window,
 	Shared<SDL2pp::Renderer> renderer,
 	Shared<Model::AssetManager> asset_manager,
+	Shared<Model::AssetLoader> asset_loader,
 	Shared<Context::ContextManager> context_manager,
 	Shared<Net::ClientProtocol> protocol
-): Controller::BaseController(window, renderer, asset_manager, context_manager),
+): Controller::BaseController(window, renderer, asset_manager, asset_loader, context_manager),
    protocol(protocol) {
 	sender = make_unique<Controller::Sender>(&sender_queue, protocol);
 	bind_handlers();

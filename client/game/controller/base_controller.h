@@ -15,6 +15,7 @@ class ContextManager;
 namespace Model {
 class Event;
 class AssetManager;
+class AssetLoader;
 };
 
 namespace Controller {
@@ -24,6 +25,7 @@ protected:
     Shared<SDL2pp::Window> window;
     Shared<SDL2pp::Renderer> renderer;
     Shared<Model::AssetManager> asset_manager;
+    Shared<Model::AssetLoader> asset_loader;
     Shared<Context::ContextManager> context_manager;
 
     BaseController(const BaseController&) = delete;
@@ -36,6 +38,7 @@ public:
         Shared<SDL2pp::Window> window,
         Shared<SDL2pp::Renderer> renderer,
         Shared<Model::AssetManager> asset_manager,
+        Shared<Model::AssetLoader> asset_loader,
         Shared<Context::ContextManager> context_manager
     );
 

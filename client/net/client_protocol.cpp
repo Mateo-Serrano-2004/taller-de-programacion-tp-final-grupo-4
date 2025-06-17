@@ -97,7 +97,7 @@ DTO::MapDTO Net::ClientProtocol::receive_map() {
     skt.recvall(&map.count_of_columns, sizeof(map.count_of_columns));
     skt.recvall(&map.count_of_rows, sizeof(map.count_of_rows));
 
-    map.map = PathMap(map.count_of_columns, PathRow(map.count_of_rows));
+    map.map = PathMap(map.count_of_rows, PathRow(map.count_of_columns));
 
     for (uint8_t i = 0; i < map.count_of_rows; i++) {
         for (uint8_t j = 0; j < map.count_of_columns; j++) {

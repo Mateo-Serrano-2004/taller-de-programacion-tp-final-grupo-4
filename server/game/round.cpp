@@ -27,7 +27,7 @@ Round::Round()
 : state(RoundState::Warmup),
   number_of_ct_alive(0),
   number_of_tt_alive(0),
-  ticks_for_warmup_phase(600),
+  ticks_for_warmup_phase(3600),
   ticks_for_buying_phase(600),
   ticks_for_playing_phase(3600),
   active_ticks_remaining(600) {}

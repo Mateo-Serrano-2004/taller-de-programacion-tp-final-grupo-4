@@ -20,8 +20,8 @@ void ClientHandler::handle_create_game(const CreateGameEvent& event) {
                                                username, sender->get_queue());
     player_id = 0;
     sender->get_queue().push(DTO::PlayerIDDTO(player_id));
-    sender->get_queue().push(game_manager.get_map(event.get_map_name()));
     sender->get_queue().push(DTO::TeamIDDTO((short_id_t)Model::TeamID::CT));
+    sender->get_queue().push(game_manager.get_map(event.get_map_name()));
 }
 
 void ClientHandler::handle_join_game(const JoinGameEvent& event) {
