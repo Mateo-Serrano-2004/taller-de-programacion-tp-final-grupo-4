@@ -6,6 +6,7 @@
 #include <utility>
 
 #include "common/overloaded.h"
+#include "common/team.h"
 #include "common/DTO/dto_variant.h"
 
 #include "client/net/client_protocol.h"
@@ -15,7 +16,6 @@
 #include "handler/game_state_manager.h"
 
 #include "event/end_of_game_event.h"
-#include "event/initialize_game_state_event.h"
 #include "event/update_role_event.h"
 
 void Controller::Receiver::update_game_state(DTO::GameStateDTO&& dto) {
@@ -29,15 +29,11 @@ void Controller::Receiver::update_game_state(DTO::GameStateDTO&& dto) {
     }
 }
 
-void Controller::Receiver::initialize_game_state(DTO::PlayerIDDTO&& dto) {
-    try {
-        controller.lock()->push_event(make_shared<Model::InitializeGameStateEvent>(dto.id));
-    } catch (const std::exception&) {}
-}
-
 void Controller::Receiver::update_current_team(DTO::TeamIDDTO&& dto) {
     try {
-        controller.lock()->push_event(make_shared<Model::UpdateRoleEvent>(dto.id));
+        controller.lock()->push_event(make_shared<Model::UpdateRoleEvent>(
+            (Model::TeamID) dto.id)
+        );
     } catch (const std::exception&) {}
 }
 
@@ -46,8 +42,8 @@ void Controller::Receiver::receive_server_info() {
     std::visit(
         overloaded {
             [this](DTO::GameStateDTO&& d) { update_game_state(std::move(d)); },
-            [this](DTO::PlayerIDDTO&& d) { initialize_game_state(std::move(d)); },
             [this](DTO::TeamIDDTO&& d) { update_current_team(std::move(d)); },
+            [this](DTO::PlayerIDDTO&&) {},
             // TODO: Fix this
             [](DTO::MapDTO&&) {},
             [](DTO::MapNameListDTO&&) {},

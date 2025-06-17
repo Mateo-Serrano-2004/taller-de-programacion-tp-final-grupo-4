@@ -151,8 +151,6 @@ App::CS2DApp::CS2DApp(Shared<Net::ClientProtocol> protocol): App::Application() 
     auto renderer = make_shared<SDL2pp::Renderer>(*window, -1, SDL_RENDERER_ACCELERATED);
     renderer->SetLogicalSize(640, 480);
 
-    std::cout << SDL_GetCurrentAudioDriver() << std::endl;
-
     auto asset_manager = make_shared<Model::AssetManager>(renderer);
     load_weapon_sprites(asset_manager);
     load_player_sprites(asset_manager);
@@ -160,9 +158,6 @@ App::CS2DApp::CS2DApp(Shared<Net::ClientProtocol> protocol): App::Application() 
     load_generated_textures(asset_manager, renderer);
 
     short_id_t player_id = std::get<DTO::PlayerIDDTO>(protocol->receive_variant()).id;
-    short_id_t initial_team = std::get<DTO::TeamIDDTO>(protocol->receive_variant()).id;
-
-    std::cout << (int) player_id << "-" << (int) (initial_team) << "\n";
 
     context_manager = make_shared<Context::ContextManager>();
     auto game_controller = make_shared<Controller::GameController>(
@@ -173,10 +168,7 @@ App::CS2DApp::CS2DApp(Shared<Net::ClientProtocol> protocol): App::Application() 
 
     auto in_game_context = make_shared<Context::InGameContext>(weak_game_controller);
     auto menu_context = make_shared<Context::MenuContext>(weak_game_controller);
-    auto pick_role_context = make_shared<Context::PickRoleContext>(
-        weak_game_controller,
-        initial_team
-    );
+    auto pick_role_context = make_shared<Context::PickRoleContext>(weak_game_controller);
     auto shop_context = make_shared<Context::ShopContext>(weak_game_controller);
     auto end_of_game_context = make_shared<Context::EndOfGameContext>(weak_game_controller);
 

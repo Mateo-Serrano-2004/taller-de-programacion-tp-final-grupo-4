@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 
 #include "common/definitions.h"
+#include "common/team.h"
 
 #include "base_context.h"
 
@@ -31,6 +32,7 @@ private:
 
 protected:
     SDL_Event placeholder;
+    Model::TeamID current_team;
     Controller::PickRoleEventHandlerStrategy strategy;
     View::VerticalPane vertical_pane;
     View::Label label;
@@ -49,12 +51,9 @@ protected:
     void dispatch_events() override;
 
 public:
-    PickRoleContext(
-        Weak<Controller::GameController> controller,
-        short_id_t team_id
-    );
+    PickRoleContext(Weak<Controller::GameController> controller);
 
-    void update_team(short_id_t new_team);
+    void update_team(Model::TeamID new_team);
 
     ~PickRoleContext() override = default;
 };

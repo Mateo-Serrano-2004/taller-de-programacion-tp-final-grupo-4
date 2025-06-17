@@ -22,6 +22,7 @@
 #include "utils/enum_translator.h"
 
 void Context::PickRoleContext::trigger_buttons(Shared<SDL_Event> event) {
+    if (current_team == Model::TeamID::NONE) return;
     if (pick_role_1_button.trigger(event)) ;
     else if (pick_role_2_button.trigger(event)) ;
     else if (pick_role_3_button.trigger(event)) ;
@@ -67,7 +68,7 @@ void Context::PickRoleContext::set_buttons_for_tt() {
 }
 
 void Context::PickRoleContext::render() {
-    vertical_pane.render();
+    if (current_team != Model::TeamID::NONE) vertical_pane.render();
 }
 
 void Context::PickRoleContext::dispatch_events() {
@@ -76,11 +77,9 @@ void Context::PickRoleContext::dispatch_events() {
     }
 }
 
-Context::PickRoleContext::PickRoleContext(
-    Weak<Controller::GameController> controller,
-    short_id_t team_id
-)
+Context::PickRoleContext::PickRoleContext(Weak<Controller::GameController> controller)
 : Context::BaseContext("pick-role", controller),
+  current_team(Model::TeamID::NONE),
   strategy(controller, this),
   vertical_pane(controller, 10),
   label(controller),
@@ -103,12 +102,11 @@ Context::PickRoleContext::PickRoleContext(
     build_button(pick_role_2_button);
     build_button(pick_role_3_button);
     build_button(pick_role_4_button);
-
-    update_team(team_id);
 }
 
-void Context::PickRoleContext::update_team(short_id_t new_team) {
-    if (new_team) {
+void Context::PickRoleContext::update_team(Model::TeamID new_team) {
+    current_team = new_team;
+    if (new_team == Model::TeamID::TT) {
         set_buttons_for_tt();
     } else {
         set_buttons_for_ct();

@@ -3,6 +3,8 @@
 
 #include "common/team.h"
 
+#include "event.h"
+
 namespace Model {
 class UpdateRoleEvent: public Event {
 protected:
