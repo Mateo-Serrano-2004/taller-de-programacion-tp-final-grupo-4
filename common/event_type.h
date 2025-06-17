@@ -1,8 +1,10 @@
 #ifndef COMMON_EVENT_EVENT_TYPES_H
 #define COMMON_EVENT_EVENT_TYPES_H
 
+#include <cstdint>
+
 namespace Model {
-enum EventType {
+enum class EventType: uint8_t {
     // Game events
     MOVEMENT = 0x00,
     ROTATION = 0x01,

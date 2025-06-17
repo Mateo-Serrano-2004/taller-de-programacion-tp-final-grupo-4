@@ -55,4 +55,8 @@ using Maybe = std::optional<T>;
 template <typename T>
 using Ref = std::reference_wrapper<T>;
 
+// Events
+template <typename T>
+using Func = std::function<void(T)>;
+
 #endif  // COMMON_DEFINITIONS_H

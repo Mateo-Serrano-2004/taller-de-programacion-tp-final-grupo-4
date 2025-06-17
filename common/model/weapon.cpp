@@ -1,6 +1,7 @@
 #include "weapon.h"
 
 #include "common/weapon_id.h"
+#include "common/definitions.h"
 #include "common/DTO/weapon_dto.h"
 
 Model::Weapon::Weapon(
@@ -29,7 +30,7 @@ void Model::Weapon::set_total_ammo(uint16_t new_total_ammo) {
 
 DTO::WeaponDTO Model::Weapon::to_dto() const {
     return DTO::WeaponDTO(
-        weapon_id,
+        static_cast<short_id_t>(weapon_id),
         loaded_ammo,
         total_ammo
     );

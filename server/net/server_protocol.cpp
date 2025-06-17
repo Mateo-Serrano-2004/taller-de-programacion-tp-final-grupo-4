@@ -24,7 +24,7 @@ EventVariant ServerProtocol::receive_event() {
     std::vector<char> data(size);
     peer.recvall(data.data(), size);
 
-    uint8_t event = uint8_t(data[0]);
+    auto event = static_cast<Model::EventType>(data[0]);
 
     switch (event) {
         case Model::EventType::MOVEMENT: {
