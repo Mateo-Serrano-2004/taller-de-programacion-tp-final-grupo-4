@@ -6,6 +6,10 @@
 #include "common/definitions.h"
 #include "common/thread.h"
 
+#include "common/DTO/game_state_dto.h"
+#include "common/DTO/player_id_dto.h"
+#include "common/DTO/team_id_dto.h"
+
 namespace Net {
 class ClientProtocol;
 };
@@ -23,6 +27,12 @@ protected:
 
     Receiver(const Receiver&) = delete;
     Receiver& operator=(const Receiver&) = delete;
+
+    void update_game_state(DTO::GameStateDTO&& dto);
+    void update_player_id(DTO::PlayerIDDTO&& dto);
+    void update_current_team(DTO::TeamIDDTO&& dto);
+
+    void receive_server_info();
 
 public:
     Receiver(

@@ -13,6 +13,11 @@
 
 #include "event/switch_context_event.h"
 
+Shared<Context::BaseContext> Context::ContextManager::get_context(const std::string& context_name) {
+    auto context = contexts.find(context_name);
+    return context == contexts.end() ? nullptr : context->second;
+}
+
 void Context::ContextManager::add_context(Shared<Context::BaseContext> context) {
     contexts.insert({ context->get_name(), context });
 }

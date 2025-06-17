@@ -34,18 +34,15 @@ class GameStateManager {
 
 private:
     std::mutex mutex;
+    Maybe<short_id_t> reference_player_id;
     Shared<Model::GameState> game_state;
     View::Camera camera;
     Weak<GameController> controller;
-    short_id_t reference_player_id;
 
 public:
-    GameStateManager(
-        Weak<GameController> controller,
-        short_id_t reference_player_id
-    );
+    GameStateManager(Weak<GameController> controller);
 
-    short_id_t get_reference_player_id() const;
+    Shared<View::RenderedPlayer> get_reference_player_unsafe();
     Shared<View::RenderedPlayer> get_reference_player();
 
     void call_function_on_players(
@@ -55,6 +52,7 @@ public:
     uint16_t get_time_left();
     View::Camera get_camera();
 
+    void update_player_id(short_id_t new_id);
     void update(DTO::GameStateDTO&& game_state_dto);
 
     ~GameStateManager() = default;

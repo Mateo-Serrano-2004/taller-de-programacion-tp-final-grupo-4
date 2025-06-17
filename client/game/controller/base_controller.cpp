@@ -23,7 +23,8 @@ Controller::BaseController::BaseController(
     Shared<SDL2pp::Renderer> renderer,
     Shared<Model::AssetManager> asset_manager,
     Shared<Context::ContextManager> context_manager
-): window(window), renderer(renderer), asset_manager(asset_manager), context_manager(context_manager) {}
+): window(window), renderer(renderer), asset_manager(asset_manager),
+   context_manager(context_manager) {}
 
 Shared<SDL2pp::Window> Controller::BaseController::get_window() {
     return window;

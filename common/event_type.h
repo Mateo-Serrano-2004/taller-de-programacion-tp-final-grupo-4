@@ -1,8 +1,10 @@
 #ifndef COMMON_EVENT_EVENT_TYPES_H
 #define COMMON_EVENT_EVENT_TYPES_H
 
+#include <cstdint>
+
 namespace Model {
-enum EventType {
+enum class EventType: uint8_t {
     // Game events
     MOVEMENT = 0x00,
     ROTATION = 0x01,
@@ -30,7 +32,9 @@ enum EventType {
 
     // Internal client events
     SWITCH_CONTEXT = 0xA0,
-    END_OF_GAME = 0xA1
+    END_OF_GAME = 0xA1,
+    UPDATE_PLAYER_ID = 0xA2,
+    UPDATE_ROLE = 0xA3
 };
 };
 

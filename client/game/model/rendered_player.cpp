@@ -79,6 +79,7 @@ View::RenderedPlayer::RenderedPlayer(
    weapon_sprite_id(Model::EnumTranslator::get_texture_from_weapon(current_weapon->get_weapon_id())) {}
 
 void View::RenderedPlayer::render() {
+    if (team == Model::TeamID::NONE) return;
     Shared<SDL2pp::Texture> texture = asset_manager->get_texture(sprite_id);
     SDL2pp::Point sprite_top_left_corner = get_sprite_top_left_corner();
 

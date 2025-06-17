@@ -33,6 +33,7 @@ protected:
 public:
     ContextManager() = default;
 
+    Shared<BaseContext> get_context(const std::string& context_name);
     void add_context(Shared<BaseContext> context);
     void set_current_context(const std::string& context_name);
 

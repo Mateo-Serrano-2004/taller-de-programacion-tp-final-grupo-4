@@ -1,8 +1,10 @@
 #ifndef COMMON_WEAPON_ID_H
 #define COMMON_WEAPON_ID_H
 
+#include <cstdint>
+
 namespace Model {
-enum WeaponID {
+enum class WeaponID: uint8_t {
     KNIFE = 0x00,
     GLOCK = 0x01,
     AK47 = 0x02,

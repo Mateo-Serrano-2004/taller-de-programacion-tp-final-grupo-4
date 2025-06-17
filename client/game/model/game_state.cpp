@@ -11,8 +11,10 @@ std::map<short_id_t, Shared<View::RenderedPlayer>>& Model::GameState::get_player
     return players;
 }
 
-Shared<View::RenderedPlayer> Model::GameState::get_player_by_id(short_id_t id) {
-    auto it = players.find(id);
+Shared<View::RenderedPlayer> Model::GameState::get_player_by_id(Maybe<short_id_t> id) {
+    if (!id.has_value()) return nullptr;
+
+    auto it = players.find(id.value());
     if (it == players.end()) return nullptr;
     return it->second;
 }

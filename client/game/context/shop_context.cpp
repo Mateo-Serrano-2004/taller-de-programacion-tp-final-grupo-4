@@ -11,6 +11,8 @@
 
 #include "controller/game_controller.h"
 
+#include "command/composite_command.h"
+#include "command/switch_context_command.h"
 #include "command/buy_weapon_command.h"
 
 void Context::ShopContext::build_button(View::Button& button, const std::string& weapon_name, Model::WeaponID weapon_id) {
@@ -21,9 +23,10 @@ void Context::ShopContext::build_button(View::Button& button, const std::string&
     button.set_text(weapon_name);
     button.set_padding(6);
 
-    button.set_command(
-        std::move(make_unique<Command::BuyWeaponCommand>(weapon_id))
-    );
+    auto composite = make_unique<Command::CompositeCommand>(controller);
+    composite->add_command(make_unique<Command::BuyWeaponCommand>(weapon_id));
+    composite->add_command(make_unique<Command::SwitchContextCommand>("in-game"));
+    button.set_command(std::move(composite));
 }
 
 void Context::ShopContext::trigger_buttons(Shared<SDL_Event> event) {
