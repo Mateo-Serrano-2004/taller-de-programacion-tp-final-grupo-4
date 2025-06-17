@@ -20,6 +20,7 @@ public:
 signals:
     void cellClicked(int x, int y, Qt::MouseButton button);
     void cellDropped(int x, int y, int assetIndex);
+    void cellTileSelected(int x, int y);
 
 protected:
     void wheelEvent(QWheelEvent* event) override;
