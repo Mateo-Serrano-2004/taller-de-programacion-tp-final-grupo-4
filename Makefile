@@ -13,6 +13,9 @@ install-compile-tools:
 	@echo "Installing build dependencies"
 	@sudo apt-get install -y cmake g++
 
+install-yaml:
+	@sudo apt-get install -y libyaml-cpp-dev
+
 install-sdl2:
 	@echo "Installing SDL2 dependencies"
 	@sudo apt-get install -y libsdl2-2.0-0 libsdl2-dev libsdl2-image-2.0-0 libsdl2-image-dev libsdl2-mixer-2.0-0 libsdl2-mixer-dev libsdl2-ttf-2.0-0 libsdl2-ttf-dev
@@ -36,11 +39,8 @@ install-qt5:
 	@sudo apt-get install -y qtmultimedia5-dev
 	@sudo apt-get install -y libqt5multimedia5-plugins
 	@sudo apt-get install -y gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly
-	@sudo apt-get install -y qtmultimedia5-dev
-	@sudo apt-get install -y libqt5multimedia5-plugins
-	@sudo apt-get install -y gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly
 
-install: install-compile-tools install-sdl2 install-qt5
+install: install-compile-tools install-sdl2 install-qt5 install-yaml
 
 clean:
 	rm -Rf ./build

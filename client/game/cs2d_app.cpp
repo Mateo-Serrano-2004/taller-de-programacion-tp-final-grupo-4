@@ -16,6 +16,7 @@
 #include <SDL2pp/Point.hh>
 
 #include "common/definitions.h"
+#include "common/asset_addresser.h"
 
 #include "client/net/client_protocol.h"
 
@@ -28,7 +29,6 @@
 
 #include "asset/asset_manager.h"
 #include "asset/asset_generator.h"
-#include "asset/asset_addresser.h"
 #include "asset/font_id.h"
 
 #include "controller/game_controller.h"

@@ -18,6 +18,8 @@
 #include "../widgets/styled_button.h"
 #include "../widgets/styled_file_dialog.h"
 
+#include "common/asset_addresser.h"
+
 #include "common/definitions.h"
 #include "grid_view.h"
 #include "map_serializer.h"
@@ -179,7 +181,9 @@ void MapEditorWidget::addCategory(const QString& title) {
     titleItem->setFlags(Qt::NoItemFlags);
     assetsList->addItem(titleItem);
 
-    QDir dir(TILES_PATH + title);
+    Model::AssetAddresser addresser;
+
+    QDir dir(QString::fromStdString(addresser.get_tile_path(title.toStdString())));
     QStringList files = dir.entryList(QStringList() << "*.png", QDir::Files);
     for (const QString& fileName : files) {
         QListWidgetItem* item = new QListWidgetItem(QIcon(dir.filePath(fileName)), fileName);

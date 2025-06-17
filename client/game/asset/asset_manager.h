@@ -6,8 +6,8 @@
 #include <string>
 
 #include "common/definitions.h"
+#include "common/asset_addresser.h"
 
-#include "asset_addresser.h"
 #include "asset_generator.h"
 #include "asset/texture_id.h"
 

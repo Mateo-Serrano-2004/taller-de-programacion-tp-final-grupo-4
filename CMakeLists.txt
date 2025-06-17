@@ -17,8 +17,8 @@ project(counter_strike_2d
     )
 
 option(CS2D_TESTS "Enable / disable tests." OFF)
-option(CS2D_CLIENT "Enable / disable client program." OFF)
-option(CS2D_SERVER "Enable / disable server program." OFF)
+option(CS2D_CLIENT "Enable / disable client program." ON)
+option(CS2D_SERVER "Enable / disable server program." ON)
 option(CS2D_EDITOR "Enable / disable editor program." ON)
 option(CS2D_MAKE_WARNINGS_AS_ERRORS "Enable / disable warnings as errors." OFF)
 
@@ -29,11 +29,21 @@ set_target_properties(cs2d_common PROPERTIES LINKER_LANGUAGE CXX)
 
 add_subdirectory(common/)
 
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_compile_definitions(cs2d_common PRIVATE DEBUG_MODE)
+endif()
+
 include(cmake/CompilerWarnings.cmake)
 set_project_warnings(cs2d_common ${CS2D_MAKE_WARNINGS_AS_ERRORS} FALSE)
 target_include_directories(cs2d_common PUBLIC .)
 
+# Program section
+# ---------------
 if(CS2D_CLIENT)
+    set(CMAKE_AUTOUIC ON)
+    set(CMAKE_AUTOMOC ON)
+    set(CMAKE_AUTORCC ON)
+
     set(SDL2PP_WITH_IMAGE YES)
     set(SDL2PP_WITH_MIXER YES)
     set(SDL2PP_WITH_TTF YES)
@@ -47,22 +57,10 @@ if(CS2D_CLIENT)
     )
 
     FetchContent_MakeAvailable(libSDL2pp)
-endif()
-
-# Program section
-# ---------------
-if(CS2D_CLIENT)
-    set(CMAKE_AUTOUIC ON)
-    set(CMAKE_AUTOMOC ON)
-    set(CMAKE_AUTORCC ON)
 
     add_executable(cs2d_client)
     add_dependencies(cs2d_client cs2d_common SDL2pp::SDL2pp)
     add_subdirectory(client/)
-
-    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-        target_compile_definitions(cs2d_client PRIVATE DEBUG_MODE)
-    endif()
 
     find_package(Qt5 COMPONENTS Widgets Multimedia MultimediaWidgets REQUIRED)
     set_project_warnings(cs2d_client ${CS2D_MAKE_WARNINGS_AS_ERRORS} FALSE)

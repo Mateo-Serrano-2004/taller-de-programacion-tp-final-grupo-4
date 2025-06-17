@@ -1,5 +1,5 @@
-#ifndef CLIENT_GAME_ASSET_ASSET_ADDRESSER_H
-#define CLIENT_GAME_ASSET_ASSET_ADDRESSER_H
+#ifndef COMMON_ASSET_ADDRESSER_H
+#define COMMON_ASSET_ADDRESSER_H
 
 #include <string>
 
@@ -15,7 +15,8 @@ public:
     std::string get_player_sprite_path(const std::string& partial_path);
     std::string get_hud_resource(const std::string& partial_path);
     std::string get_font_path(const std::string& font_name);
+    std::string get_tile_path(const std::string& partial_path);
 };
 };
 
-#endif // CLIENT_GAME_ASSET_ASSET_ADDRESSER_H
+#endif // COMMON_ASSET_ADDRESSER_H

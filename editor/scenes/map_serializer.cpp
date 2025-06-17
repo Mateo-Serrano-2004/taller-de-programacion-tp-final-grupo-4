@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "common/definitions.h"
+#include "common/asset_addresser.h"
 
 #include "constants.h"
 
@@ -88,6 +89,7 @@ void MapSerializer::loadFromYaml(const QString& filePath, QGraphicsScene* scene)
     }
     
     YAML::Node root = YAML::LoadFile(filePath.toStdString());
+    Model::AssetAddresser addresser;
 
     for (const auto& tile : root["map"]["tiles"]) {
         int x = tile["x"].as<int>();
@@ -98,7 +100,7 @@ void MapSerializer::loadFromYaml(const QString& filePath, QGraphicsScene* scene)
         QListWidgetItem tempItem;
         tempItem.setData(Qt::UserRole, name);
         tempItem.setData(Qt::UserRole + 1, type);
-        tempItem.setIcon(QIcon(TILES_PATH + type + "/" + name));
+        tempItem.setIcon(QIcon(QString::fromStdString(addresser.get_tile_path(type.toStdString())) + "/" + name));
 
         QIcon icon = tempItem.icon();
         QPixmap pixmap = icon.pixmap(TILE_SIZE, TILE_SIZE);
