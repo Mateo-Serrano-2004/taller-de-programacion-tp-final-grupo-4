@@ -5,6 +5,7 @@
 #include <string>
 #include <memory>
 #include <utility>
+#include <variant>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
@@ -158,8 +159,8 @@ App::CS2DApp::CS2DApp(Shared<Net::ClientProtocol> protocol): App::Application() 
     load_hud_textures(asset_manager, renderer);
     load_generated_textures(asset_manager, renderer);
 
-    short_id_t player_id = protocol->receive_player_id();
-    short_id_t initial_team = protocol->receive_team();
+    short_id_t player_id = std::get<DTO::PlayerIDDTO>(protocol->receive_variant()).id;
+    short_id_t initial_team = std::get<DTO::TeamIDDTO>(protocol->receive_variant()).id;
 
     std::cout << (int) player_id << "-" << (int) (initial_team) << "\n";
 

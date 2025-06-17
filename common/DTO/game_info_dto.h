@@ -1,9 +1,10 @@
-#ifndef GAME_INFO_DTO_H
-#define GAME_INFO_DTO_H
+#ifndef COMMON_DTO_GAME_INFO_DTO_H
+#define COMMON_DTO_GAME_INFO_DTO_H
 
 #include <cstdint>
 #include <string>
 
+namespace DTO {
 struct GameInfoDTO {
     uint8_t id;
     std::string name;
@@ -16,5 +17,6 @@ struct GameInfoDTO {
                 const std::string& map_name):
             id(id), name(name), current_players(current_players), map_name(map_name) {}
 };
+}
 
-#endif  // GAME_INFO_DTO_H
+#endif  // COMMON_DTO_GAME_INFO_DTO_H

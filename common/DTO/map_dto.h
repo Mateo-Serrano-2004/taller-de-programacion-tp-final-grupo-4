@@ -7,6 +7,7 @@
 #include "common/definitions.h"
 
 using PathMap = std::vector<std::vector<std::string>>;
+using PathRow = std::vector<std::string>;
 
 namespace DTO {
 struct MapDTO {
@@ -16,6 +17,7 @@ public:
 
     PathMap map;
 
+    MapDTO(): count_of_columns(0), count_of_rows(0) {}
     MapDTO(uint8_t count_of_columns, uint8_t count_of_rows, const PathMap& map) :
         count_of_columns(count_of_columns), count_of_rows(count_of_rows), map(map) {}
 };

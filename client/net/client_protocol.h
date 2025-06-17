@@ -7,13 +7,9 @@
 #include <utility>
 #include <vector>
 
-#include "common/DTO/event_dto.h"
-#include "common/DTO/game_info_dto.h"
-#include "common/DTO/game_state_dto.h"
-#include "common/DTO/player_dto.h"
-#include "common/DTO/weapon_dto.h"
-#include "common/DTO/round_dto.h"
 #include "common/socket.h"
+#include "common/DTO/event_dto.h"
+#include "common/DTO/dto_variant.h"
 
 namespace Net {
 
@@ -24,7 +20,19 @@ private:
     void receive_weapon(DTO::WeaponDTO& weapon);
     void receive_player(DTO::PlayerDTO& player);
     void receive_player_list(std::vector<DTO::PlayerDTO>& players);
-    DTO::RoundDTO receive_round(DTO::RoundDTO& round);
+    void receive_round(DTO::RoundDTO& round);
+    DTO::GameStateDTO receive_match_state();
+
+    DTO::PlayerIDDTO receive_player_id();
+
+    DTO::TeamIDDTO receive_team();
+
+    DTO::MapDTO receive_map();
+
+    DTO::MapNameListDTO receive_map_list();
+
+    void receive_game_info(DTO::GameInfoDTO& dto);
+    DTO::GameListDTO receive_game_list();
 
     ClientProtocol(const ClientProtocol&) = delete;
     ClientProtocol& operator=(const ClientProtocol&) = delete;
@@ -37,12 +45,7 @@ public:
 
     void send_event(const DTO::EventDTO& event_dto);
 
-    DTO::GameStateDTO receive_match_state();
-    std::list<GameInfoDTO> receive_game_list();
-    std::list<std::string> receive_map_list();
-    std::vector<std::vector<std::string>> receive_map();
-    uint8_t receive_player_id();
-    uint8_t receive_team();
+    DTO::DTOVariant receive_variant();
 
     ClientProtocol(ClientProtocol&&) = default;
     ClientProtocol& operator=(ClientProtocol&&) = default;

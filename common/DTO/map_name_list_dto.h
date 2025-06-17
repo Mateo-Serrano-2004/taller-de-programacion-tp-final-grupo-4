@@ -11,6 +11,7 @@ struct MapNameListDTO {
 public:
     std::vector<std::string> maps_names;
 
+    MapNameListDTO() = default;
     MapNameListDTO(const std::vector<std::string> maps_names) : maps_names(maps_names) {}
 };
 };

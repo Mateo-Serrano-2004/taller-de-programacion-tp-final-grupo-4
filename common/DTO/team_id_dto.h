@@ -8,6 +8,7 @@ struct TeamIDDTO {
 public:
     short_id_t id;
 
+    TeamIDDTO(): id(0) {}
     TeamIDDTO(short_id_t id) : id(id) {}
 };
 };

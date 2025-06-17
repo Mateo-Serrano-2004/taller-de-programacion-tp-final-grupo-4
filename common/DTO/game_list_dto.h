@@ -12,6 +12,7 @@ struct GameListDTO {
 public:
     std::vector<GameInfoDTO> games;
 
+    GameListDTO() = default;
     GameListDTO(const std::vector<GameInfoDTO>& games) : games(games) {}
 };
 };

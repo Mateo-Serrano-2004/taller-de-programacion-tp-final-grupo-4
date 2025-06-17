@@ -172,9 +172,7 @@ void Game::process_frames(uint16_t frames_to_process) {
 void Game::broadcast_game_state() {
     std::vector<DTO::PlayerDTO> player_dtos;
     for (const auto& [id, player] : players) {
-        if (player.get_role_id() != Model::RoleID::NO_ROLE) {
-            player_dtos.push_back(player.to_dto());
-        }
+        player_dtos.push_back(player.to_dto());
     }
 
     DTO::RoundDTO round_dto = round.to_dto(GAME_FPS);
@@ -197,11 +195,9 @@ void Game::broadcast_game_state() {
     );
 
     for (auto& [id, queue]: client_queues) {
-        if (players.at(id).get_role_id() != Model::RoleID::NO_ROLE) {
-            try {
-                queue->push(game_snapshot);
-            } catch (const ClosedQueue&) {}
-        }
+        try {
+            queue->push(game_snapshot);
+        } catch (const ClosedQueue&) {}
     }
 }
 

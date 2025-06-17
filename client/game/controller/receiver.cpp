@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <exception>
+#include <variant>
 
 #include "common/DTO/game_state_dto.h"
 
@@ -26,7 +27,7 @@ Controller::Receiver::Receiver(
 void Controller::Receiver::run() {
     while (keep_running) {
         try {
-            DTO::GameStateDTO game_state_dto = protocol->receive_match_state();
+            auto game_state_dto = std::get<DTO::GameStateDTO>(protocol->receive_variant());
             if (game_state_dto.ended) {
                 keep_running = false;
                 try {

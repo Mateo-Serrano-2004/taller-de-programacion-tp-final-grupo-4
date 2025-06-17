@@ -55,12 +55,12 @@ std::pair<short_id_t, GameQueue*> GameManager::join_game(const uint8_t& game_id,
     return pair;
 }
 
-std::vector<GameInfoDTO> GameManager::get_games() {
+std::vector<DTO::GameInfoDTO> GameManager::get_games() {
     std::lock_guard<std::mutex> lock(mtx);
     reap_games();
-    std::vector<GameInfoDTO> games_info;
+    std::vector<DTO::GameInfoDTO> games_info;
     for (const auto& game: games) {
-        GameInfoDTO game_info = {game.first, game.second->get_party_name(),
+        DTO::GameInfoDTO game_info = {game.first, game.second->get_party_name(),
                                  game.second->get_number_of_players(), game.second->get_map_name()};
         games_info.push_back(game_info);
     }

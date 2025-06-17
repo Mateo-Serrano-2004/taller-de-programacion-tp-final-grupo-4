@@ -5,7 +5,7 @@
 #include <QGraphicsScene>
 #include <QPushButton>
 #include <QTableWidget>
-#include <list>
+#include <vector>
 
 #include "common/DTO/game_info_dto.h"
 
@@ -16,7 +16,7 @@ class JoinGameScene: public BackgroundScene {
 
 public:
     explicit JoinGameScene(QObject* parent = nullptr);
-    void setAvailableGames(const std::list<GameInfoDTO>& games);
+    void setAvailableGames(const std::vector<DTO::GameInfoDTO>& games);
     int selectedGameId() const;
 
 signals:

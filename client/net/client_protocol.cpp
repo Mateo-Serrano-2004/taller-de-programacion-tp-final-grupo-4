@@ -5,6 +5,7 @@
 #include <arpa/inet.h>
 
 #include "common/DTO/event_dto.h"
+#include "common/DTO/dto_code.h"
 
 void Net::ClientProtocol::receive_weapon(DTO::WeaponDTO& weapon) {
     skt.recvall(&weapon.weapon_id, sizeof(weapon.weapon_id));
@@ -53,15 +54,13 @@ void Net::ClientProtocol::receive_player_list(std::vector<DTO::PlayerDTO>& playe
     }
 }
 
-DTO::RoundDTO Net::ClientProtocol::receive_round(DTO::RoundDTO& round) {
+void Net::ClientProtocol::receive_round(DTO::RoundDTO& round) {
     skt.recvall(&round.state, sizeof(round.state));
     skt.recvall(&round.ended, sizeof(round.ended));
     skt.recvall(&round.time_left, sizeof(round.time_left));
     skt.recvall(&round.winner, sizeof(round.winner));
 
     round.time_left = htons(round.time_left);
-
-    return round;
 }
 
 DTO::GameStateDTO Net::ClientProtocol::receive_match_state() {
@@ -79,95 +78,116 @@ DTO::GameStateDTO Net::ClientProtocol::receive_match_state() {
     return game_state_dto;
 }
 
-void Net::ClientProtocol::send_event(const DTO::EventDTO& event_dto) {
-    skt.sendall(&event_dto.size, sizeof(event_dto.size));
-    skt.sendall(event_dto.data.data(), event_dto.size);
+DTO::PlayerIDDTO Net::ClientProtocol::receive_player_id() {
+    DTO::PlayerIDDTO player_id;
+    skt.recvall(&player_id.id, sizeof(player_id.id));
+
+    return player_id;
 }
 
-std::list<GameInfoDTO> Net::ClientProtocol::receive_game_list() {
-    uint8_t games_info_size;
-    skt.recvall(&games_info_size, sizeof(games_info_size));
+DTO::TeamIDDTO Net::ClientProtocol::receive_team() {
+    DTO::TeamIDDTO team;
+    skt.recvall(&team.id, sizeof(team.id));
 
-    std::list<GameInfoDTO> games_info;
+    return team;
+}
 
-    for (uint8_t i = 0; i < games_info_size; i++) {
-        GameInfoDTO dto = GameInfoDTO();
-        skt.recvall(&dto.id, sizeof(dto.id));
+DTO::MapDTO Net::ClientProtocol::receive_map() {
+    DTO::MapDTO map;
+    skt.recvall(&map.count_of_columns, sizeof(map.count_of_columns));
+    skt.recvall(&map.count_of_rows, sizeof(map.count_of_rows));
 
-        uint8_t game_name_size;
-        skt.recvall(&game_name_size, sizeof(game_name_size));
+    map.map = PathMap(map.count_of_columns, PathRow(map.count_of_rows));
 
-        std::vector<char> game_name(game_name_size);
-        skt.recvall(game_name.data(), game_name_size);
-        dto.name = std::string(game_name.begin(), game_name.end());
+    for (uint8_t i = 0; i < map.count_of_rows; i++) {
+        for (uint8_t j = 0; j < map.count_of_columns; j++) {
+            uint8_t path_size;
+            skt.recvall(&path_size, sizeof(path_size));
 
-        skt.recvall(&dto.current_players, sizeof(dto.current_players));
-        skt.recvall(&dto.max_players, sizeof(dto.max_players));
-
-        uint8_t map_name_size;
-        skt.recvall(&map_name_size, sizeof(map_name_size));
-
-        std::vector<char> map_name(map_name_size);
-        skt.recvall(map_name.data(), map_name_size);
-        dto.map_name = std::string(map_name.begin(), map_name.end());
-
-        games_info.push_back(dto);
+            std::vector<char> path(path_size);
+            skt.recvall(path.data(), path_size);
+            map.map[i][j] = std::string(path.begin(), path.end());
+        }
     }
 
-    return games_info;
+    return map;
 }
 
-std::list<std::string> Net::ClientProtocol::receive_map_list() {
+DTO::MapNameListDTO Net::ClientProtocol::receive_map_list() {
+    DTO::MapNameListDTO map_name;
     uint8_t maps_size;
     skt.recvall(&maps_size, sizeof(maps_size));
-
-    std::list<std::string> maps;
 
     for (uint8_t i = 0; i < maps_size; i++) {
         uint8_t map_name_size;
         skt.recvall(&map_name_size, sizeof(map_name_size));
 
-        std::vector<char> map_name(map_name_size);
-        skt.recvall(map_name.data(), map_name_size);
-        maps.push_back(std::string(map_name.begin(), map_name.end()));
+        std::vector<char> name(map_name_size);
+        skt.recvall(name.data(), map_name_size);
+        map_name.maps_names.push_back(std::string(name.begin(), name.end()));
     }
 
-    return maps;
+    return map_name;
 }
 
-uint8_t Net::ClientProtocol::receive_player_id() {
-    uint8_t player_id;
-    skt.recvall(&player_id, sizeof(player_id));
+void Net::ClientProtocol::receive_game_info(DTO::GameInfoDTO& dto) {
+    skt.recvall(&dto.id, sizeof(dto.id));
 
-    return player_id;
+    uint8_t game_name_size;
+    skt.recvall(&game_name_size, sizeof(game_name_size));
+
+    std::vector<char> game_name(game_name_size);
+    skt.recvall(game_name.data(), game_name_size);
+    dto.name = std::string(game_name.begin(), game_name.end());
+
+    skt.recvall(&dto.current_players, sizeof(dto.current_players));
+    skt.recvall(&dto.max_players, sizeof(dto.max_players));
+
+    uint8_t map_name_size;
+    skt.recvall(&map_name_size, sizeof(map_name_size));
+
+    std::vector<char> map_name(map_name_size);
+    skt.recvall(map_name.data(), map_name_size);
+    dto.map_name = std::string(map_name.begin(), map_name.end());
 }
 
-uint8_t Net::ClientProtocol::receive_team() {
-    uint8_t team;
-    skt.recvall(&team, sizeof(team));
+DTO::GameListDTO Net::ClientProtocol::receive_game_list() {
+    DTO::GameListDTO games;
 
-    return team;
-}
+    uint8_t size;
+    skt.recvall(&size, sizeof(size));
 
-std::vector<std::vector<std::string>> Net::ClientProtocol::receive_map() {
-    uint8_t map_size;
-    skt.recvall(&map_size, sizeof(map_size));
 
-    uint8_t row_size;
-    skt.recvall(&row_size, sizeof(row_size));
-
-    std::vector<std::vector<std::string>> map(map_size, std::vector<std::string>(row_size));
-
-    for (uint8_t i = 0; i < map_size; i++) {
-        for (uint8_t j = 0; j < row_size; j++) {
-            uint8_t tile_size;
-            skt.recvall(&tile_size, sizeof(tile_size));
-
-            std::vector<char> tile(tile_size);
-            skt.recvall(tile.data(), tile_size);
-            map[i][j] = std::string(tile.begin(), tile.end());
-        }
+    for (uint8_t i = 0; i < size; i++) {
+        DTO::GameInfoDTO dto;
+        receive_game_info(dto);
+        games.games.push_back(dto);
     }
 
-    return map;
+    return games;
+}
+
+void Net::ClientProtocol::send_event(const DTO::EventDTO& event_dto) {
+    skt.sendall(&event_dto.size, sizeof(event_dto.size));
+    skt.sendall(event_dto.data.data(), event_dto.size);
+}
+
+DTO::DTOVariant Net::ClientProtocol::receive_variant() {
+    DTO::DTOCode code;
+    skt.recvall(&code, sizeof(code));
+
+    switch (code) {
+        case DTO::DTOCode::GAME_STATE:
+            return receive_match_state();
+        case DTO::DTOCode::PLAYER_ID:
+            return receive_player_id();
+        case DTO::DTOCode::TEAM_ID:
+            return receive_team();
+        case DTO::DTOCode::MAP:
+            return receive_map();
+        case DTO::DTOCode::MAP_NAMES_LIST:
+            return receive_map_list();
+        case DTO::DTOCode::GAMES_LIST:
+            return receive_game_list();
+    }
 }

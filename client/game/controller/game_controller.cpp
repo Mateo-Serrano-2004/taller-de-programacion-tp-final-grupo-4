@@ -42,6 +42,7 @@ void Controller::GameController::process_event(Shared<Model::Event> event) {
     } else if (event_type == Model::EventType::END_OF_GAME) {
 		context_manager->set_current_context("end-of-game");
 	} else {
+		if (event_type == Model::EventType::QUIT) receiver.reset();
 		try {
 			auto transfered_event = std::static_pointer_cast<Model::TransferedEvent>(event);
 			sender_queue.push(transfered_event);
@@ -50,9 +51,6 @@ void Controller::GameController::process_event(Shared<Model::Event> event) {
 
 	if (event_type == Model::EventType::QUIT) {
 		std::cout << "Received a QUIT event\n";
-		receiver.reset();
-		sender_queue.close();
-		sender.reset();
 		throw ClosedAppException("Closed app"); 
 	}
 

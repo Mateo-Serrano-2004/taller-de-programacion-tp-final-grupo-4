@@ -148,8 +148,9 @@ void ServerProtocol::send_round(const DTO::RoundDTO& round_dto) {
 }
 
 void ServerProtocol::send_game_state(const DTO::GameStateDTO& game_state_dto) {
-    // DTO::DTOCode code = DTO::DTOCode::GAME_STATE;
-    // peer.sendall(&code, sizeof(code));
+    DTO::DTOCode code = DTO::DTOCode::GAME_STATE;
+    peer.sendall(&code, sizeof(code));
+
     peer.sendall(&game_state_dto.game_state, sizeof(game_state_dto.game_state));
     peer.sendall(&game_state_dto.ended, sizeof(game_state_dto.ended));
     peer.sendall(&game_state_dto.winner, sizeof(game_state_dto.winner));
@@ -160,8 +161,8 @@ void ServerProtocol::send_game_state(const DTO::GameStateDTO& game_state_dto) {
 }
 
 void ServerProtocol::send_all_maps_names(const DTO::MapNameListDTO& maps) {
-    // DTO::DTOCode code = DTO::DTOCode::MAP_NAMES_LIST;
-    // peer.sendall(&code, sizeof(code));
+    DTO::DTOCode code = DTO::DTOCode::MAP_NAMES_LIST;
+    peer.sendall(&code, sizeof(code));
 
     uint8_t size = static_cast<uint8_t>(maps.maps_names.size());
 
@@ -175,8 +176,8 @@ void ServerProtocol::send_all_maps_names(const DTO::MapNameListDTO& maps) {
 }
 
 void ServerProtocol::send_games(const DTO::GameListDTO& game_list_dto) {
-    // DTO::DTOCode code = DTO::DTOCode::GAMES_LIST;
-    // peer.sendall(&code, sizeof(code));
+    DTO::DTOCode code = DTO::DTOCode::GAMES_LIST;
+    peer.sendall(&code, sizeof(code));
 
     uint8_t size = static_cast<uint8_t>(game_list_dto.games.size());
     peer.sendall(&size, sizeof(size));
@@ -200,20 +201,20 @@ void ServerProtocol::send_games(const DTO::GameListDTO& game_list_dto) {
 }
 
 void ServerProtocol::send_player_id(const DTO::PlayerIDDTO& player_id_dto) {
-    // DTO::DTOCode code = DTO::DTOCode::PLAYER_ID;
-    // peer.sendall(&code, sizeof(code));
+    DTO::DTOCode code = DTO::DTOCode::PLAYER_ID;
+    peer.sendall(&code, sizeof(code));
     peer.sendall(&player_id_dto.id, sizeof(player_id_dto.id));
 }
 
 void ServerProtocol::send_team_id(const DTO::TeamIDDTO& team_id_dto) {
-    // DTO::DTOCode code = DTO::DTOCode::TEAM_ID;
-    // peer.sendall(&code, sizeof(code));
+    DTO::DTOCode code = DTO::DTOCode::TEAM_ID;
+    peer.sendall(&code, sizeof(code));
     peer.sendall(&team_id_dto.id, sizeof(team_id_dto.id));
 }
 
 void ServerProtocol::send_map(const DTO::MapDTO& map_dto) {
-    // DTO::DTOCode code = DTO::DTOCode::MAP;
-    // peer.sendall(&code, sizeof(code));
+    DTO::DTOCode code = DTO::DTOCode::MAP;
+    peer.sendall(&code, sizeof(code));
 
     auto map = map_dto.map;
     uint8_t cols = map_dto.count_of_columns;

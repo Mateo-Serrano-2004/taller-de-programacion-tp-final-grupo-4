@@ -6,7 +6,7 @@
 #include <QTableWidgetItem>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <list>
+#include <vector>
 
 #include "../widgets/styled_button.h"
 
@@ -14,7 +14,7 @@ JoinGameScene::JoinGameScene(QObject* parent): BackgroundScene(parent), mainWidg
     setUpJoin();
 }
 
-void JoinGameScene::setAvailableGames(const std::list<GameInfoDTO>& games) {
+void JoinGameScene::setAvailableGames(const std::vector<DTO::GameInfoDTO>& games) {
     gameTableWidget->setRowCount(static_cast<int>(games.size()));
     int row = 0;
     for (const auto& game: games) {

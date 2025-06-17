@@ -1,8 +1,9 @@
 #include "main_window.h"
 
-#include <list>
+#include <vector>
 #include <memory>
 #include <string>
+#include <variant>
 #include <iostream>
 
 #include "common/DTO/game_info_dto.h"
@@ -43,8 +44,8 @@ void MainWindow::loadGames() {
     auto requestGamesListEvent = make_shared<Model::RequestGamesListEvent>();
     protocol->send_event(requestGamesListEvent->as_dto());
 
-    std::list<GameInfoDTO> games = protocol->receive_game_list();
-    joinGameScene->setAvailableGames(games);
+    auto games = std::get<DTO::GameListDTO>(protocol->receive_variant());
+    joinGameScene->setAvailableGames(games.games);
 }
 
 void MainWindow::clearCurrentScene() {
@@ -108,9 +109,9 @@ void MainWindow::showGameCreationScene() {
     auto requestMapsEvent = std::make_shared<Model::RequestMapsEvent>();
     protocol->send_event(requestMapsEvent->as_dto());
 
-    std::list<std::string> maps = protocol->receive_map_list();
+    auto map_name_list = std::get<DTO::MapNameListDTO>(protocol->receive_variant());
     QStringList qMaps;
-    for (const auto& map: maps) {
+    for (const auto& map: map_name_list.maps_names) {
         qMaps << QString::fromStdString(map);
     }
     gameCreationScene->setAvailableMaps(qMaps);

@@ -38,7 +38,7 @@ public:
                       Queue<DTO::DTOVariant>& client_queue);
 
     uint8_t get_number_of_games();
-    std::vector<GameInfoDTO> get_games();
+    std::vector<DTO::GameInfoDTO> get_games();
     std::vector<std::string> get_name_maps();
     std::string get_game_map(const uint8_t& game_id);
 
