@@ -8,9 +8,9 @@ YamlParser::YamlParser(const std::string& yamlGameConfigPath) {
 
 void YamlParser::parseMapYaml(const std::string& yamlPath) {
     YAML::Node root = YAML::LoadFile(yamlPath);
-    
-    mapMinWidth = root["map"]["minWidht"].as<int>();
-    mapMaxWidth = root["map"]["maxWidht"].as<int>();
+
+    mapMinWidth = root["map"]["minWidth"].as<int>();
+    mapMaxWidth = root["map"]["maxWidth"].as<int>();
 
     mapMinHeight = root["map"]["minHeight"].as<int>();
     mapMaxHeight = root["map"]["maxHeight"].as<int>();
@@ -34,7 +34,6 @@ void YamlParser::parseMapYaml(const std::string& yamlPath) {
             tileMatrix[resizedY][resizedX] = type + "/" + name;
             typeMatrix[resizedY][resizedX] = stringToTileType(type, name);
         }
-
     }
 }
 

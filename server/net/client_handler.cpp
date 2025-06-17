@@ -1,6 +1,5 @@
 #include "client_handler.h"
 
-#include <iostream>
 #include <utility>
 #include <variant>
 #include <exception>
@@ -21,7 +20,8 @@ void ClientHandler::handle_create_game(const CreateGameEvent& event) {
     player_id = 0;
     sender->get_queue().push(DTO::PlayerIDDTO(player_id));
     sender->get_queue().push(DTO::TeamIDDTO((short_id_t)Model::TeamID::CT));
-    sender->get_queue().push(game_manager.get_map(event.get_map_name()));
+    auto map = game_manager.get_map(event.get_map_name());
+    sender->get_queue().push(map);
 }
 
 void ClientHandler::handle_join_game(const JoinGameEvent& event) {
@@ -30,7 +30,8 @@ void ClientHandler::handle_join_game(const JoinGameEvent& event) {
         player_id = pair.first;
         game_queue = pair.second;
         sender->get_queue().push(DTO::PlayerIDDTO(player_id));
-        sender->get_queue().push(game_manager.get_map(game_manager.get_game_map(event.get_game_id())));
+        auto map = game_manager.get_map(game_manager.get_game_map(event.get_game_id()));
+        sender->get_queue().push(map);
         sender->get_queue().push(DTO::TeamIDDTO(player_id % 2));
     } catch (const InvalidGameException& e) {
         std::cout << "An exception happend\n";

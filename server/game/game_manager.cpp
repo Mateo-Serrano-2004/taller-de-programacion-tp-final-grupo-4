@@ -3,7 +3,6 @@
 #include <string>
 #include <mutex>
 #include <algorithm>
-#include <iostream>
 
 #include "common/team.h"
 
@@ -74,14 +73,6 @@ std::vector<DTO::GameInfoDTO> GameManager::get_games() {
 }
 
 std::vector<std::string> GameManager::get_name_maps() {
-    // return {
-    //     "de_dust2",
-    //     "de_mirage",
-    //     "de_inferno",
-    //     "de_nuke",
-    //     "de_overpass",
-    //     "de_train"
-    // };
     return maps_names;
 }
 

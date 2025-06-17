@@ -12,12 +12,12 @@ using PathRow = std::vector<std::string>;
 namespace DTO {
 struct MapDTO {
 public:
+    PathMap map;
     uint8_t count_of_columns;
     uint8_t count_of_rows;
-    PathMap map;
 
     MapDTO() : count_of_columns(0), count_of_rows(0) {}
-    MapDTO(const PathMap& map) : map(map), count_of_columns(map.size()), count_of_rows(map[0].size()) {}
+    MapDTO(const PathMap& map) : map(map), count_of_columns(map[0].size()), count_of_rows(map.size()) {}
 };
 };
 
