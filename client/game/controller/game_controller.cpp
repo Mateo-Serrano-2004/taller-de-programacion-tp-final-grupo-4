@@ -21,6 +21,7 @@
 
 #include "event/switch_context_event.h"
 #include "event/quit_event.h"
+#include "event/initialize_game_state_event.h"
 #include "event/transfered_event.h"
 
 Controller::GameController::GameController(
@@ -41,6 +42,16 @@ void Controller::GameController::process_event(Shared<Model::Event> event) {
         context_manager->set_current_context(switch_context_event->get_new_context_name());
     } else if (event_type == Model::EventType::END_OF_GAME) {
 		context_manager->set_current_context("end-of-game");
+	} else if (event_type == Model::EventType::INITIALIZE_GAME_STATE) {
+		auto initialize_event = std::static_pointer_cast<Model::InitializeGameStateEvent>(event);
+		game_state_manager = make_shared<Controller::GameStateManager>(
+			self_weak, initialize_event->get_player_id()
+		);
+		receiver.set_game_state_manager(game_state_manager);
+	} else if (event_type == Model::EventType::UPDATE_ROLE) {
+		auto update_role_event = std::static_pointer_cast<Model::InitializeGameStateEvent>(event);
+		context_manager->get_context("pick-role");
+		receiver.set_game_state_manager(game_state_manager);
 	} else {
 		if (event_type == Model::EventType::QUIT) receiver.reset();
 		try {

@@ -13,6 +13,8 @@
 
 #include "event/switch_context_event.h"
 
+void Context::ContextManager::get_context(const std::string& context_name) {}
+
 void Context::ContextManager::add_context(Shared<Context::BaseContext> context) {
     contexts.insert({ context->get_name(), context });
 }

@@ -3,8 +3,10 @@
 #include <iostream>
 #include <exception>
 #include <variant>
+#include <utility>
 
-#include "common/DTO/game_state_dto.h"
+#include "common/overloaded.h"
+#include "common/DTO/dto_variant.h"
 
 #include "client/net/client_protocol.h"
 
@@ -13,29 +15,61 @@
 #include "handler/game_state_manager.h"
 
 #include "event/end_of_game_event.h"
+#include "event/initialize_game_state_event.h"
+#include "event/update_role_event.h"
 
-Controller::Receiver::Receiver(
-    Weak<GameController> controller,
-    Shared<Net::ClientProtocol> protocol
-): keep_running(true),
-   controller(controller),
-   game_state_manager(controller.lock()->get_game_state_manager()),
-   protocol(protocol) {
+void Controller::Receiver::update_game_state(DTO::GameStateDTO&& dto) {
+    if (dto.ended) {
+        keep_running = false;
+        try {
+            controller.lock()->push_event(make_shared<Model::EndOfGameEvent>());
+        } catch (const std::exception&) {}
+    } else if (game_state_manager) {
+        game_state_manager->update(std::move(dto));
+    }
+}
+
+void Controller::Receiver::initialize_game_state(DTO::PlayerIDDTO&& dto) {
+    try {
+        controller.lock()->push_event(make_shared<Model::InitializeGameStateEvent>(dto.id));
+    } catch (const std::exception&) {}
+}
+
+void Controller::Receiver::update_current_team(DTO::TeamIDDTO&& dto) {
+    try {
+        controller.lock()->push_event(make_shared<Model::UpdateRoleEvent>(dto.id));
+    } catch (const std::exception&) {}
+}
+
+void Controller::Receiver::receive_server_info() {
+    auto variant = protocol->receive_variant();
+    std::visit(
+        overloaded {
+            [this](DTO::GameStateDTO&& d) { update_game_state(std::move(d)); },
+            [this](DTO::PlayerIDDTO&& d) { initialize_game_state(std::move(d)); },
+            [this](DTO::TeamIDDTO&& d) { update_current_team(std::move(d)); },
+            // TODO: Fix this
+            [](DTO::MapDTO&&) {},
+            [](DTO::MapNameListDTO&&) {},
+            [](DTO::GameListDTO&&) {}
+        },
+        std::move(variant)
+    );
+}
+
+Controller::Receiver::Receiver(Weak<GameController> controller,
+                               Shared<Net::ClientProtocol> protocol):
+        keep_running(true),
+        controller(controller),
+        game_state_manager(controller.lock()->get_game_state_manager()),
+        protocol(protocol) {
     start();
 }
 
 void Controller::Receiver::run() {
     while (keep_running) {
         try {
-            auto game_state_dto = std::get<DTO::GameStateDTO>(protocol->receive_variant());
-            if (game_state_dto.ended) {
-                keep_running = false;
-                try {
-                    controller.lock()->push_event(make_shared<Model::EndOfGameEvent>());
-                } catch (const std::exception&) {}
-            } else {
-                game_state_manager->update(std::move(game_state_dto));
-            }
+            receive_server_info();
         } catch (const std::exception& e) {
             std::cerr << "Receiver error: " << e.what() << "\n";
             keep_running = false;
