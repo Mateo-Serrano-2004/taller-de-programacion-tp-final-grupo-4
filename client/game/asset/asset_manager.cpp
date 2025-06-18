@@ -24,8 +24,8 @@ void Model::AssetManager::load_texture(Model::TextureID id, Shared<SDL2pp::Textu
     textures.insert({id, texture});
 }
 
-void Model::AssetManager::load_animation(AnimationID id, Shared<SDL2pp::Texture> animation) {
-    animations.insert({id, animation});
+void Model::AssetManager::load_animation(AnimationID id, const Model::AnimationDetails& details) {
+    animations.insert({id, details});
 }
 
 Shared<SDL2pp::Texture> Model::AssetManager::generate_background(
@@ -64,7 +64,7 @@ Shared<SDL2pp::Texture> Model::AssetManager::get_texture(Model::TextureID id) {
     return textures.at(id);
 }
 
-Shared<SDL2pp::Texture> Model::AssetManager::get_animation(AnimationID id) {
+const Model::AnimationDetails& Model::AssetManager::get_animation(AnimationID id) {
     return animations.at(id);
 }
 

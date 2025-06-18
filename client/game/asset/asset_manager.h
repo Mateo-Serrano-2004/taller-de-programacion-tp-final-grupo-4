@@ -4,9 +4,12 @@
 #include <map>
 #include <tuple>
 #include <string>
+#include <utility>
 
 #include "common/definitions.h"
 #include "common/asset_addresser.h"
+
+#include "animation/animation_details.h"
 
 #include "asset_generator.h"
 #include "texture_id.h"
@@ -31,7 +34,7 @@ private:
     Shared<SDL2pp::Renderer> renderer;
     View::AssetGenerator asset_generator;
     std::map<TextureID, Shared<SDL2pp::Texture>> textures;
-    std::map<AnimationID, Shared<SDL2pp::Texture>> animations;
+    std::map<AnimationID, Model::AnimationDetails> animations;
     std::map<color_tuple, Shared<SDL2pp::Texture>> backgrounds;
     std::map<font_tuple, Shared<SDL2pp::Font>> fonts;
     Shared<SDL2pp::Texture> current_map;
@@ -41,7 +44,7 @@ public:
 
     void load_texture(TextureID id, const std::string& path);
     void load_texture(TextureID id, Shared<SDL2pp::Texture> texture);
-    void load_animation(AnimationID id, Shared<SDL2pp::Texture> animation);
+    void load_animation(AnimationID id, const Model::AnimationDetails& details);
 
     Shared<SDL2pp::Texture> generate_background(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
     Shared<SDL2pp::Texture> generate_background(const SDL2pp::Color& color);
@@ -51,7 +54,7 @@ public:
     Shared<SDL2pp::Texture> generate_map(const DTO::MapDTO& map_dto);
 
     Shared<SDL2pp::Texture> get_texture(TextureID id);
-    Shared<SDL2pp::Texture> get_animation(AnimationID id);
+    const Model::AnimationDetails& get_animation(AnimationID id);
 
     Shared<SDL2pp::Texture> apply_font_to_text(
         Shared<SDL2pp::Font> font,

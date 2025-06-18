@@ -10,6 +10,8 @@
 
 #include "controller/game_controller.h"
 
+#include "animation/animation_details.h"
+
 #include "asset_manager.h"
 #include "animation_id.h"
 #include "texture_id.h"
@@ -92,7 +94,10 @@ void Model::AssetLoader::load_animations() {
         addresser.get_animation_path("muzzle-fire/muzzle_04.png"),
         addresser.get_animation_path("muzzle-fire/muzzle_05.png")
     });
-    manager->load_animation(Model::AnimationID::MUZZLE_FIRE, animation);
+    manager->load_animation(
+        Model::AnimationID::MUZZLE_FIRE,
+        Model::AnimationDetails(5, 1, 5, animation)
+    );
 }
 
 Model::AssetLoader::AssetLoader(Shared<AssetManager> manager, Shared<SDL2pp::Renderer> renderer)
