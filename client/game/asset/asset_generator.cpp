@@ -84,7 +84,10 @@ Shared<SDL2pp::Texture> View::AssetGenerator::generate_animation(
         frames.size() * 32,
         32
     );
+    animation->SetBlendMode(SDL_BLENDMODE_BLEND);
     renderer->SetTarget(*animation);
+    auto blend_mode = renderer->GetDrawBlendMode();
+    renderer->SetDrawBlendMode(SDL_BLENDMODE_BLEND);
     for (size_t i = 0; i < frames.size(); i++) {
         renderer->Copy(
             *frames[i],
@@ -92,28 +95,7 @@ Shared<SDL2pp::Texture> View::AssetGenerator::generate_animation(
             SDL2pp::Rect(i * 32, 0, 32, 32)
         );
     }
-    renderer->SetTarget();
-    return animation;
-}
-
-Shared<SDL2pp::Texture> View::AssetGenerator::generate_animation(
-    const std::vector<Shared<SDL2pp::Texture>>& frames
-) {
-    auto animation = make_shared<SDL2pp::Texture>(
-        *renderer,
-        SDL_PIXELFORMAT_RGBA8888,
-        SDL_TEXTUREACCESS_TARGET,
-        frames.size() * 32,
-        32
-    );
-    renderer->SetTarget(*animation);
-    for (size_t i = 0; i < frames.size(); i++) {
-        renderer->Copy(
-            *frames[i],
-            SDL2pp::NullOpt,
-            SDL2pp::Rect(i * 32, 0, 32, 32)
-        );
-    }
+    renderer->SetDrawBlendMode(blend_mode);
     renderer->SetTarget();
     return animation;
 }
@@ -195,19 +177,6 @@ Shared<SDL2pp::Texture> View::AssetGenerator::generate_map(const DTO::MapDTO& ma
     insert_tiles(map_texture, map_dto, tiles);
 
     return map_texture;
-}
-
-Shared<SDL2pp::Texture> View::AssetGenerator::generate_animation(const IList<std::string>& list) {
-    std::vector<Shared<SDL2pp::Texture>> paths;
-    for (const auto& path: list) {
-        paths.push_back(
-            make_shared<SDL2pp::Texture>(
-                *renderer,
-                path
-            )
-        );
-    }
-    return generate_animation(paths);
 }
 
 Shared<SDL2pp::Texture> View::AssetGenerator::generate_animation(const IList<std::string>& list) {
