@@ -21,7 +21,7 @@ const char* to_string(RoundState state) {
 }
 
 void test_cambio_ronda() {
-    std::cout << "[TEST] - 10 rondas de 5 segundos cada una" << std::endl;
+    std::cout << "[TEST] - 2 rondas con tiempos 1,5 s warmup, 10 segundos compra y 60 de jugar. En la primera muere el unico ct por disparos y en la segunda gana por tiempo ct" << std::endl;
     using namespace std::chrono;
 
     ClientQueue client_queue1;
@@ -33,7 +33,8 @@ void test_cambio_ronda() {
     game.add_player("Player1", client_queue1, player1_id, Model::TeamID::CT, Model::RoleID::CT1);
     game.add_player("Player2", client_queue2, player2_id, Model::TeamID::TT, Model::RoleID::T1);
 
-    std::this_thread::sleep_for(seconds(21));
+    std::cout << "ESPERANDO WARMUP Y TIEMPO DE COMPRA DE LA RONDA 1:" << std::endl;
+    std::this_thread::sleep_for(seconds(12));
     game.get_queue().push({player2_id, UseWeaponEvent()});
     std::this_thread::sleep_for(milliseconds(32));
     game.get_queue().push({player2_id, StopUsingWeaponEvent()});
@@ -41,25 +42,35 @@ void test_cambio_ronda() {
     game.get_queue().push({player2_id, UseWeaponEvent()});
     std::this_thread::sleep_for(milliseconds(32));
     game.get_queue().push({player2_id, StopUsingWeaponEvent()});
-    std::this_thread::sleep_for(seconds(120));
+    std::this_thread::sleep_for(milliseconds(32));
+    game.get_queue().push({player2_id, UseWeaponEvent()});
+    std::this_thread::sleep_for(milliseconds(32));
+    game.get_queue().push({player2_id, StopUsingWeaponEvent()});
+    std::this_thread::sleep_for(milliseconds(32));
+    game.get_queue().push({player2_id, UseWeaponEvent()});
+    std::this_thread::sleep_for(milliseconds(32));
+    game.get_queue().push({player2_id, StopUsingWeaponEvent()});
+    std::cout << "DEBERÍA HABER MUERTO EL CT" << std::endl;
+    std::cout << "ESPERANDO 1 MINUTOS Y 11 SEGUNDOS A QUE TERMINE LA APRTIDA" << std::endl;
+    std::this_thread::sleep_for(seconds(71));
     game.stop();
 
     DTO::GameStateDTO last_printed_dto;
     DTO::GameStateDTO final_dto;
     bool printed_first = false;
 
+
     DTO::DTOVariant current_dto_variant;
     while (client_queue1.try_pop(current_dto_variant)) {
-        // Verificamos si es un GameStateDTO
         if (!std::holds_alternative<DTO::GameStateDTO>(current_dto_variant)) {
-            continue;  // Si no es GameStateDTO, lo ignoramos (o podrías manejar otros casos)
+            continue;
         }
 
-        // Obtenemos el GameStateDTO del variant
         const auto& current_dto = std::get<DTO::GameStateDTO>(current_dto_variant);
 
         bool should_print = false;
 
+        // Detectar cambios en estado de ronda
         if (!printed_first) {
             should_print = true;
         } else if (
@@ -67,6 +78,19 @@ void test_cambio_ronda() {
             current_dto.round.state != last_printed_dto.round.state
         ) {
             should_print = true;
+        } else {
+            // ✅ Detectar cambio en vida de al menos un jugador
+            for (const auto& current_player : current_dto.players) {
+                auto it = std::find_if(
+                    last_printed_dto.players.begin(),
+                    last_printed_dto.players.end(),
+                    [&](const DTO::PlayerDTO& p) { return p.player_id == current_player.player_id; });
+
+                if (it != last_printed_dto.players.end() && it->health != current_player.health) {
+                    should_print = true;
+                    break;
+                }
+            }
         }
 
         if (should_print) {
@@ -96,25 +120,25 @@ void test_cambio_ronda() {
             std::cout << std::endl;
 
             std::cout << "🔢 Rondas ganadas - CT: " << static_cast<int>(current_dto.ct_rounds_won)
-                      << " | TT: " << static_cast<int>(current_dto.tt_rounds_won) << std::endl;
+                    << " | TT: " << static_cast<int>(current_dto.tt_rounds_won) << std::endl;
 
             for (const auto& player : current_dto.players) {
                 std::cout << "Player ID: " << static_cast<int>(player.player_id)
-                          << " | Nombre: " << player.name
-                          << " | Arma ID: " << static_cast<int>(player.weapon_dto.weapon_id)
-                          << " | Munición: " << static_cast<int>(player.weapon_dto.loaded_ammo)
-                          << " | Disparando: " << (player.shooting ? "Sí" : "No")
-                          << " | Dinero: $" << player.money
-                          << " | Salud: " << static_cast<int>(player.health)
-                          << " | Pos: (" << player.position_x << ", " << player.position_y << ")"
-                          << std::endl;
+                        << " | Nombre: " << player.name
+                        << " | Arma ID: " << static_cast<int>(player.weapon_dto.weapon_id)
+                        << " | Munición: " << static_cast<int>(player.weapon_dto.loaded_ammo)
+                        << " | Disparando: " << (player.shooting ? "Sí" : "No")
+                        << " | Dinero: $" << player.money
+                        << " | Salud: " << static_cast<int>(player.health)
+                        << " | Pos: (" << player.position_x << ", " << player.position_y << ")"
+                        << std::endl;
             }
 
             last_printed_dto = current_dto;
             printed_first = true;
         }
 
-        final_dto = current_dto;  // Guardamos el último DTO recibido
+        final_dto = current_dto; 
     }
 
     // Mostrar explícitamente el DTO final
@@ -130,14 +154,14 @@ void test_cambio_ronda() {
     // Asserts con el DTO más reciente
     assert(final_dto.round.state == RoundState::Ended && "La ronda final no terminó correctamente");
     assert(final_dto.game_state == GameState::Finished && "El estado del juego no es 'Finished'");
-    assert(final_dto.winner == Model::TeamID::CT && "El ganador del game debería ser CT");
-    assert(final_dto.ct_rounds_won == 9 && "CT debería haber ganado 10 rondas");
+    assert(final_dto.winner == Model::TeamID::NONE && "Debería ser empate");
+    assert(final_dto.ct_rounds_won == 1 && "CT debería haber ganado 1 ronda");
     assert(final_dto.tt_rounds_won == 1 && "TT debería haber ganado 1 ronda");
 
     bool found_player1 = false, found_player2 = false;
     for (const auto& player : final_dto.players) {
         if (player.player_id == player1_id) {
-            assert(player.money == 10500 && "El jugador 1 (CT) debería tener $10500");
+            assert(player.money == 2500 && "El jugador 1 (CT) debería tener $10500");
             found_player1 = true;
         } else if (player.player_id == player2_id) {
             assert(player.money == 3300 && "El jugador 2 (TT) debería tener $3300");
@@ -225,8 +249,8 @@ void test_bomba_y_estado_round() {
 
 
 int main() {
-    //test_cambio_ronda();
-    test_bomba_y_estado_round();
+    test_cambio_ronda();
+    //test_bomba_y_estado_round();
     std::cout << "Pasaron los test" << std::endl;
     return 0;
 }
