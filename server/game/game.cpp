@@ -128,11 +128,8 @@ void Game::start_new_round() {
 
     gamelogic.assign_bomb_to_random_tt(players);
 
-    round.set_ct_count(ct_count);
-    round.set_tt_count(tt_count);
-
-    // round = new_buying_round();
-    round.to_buying_phase();
+    round = Round(ct_count, tt_count);
+    rounds_played++;
 }
 
 void Game::update_players_that_won() {
@@ -162,7 +159,7 @@ void Game::process_frames(uint16_t frames_to_process) {
         clear_game_queue();
         update_players_that_won();
 
-        if (round.get_count_of_rounds() == max_rounds) {
+        if (rounds_played == max_rounds) {
             state = GameState::Finished;
             is_not_finished = false;
             return;
@@ -233,7 +230,7 @@ void Game::close() {
 }
 
 Game::Game(const std::string& party_name, const std::string& map_name)
-: party_name(party_name), map_name(map_name) {
+: party_name(party_name), map_name(map_name), round(Round::create_warmup_round()) {
     start();
 }
 
