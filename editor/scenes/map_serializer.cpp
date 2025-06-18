@@ -57,6 +57,7 @@ void MapSerializer::saveToYaml(QGraphicsScene* scene, const QString& filePath) {
     out << YAML::Key << "maxWidth" << YAML::Value << (maxX);
     out << YAML::Key << "minHeight" << YAML::Value << (minY);
     out << YAML::Key << "maxHeight" << YAML::Value << (maxY);
+    out << YAML::EndMap;
     out << YAML::Key << "tiles" << YAML::Value << YAML::BeginSeq;
 
     for (const auto& tile : tiles) {
@@ -69,7 +70,6 @@ void MapSerializer::saveToYaml(QGraphicsScene* scene, const QString& filePath) {
     }
 
     out << YAML::EndSeq;
-    out << YAML::EndMap;
     out << YAML::EndMap;
 
 
@@ -91,7 +91,7 @@ void MapSerializer::loadFromYaml(const QString& filePath, QGraphicsScene* scene)
     YAML::Node root = YAML::LoadFile(filePath.toStdString());
     Model::AssetAddresser addresser;
 
-    for (const auto& tile : root["map"]["tiles"]) {
+    for (const auto& tile : root["tiles"]) {
         int x = tile["x"].as<int>();
         int y = tile["y"].as<int>();
         QString name = QString::fromStdString(tile["name"].as<std::string>());
