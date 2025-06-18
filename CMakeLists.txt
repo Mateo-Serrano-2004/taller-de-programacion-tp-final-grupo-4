@@ -16,7 +16,7 @@ project(counter_strike_2d
     LANGUAGES CXX
     )
 
-option(CS2D_TESTS "Enable / disable tests." OFF)
+option(CS2D_TESTS "Enable / disable tests." ON)
 option(CS2D_CLIENT "Enable / disable client program." ON)
 option(CS2D_SERVER "Enable / disable server program." ON)
 option(CS2D_EDITOR "Enable / disable editor program." OFF)
@@ -121,9 +121,13 @@ if(CS2D_TESTS)
     add_dependencies(cs2d_tests cs2d_common)
     add_subdirectory(tests/)
 
-    target_include_directories(cs2d_tests PUBLIC .)
-
     set_project_warnings(cs2d_tests ${CS2D_MAKE_WARNINGS_AS_ERRORS} TRUE)
+
+    target_sources(cs2d_tests
+        PRIVATE
+            ${CMAKE_SOURCE_DIR}/client/net/client_protocol.cpp
+            ${CMAKE_SOURCE_DIR}/server/net/server_protocol.cpp
+    )
 
     target_include_directories(cs2d_tests
         PUBLIC

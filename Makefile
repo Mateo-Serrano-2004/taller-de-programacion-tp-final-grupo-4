@@ -40,7 +40,11 @@ install-qt5:
 	@sudo apt-get install -y libqt5multimedia5-plugins
 	@sudo apt-get install -y gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly
 
-install: install-compile-tools install-sdl2 install-qt5 install-yaml
+install-gtest:
+	@echo "Installing GTest dependencies"
+	@sudo apt-get install -y libgtest-dev
+
+install: install-compile-tools install-sdl2 install-qt5 install-yaml install-gtest
 
 clean:
 	rm -Rf ./build

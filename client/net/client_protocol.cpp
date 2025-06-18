@@ -189,5 +189,7 @@ DTO::DTOVariant Net::ClientProtocol::receive_variant() {
             return receive_map_list();
         case DTO::DTOCode::GAMES_LIST:
             return receive_game_list();
+        default:
+            throw std::runtime_error("Invalid DTO code received");
     }
 }
