@@ -123,16 +123,23 @@ if(CS2D_TESTS)
 
     set_project_warnings(cs2d_tests ${CS2D_MAKE_WARNINGS_AS_ERRORS} TRUE)
 
+    file(GLOB EVENT_SOURCES 
+        "${CMAKE_SOURCE_DIR}/client/game/event/*.cpp"
+        "${CMAKE_SOURCE_DIR}/client/game/dto_handler/*.cpp"
+    )
+
     target_sources(cs2d_tests
         PRIVATE
             ${CMAKE_SOURCE_DIR}/client/net/client_protocol.cpp
             ${CMAKE_SOURCE_DIR}/server/net/server_protocol.cpp
+            ${EVENT_SOURCES}
     )
 
     target_include_directories(cs2d_tests
         PUBLIC
         ${gtest_SOURCE_DIR}/include
         ${gmock_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/client/game
         )
 
     target_link_libraries(cs2d_tests
