@@ -96,7 +96,7 @@ void Model::AssetLoader::load_animations() {
     });
     manager->load_animation(
         Model::AnimationID::MUZZLE_FIRE,
-        Model::AnimationDetails(5, 1, 5, animation)
+        Model::AnimationDetails(5, 1, 5, 5, animation)
     );
 }
 

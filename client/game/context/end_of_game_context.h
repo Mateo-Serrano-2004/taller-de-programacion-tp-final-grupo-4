@@ -1,6 +1,8 @@
 #ifndef CLIENT_GAME_CONTEXT_END_OF_GAME_CONTEXT_H
 #define CLIENT_GAME_CONTEXT_END_OF_GAME_CONTEXT_H
 
+#include <cstdint>
+
 #include <SDL2/SDL.h>
 
 #include "common/definitions.h"
@@ -21,7 +23,7 @@ protected:
     View::HorizontalPane background;
     View::Label label;
 
-    void render() override;
+    void render(uint8_t) override;
     void dispatch_events() override;
 
 public:

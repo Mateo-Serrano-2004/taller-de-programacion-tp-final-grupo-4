@@ -1,7 +1,9 @@
 #include "player_renderer.h"
 
 #include <map>
+#include <list>
 #include <cmath>
+#include <cstdint>
 #include <iostream>
 
 #include <SDL2pp/SDL2pp.hh>
@@ -22,6 +24,8 @@
 #include "handler/game_state_manager.h"
 
 #include "model/rendered_player.h"
+
+#include "animation/muzzle_fire_animation.h"
 
 #include "camera.h"
 
@@ -119,7 +123,8 @@ View::PlayerRenderer::PlayerRenderer(
     font = asset_manager->generate_font("liberationsans", 16);
 }
 
-void View::PlayerRenderer::render() {
+void View::PlayerRenderer::render(uint8_t frames) {
+    (void) frames;
     auto camera = game_state_manager->get_camera();
     render_map(camera);
     bool render_ref_player = true;
@@ -137,6 +142,13 @@ void View::PlayerRenderer::render() {
             if (render_ref_player) {
                 angle = reference_player->get_angle();
                 reference_player->render();
+            }
+        }
+    );
+    game_state_manager->call_function_on_pending_fires(
+        [this](std::list<View::MuzzleFireAnimation>& list) {
+            for (auto& animation: list) {
+                animation.render();
             }
         }
     );

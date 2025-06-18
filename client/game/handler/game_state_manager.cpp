@@ -2,9 +2,11 @@
 
 #include <mutex>
 #include <functional>
+#include <algorithm>
 #include <memory>
 #include <utility>
 #include <map>
+#include <list>
 
 #include <SDL2pp/Texture.hh>
 
@@ -32,6 +34,12 @@ Shared<View::RenderedPlayer> Controller::GameStateManager::get_reference_player_
     return game_state->get_player_by_id(reference_player_id);
 }
 
+Shared<View::RenderedPlayer> Controller::GameStateManager::get_player_by_id_unsafe(short_id_t player_id) {
+    return game_state->get_player_by_id(player_id);
+}
+
+View::Camera Controller::GameStateManager::get_camera_unsafe() { return camera; }
+
 Shared<View::RenderedPlayer> Controller::GameStateManager::get_reference_player() {
     std::lock_guard<std::mutex> lock(mutex);
     return game_state->get_player_by_id(reference_player_id);
@@ -42,6 +50,19 @@ void Controller::GameStateManager::call_function_on_players(
 ) {
     std::lock_guard<std::mutex> lock(mutex);
     func(game_state->get_players());
+}
+
+void Controller::GameStateManager::call_function_on_pending_fires(
+    const std::function<void(std::list<View::MuzzleFireAnimation>&)>& func
+) {
+    std::lock_guard<std::mutex> lock(mutex);
+    std::remove_if(
+        fire_animations.begin(), fire_animations.end(),
+        [](View::MuzzleFireAnimation& animation) {
+            return animation.has_ended();
+        }
+    );
+    func(fire_animations);
 }
 
 uint16_t Controller::GameStateManager::get_time_left() {
@@ -79,6 +100,13 @@ void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
             camera
         );
         new_game_state->register_player(player);
+
+        if (player->is_shooting()) {
+            fire_animations.emplace_back(
+                controller,
+                player->get_id()
+            );
+        }
     }
 
     new_game_state->set_time_left(game_state_dto.round.time_left);

@@ -1,6 +1,7 @@
 #include "in_game_context.h"
 
 #include <functional>
+#include <cstdint>
 
 #include <SDL2/SDL.h>
 
@@ -11,9 +12,9 @@
 
 #include "exception/closed_window.h"
 
-void Context::InGameContext::render() {
-    player_renderer.render();
-    hud_renderer.render();
+void Context::InGameContext::render(uint8_t frames) {
+    player_renderer.render(frames);
+    hud_renderer.render(frames);
 }
 
 void Context::InGameContext::dispatch_events() {

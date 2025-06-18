@@ -3,6 +3,7 @@
 #include <mutex>
 #include <utility>
 #include <string>
+#include <cstdint>
 
 #include <SDL2pp/Window.hh>
 #include <SDL2pp/Renderer.hh>
@@ -26,9 +27,9 @@ void Context::ContextManager::set_current_context(const std::string& context_nam
     current_context_name = context_name;
 }
 
-void Context::ContextManager::update_current_context() {
+void Context::ContextManager::update_current_context(uint8_t frames) {
     if (current_context_name.empty()) {
         return;
     }
-    contexts.at(current_context_name)->update();
+    contexts.at(current_context_name)->update(frames);
 }

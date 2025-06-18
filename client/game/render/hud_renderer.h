@@ -2,6 +2,7 @@
 #define CLIENT_GAME_RENDER_HUD_RENDERER_H
 
 #include <vector>
+#include <cstdint>
 
 #include "common/definitions.h"
 
@@ -63,7 +64,7 @@ protected:
 public:
     HUDRenderer(Weak<Controller::GameController> controller);
 
-    void render() override;
+    void render(uint8_t) override;
 
     ~HUDRenderer() override = default;
 };

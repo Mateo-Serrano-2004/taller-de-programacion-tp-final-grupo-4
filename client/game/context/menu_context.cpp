@@ -1,5 +1,7 @@
 #include "menu_context.h"
 
+#include <cstdint>
+
 #include <SDL2/SDL.h>
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Renderer.hh>
@@ -16,8 +18,8 @@ void Context::MenuContext::trigger_buttons(Shared<SDL_Event> event) {
     else if (return_game_button.trigger(event));
 }
 
-void Context::MenuContext::render() {
-    player_renderer.render();
+void Context::MenuContext::render(uint8_t frames) {
+    player_renderer.render(frames);
 
     viewport.render();
 }

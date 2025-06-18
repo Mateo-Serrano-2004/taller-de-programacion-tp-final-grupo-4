@@ -1,6 +1,8 @@
 #ifndef CLIENT_GAME_CONTEXT_PICK_ROLE_CONTEXT_H
 #define CLIENT_GAME_CONTEXT_PICK_ROLE_CONTEXT_H
 
+#include <cstdint>
+
 #include <SDL2/SDL.h>
 
 #include "common/definitions.h"
@@ -47,7 +49,7 @@ protected:
     void set_buttons_for_ct();
     void set_buttons_for_tt();
 
-    void render() override;
+    void render(uint8_t) override;
     void dispatch_events() override;
 
 public:

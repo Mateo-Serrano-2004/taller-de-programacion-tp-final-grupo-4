@@ -1,6 +1,7 @@
 #include "pick_role_context.h"
 
 #include <utility>
+#include <cstdint>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/Point.hh>
@@ -67,7 +68,7 @@ void Context::PickRoleContext::set_buttons_for_tt() {
     set_role_for_button(pick_role_4_button, Model::TextureID::SPRITE_T4);
 }
 
-void Context::PickRoleContext::render() {
+void Context::PickRoleContext::render(uint8_t) {
     if (current_team != Model::TeamID::NONE) vertical_pane.render();
 }
 

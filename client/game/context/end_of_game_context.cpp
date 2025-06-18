@@ -1,12 +1,14 @@
 #include "end_of_game_context.h"
 
+#include <cstdint>
+
 #include <SDL2/SDL.h>
 
 #include "controller/game_controller.h"
 
 #include "event/quit_event.h"
 
-void Context::EndOfGameContext::render() {
+void Context::EndOfGameContext::render(uint8_t) {
     background.render();
 }
 

@@ -37,7 +37,7 @@ public:
     void add_context(Shared<BaseContext> context);
     void set_current_context(const std::string& context_name);
 
-    void update_current_context();
+    void update_current_context(uint8_t frames);
 
     ContextManager(ContextManager&&) = default;
     ContextManager& operator=(ContextManager&&) = default;

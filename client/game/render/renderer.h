@@ -1,6 +1,8 @@
 #ifndef CLIENT_GAME_RENDER_RENDERER_H
 #define CLIENT_GAME_RENDER_RENDERER_H
 
+#include <cstdint>
+
 #include "common/definitions.h"
 
 namespace SDL2pp {
@@ -26,7 +28,7 @@ protected:
 public:
     Renderer(Weak<Controller::BaseController> controller);
 
-    virtual void render() = 0;
+    virtual void render(uint8_t frames) = 0;
 
     virtual ~Renderer() = default;
 };
