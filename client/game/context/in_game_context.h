@@ -1,6 +1,8 @@
 #ifndef CLIENT_GAME_CONTEXT_IN_GAME_CONTEXT_H
 #define CLIENT_GAME_CONTEXT_IN_GAME_CONTEXT_H
 
+#include <cstdint>
+
 #include <SDL2/SDL.h>
 
 #include "entity/pane.h"
@@ -23,7 +25,7 @@ protected:
     View::HUDRenderer hud_renderer;
     Controller::InGameEventHandlerStrategy event_handler_strategy;
 
-    void render() override;
+    void render(uint8_t frames) override;
     void dispatch_events() override;
 
     InGameContext(const InGameContext&) = delete;

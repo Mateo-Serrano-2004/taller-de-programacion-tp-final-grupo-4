@@ -36,6 +36,7 @@ private:
     void load_hud_texture(Model::TextureID id, int index);
     void load_hud_textures();
     void load_fov();
+    void load_animations();
 
 public:
     AssetLoader(Shared<AssetManager> manager, Shared<SDL2pp::Renderer> renderer);

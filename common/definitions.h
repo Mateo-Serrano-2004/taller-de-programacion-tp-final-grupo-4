@@ -15,7 +15,7 @@
 #include <memory>
 #include <optional>
 #include <string>
-#include <tuple>
+#include <initializer_list>
 
 #include "queue.h"
 
@@ -54,6 +54,9 @@ using Maybe = std::optional<T>;
 
 template <typename T>
 using Ref = std::reference_wrapper<T>;
+
+template <typename T>
+using IList = std::initializer_list<T>;
 
 // Events
 template <typename T>

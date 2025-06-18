@@ -2,6 +2,7 @@
 #define CLIENT_GAME_RENDER_PLAYER_RENDERER_H
 
 #include <map>
+#include <cstdint>
 
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Rect.hh>
@@ -43,7 +44,7 @@ protected:
 public:
     explicit PlayerRenderer(Weak<Controller::GameController> controller);
 
-    void render() override;
+    void render(uint8_t frames) override;
 
     ~PlayerRenderer() = default;
 };

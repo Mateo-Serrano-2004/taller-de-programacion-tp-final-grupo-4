@@ -1,7 +1,9 @@
 #include "player_renderer.h"
 
-#include <algorithm>
+#include <map>
+#include <list>
 #include <cmath>
+#include <cstdint>
 #include <iostream>
 #include <map>
 
@@ -20,6 +22,8 @@
 #include "controller/game_controller.h"
 #include "handler/game_state_manager.h"
 #include "model/rendered_player.h"
+
+#include "animation/muzzle_fire_animation.h"
 
 #include "camera.h"
 
@@ -102,7 +106,8 @@ View::PlayerRenderer::PlayerRenderer(Weak<Controller::GameController> controller
     font = asset_manager->generate_font("liberationsans", 16);
 }
 
-void View::PlayerRenderer::render() {
+void View::PlayerRenderer::render(uint8_t frames) {
+    (void) frames;
     auto camera = game_state_manager->get_camera();
     render_map(camera);
     bool render_ref_player = true;
@@ -120,11 +125,18 @@ void View::PlayerRenderer::render() {
                         pair.second->render();
                 }
 
-                if (render_ref_player) {
-                    angle = reference_player->get_angle();
-                    reference_player->render();
-                }
-            });
-    if (render_ref_player)
-        render_fov(angle, camera);
-}
+            if (render_ref_player) {
+                angle = reference_player->get_angle();
+                reference_player->render();
+            }
+        }
+    );
+    game_state_manager->call_function_on_pending_fires(
+        [this](std::list<View::MuzzleFireAnimation>& list) {
+            for (auto& animation: list) {
+                animation.render();
+            }
+        }
+    );
+    if (render_ref_player) render_fov(angle, camera);
+};

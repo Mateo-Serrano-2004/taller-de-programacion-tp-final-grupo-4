@@ -147,7 +147,7 @@ View::HUDRenderer::HUDRenderer(Weak<Controller::GameController> controller):
     money.set_height(37);
 }
 
-void View::HUDRenderer::render() {
+void View::HUDRenderer::render(uint8_t) {
     render_time();
     auto player = game_state_manager->get_reference_player();
     if (player) {

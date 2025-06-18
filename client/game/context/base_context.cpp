@@ -1,5 +1,7 @@
 #include "base_context.h"
 
+#include <cstdint>
+
 #include <SDL2pp/Renderer.hh>
 
 #include "controller/base_controller.h"
@@ -12,9 +14,9 @@ Context::BaseContext::BaseContext(const std::string& name,
 
 const std::string& Context::BaseContext::get_name() const { return name; }
 
-void Context::BaseContext::update() {
+void Context::BaseContext::update(uint8_t frames) {
     renderer->Clear();
     dispatch_events();
-    render();
+    render(frames);
     renderer->Present();
 }

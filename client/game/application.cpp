@@ -1,6 +1,7 @@
 #include "application.h"
 
 #include <exception>
+#include <cstdint>
 #include <iostream>
 
 #include <SDL2/SDL.h>
@@ -16,8 +17,8 @@ void App::Application::launch() {
 
     while (keep_running) {
         try {
-            (void)clock.sleep_and_get_frames();
-            context_manager->update_current_context();
+            uint8_t frames = clock.sleep_and_get_frames();
+            context_manager->update_current_context(frames);
             controller->handle_events();
         } catch (const App::ClosedWindowException& e) {
             keep_running = false;

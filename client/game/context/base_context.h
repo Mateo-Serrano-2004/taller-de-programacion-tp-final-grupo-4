@@ -3,6 +3,7 @@
 
 #include <list>
 #include <string>
+#include <cstdint>
 
 #include "common/definitions.h"
 #include "event/event.h"
@@ -24,7 +25,7 @@ protected:
     Weak<Controller::BaseController> controller;
     Shared<SDL2pp::Renderer> renderer;
 
-    virtual void render() = 0;
+    virtual void render(uint8_t frames) = 0;
     virtual void dispatch_events() = 0;
 
     BaseContext(const BaseContext&) = delete;
@@ -35,7 +36,7 @@ public:
 
     const std::string& get_name() const;
 
-    void update();
+    void update(uint8_t frames);
 
     BaseContext(BaseContext&&) = default;
     BaseContext& operator=(BaseContext&&) = default;

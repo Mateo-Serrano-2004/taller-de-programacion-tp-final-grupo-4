@@ -11,6 +11,10 @@
 #include "render/camera.h"
 #include "utils/enum_translator.h"
 
+#include "render/camera.h"
+
+#include "animation/muzzle_fire_animation.h"
+
 namespace SDL2pp {
 class Texture;
 };
@@ -32,9 +36,9 @@ namespace Controller {
 class GameController;
 
 class GameStateManager {
-
 private:
     std::mutex mutex;
+    std::list<View::MuzzleFireAnimation> fire_animations;
     Shared<SDL2pp::Texture> map;
     Maybe<short_id_t> reference_player_id;
     Shared<Model::GameState> game_state;
@@ -45,10 +49,17 @@ public:
     explicit GameStateManager(Weak<GameController> controller);
 
     Shared<View::RenderedPlayer> get_reference_player_unsafe();
+    Shared<View::RenderedPlayer> get_player_by_id_unsafe(short_id_t player_id);
+    View::Camera get_camera_unsafe();
+
     Shared<View::RenderedPlayer> get_reference_player();
 
     void call_function_on_players(
-            const std::function<void(std::map<short_id_t, Shared<View::RenderedPlayer>>&)>& func);
+        const std::function<void(std::map<short_id_t, Shared<View::RenderedPlayer>>&)>& func
+    );
+    void call_function_on_pending_fires(
+        const std::function<void(std::list<View::MuzzleFireAnimation>&)>& func
+    );
 
     uint16_t get_time_left();
     View::Camera get_camera();

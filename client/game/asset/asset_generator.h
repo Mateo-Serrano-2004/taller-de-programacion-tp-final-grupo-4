@@ -3,6 +3,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 #include <SDL2/SDL.h>
 
@@ -31,8 +32,12 @@ protected:
     void draw_triangle(int half_size, int angle);
 
     std::unordered_map<std::string, Shared<SDL2pp::Texture>> load_tiles(const DTO::MapDTO& map_dto);
-    void insert_tiles(Shared<SDL2pp::Texture> texture, const DTO::MapDTO& map_dto,
-                      std::unordered_map<std::string, Shared<SDL2pp::Texture>>& tiles);
+    void insert_tiles(
+        Shared<SDL2pp::Texture> texture,
+        const DTO::MapDTO& map_dto,
+        std::unordered_map<std::string, Shared<SDL2pp::Texture>>& tiles
+    );
+    Shared<SDL2pp::Texture> generate_animation(const std::vector<Shared<SDL2pp::Texture>>& frames);
 
 public:
     explicit AssetGenerator(Shared<SDL2pp::Renderer> renderer);
@@ -45,6 +50,7 @@ public:
                                                    const SDL2pp::Color& color);
     Shared<SDL2pp::Texture> generate_plain_texture(const SDL2pp::Color& color);
     Shared<SDL2pp::Texture> generate_map(const DTO::MapDTO& map_dto);
+    Shared<SDL2pp::Texture> generate_animation(const IList<std::string>& list);
     Shared<SDL2pp::Font> generate_font(const std::string& path, uint8_t size);
 
     ~AssetGenerator() = default;

@@ -1,6 +1,6 @@
 #include "menu_context.h"
 
-#include <memory>
+#include <cstdint>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/Point.hh>
@@ -17,8 +17,8 @@ void Context::MenuContext::trigger_buttons(Shared<SDL_Event> event) {
     }
 }
 
-void Context::MenuContext::render() {
-    player_renderer.render();
+void Context::MenuContext::render(uint8_t frames) {
+    player_renderer.render(frames);
 
     viewport.render();
 }

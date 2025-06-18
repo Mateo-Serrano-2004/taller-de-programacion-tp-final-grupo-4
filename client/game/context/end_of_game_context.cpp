@@ -1,13 +1,15 @@
 #include "end_of_game_context.h"
 
-#include <memory>
+#include <cstdint>
 
 #include <SDL2/SDL.h>
 
 #include "controller/game_controller.h"
 #include "event/quit_event.h"
 
-void Context::EndOfGameContext::render() { background.render(); }
+void Context::EndOfGameContext::render(uint8_t) {
+    background.render();
+}
 
 void Context::EndOfGameContext::dispatch_events() {
     while (SDL_PollEvent(&placeholder)) {

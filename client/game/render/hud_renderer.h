@@ -3,6 +3,7 @@
 
 #include <list>
 #include <vector>
+#include <cstdint>
 
 #include "common/definitions.h"
 #include "entity/horizontal_pane.h"
@@ -54,7 +55,7 @@ protected:
 public:
     explicit HUDRenderer(Weak<Controller::GameController> controller);
 
-    void render() override;
+    void render(uint8_t) override;
 
     ~HUDRenderer() override = default;
 };

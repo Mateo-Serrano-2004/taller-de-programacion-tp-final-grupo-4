@@ -2,6 +2,7 @@
 #define CLIENT_GAME_CONTEXT_SHOP_CONTEXT_H
 
 #include <string>
+#include <cstdint>
 
 #include <SDL2/SDL.h>
 
@@ -36,7 +37,7 @@ protected:
     View::Button buy_m3;
     View::Button buy_awp;
 
-    void render() override;
+    void render(uint8_t) override;
     void dispatch_events() override;
 
 public:

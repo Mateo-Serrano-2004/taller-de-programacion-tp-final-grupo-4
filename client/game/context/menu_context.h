@@ -1,6 +1,8 @@
 #ifndef CLIENT_GAME_CONTEXT_MENU_CONTEXT_H
 #define CLIENT_GAME_CONTEXT_MENU_CONTEXT_H
 
+#include <cstdint>
+
 #include <SDL2/SDL.h>
 
 #include "common/definitions.h"
@@ -36,7 +38,7 @@ protected:
     View::Button return_game_button;
     View::Button exit_button;
 
-    void render() override;
+    void render(uint8_t) override;
     void dispatch_events() override;
 
     void build_button(View::Button& button);
