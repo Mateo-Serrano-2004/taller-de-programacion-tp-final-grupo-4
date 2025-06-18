@@ -8,11 +8,9 @@
 #include "common/DTO/round_dto.h"
 #include "common/model/vector_2d.h"
 
-
 class Round {
 private:
     Model::TeamID winner_team = Model::TeamID::NONE;
-    int count_of_rounds = 0;
 
     RoundState state;
     int number_of_ct_alive;
@@ -22,8 +20,6 @@ private:
     bool bomb_defused;
     Physics::Vector2D bomb_position;
 
-    // X seconds = N frames / M FPS
-    // For 60FPS, X seconds = N frames / 60FPS
     int ticks_for_warmup_phase;
     int ticks_for_buying_phase;
     int ticks_for_playing_phase;
@@ -31,41 +27,34 @@ private:
 
     int active_ticks_remaining;
 
+    bool is_warmup_round;
+
     void update_if_finished_warmup();
     void update_if_finished_buying();
     void update_if_finished_playing();
 
-    void reset();
-
 public:
-    // Builds a base round in warmup state
-    Round();
+    Round(int ct_alive, int tt_alive);
+
+    static Round create_warmup_round();
 
     Model::TeamID get_winner_team() const;
-    int get_count_of_rounds() const;
     RoundState get_state() const;
     bool is_warmup() const;
     bool is_buying() const;
     bool is_active() const;
     bool ended() const;
     bool bomb_is_planted() const;
-    uint16_t get_ticks_remaining() const;
 
-    void set_ticks_for_warmup_phase(int ticks);
-    void set_ticks_for_buying_phase(int ticks);
-    void set_ticks_for_playing_phase(int ticks);
-
-    void set_ct_count(int count);
-    void set_tt_count(int count);
-
-    void to_buying_phase();
     void update(int frames_to_process);
 
-    // Si la bomba está plantada, NO debe terminar la ronda falta esa lógica
     void notify_on_one_player_less(Model::TeamID team);
     void notify_player_joined(Model::TeamID team);
 
     void notify_bomb_planted(Physics::Vector2D position);
+    void notify_bomb_defused();
+
+    int get_ticks_remaining() const;
 
     DTO::RoundDTO to_dto(int fps) const;
 };
