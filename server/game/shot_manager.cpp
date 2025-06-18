@@ -73,24 +73,7 @@ std::vector<Impact> ShotManager::calculate_shot_impacts(
     const std::map<uint8_t, FullPlayer>& players
 ) {
     std::vector<Impact> impacts;
-    // Imprimir ShotInfo y WeaponShotInfo
-    std::cout << "[SHOT INFO]" << std::endl;
-    std::cout << "Shooter ID: " << static_cast<int>(shot_info.shooter_id) << std::endl;
-    std::cout << "Origin: (" << shot_info.origin.get_x() << ", " << shot_info.origin.get_y() << ")" << std::endl;
-    std::cout << "Angle: " << shot_info.angle << std::endl;
 
-    const auto& w = shot_info.weapon_info;
-    std::cout << "[WEAPON INFO]" << std::endl;
-    std::cout << "Bullets fired: " << static_cast<int>(w.bullets_fired) << std::endl;
-    std::cout << "Base damage: " << w.base_damage << std::endl;
-    std::cout << "Min damage: " << w.min_damage << std::endl;
-    std::cout << "Max range: " << w.max_range << std::endl;
-    std::cout << "Precision: " << w.precision << std::endl;
-    std::cout << "Dispersion: " << w.dispersion << std::endl;
-    std::cout << "Damage mode: " << static_cast<int>(w.damage_mode) << std::endl;
-    std::cout << "Falloff factor: " << w.falloff_factor << std::endl;
-    std::cout << "Close range threshold: " << w.close_range_threshold << std::endl;
-    std::cout << "Close range multiplier: " << w.close_range_multiplier << std::endl;
     const WeaponShotInfo& winfo = shot_info.weapon_info;
     const Physics::Vector2D& origin = shot_info.origin;
     float base_angle = shot_info.angle;
