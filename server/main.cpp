@@ -7,10 +7,11 @@
 #define MAX_ARGS 3
 #define DEFAULT_CONFIG_FILE "game_config.yaml"
 
-int main(int argc, char* argv[]) try {
+int main(int argc, const char* const argv[]) try {
 
     if (argc < MIN_ARGS || argc > MAX_ARGS) {
-        std::cerr << "Please use: " << argv[0] << " <port> [config_file_path](optional)" << std::endl;
+        std::cerr << "Please use: " << argv[0] << " <port> [config_file_path](optional)"
+                  << std::endl;
         return ERROR;
     }
 

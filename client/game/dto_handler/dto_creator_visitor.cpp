@@ -1,10 +1,10 @@
 #include "dto_creator_visitor.h"
 
 #include <string>
+
 #include <arpa/inet.h>
 
 #include "common/definitions.h"
-
 #include "event/events.h"
 
 DTO::EventDTO DTO::DTOCreatorVisitor::visit_buy_weapon_event(Model::BuyWeaponEvent* event) {

@@ -2,15 +2,14 @@
 #define CLIENT_GAME_ASSET_ASSET_MANAGER_H
 
 #include <map>
-#include <tuple>
 #include <string>
+#include <tuple>
 
-#include "common/definitions.h"
+#include "asset/texture_id.h"
 #include "common/asset_addresser.h"
+#include "common/definitions.h"
 
 #include "asset_generator.h"
-#include "asset/texture_id.h"
-
 #include "font_id.h"
 
 namespace SDL2pp {
@@ -18,7 +17,7 @@ class Renderer;
 class Texture;
 class Font;
 class Color;
-};
+};  // namespace SDL2pp
 
 namespace DTO {
 struct MapDTO;
@@ -36,12 +35,13 @@ private:
     Shared<SDL2pp::Texture> current_map;
 
 public:
-    AssetManager(Shared<SDL2pp::Renderer> renderer);
+    explicit AssetManager(Shared<SDL2pp::Renderer> renderer);
 
     void load_texture(TextureID id, const std::string& path);
     void load_texture(TextureID id, Shared<SDL2pp::Texture> texture);
 
-    Shared<SDL2pp::Texture> generate_background(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
+    Shared<SDL2pp::Texture> generate_background(uint8_t red, uint8_t green, uint8_t blue,
+                                                uint8_t alpha);
     Shared<SDL2pp::Texture> generate_background(const SDL2pp::Color& color);
 
     Shared<SDL2pp::Font> generate_font(const std::string& name, uint8_t size);
@@ -50,14 +50,11 @@ public:
 
     Shared<SDL2pp::Texture> get_texture(TextureID id);
 
-    Shared<SDL2pp::Texture> apply_font_to_text(
-        Shared<SDL2pp::Font> font,
-        const std::string& text,
-        const SDL2pp::Color& color
-    );
+    Shared<SDL2pp::Texture> apply_font_to_text(Shared<SDL2pp::Font> font, const std::string& text,
+                                               const SDL2pp::Color& color);
 
     ~AssetManager() = default;
 };
-};
+};  // namespace Model
 
-#endif // CLIENT_GAME_ASSET_ASSET_MANAGER_H
+#endif  // CLIENT_GAME_ASSET_ASSET_MANAGER_H

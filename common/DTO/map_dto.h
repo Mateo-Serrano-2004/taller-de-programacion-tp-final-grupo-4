@@ -1,8 +1,8 @@
 #ifndef COMMON_DTO_MAP_DTO_H
 #define COMMON_DTO_MAP_DTO_H
 
-#include <vector>
 #include <string>
+#include <vector>
 
 #include "common/definitions.h"
 
@@ -16,9 +16,10 @@ public:
     uint8_t count_of_columns;
     uint8_t count_of_rows;
 
-    MapDTO() : count_of_columns(0), count_of_rows(0) {}
-    MapDTO(const PathMap& map) : map(map), count_of_columns(map[0].size()), count_of_rows(map.size()) {}
+    MapDTO(): count_of_columns(0), count_of_rows(0) {}
+    explicit MapDTO(const PathMap& map):
+            map(map), count_of_columns(map[0].size()), count_of_rows(map.size()) {}
 };
-};
+};  // namespace DTO
 
-#endif // COMMON_DTO_MAP_DTO_H
+#endif  // COMMON_DTO_MAP_DTO_H

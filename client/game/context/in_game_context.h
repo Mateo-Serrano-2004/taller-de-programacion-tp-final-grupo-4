@@ -3,23 +3,20 @@
 
 #include <SDL2/SDL.h>
 
-#include "base_context.h"
-
-#include "handler/in_game_event_handler_strategy.h"
-
-#include "event/event.h"
-
 #include "entity/pane.h"
-
-#include "render/player_renderer.h"
+#include "event/event.h"
+#include "handler/in_game_event_handler_strategy.h"
 #include "render/hud_renderer.h"
+#include "render/player_renderer.h"
+
+#include "base_context.h"
 
 namespace Controller {
 class GameController;
 }
 
 namespace Context {
-class InGameContext : public BaseContext {
+class InGameContext: public BaseContext {
 protected:
     SDL_Event placeholder;
     View::PlayerRenderer player_renderer;
@@ -33,13 +30,13 @@ protected:
     InGameContext& operator=(const InGameContext&) = delete;
 
 public:
-    InGameContext(Weak<Controller::GameController> controller);
+    explicit InGameContext(Weak<Controller::GameController> controller);
 
     InGameContext(InGameContext&&) = default;
     InGameContext& operator=(InGameContext&&) = default;
 
     ~InGameContext() override = default;
 };
-};
+};  // namespace Context
 
-#endif // CLIENT_GAME_CONTEXT_IN_GAME_CONTEXT_H
+#endif  // CLIENT_GAME_CONTEXT_IN_GAME_CONTEXT_H

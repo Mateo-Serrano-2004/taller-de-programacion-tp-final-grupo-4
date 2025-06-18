@@ -11,12 +11,12 @@ protected:
     DTO::MapDTO dto;
 
 public:
-    GenerateMapEvent(DTO::MapDTO&& dto);
+    explicit GenerateMapEvent(DTO::MapDTO&& dto);
 
     DTO::MapDTO get_map_dto();
 
     ~GenerateMapEvent() override = default;
 };
-};
+};  // namespace Model
 
-#endif // CLIENT_GAME_EVENT_GENERATE_MAP_EVENT_H
+#endif  // CLIENT_GAME_EVENT_GENERATE_MAP_EVENT_H

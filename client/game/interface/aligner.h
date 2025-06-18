@@ -18,6 +18,6 @@ public:
 
     virtual ~Aligner() = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_ENTITY_ALIGNER_H
+#endif  // CLIENT_GAME_ENTITY_ALIGNER_H

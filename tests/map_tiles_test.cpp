@@ -2,20 +2,17 @@
 #include <thread>
 
 #include "client/net/client_protocol.h"
-#include "server/net/server_protocol.h"
 #include "common/DTO/dto_variant.h"
 #include "common/socket.h"
-
 #include "gtest/gtest.h"
+#include "server/net/server_protocol.h"
 
 TEST(MapTilesTest, send_and_receive_map_tiles) {
     Socket server_socket("8080");
 
-    PathMap map_tiles = {
-        {"Walls/sand_wall.png", "Boxes/box.png", "Boxes/box.png"},
-        {"Walls/sand_wall.png", "Walls/sand_wall.png", ""},
-        {"Boxes/box.png", "Backgrounds/water.png", "Backgrounds/water.png"}
-    };
+    PathMap map_tiles = {{"Walls/sand_wall.png", "Boxes/box.png", "Boxes/box.png"},
+                         {"Walls/sand_wall.png", "Walls/sand_wall.png", ""},
+                         {"Boxes/box.png", "Backgrounds/water.png", "Backgrounds/water.png"}};
 
     DTO::MapDTO map_tiles_dto(map_tiles);
 

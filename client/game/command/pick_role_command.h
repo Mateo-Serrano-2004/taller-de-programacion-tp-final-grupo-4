@@ -16,15 +16,13 @@ protected:
     Model::RoleID role_id;
 
 public:
-    PickRoleCommand(
-        Model::RoleID role_id,
-        Weak<Controller::BaseController> controller = {}
-    );
+    explicit PickRoleCommand(Model::RoleID role_id,
+                             Weak<Controller::BaseController> controller = {});
 
     virtual void execute() override;
 
     virtual ~PickRoleCommand() override = default;
 };
-};
+};  // namespace Command
 
-#endif // CLIENT_GAME_COMMAND_PICK_ROLE_COMMAND_H
+#endif  // CLIENT_GAME_COMMAND_PICK_ROLE_COMMAND_H

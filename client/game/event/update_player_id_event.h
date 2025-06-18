@@ -11,12 +11,12 @@ protected:
     short_id_t new_id;
 
 public:
-    UpdatePlayerIDEvent(short_id_t new_id);
+    explicit UpdatePlayerIDEvent(short_id_t new_id);
 
     short_id_t get_new_id() const;
 
     ~UpdatePlayerIDEvent() override = default;
 };
-};
+};  // namespace Model
 
-#endif // CLIENT_GAME_EVENT_UPDATE_PLAYER_ID_EVENT_H
+#endif  // CLIENT_GAME_EVENT_UPDATE_PLAYER_ID_EVENT_H

@@ -13,7 +13,7 @@ protected:
     Weak<Controller::BaseController> controller;
 
 public:
-    BaseCommand(Weak<Controller::BaseController> controller = {});
+    explicit BaseCommand(Weak<Controller::BaseController> controller = {});
 
     void set_controller(Weak<Controller::BaseController> new_controller);
 
@@ -22,6 +22,6 @@ public:
 
     virtual ~BaseCommand() = default;
 };
-};
+};  // namespace Command
 
-#endif // CLIENT_GAME_COMMAND_BASE_COMMAND_H
+#endif  // CLIENT_GAME_COMMAND_BASE_COMMAND_H

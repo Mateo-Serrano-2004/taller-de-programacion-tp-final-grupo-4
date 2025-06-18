@@ -1,16 +1,15 @@
 #ifndef CLIENT_HANDLER_H
 #define CLIENT_HANDLER_H
 
+#include <atomic>
 #include <functional>
 #include <map>
 #include <memory>
-#include <atomic>
 #include <string>
 
 #include "common/definitions.h"
 #include "common/queue.h"
 #include "common/thread.h"
-
 #include "server/events/events.h"
 #include "server/game/game.h"
 #include "server/game/game_manager.h"

@@ -1,5 +1,6 @@
 #include "shop_context.h"
 
+#include <memory>
 #include <string>
 #include <utility>
 
@@ -7,15 +8,14 @@
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Renderer.hh>
 
-#include "common/event_type.h"
-
-#include "controller/game_controller.h"
-
+#include "command/buy_weapon_command.h"
 #include "command/composite_command.h"
 #include "command/switch_context_command.h"
-#include "command/buy_weapon_command.h"
+#include "common/event_type.h"
+#include "controller/game_controller.h"
 
-void Context::ShopContext::build_button(View::Button& button, const std::string& weapon_name, Model::WeaponID weapon_id) {
+void Context::ShopContext::build_button(View::Button& button, const std::string& weapon_name,
+                                        Model::WeaponID weapon_id) {
     background.add_child(&button);
     button.set_background_color(78, 107, 60, 255);
     button.set_draw_background(true);
@@ -35,9 +35,7 @@ void Context::ShopContext::trigger_buttons(Shared<SDL_Event> event) {
     buy_awp.trigger(event);
 }
 
-void Context::ShopContext::render() {
-    background.render();
-}
+void Context::ShopContext::render() { background.render(); }
 
 void Context::ShopContext::dispatch_events() {
     while (SDL_PollEvent(&placeholder)) {
@@ -45,14 +43,14 @@ void Context::ShopContext::dispatch_events() {
     }
 }
 
-Context::ShopContext::ShopContext(Weak<Controller::GameController> controller)
-: Context::BaseContext("shop", controller),
-  strategy(controller, this),
-  background(controller, 5),
-  label(controller),
-  buy_ak47(controller),
-  buy_m3(controller),
-  buy_awp(controller) {
+Context::ShopContext::ShopContext(Weak<Controller::GameController> controller):
+        Context::BaseContext("shop", controller),
+        strategy(controller, this),
+        background(controller, 5),
+        label(controller),
+        buy_ak47(controller),
+        buy_m3(controller),
+        buy_awp(controller) {
     background.set_background_color(50, 100, 50, 255);
     background.set_draw_background(true);
     background.add_child(&label);

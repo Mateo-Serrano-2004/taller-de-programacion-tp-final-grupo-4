@@ -20,15 +20,12 @@ private:
     void handle_click(Shared<SDL_Event> event);
 
 public:
-    ShopEventHandlerStrategy(
-        Weak<GameController> controller,
-        Context::ShopContext* context
-    );
+    ShopEventHandlerStrategy(Weak<GameController> controller, Context::ShopContext* context);
 
     void handle(Shared<SDL_Event> event) override;
 
     ~ShopEventHandlerStrategy() override = default;
 };
-};
+};  // namespace Controller
 
-#endif // CLIENT_GAME_HANDLER_SHOP_EVENT_HANDLER_STRATEGY_H
+#endif  // CLIENT_GAME_HANDLER_SHOP_EVENT_HANDLER_STRATEGY_H

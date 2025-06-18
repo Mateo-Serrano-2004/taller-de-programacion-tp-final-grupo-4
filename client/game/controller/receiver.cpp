@@ -1,24 +1,22 @@
 #include "receiver.h"
 
-#include <iostream>
 #include <exception>
-#include <variant>
+#include <iostream>
+#include <memory>
 #include <utility>
-
-#include "common/overloaded.h"
-#include "common/team.h"
-#include "common/DTO/dto_variant.h"
+#include <variant>
 
 #include "client/net/client_protocol.h"
-
-#include "game_controller.h"
-
-#include "handler/game_state_manager.h"
-
+#include "common/DTO/dto_variant.h"
+#include "common/overloaded.h"
+#include "common/team.h"
 #include "event/end_of_game_event.h"
+#include "event/generate_map_event.h"
 #include "event/update_player_id_event.h"
 #include "event/update_role_event.h"
-#include "event/generate_map_event.h"
+#include "handler/game_state_manager.h"
+
+#include "game_controller.h"
 
 void Controller::Receiver::update_game_state(DTO::GameStateDTO&& dto) {
     if (dto.ended) {
@@ -39,9 +37,7 @@ void Controller::Receiver::update_player_id(DTO::PlayerIDDTO&& dto) {
 
 void Controller::Receiver::update_current_team(DTO::TeamIDDTO&& dto) {
     try {
-        controller.lock()->push_event(make_shared<Model::UpdateRoleEvent>(
-            (Model::TeamID) dto.id)
-        );
+        controller.lock()->push_event(make_shared<Model::UpdateRoleEvent>((Model::TeamID)dto.id));
     } catch (const std::exception&) {}
 }
 
@@ -53,18 +49,13 @@ void Controller::Receiver::generate_map(DTO::MapDTO&& dto) {
 
 void Controller::Receiver::receive_server_info() {
     auto variant = protocol->receive_variant();
-    std::visit(
-        overloaded {
-            [this](DTO::GameStateDTO&& d) { update_game_state(std::move(d)); },
-            [this](DTO::PlayerIDDTO&& d) { update_player_id(std::move(d)); },
-            [this](DTO::TeamIDDTO&& d) { update_current_team(std::move(d)); },
-            [this](DTO::MapDTO&& d) { generate_map(std::move(d)); },
-            // TODO: Fix this
-            [](DTO::MapNameListDTO&&) {},
-            [](DTO::GameListDTO&&) {}
-        },
-        std::move(variant)
-    );
+    std::visit(overloaded{[this](DTO::GameStateDTO&& d) { update_game_state(std::move(d)); },
+                          [this](DTO::PlayerIDDTO&& d) { update_player_id(std::move(d)); },
+                          [this](DTO::TeamIDDTO&& d) { update_current_team(std::move(d)); },
+                          [this](DTO::MapDTO&& d) { generate_map(std::move(d)); },
+                          // TODO: Fix this
+                          [](DTO::MapNameListDTO&&) {}, [](DTO::GameListDTO&&) {}},
+               std::move(variant));
 }
 
 Controller::Receiver::Receiver(Weak<GameController> controller,

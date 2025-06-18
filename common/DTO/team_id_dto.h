@@ -9,8 +9,8 @@ public:
     short_id_t id;
 
     TeamIDDTO(): id(0) {}
-    TeamIDDTO(short_id_t id) : id(id) {}
+    explicit TeamIDDTO(short_id_t id): id(id) {}
 };
-};
+};  // namespace DTO
 
-#endif // COMMON_DTO_TEAM_ID_DTO_H
+#endif  // COMMON_DTO_TEAM_ID_DTO_H

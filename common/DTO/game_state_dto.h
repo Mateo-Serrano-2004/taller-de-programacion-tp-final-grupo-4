@@ -20,12 +20,8 @@ public:
     uint8_t tt_rounds_won;
 
     GameStateDTO();
-    GameStateDTO(GameState game_state,
-                 const std::vector<PlayerDTO>& players,
-                 bool ended,
-                 Model::TeamID winner,
-                 const RoundDTO& round,
-                 uint8_t ct_rounds_won,
+    GameStateDTO(GameState game_state, const std::vector<PlayerDTO>& players, bool ended,
+                 Model::TeamID winner, const RoundDTO& round, uint8_t ct_rounds_won,
                  uint8_t tt_rounds_won);
 };
 }  // namespace DTO

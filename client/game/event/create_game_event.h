@@ -3,9 +3,8 @@
 
 #include <string>
 
-#include "common/event_type.h"
 #include "common/DTO/event_dto.h"
-
+#include "common/event_type.h"
 #include "dto_handler/dto_creator_visitor.h"
 
 #include "transfered_event.h"

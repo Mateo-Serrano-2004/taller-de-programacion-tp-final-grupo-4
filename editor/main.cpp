@@ -1,4 +1,5 @@
 #include <QApplication>
+
 #include "menu/main_window.h"
 
 int main(int argc, char* argv[]) {

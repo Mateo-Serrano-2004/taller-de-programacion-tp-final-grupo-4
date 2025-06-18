@@ -4,10 +4,9 @@
 #include <cstdint>
 #include <string>
 
+#include "common/DTO/event_dto.h"
 #include "common/definitions.h"
 #include "common/event_type.h"
-#include "common/DTO/event_dto.h"
-
 #include "dto_handler/dto_creator_visitor.h"
 
 #include "transfered_event.h"
@@ -18,7 +17,8 @@ private:
     short_id_t game_id;
 
 public:
-    explicit JoinGameEvent(short_id_t game_id): TransferedEvent(EventType::JOIN_GAME), game_id(game_id) {}
+    explicit JoinGameEvent(short_id_t game_id):
+            TransferedEvent(EventType::JOIN_GAME), game_id(game_id) {}
 
     short_id_t get_game_id() const;
 

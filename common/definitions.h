@@ -11,11 +11,11 @@
 
 #include <chrono>
 #include <cstdint>
-#include <memory>
 #include <functional>
+#include <memory>
 #include <optional>
-#include <tuple>
 #include <string>
+#include <tuple>
 
 #include "queue.h"
 

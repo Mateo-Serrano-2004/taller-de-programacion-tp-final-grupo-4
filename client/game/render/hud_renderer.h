@@ -1,12 +1,12 @@
 #ifndef CLIENT_GAME_RENDER_HUD_RENDERER_H
 #define CLIENT_GAME_RENDER_HUD_RENDERER_H
 
+#include <list>
 #include <vector>
 
 #include "common/definitions.h"
-
-#include "entity/pane.h"
 #include "entity/horizontal_pane.h"
+#include "entity/pane.h"
 
 #include "renderer.h"
 
@@ -17,7 +17,7 @@ class Texture;
 namespace Controller {
 class GameController;
 class GameStateManager;
-};
+};  // namespace Controller
 
 namespace View {
 class RenderedPlayer;
@@ -41,32 +41,23 @@ protected:
     std::vector<uint8_t> get_units(uint16_t number);
     std::vector<uint8_t> get_units_of_time_left(uint16_t seconds_left);
 
-    void load_separator(
-        std::list<View::Pane>& numbers,
-        View::HorizontalPane& parent
-    );
-    void render_hud_symbol(
-        std::list<View::Pane>& numbers,
-        View::HorizontalPane& parent,
-        uint8_t symbol_number
-    );
-    void render_number(
-        std::list<View::Pane>& numbers,
-        View::HorizontalPane& parent,
-        uint8_t number
-    );
+    void load_separator(std::list<View::Pane>& numbers, View::HorizontalPane& parent);
+    void render_hud_symbol(std::list<View::Pane>& numbers, View::HorizontalPane& parent,
+                           uint8_t symbol_number);
+    void render_number(std::list<View::Pane>& numbers, View::HorizontalPane& parent,
+                       uint8_t number);
 
     void render_time();
     void render_life_points(Shared<RenderedPlayer> player);
     void render_money(Shared<RenderedPlayer> player);
 
 public:
-    HUDRenderer(Weak<Controller::GameController> controller);
+    explicit HUDRenderer(Weak<Controller::GameController> controller);
 
     void render() override;
 
     ~HUDRenderer() override = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_RENDER_HUD_RENDERER_H
+#endif  // CLIENT_GAME_RENDER_HUD_RENDERER_H

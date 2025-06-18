@@ -3,11 +3,10 @@
 
 #include <map>
 
-#include "common/definitions.h"
-#include "common/weapon_id.h"
-#include "common/role_id.h"
-
 #include "asset/texture_id.h"
+#include "common/definitions.h"
+#include "common/role_id.h"
+#include "common/weapon_id.h"
 
 namespace Model {
 class EnumTranslator {
@@ -27,6 +26,6 @@ public:
     static Model::TextureID get_texture_from_role(Model::RoleID role_id);
     static Model::TextureID get_texture_from_weapon(Model::WeaponID weapon_id);
 };
-};
+};  // namespace Model
 
-#endif // CLIENT_GAME_ENUM_ENUM_TRANSLATOR_H
+#endif  // CLIENT_GAME_ENUM_ENUM_TRANSLATOR_H

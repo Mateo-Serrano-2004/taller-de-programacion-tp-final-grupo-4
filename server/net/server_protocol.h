@@ -6,10 +6,10 @@
 #include <utility>
 #include <vector>
 
+#include "common/DTO/dto_variant.h"
 #include "common/DTO/game_info_dto.h"
 #include "common/DTO/game_state_dto.h"
 #include "common/DTO/player_dto.h"
-#include "common/DTO/dto_variant.h"
 #include "common/socket.h"
 #include "server/events/events.h"
 

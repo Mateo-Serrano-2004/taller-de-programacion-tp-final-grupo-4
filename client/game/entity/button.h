@@ -5,11 +5,9 @@
 
 #include <SDL2/SDL.h>
 
-#include "common/definitions.h"
-
-#include "command/base_command.h"
-
 #include "asset/texture_id.h"
+#include "command/base_command.h"
+#include "common/definitions.h"
 
 #include "label.h"
 
@@ -24,7 +22,7 @@ protected:
     Weak<Controller::BaseController> controller;
 
 public:
-    Button(Weak<Controller::BaseController> controller);
+    explicit Button(Weak<Controller::BaseController> controller);
 
     bool check_click(Shared<SDL_Event> event) const;
 
@@ -35,6 +33,6 @@ public:
 
     virtual ~Button() override = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_ENTITY_BUTTON_H
+#endif  // CLIENT_GAME_ENTITY_BUTTON_H

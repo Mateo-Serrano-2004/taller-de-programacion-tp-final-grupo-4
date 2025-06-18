@@ -3,9 +3,8 @@
 
 #include <QMainWindow>
 
-#include "common/definitions.h"
-
 #include "client/net/client_protocol.h"
+#include "common/definitions.h"
 #include "scenes/game_creation_scene.h"
 #include "scenes/join_game_scene.h"
 #include "scenes/lobby_scene.h"

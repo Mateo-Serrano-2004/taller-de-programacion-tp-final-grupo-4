@@ -4,7 +4,6 @@
 #include <string>
 
 #include "common/DTO/event_dto.h"
-
 #include "dto_handler/dto_creator_visitor.h"
 
 #include "transfered_event.h"

@@ -31,4 +31,4 @@ enum TextureID {
 };
 };
 
-#endif // CLIENT_GAME_ASSET_TEXTURE_ID_H
+#endif  // CLIENT_GAME_ASSET_TEXTURE_ID_H

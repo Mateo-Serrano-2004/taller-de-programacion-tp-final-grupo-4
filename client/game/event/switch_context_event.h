@@ -11,12 +11,12 @@ protected:
     std::string new_context_name;
 
 public:
-    SwitchContextEvent(const std::string& new_context_name);
+    explicit SwitchContextEvent(const std::string& new_context_name);
 
     const std::string& get_new_context_name() const;
 
     ~SwitchContextEvent() override = default;
 };
-};
+};  // namespace Model
 
-#endif // CLIENT_GAME_EVENT_SWITCH_CONTENT_EVENT_H
+#endif  // CLIENT_GAME_EVENT_SWITCH_CONTENT_EVENT_H

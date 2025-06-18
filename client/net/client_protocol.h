@@ -7,9 +7,9 @@
 #include <utility>
 #include <vector>
 
-#include "common/socket.h"
-#include "common/DTO/event_dto.h"
 #include "common/DTO/dto_variant.h"
+#include "common/DTO/event_dto.h"
+#include "common/socket.h"
 
 namespace Net {
 

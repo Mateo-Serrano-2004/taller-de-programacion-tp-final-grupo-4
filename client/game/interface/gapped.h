@@ -8,7 +8,7 @@ protected:
     int gap_x;
 
 public:
-    Gapped(int gap_y, int gap_x);
+    explicit Gapped(int gap_y, int gap_x);
 
     int get_gap_y() const;
     int get_gap_x() const;
@@ -18,6 +18,6 @@ public:
 
     virtual ~Gapped() = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_ENTITY_GAPPED_H
+#endif  // CLIENT_GAME_ENTITY_GAPPED_H

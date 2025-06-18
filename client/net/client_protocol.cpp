@@ -1,11 +1,12 @@
 #include "client_protocol.h"
 
-#include <vector>
 #include <cstdint>
+#include <vector>
+
 #include <arpa/inet.h>
 
-#include "common/DTO/event_dto.h"
 #include "common/DTO/dto_code.h"
+#include "common/DTO/event_dto.h"
 
 void Net::ClientProtocol::receive_weapon(DTO::WeaponDTO& weapon) {
     skt.recvall(&weapon.weapon_id, sizeof(weapon.weapon_id));

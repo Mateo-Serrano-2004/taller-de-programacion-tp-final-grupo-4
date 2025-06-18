@@ -1,10 +1,10 @@
 #ifndef MENU_WIDGET_H
 #define MENU_WIDGET_H
 
-#include <QWidget>
 #include <QPushButton>
+#include <QWidget>
 
-class MenuWidget : public QWidget {
+class MenuWidget: public QWidget {
     Q_OBJECT
 public:
     explicit MenuWidget(QWidget* parent = nullptr);
@@ -18,4 +18,4 @@ private:
     QPushButton* editMapBtn = nullptr;
 };
 
-#endif // MENU_WIDGET_H 
+#endif  // MENU_WIDGET_H

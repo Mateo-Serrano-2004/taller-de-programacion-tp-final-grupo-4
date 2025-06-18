@@ -2,7 +2,6 @@
 #define CLIENT_GAME_EVENT_STOP_USING_WEAPON_EVENT_H
 
 #include "common/DTO/event_dto.h"
-
 #include "dto_handler/dto_creator_visitor.h"
 
 #include "transfered_event.h"
@@ -16,6 +15,6 @@ public:
 
     ~StopUsingWeaponEvent() override = default;
 };
-};
+};  // namespace Model
 
-#endif // CLIENT_GAME_EVENT_STOP_USING_WEAPON_EVENT_H
+#endif  // CLIENT_GAME_EVENT_STOP_USING_WEAPON_EVENT_H

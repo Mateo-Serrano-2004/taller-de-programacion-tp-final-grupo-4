@@ -2,12 +2,15 @@
 
 #include <string>
 
-Model::AssetAddresser::AssetAddresser() {
-    #ifdef DEBUG_MODE
-    assets_main_path = "assets/";
-    #else
-    assets_main_path = "/var/cs2d/assets/";
-    #endif
+Model::AssetAddresser::AssetAddresser()
+#ifdef DEBUG_MODE
+        :
+        assets_main_path("assets/")
+#else
+        :
+        assets_main_path("/var/cs2d/assets/")
+#endif
+{
 }
 
 std::string Model::AssetAddresser::get_weapon_sprite_path(const std::string& partial_path) {

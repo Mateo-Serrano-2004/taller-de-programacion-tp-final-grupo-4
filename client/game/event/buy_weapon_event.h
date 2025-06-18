@@ -1,9 +1,8 @@
 #ifndef CLIENT_EVENT_BUY_WEAPON_EVENT_H
 #define CLIENT_EVENT_BUY_WEAPON_EVENT_H
 
-#include "common/weapon_id.h"
 #include "common/DTO/event_dto.h"
-
+#include "common/weapon_id.h"
 #include "dto_handler/dto_creator_visitor.h"
 
 #include "transfered_event.h"
@@ -14,7 +13,7 @@ private:
     Model::WeaponID weapon_id;
 
 public:
-    BuyWeaponEvent(Model::WeaponID weapon_id);
+    explicit BuyWeaponEvent(Model::WeaponID weapon_id);
 
     Model::WeaponID get_weapon_id() const;
 

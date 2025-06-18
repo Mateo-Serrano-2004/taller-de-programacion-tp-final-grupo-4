@@ -32,13 +32,13 @@ protected:
     void handle_keyup_event(Shared<SDL_Event> event);
 
 public:
-    InGameEventHandlerStrategy(Weak<GameController> controller);
+    explicit InGameEventHandlerStrategy(Weak<GameController> controller);
 
     void handle(Shared<SDL_Event> event) override;
     void handle_current_game_state();
 
     ~InGameEventHandlerStrategy() override = default;
 };
-};
+};  // namespace Controller
 
-#endif // CLIENT_GAME_HANDLER_IN_GAME_EVENT_HANDLER_STRATEGY_H
+#endif  // CLIENT_GAME_HANDLER_IN_GAME_EVENT_HANDLER_STRATEGY_H

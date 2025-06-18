@@ -1,12 +1,13 @@
 #ifndef YAML_PARSER_H
 #define YAML_PARSER_H
 
+#include <map>
+#include <string>
+#include <vector>
+
 #include <yaml-cpp/yaml.h>
 
 #include "types.h"
-#include <string>
-#include <vector>
-#include <map>
 
 struct TileData {
     int x;
@@ -75,7 +76,6 @@ class YamlParser {
 
 private:
     ConfigData gameConfig;
-    int mapMinWidth, mapMaxWidth, mapMinHeight, mapMaxHeight;
     std::vector<std::vector<std::string>> tileMatrix;
     std::vector<std::vector<TileType>> typeMatrix;
 
@@ -83,10 +83,10 @@ private:
     TileType stringToTileType(const std::string& typeStr, const std::string& nameStr);
 
 public:
-    YamlParser(const std::string& yamlGameConfigPath);
+    explicit YamlParser(const std::string& yamlGameConfigPath);
     void parseMapYaml(const std::string& yamlMapPath);
     std::vector<std::vector<std::string>> getTileMatrix() const;
     std::vector<std::vector<TileType>> getTypeMatrix() const;
     const ConfigData& getConfigData() const;
 };
-#endif // YAML_PARSER_H
+#endif  // YAML_PARSER_H

@@ -6,7 +6,7 @@
 namespace SDL2pp {
 class Window;
 class Renderer;
-};
+};  // namespace SDL2pp
 
 namespace Model {
 class AssetManager;
@@ -24,12 +24,12 @@ protected:
     Shared<Model::AssetManager> asset_manager;
 
 public:
-    Renderer(Weak<Controller::BaseController> controller);
+    explicit Renderer(Weak<Controller::BaseController> controller);
 
     virtual void render() = 0;
 
     virtual ~Renderer() = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_RENDER_RENDERER_H
+#endif  // CLIENT_GAME_RENDER_RENDERER_H

@@ -5,4 +5,4 @@
 #define MAP_WIDTH 100
 #define MAP_HEIGHT 100
 
-#endif // CONSTANTS_H
+#endif  // CONSTANTS_H

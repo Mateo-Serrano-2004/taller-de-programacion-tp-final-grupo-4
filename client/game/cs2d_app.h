@@ -20,10 +20,10 @@ protected:
     CS2DApp& operator=(CS2DApp&&) = delete;
 
 public:
-    CS2DApp(Shared<Net::ClientProtocol> protocol);
+    explicit CS2DApp(Shared<Net::ClientProtocol> protocol);
 
     ~CS2DApp() override = default;
 };
-};
+};  // namespace App
 
-#endif // CLIENT_GAME_CS2D_APP_H
+#endif  // CLIENT_GAME_CS2D_APP_H

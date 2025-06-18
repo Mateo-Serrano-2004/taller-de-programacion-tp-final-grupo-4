@@ -17,6 +17,6 @@ struct GameInfoDTO {
                 const std::string& map_name):
             id(id), name(name), current_players(current_players), map_name(map_name) {}
 };
-}
+}  // namespace DTO
 
 #endif  // COMMON_DTO_GAME_INFO_DTO_H

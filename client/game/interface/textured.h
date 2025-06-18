@@ -5,9 +5,8 @@
 #include <SDL2pp/Rect.hh>
 #include <SDL2pp/Texture.hh>
 
-#include "common/definitions.h"
-
 #include "asset/texture_id.h"
+#include "common/definitions.h"
 
 namespace Model {
 class AssetManager;
@@ -26,8 +25,8 @@ protected:
     Shared<Model::AssetManager> asset_manager;
 
 public:
-    Textured(Weak<Controller::BaseController> controller);
-    
+    explicit Textured(Weak<Controller::BaseController> controller);
+
     bool is_texture_drawn() const;
     SDL2pp::Optional<SDL2pp::Rect> get_texture_slice() const;
 
@@ -39,6 +38,6 @@ public:
 
     virtual ~Textured() = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_ENTITY_TEXTURED_H
+#endif  // CLIENT_GAME_ENTITY_TEXTURED_H

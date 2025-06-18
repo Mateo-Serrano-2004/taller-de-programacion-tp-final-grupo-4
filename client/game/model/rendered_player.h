@@ -6,23 +6,20 @@
 
 #include <SDL2pp/Point.hh>
 
+#include "asset/texture_id.h"
 #include "common/definitions.h"
+#include "common/model/player.h"
+#include "common/model/vector_2d.h"
+#include "common/model/weapon.h"
 #include "common/role_id.h"
 #include "common/weapon_id.h"
-#include "common/model/player.h"
-#include "common/model/weapon.h"
-#include "common/model/vector_2d.h"
-
-#include "render/camera.h"
-
-#include "asset/texture_id.h"
-
 #include "interface/rendered.h"
+#include "render/camera.h"
 
 namespace SDL2pp {
 class Renderer;
 class Point;
-};
+};  // namespace SDL2pp
 
 namespace Model {
 class AssetManager;
@@ -49,16 +46,13 @@ protected:
     void render_name(const SDL2pp::Point& player_center);
 
 public:
-    RenderedPlayer(
-        Weak<Controller::GameController> controller,
-        Model::Player&& player,
-        const Camera& camera
-    );
+    RenderedPlayer(Weak<Controller::GameController> controller, Model::Player&& player,
+                   const Camera& camera);
 
     void render() override;
 
     ~RenderedPlayer() override = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_MODEL_RENDERED_PLAYER_H
+#endif  // CLIENT_GAME_MODEL_RENDERED_PLAYER_H

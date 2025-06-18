@@ -2,5 +2,4 @@
 
 #include "common/event_type.h"
 
-Model::EndOfGameEvent::EndOfGameEvent()
-: Model::Event(Model::EventType::END_OF_GAME) {}
+Model::EndOfGameEvent::EndOfGameEvent(): Model::Event(Model::EventType::END_OF_GAME) {}

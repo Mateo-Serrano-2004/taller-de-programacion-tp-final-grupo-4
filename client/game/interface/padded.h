@@ -7,7 +7,7 @@ protected:
     int padding;
 
 public:
-    Padded(int padding = 0);
+    explicit Padded(int padding = 0);
 
     int get_padding() const;
 
@@ -15,6 +15,6 @@ public:
 
     virtual ~Padded() = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_ENTITY_PADDED_H
+#endif  // CLIENT_GAME_ENTITY_PADDED_H

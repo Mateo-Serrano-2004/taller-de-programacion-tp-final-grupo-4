@@ -1,8 +1,8 @@
 #ifndef MAP_SERIALIZER_H
 #define MAP_SERIALIZER_H
 
-#include <QString>
 #include <QGraphicsScene>
+#include <QString>
 
 class MapSerializer {
 public:
@@ -10,4 +10,4 @@ public:
     static void loadFromYaml(const QString& filePath, QGraphicsScene* scene);
 };
 
-#endif // MAP_SERIALIZER_H
+#endif  // MAP_SERIALIZER_H

@@ -1,31 +1,28 @@
 #include "in_game_event_handler_strategy.h"
 
-#include <utility>
 #include <cmath>
+#include <memory>
+#include <utility>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/Point.hh>
-#include <SDL2pp/Window.hh>
 #include <SDL2pp/Renderer.hh>
+#include <SDL2pp/Window.hh>
 
 #include "common/slot_id.h"
-
-#include "game_state_manager.h"
-
 #include "controller/game_controller.h"
-
-#include "event/quit_event.h"
 #include "event/movement_event.h"
-#include "event/stop_movement_event.h"
+#include "event/quit_event.h"
 #include "event/rotation_event.h"
-#include "event/switch_weapon_event.h"
-#include "event/switch_context_event.h"
-#include "event/use_weapon_event.h"
+#include "event/stop_movement_event.h"
 #include "event/stop_using_weapon_event.h"
-
+#include "event/switch_context_event.h"
+#include "event/switch_weapon_event.h"
+#include "event/use_weapon_event.h"
+#include "exception/closed_window.h"
 #include "utils/mouse_coords_translator.h"
 
-#include "exception/closed_window.h"
+#include "game_state_manager.h"
 
 void Controller::InGameEventHandlerStrategy::handle_movement_event(Shared<SDL_Event> event) {
     Shared<Model::MovementEvent> movement_event;
@@ -64,7 +61,8 @@ void Controller::InGameEventHandlerStrategy::handle_movement_event(Shared<SDL_Ev
 }
 
 void Controller::InGameEventHandlerStrategy::handle_switch_weapon_event(Shared<SDL_Event> event) {
-    if (handler_state.switching_weapon) return;
+    if (handler_state.switching_weapon)
+        return;
 
     Shared<Model::SwitchWeaponEvent> switch_weapon_event;
     auto key_symbol = event->key.keysym.sym;
@@ -134,14 +132,16 @@ void Controller::InGameEventHandlerStrategy::handle_stop_switching_weapon_event(
 }
 
 void Controller::InGameEventHandlerStrategy::handle_click() {
-    if (handler_state.is_shooting) return;
+    if (handler_state.is_shooting)
+        return;
     auto use_weapon_event = make_shared<Model::UseWeaponEvent>();
     handler_state.is_shooting = true;
     controller.lock()->push_event(std::move(use_weapon_event));
 }
 
 void Controller::InGameEventHandlerStrategy::handle_click_release() {
-    if (!handler_state.is_shooting) return;
+    if (!handler_state.is_shooting)
+        return;
     auto stop_using_weapon_event = make_shared<Model::StopUsingWeaponEvent>();
     handler_state.is_shooting = false;
     controller.lock()->push_event(std::move(stop_using_weapon_event));
@@ -151,14 +151,10 @@ void Controller::InGameEventHandlerStrategy::handle_keydown_event(Shared<SDL_Eve
     auto key_symbol = event->key.keysym.sym;
     if (key_symbol == SDLK_ESCAPE || key_symbol == SDLK_b) {
         handle_switch_context_event(event);
-    } else if (key_symbol == SDLK_w ||
-               key_symbol == SDLK_a ||
-               key_symbol == SDLK_s ||
+    } else if (key_symbol == SDLK_w || key_symbol == SDLK_a || key_symbol == SDLK_s ||
                key_symbol == SDLK_d) {
         handle_movement_event(std::move(event));
-    } else if (key_symbol == SDLK_1 ||
-               key_symbol == SDLK_2 ||
-               key_symbol == SDLK_3 ||
+    } else if (key_symbol == SDLK_1 || key_symbol == SDLK_2 || key_symbol == SDLK_3 ||
                key_symbol == SDLK_4) {
         handle_switch_weapon_event(std::move(event));
     }
@@ -166,22 +162,19 @@ void Controller::InGameEventHandlerStrategy::handle_keydown_event(Shared<SDL_Eve
 
 void Controller::InGameEventHandlerStrategy::handle_keyup_event(Shared<SDL_Event> event) {
     auto key_symbol = event->key.keysym.sym;
-    if (key_symbol == SDLK_w ||
-        key_symbol == SDLK_a ||
-        key_symbol == SDLK_s ||
+    if (key_symbol == SDLK_w || key_symbol == SDLK_a || key_symbol == SDLK_s ||
         key_symbol == SDLK_d) {
         handle_stop_movement_event(std::move(event));
-    } else if (key_symbol == SDLK_1 ||
-               key_symbol == SDLK_2 ||
-               key_symbol == SDLK_3 ||
+    } else if (key_symbol == SDLK_1 || key_symbol == SDLK_2 || key_symbol == SDLK_3 ||
                key_symbol == SDLK_4) {
         handle_stop_switching_weapon_event();
     }
 }
 
-Controller::InGameEventHandlerStrategy::InGameEventHandlerStrategy(Weak<Controller::GameController> controller)
-: Controller::EventHandlerStrategy(controller),
-  game_state_manager(controller.lock()->get_game_state_manager()) {}
+Controller::InGameEventHandlerStrategy::InGameEventHandlerStrategy(
+        Weak<Controller::GameController> controller):
+        Controller::EventHandlerStrategy(controller),
+        game_state_manager(controller.lock()->get_game_state_manager()) {}
 
 void Controller::InGameEventHandlerStrategy::handle(Shared<SDL_Event> event) {
     Controller::EventHandlerStrategy::handle(event);
@@ -212,8 +205,10 @@ void Controller::InGameEventHandlerStrategy::handle_current_game_state() {
 
     angle_deg += 90;
 
-    if (angle_deg < 0) angle_deg += 360;
-    if (angle_deg >= 360) angle_deg -= 360;
+    if (angle_deg < 0)
+        angle_deg += 360;
+    if (angle_deg >= 360)
+        angle_deg -= 360;
 
     angle_t angle = static_cast<angle_t>(angle_deg);
 

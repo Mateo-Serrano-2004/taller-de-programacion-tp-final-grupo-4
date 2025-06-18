@@ -9,4 +9,4 @@ public:
     virtual ~Transfered() = default;
 };
 
-#endif // CLIENT_GAME_INTERFACE_TRANSFERED_H
+#endif  // CLIENT_GAME_INTERFACE_TRANSFERED_H

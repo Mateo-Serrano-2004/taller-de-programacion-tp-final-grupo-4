@@ -3,21 +3,17 @@
 
 #include <SDL2/SDL.h>
 
+#include "asset/texture_id.h"
 #include "common/definitions.h"
 #include "common/team.h"
-
-#include "base_context.h"
-
+#include "entity/button.h"
+#include "entity/horizontal_pane.h"
+#include "entity/label.h"
+#include "entity/vertical_pane.h"
+#include "event/event.h"
 #include "handler/pick_role_event_handler_strategy.h"
 
-#include "asset/texture_id.h"
-
-#include "event/event.h"
-
-#include "entity/horizontal_pane.h"
-#include "entity/vertical_pane.h"
-#include "entity/label.h"
-#include "entity/button.h"
+#include "base_context.h"
 
 namespace Controller {
 class GameController;
@@ -25,7 +21,7 @@ class GameController;
 
 namespace Context {
 class PickRoleContext: public BaseContext {
-friend class Controller::PickRoleEventHandlerStrategy;
+    friend class Controller::PickRoleEventHandlerStrategy;
 
 private:
     void trigger_buttons(Shared<SDL_Event> event);
@@ -51,12 +47,12 @@ protected:
     void dispatch_events() override;
 
 public:
-    PickRoleContext(Weak<Controller::GameController> controller);
+    explicit PickRoleContext(Weak<Controller::GameController> controller);
 
     void update_team(Model::TeamID new_team);
 
     ~PickRoleContext() override = default;
 };
-};
+};  // namespace Context
 
-#endif // CLIENT_GAME_CONTEXT_PICK_ROLE_CONTEXT_H
+#endif  // CLIENT_GAME_CONTEXT_PICK_ROLE_CONTEXT_H

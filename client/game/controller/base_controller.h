@@ -6,7 +6,7 @@
 namespace SDL2pp {
 class Window;
 class Renderer;
-};
+};  // namespace SDL2pp
 
 namespace Context {
 class ContextManager;
@@ -16,7 +16,7 @@ namespace Model {
 class Event;
 class AssetManager;
 class AssetLoader;
-};
+};  // namespace Model
 
 namespace Controller {
 class BaseController {
@@ -34,13 +34,10 @@ protected:
     virtual void process_event(Shared<Model::Event> event) = 0;
 
 public:
-    BaseController(
-        Shared<SDL2pp::Window> window,
-        Shared<SDL2pp::Renderer> renderer,
-        Shared<Model::AssetManager> asset_manager,
-        Shared<Model::AssetLoader> asset_loader,
-        Shared<Context::ContextManager> context_manager
-    );
+    BaseController(Shared<SDL2pp::Window> window, Shared<SDL2pp::Renderer> renderer,
+                   Shared<Model::AssetManager> asset_manager,
+                   Shared<Model::AssetLoader> asset_loader,
+                   Shared<Context::ContextManager> context_manager);
 
     Shared<SDL2pp::Window> get_window();
     Shared<SDL2pp::Renderer> get_renderer();
@@ -54,6 +51,6 @@ public:
 
     virtual ~BaseController() = default;
 };
-};
+};  // namespace Controller
 
-#endif // CLIENT_GAME_CONTROLLER_BASE_CONTROLLER_H
+#endif  // CLIENT_GAME_CONTROLLER_BASE_CONTROLLER_H

@@ -1,21 +1,22 @@
 #include "player_dto.h"
 
-#include <string>
 #include <cstdint>
 #include <memory>
+#include <string>
+#include <utility>
 
 #include "common/role_id.h"
 
-DTO::PlayerDTO::PlayerDTO()
-: player_id(0),
-  role_id(0),
-  angle(0),
-  money(0),
-  position_x(0),
-  position_y(0),
-  shooting(0),
-  health(0),
-  team(0) {}
+DTO::PlayerDTO::PlayerDTO():
+        player_id(0),
+        role_id(0),
+        angle(0),
+        money(0),
+        position_x(0),
+        position_y(0),
+        shooting(0),
+        health(0),
+        team(0) {}
 
 DTO::PlayerDTO::PlayerDTO(short_id_t player_id, short_id_t role_id, angle_t angle, uint16_t money,
                           coord_t position_x, coord_t position_y, const std::string& name,
@@ -34,11 +35,8 @@ DTO::PlayerDTO::PlayerDTO(short_id_t player_id, short_id_t role_id, angle_t angl
         team(team) {}
 
 Model::Player DTO::PlayerDTO::to_player() const {
-    return Model::Player(
-        shooting, player_id, (Model::RoleID) (role_id), angle, money,
-        name,
-        Physics::Vector2D(position_x, position_y),
-        make_shared<Model::Weapon>(std::move(weapon_dto.to_weapon())),
-        health, (Model::TeamID) (team)
-    );
+    return Model::Player(shooting, player_id, (Model::RoleID)(role_id), angle, money, name,
+                         Physics::Vector2D(position_x, position_y),
+                         make_shared<Model::Weapon>(std::move(weapon_dto.to_weapon())), health,
+                         (Model::TeamID)(team));
 }

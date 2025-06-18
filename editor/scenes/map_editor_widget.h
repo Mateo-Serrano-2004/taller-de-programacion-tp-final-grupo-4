@@ -1,13 +1,13 @@
 #ifndef MAP_EDITOR_WIDGET_H
 #define MAP_EDITOR_WIDGET_H
 
-#include <QWidget>
-#include <QGraphicsView>
 #include <QGraphicsScene>
+#include <QGraphicsView>
 #include <QListWidget>
 #include <QPushButton>
+#include <QWidget>
 
-class MapEditorWidget : public QWidget {
+class MapEditorWidget: public QWidget {
     Q_OBJECT
 public:
     explicit MapEditorWidget(QWidget* parent = nullptr);
@@ -40,4 +40,4 @@ private:
     int selectedAsset = -1;
 };
 
-#endif // MAP_EDITOR_WIDGET_H 
+#endif  // MAP_EDITOR_WIDGET_H

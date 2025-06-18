@@ -1,14 +1,13 @@
 #include "in_game_context.h"
 
 #include <functional>
+#include <memory>
 
 #include <SDL2/SDL.h>
 
 #include "common/event_type.h"
 #include "common/model/player.h"
-
 #include "controller/game_controller.h"
-
 #include "exception/closed_window.h"
 
 void Context::InGameContext::render() {
@@ -24,8 +23,8 @@ void Context::InGameContext::dispatch_events() {
     event_handler_strategy.handle_current_game_state();
 }
 
-Context::InGameContext::InGameContext(Weak<Controller::GameController> controller)
-: Context::BaseContext("in-game", controller),
-  player_renderer(controller),
-  hud_renderer(controller),
-  event_handler_strategy(controller) {}
+Context::InGameContext::InGameContext(Weak<Controller::GameController> controller):
+        Context::BaseContext("in-game", controller),
+        player_renderer(controller),
+        hud_renderer(controller),
+        event_handler_strategy(controller) {}

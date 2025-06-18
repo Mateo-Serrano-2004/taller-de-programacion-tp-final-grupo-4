@@ -7,8 +7,7 @@
 
 #include "definitions.h"
 
-PeriodicClock::PeriodicClock(uint16_t fps)
-    : rate(1000 / fps), start(steady_clock::now()) {}
+PeriodicClock::PeriodicClock(uint16_t fps): rate(1000 / fps), start(steady_clock::now()) {}
 
 uint64_t PeriodicClock::sleep_and_get_frames() {
     time_point end = steady_clock::now();

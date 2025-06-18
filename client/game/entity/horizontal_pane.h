@@ -2,7 +2,6 @@
 #define CLIENT_GAME_ENTITY_HORIZONTAL_PANE_H
 
 #include "common/definitions.h"
-
 #include "interface/gapped.h"
 
 #include "smart_pane.h"
@@ -17,10 +16,10 @@ protected:
     void position_children() override;
 
 public:
-    HorizontalPane(Weak<Controller::BaseController> controller, int gap_x = 0);
+    explicit HorizontalPane(Weak<Controller::BaseController> controller, int gap_x = 0);
 
     virtual ~HorizontalPane() override = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_ENTITY_HORIZONTAL_PANE_H
+#endif  // CLIENT_GAME_ENTITY_HORIZONTAL_PANE_H

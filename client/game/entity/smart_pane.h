@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "common/definitions.h"
-
 #include "interface/aligner.h"
 
 #include "pane.h"
@@ -19,12 +18,12 @@ protected:
     virtual void position_children();
 
 public:
-    SmartPane(Weak<Controller::BaseController> controller);
+    explicit SmartPane(Weak<Controller::BaseController> controller);
 
     virtual void render() override;
 
     virtual ~SmartPane() override = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_ENTITY_SMART_PANE_H
+#endif  // CLIENT_GAME_ENTITY_SMART_PANE_H

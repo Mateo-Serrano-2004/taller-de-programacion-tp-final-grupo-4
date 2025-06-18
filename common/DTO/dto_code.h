@@ -4,7 +4,7 @@
 #include <cstdint>
 
 namespace DTO {
-enum class DTOCode: uint8_t {
+enum class DTOCode : uint8_t {
     GAME_STATE = 0x00,
     PLAYER_ID = 0x01,
     TEAM_ID = 0x02,
@@ -14,4 +14,4 @@ enum class DTOCode: uint8_t {
 };
 };
 
-#endif // COMMON_DTO_DTO_CODE_H
+#endif  // COMMON_DTO_DTO_CODE_H

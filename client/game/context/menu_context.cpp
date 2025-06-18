@@ -1,19 +1,20 @@
 #include "menu_context.h"
 
+#include <memory>
+
 #include <SDL2/SDL.h>
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Renderer.hh>
 
-#include "common/event_type.h"
-
-#include "controller/game_controller.h"
-
 #include "command/quit_command.h"
 #include "command/switch_context_command.h"
+#include "common/event_type.h"
+#include "controller/game_controller.h"
 
 void Context::MenuContext::trigger_buttons(Shared<SDL_Event> event) {
-    if (exit_button.trigger(event)) ;
-    else if (return_game_button.trigger(event));
+    if (exit_button.trigger(event)) {
+    } else if (return_game_button.trigger(event)) {
+    }
 }
 
 void Context::MenuContext::render() {
@@ -36,15 +37,15 @@ void Context::MenuContext::build_button(View::Button& button) {
 }
 
 Context::MenuContext::MenuContext(Weak<Controller::GameController> controller):
-Context::BaseContext("menu", controller),
-strategy(controller, this),
-player_renderer(controller),
-viewport(controller),
-background(controller),
-ask_to_leave_label(controller),
-buttons(controller),
-return_game_button(controller),
-exit_button(controller) {
+        Context::BaseContext("menu", controller),
+        strategy(controller, this),
+        player_renderer(controller),
+        viewport(controller),
+        background(controller),
+        ask_to_leave_label(controller),
+        buttons(controller),
+        return_game_button(controller),
+        exit_button(controller) {
     viewport.add_child(&background);
 
     background.add_child(&ask_to_leave_label);

@@ -33,18 +33,9 @@ protected:
 public:
     Player(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role_id);
 
-    Player(
-        bool shooting,
-        short_id_t id,
-        Model::RoleID role_id,
-        angle_t angle,
-        uint16_t money,
-        const std::string& name,
-        const Physics::Vector2D& position,
-        Shared<Weapon> weapon,
-        uint8_t health,
-        Model::TeamID team
-    );
+    Player(bool shooting, short_id_t id, Model::RoleID role_id, angle_t angle, uint16_t money,
+           const std::string& name, const Physics::Vector2D& position, Shared<Weapon> weapon,
+           uint8_t health, Model::TeamID team);
 
     Player(const Player&) = delete;
     Player& operator=(const Player&) = delete;

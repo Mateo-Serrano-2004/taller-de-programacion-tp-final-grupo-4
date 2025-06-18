@@ -2,11 +2,10 @@
 #include <thread>
 
 #include "client/net/client_protocol.h"
-#include "server/net/server_protocol.h"
 #include "common/DTO/dto_variant.h"
 #include "common/socket.h"
-
 #include "gtest/gtest.h"
+#include "server/net/server_protocol.h"
 
 TEST(GameInfoTest, send_and_receive_game_info) {
     Socket server_socket("8080");
@@ -20,7 +19,8 @@ TEST(GameInfoTest, send_and_receive_game_info) {
     std::thread client_thread([&]() {
         Socket client_socket("localhost", "8080");
         Net::ClientProtocol protocol(client_socket);
-        DTO::GameListDTO received_game_list = std::get<DTO::GameListDTO>(protocol.receive_variant());
+        DTO::GameListDTO received_game_list =
+                std::get<DTO::GameListDTO>(protocol.receive_variant());
 
         EXPECT_EQ(received_game_list.games.size(), 3);
 

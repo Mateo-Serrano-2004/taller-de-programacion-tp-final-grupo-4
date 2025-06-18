@@ -3,13 +3,12 @@
 
 #include <atomic>
 
-#include "common/definitions.h"
-#include "common/thread.h"
-
 #include "common/DTO/game_state_dto.h"
+#include "common/DTO/map_dto.h"
 #include "common/DTO/player_id_dto.h"
 #include "common/DTO/team_id_dto.h"
-#include "common/DTO/map_dto.h"
+#include "common/definitions.h"
+#include "common/thread.h"
 
 namespace Net {
 class ClientProtocol;
@@ -38,15 +37,12 @@ protected:
     void receive_server_info();
 
 public:
-    Receiver(
-        Weak<GameController> controller,
-        Shared<Net::ClientProtocol> protocol
-    );
+    Receiver(Weak<GameController> controller, Shared<Net::ClientProtocol> protocol);
 
     void run() override;
 
     ~Receiver() override;
 };
-};
+};  // namespace Controller
 
-#endif // CLIENT_GAME_CONTROLLER_RECEIVER_H
+#endif  // CLIENT_GAME_CONTROLLER_RECEIVER_H

@@ -4,19 +4,15 @@
 #include <SDL2/SDL.h>
 
 #include "common/definitions.h"
-
-#include "base_context.h"
-
-#include "handler/menu_event_handler_strategy.h"
-
-#include "event/event.h"
-
-#include "entity/vertical_pane.h"
+#include "entity/button.h"
 #include "entity/horizontal_pane.h"
 #include "entity/label.h"
-#include "entity/button.h"
-
+#include "entity/vertical_pane.h"
+#include "event/event.h"
+#include "handler/menu_event_handler_strategy.h"
 #include "render/player_renderer.h"
+
+#include "base_context.h"
 
 namespace Controller {
 class GameController;
@@ -24,7 +20,7 @@ class GameController;
 
 namespace Context {
 class MenuContext: public BaseContext {
-friend class Controller::MenuEventHandlerStrategy;
+    friend class Controller::MenuEventHandlerStrategy;
 
 private:
     void trigger_buttons(Shared<SDL_Event> event);
@@ -49,13 +45,13 @@ protected:
     MenuContext& operator=(const MenuContext&) = delete;
 
 public:
-    MenuContext(Weak<Controller::GameController> controller);
+    explicit MenuContext(Weak<Controller::GameController> controller);
 
     MenuContext(MenuContext&&) = default;
     MenuContext& operator=(MenuContext&&) = default;
 
     ~MenuContext() override = default;
 };
-};
+};  // namespace Context
 
-#endif // CLIENT_GAME_CONTEXT_MENU_CONTEXT_H
+#endif  // CLIENT_GAME_CONTEXT_MENU_CONTEXT_H

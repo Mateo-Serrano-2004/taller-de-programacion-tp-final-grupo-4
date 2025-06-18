@@ -1,7 +1,7 @@
 #include "acceptor.h"
 
-#include <utility>
 #include <exception>
+#include <utility>
 
 #include "common/definitions.h"
 
@@ -19,12 +19,10 @@ void Acceptor::clear() {
     }
 }
 
-Acceptor::Acceptor(Socket& acceptor, GameManager& game_manager)
-: acceptor(acceptor), game_manager(game_manager) {}
+Acceptor::Acceptor(Socket& acceptor, GameManager& game_manager):
+        acceptor(acceptor), game_manager(game_manager) {}
 
-void Acceptor::kill() {
-    is_alive = false;
-}
+void Acceptor::kill() { is_alive = false; }
 
 void Acceptor::run() {
     while (is_alive) {

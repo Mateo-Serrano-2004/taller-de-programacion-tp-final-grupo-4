@@ -17,7 +17,7 @@ protected:
     std::list<Unique<BaseCommand>> commands;
 
 public:
-    CompositeCommand(Weak<Controller::BaseController> controller);
+    explicit CompositeCommand(Weak<Controller::BaseController> controller);
 
     void add_command(Unique<BaseCommand> new_command);
 
@@ -25,6 +25,6 @@ public:
 
     virtual ~CompositeCommand() override = default;
 };
-};
+};  // namespace Command
 
-#endif // CLIENT_GAME_COMMAND_COMPOSITE_COMMAND_H
+#endif  // CLIENT_GAME_COMMAND_COMPOSITE_COMMAND_H

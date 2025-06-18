@@ -1,14 +1,16 @@
 #ifndef SERVER_GAME_MODEL_FULL_PLAYER_H
 #define SERVER_GAME_MODEL_FULL_PLAYER_H
 
-#include <string>
 #include <optional>
+#include <string>
+
 #include "common/definitions.h"
-#include "common/slot_id.h"
 #include "common/model/player.h"
 #include "common/model/vector_2d.h"
-#include "shot_info.h"
+#include "common/slot_id.h"
+
 #include "full_weapon.h"
+#include "shot_info.h"
 
 class FullPlayer: public Model::Player {
 private:
@@ -35,7 +37,7 @@ public:
     void stop_using_weapon();
     std::optional<ShotInfo> shoot(uint16_t frames_to_process);
     void take_damage(uint8_t damage);
-    //no maneja tope de dinero
+    // no maneja tope de dinero
     void add_money(uint16_t money_to_be_added);
     void equip_weapon_by_type(Model::SlotID type);
 

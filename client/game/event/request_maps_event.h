@@ -1,9 +1,8 @@
 #ifndef CLIENT_GAME_EVENT_REQUEST_MAPS_EVENT_H
 #define CLIENT_GAME_EVENT_REQUEST_MAPS_EVENT_H
 
-#include "common/event_type.h"
 #include "common/DTO/event_dto.h"
-
+#include "common/event_type.h"
 #include "dto_handler/dto_creator_visitor.h"
 
 #include "transfered_event.h"

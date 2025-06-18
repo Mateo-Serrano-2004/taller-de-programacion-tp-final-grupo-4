@@ -1,13 +1,12 @@
 #ifndef CLIENT_GAME_ENTITY_LABEL_H
 #define CLIENT_GAME_ENTITY_LABEL_H
 
-#include <string>
 #include <cstdint>
+#include <string>
 
 #include <SDL2pp/Color.hh>
 
 #include "common/definitions.h"
-
 #include "interface/padded.h"
 
 #include "pane.h"
@@ -15,7 +14,7 @@
 namespace SDL2pp {
 class Font;
 class Texture;
-};
+};  // namespace SDL2pp
 
 namespace Controller {
 class BaseController;
@@ -31,7 +30,7 @@ protected:
     Shared<SDL2pp::Texture> text_texture;
 
 public:
-    Label(Weak<Controller::BaseController> controller);
+    explicit Label(Weak<Controller::BaseController> controller);
 
     std::string get_text() const;
     uint8_t get_font_size() const;
@@ -53,6 +52,6 @@ public:
 
     ~Label() override = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_ENTITY_LABEL_H
+#endif  // CLIENT_GAME_ENTITY_LABEL_H

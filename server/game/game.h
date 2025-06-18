@@ -1,31 +1,29 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <mutex>
 #include <chrono>
 #include <cmath>
 #include <cstdint>
 #include <map>
+#include <mutex>
 #include <string>
 #include <thread>
 #include <utility>
 #include <vector>
 
+#include "common/DTO/dto_variant.h"
+#include "common/DTO/game_info_dto.h"
+#include "common/DTO/game_state_dto.h"
 #include "common/definitions.h"
+#include "common/game_state.h"
 #include "common/queue.h"
 #include "common/thread.h"
-#include "common/game_state.h"
-#include "common/DTO/game_state_dto.h"
-#include "common/DTO/game_info_dto.h"
-#include "common/DTO/dto_variant.h"
-
+#include "model/full_player.h"
 #include "server/events/events.h"
 
-#include "model/full_player.h"
-
-#include "movement_system.h" 
-#include "round.h"
 #include "game_logic.h"
+#include "movement_system.h"
+#include "round.h"
 
 using GameQueue = Queue<std::pair<uint8_t, GameEventVariant>>;
 using ClientQueue = Queue<DTO::DTOVariant>;
@@ -99,13 +97,8 @@ public:
 
     bool is_dead();
 
-    void add_player(
-        const std::string& username,
-        ClientQueue& client_queue,
-        short_id_t player_id,
-        Model::TeamID team_id,
-        Model::RoleID role_id
-    );
+    void add_player(const std::string& username, ClientQueue& client_queue, short_id_t player_id,
+                    Model::TeamID team_id, Model::RoleID role_id);
 
     void kill();
     void run() override;

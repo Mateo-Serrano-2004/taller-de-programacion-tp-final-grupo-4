@@ -5,7 +5,6 @@
 #include <SDL2pp/SDLTTF.hh>
 
 #include "common/definitions.h"
-
 #include "context/context_manager.h"
 #include "controller/base_controller.h"
 
@@ -30,6 +29,6 @@ public:
 
     virtual ~Application() = default;
 };
-};
+};  // namespace App
 
-#endif // CLIENT_GAME_APPLICATION_H
+#endif  // CLIENT_GAME_APPLICATION_H

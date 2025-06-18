@@ -3,9 +3,10 @@
 
 #include <cstdint>
 #include <iostream>
-#include "common/team.h"
-#include "common/round_state.h"
+
 #include "common/DTO/round_dto.h"
+#include "common/round_state.h"
+#include "common/team.h"
 
 class Round {
 private:
@@ -58,5 +59,4 @@ public:
     DTO::RoundDTO to_dto(int fps) const;
 };
 
-#endif // ROUND_H
-
+#endif  // ROUND_H

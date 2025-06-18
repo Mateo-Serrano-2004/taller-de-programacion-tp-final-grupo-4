@@ -2,13 +2,12 @@
 #include <thread>
 #include <variant>
 
-#include "client/net/client_protocol.h"
 #include "client/game/event/movement_event.h"
-#include "server/net/server_protocol.h"
-#include "server/events/events.h"
+#include "client/net/client_protocol.h"
 #include "common/socket.h"
-
 #include "gtest/gtest.h"
+#include "server/events/events.h"
+#include "server/net/server_protocol.h"
 
 TEST(MovementTest, send_and_receive_movement) {
     Socket server_socket("8080");

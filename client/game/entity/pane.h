@@ -6,18 +6,16 @@
 #include <SDL2pp/Optional.hh>
 #include <SDL2pp/Point.hh>
 
-#include "common/definitions.h"
-
 #include "asset/texture_id.h"
-
+#include "common/definitions.h"
 #include "interface/rendered.h"
-#include "interface/textured.h"
 #include "interface/rotated.h"
+#include "interface/textured.h"
 
 namespace SDL2pp {
 class Texture;
 class Color;
-};
+};  // namespace SDL2pp
 
 namespace Controller {
 class BaseController;
@@ -36,7 +34,7 @@ protected:
     void render_texture(Shared<SDL2pp::Texture> texture);
 
 public:
-    Pane(Weak<Controller::BaseController> controller);
+    explicit Pane(Weak<Controller::BaseController> controller);
 
     bool get_draw_background() const;
     Shared<SDL2pp::Texture> get_background() const;
@@ -67,6 +65,6 @@ public:
 
     virtual ~Pane() override = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_ENTITY_PANE_H
+#endif  // CLIENT_GAME_ENTITY_PANE_H

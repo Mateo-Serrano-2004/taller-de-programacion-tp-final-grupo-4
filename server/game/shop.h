@@ -4,7 +4,6 @@
 #include <cstdint>
 
 #include "common/weapon_id.h"
-
 #include "model/full_player.h"
 
 class Shop {
@@ -19,4 +18,4 @@ public:
     ~Shop() = default;
 };
 
-#endif // SERVER_GAME_SHOP_H
+#endif  // SERVER_GAME_SHOP_H

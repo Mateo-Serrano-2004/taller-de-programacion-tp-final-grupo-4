@@ -3,8 +3,8 @@
 
 #include <cstdint>
 
-#include "common/weapon_id.h"
 #include "common/slot_id.h"
+#include "common/weapon_id.h"
 
 namespace DTO {
 class WeaponDTO;
@@ -29,14 +29,14 @@ public:
     void set_total_ammo(uint16_t new_total_ammo);
 
     Weapon(const Weapon&) = default;
-    Weapon& operator =(const Weapon&) = default;
+    Weapon& operator=(const Weapon&) = default;
     Weapon(Weapon&&) = default;
-    Weapon& operator =(Weapon&&) = default;
+    Weapon& operator=(Weapon&&) = default;
 
     DTO::WeaponDTO to_dto() const;
 
     virtual ~Weapon() = default;
 };
-};
+};  // namespace Model
 
-#endif // COMMON_MODEL_WEAPON_H
+#endif  // COMMON_MODEL_WEAPON_H

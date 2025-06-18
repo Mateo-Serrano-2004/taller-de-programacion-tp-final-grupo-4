@@ -16,14 +16,10 @@ public:
 
     WeaponDTO();
 
-    WeaponDTO(
-        uint8_t weapon_id,
-        uint8_t loaded_ammo,
-        uint16_t total_ammo
-    );
+    WeaponDTO(uint8_t weapon_id, uint8_t loaded_ammo, uint16_t total_ammo);
 
     Model::Weapon to_weapon() const;
 };
-}
+}  // namespace DTO
 
 #endif  // COMMON_DTO_WEAPON_DTO_H

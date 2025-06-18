@@ -2,9 +2,12 @@
 
 #include <QPainter>
 
-GridItem::GridItem(int width, int height, int tileSize, QGraphicsItem* parent)
-    : QGraphicsItem(parent), gridWidth(width), gridHeight(height), tileSize(tileSize), gridPen(Qt::gray)
-{
+GridItem::GridItem(int width, int height, int tileSize, QGraphicsItem* parent):
+        QGraphicsItem(parent),
+        gridWidth(width),
+        gridHeight(height),
+        tileSize(tileSize),
+        gridPen(Qt::gray) {
     setFlag(QGraphicsItem::ItemIsSelectable, false);
     setFlag(QGraphicsItem::ItemIsMovable, false);
 }
@@ -30,4 +33,4 @@ void GridItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget
 void GridItem::setZoom(qreal zoom) {
     prepareGeometryChange();
     zoomFactor = zoom;
-} 
+}

@@ -1,10 +1,11 @@
 #ifndef MOVEMENT_SYSTEM_H
 #define MOVEMENT_SYSTEM_H
 
-#include <map>
 #include <cstdint>
-#include "model/full_player.h"
 #include <iostream>
+#include <map>
+
+#include "model/full_player.h"
 
 class MovementSystem {
 public:

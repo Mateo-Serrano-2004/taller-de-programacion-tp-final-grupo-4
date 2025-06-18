@@ -36,6 +36,6 @@ public:
 
     ~Camera() = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_RENDER_CAMERA_H
+#endif  // CLIENT_GAME_RENDER_CAMERA_H

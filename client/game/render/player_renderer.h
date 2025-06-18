@@ -6,10 +6,8 @@
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Rect.hh>
 
-#include "common/definitions.h"
-
 #include "asset/texture_id.h"
-
+#include "common/definitions.h"
 #include "entity/pane.h"
 
 #include "renderer.h"
@@ -25,7 +23,7 @@ class Player;
 namespace Controller {
 class GameController;
 class GameStateManager;
-};
+};  // namespace Controller
 
 namespace View {
 class Camera;
@@ -43,12 +41,12 @@ protected:
     void render_map(const Camera& camera);
 
 public:
-    PlayerRenderer(Weak<Controller::GameController> controller);
+    explicit PlayerRenderer(Weak<Controller::GameController> controller);
 
     void render() override;
 
     ~PlayerRenderer() = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_RENDER_PLAYER_RENDERER_H
+#endif  // CLIENT_GAME_RENDER_PLAYER_RENDERER_H

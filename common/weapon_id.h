@@ -4,7 +4,7 @@
 #include <cstdint>
 
 namespace Model {
-enum class WeaponID: uint8_t {
+enum class WeaponID : uint8_t {
     KNIFE = 0x00,
     GLOCK = 0x01,
     AK47 = 0x02,
@@ -17,4 +17,4 @@ enum class WeaponID: uint8_t {
 };
 
 
-#endif // COMMON_WEAPON_ID_H
+#endif  // COMMON_WEAPON_ID_H

@@ -2,6 +2,7 @@
 #define EDITOR_MAIN_WINDOW_H
 
 #include <QMainWindow>
+
 #include "../scenes/map_editor_widget.h"
 
 namespace Ui {

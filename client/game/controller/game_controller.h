@@ -23,12 +23,12 @@ namespace Model {
 class TransferedEvent;
 class AssetManager;
 class AssetLoader;
-};
+};  // namespace Model
 
 namespace SDL2pp {
 class Window;
 class Renderer;
-};
+};  // namespace SDL2pp
 
 namespace Controller {
 class GameStateManager;
@@ -56,14 +56,11 @@ protected:
     void process_event(Shared<Model::Event> event) override;
 
 public:
-    GameController(
-        Shared<SDL2pp::Window> window,
-        Shared<SDL2pp::Renderer> renderer,
-        Shared<Model::AssetManager> asset_manager,
-        Shared<Model::AssetLoader> asset_loader,
-        Shared<Context::ContextManager> context_manager,
-        Shared<Net::ClientProtocol> protocol
-    );
+    GameController(Shared<SDL2pp::Window> window, Shared<SDL2pp::Renderer> renderer,
+                   Shared<Model::AssetManager> asset_manager,
+                   Shared<Model::AssetLoader> asset_loader,
+                   Shared<Context::ContextManager> context_manager,
+                   Shared<Net::ClientProtocol> protocol);
 
     Shared<GameStateManager> get_game_state_manager();
     void set_self_pointer(Weak<GameController> self);
@@ -71,10 +68,8 @@ public:
     GameController(GameController&&) = default;
     GameController& operator=(GameController&&) = default;
 
-    ~GameController() override {
-        std::cout << "Destroying controller\n";
-    }
+    ~GameController() override { std::cout << "Destroying controller\n"; }
 };
-};
+};  // namespace Controller
 
-#endif // CLIENT_GAME_CONTROLLER_GAME_CONTROLLER_H
+#endif  // CLIENT_GAME_CONTROLLER_GAME_CONTROLLER_H

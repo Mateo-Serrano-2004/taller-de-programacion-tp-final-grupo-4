@@ -1,13 +1,12 @@
 #include "menu_event_handler_strategy.h"
 
+#include <memory>
 #include <utility>
 
 #include <SDL2/SDL.h>
 
-#include "controller/game_controller.h"
-
 #include "context/menu_context.h"
-
+#include "controller/game_controller.h"
 #include "event/quit_event.h"
 #include "event/switch_context_event.h"
 
@@ -30,9 +29,8 @@ void Controller::MenuEventHandlerStrategy::handle_keydown_event(Shared<SDL_Event
 }
 
 Controller::MenuEventHandlerStrategy::MenuEventHandlerStrategy(
-    Weak<Controller::GameController> controller,
-    Context::MenuContext* context
-): Controller::EventHandlerStrategy(controller), context(context) {}
+        Weak<Controller::GameController> controller, Context::MenuContext* context):
+        Controller::EventHandlerStrategy(controller), context(context) {}
 
 void Controller::MenuEventHandlerStrategy::handle(Shared<SDL_Event> event) {
     Controller::EventHandlerStrategy::handle(event);

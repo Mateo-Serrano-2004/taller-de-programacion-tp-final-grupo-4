@@ -1,9 +1,11 @@
 #ifndef SERVER_GAME_MODEL_FULL_WEAPON_H
 #define SERVER_GAME_MODEL_FULL_WEAPON_H
 #include <optional>
+
+#include "common/model/weapon.h"
 #include "common/slot_id.h"
 #include "common/weapon_id.h"
-#include "common/model/weapon.h"
+
 #include "weapon_shot_info.h"
 
 class FullWeapon: public Model::Weapon {
@@ -14,8 +16,10 @@ protected:
     bool automatic;
     uint16_t cooldown_ticks;
     uint16_t ticks_remaining = 0;
+
 public:
-    FullWeapon(Model::WeaponID weapon_id, Model::SlotID slot_id, uint8_t loaded_ammo, uint16_t total_ammo, bool automatic, uint16_t cooldown_ticks);
+    FullWeapon(Model::WeaponID weapon_id, Model::SlotID slot_id, uint8_t loaded_ammo,
+               uint16_t total_ammo, bool automatic, uint16_t cooldown_ticks);
 
     Model::SlotID get_slot_id() const;
 
@@ -27,4 +31,4 @@ public:
     ~FullWeapon() override = default;
 };
 
-#endif // SERVER_GAME_MODEL_FULL_WEAPON_H
+#endif  // SERVER_GAME_MODEL_FULL_WEAPON_H

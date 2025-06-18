@@ -13,7 +13,7 @@ class RotationEvent;
 class StopMovementEvent;
 class SwitchWeaponEvent;
 class UsernameEvent;
-};
+};  // namespace Model
 
 namespace DTO {
 class DTOCreatorVisitor {
@@ -34,6 +34,6 @@ public:
     static EventDTO visit_use_weapon_event();
     static EventDTO visit_username_event(Model::UsernameEvent* event);
 };
-};
+};  // namespace DTO
 
-#endif // CLIENT_GAME_DTO_HANDLER_DTO_CREATOR_VISITOR_H
+#endif  // CLIENT_GAME_DTO_HANDLER_DTO_CREATOR_VISITOR_H

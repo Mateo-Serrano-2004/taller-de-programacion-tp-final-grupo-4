@@ -7,8 +7,7 @@ class StyledFileDialog: public QFileDialog {
     Q_OBJECT
 
 public:
-    explicit StyledFileDialog(QWidget* parent = nullptr):
-            QFileDialog(parent) {
+    explicit StyledFileDialog(QWidget* parent = nullptr): QFileDialog(parent) {
         this->setOption(QFileDialog::DontUseNativeDialog, true);
         this->setStyleSheet(R"(
         QFileDialog {
@@ -46,4 +45,4 @@ public:
     }
 };
 
-#endif  // STYLED_FILE_DIALOG_H  
+#endif  // STYLED_FILE_DIALOG_H

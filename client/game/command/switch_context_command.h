@@ -17,15 +17,13 @@ protected:
     std::string new_context_name;
 
 public:
-    SwitchContextCommand(
-        const std::string& new_context_name,
-        Weak<Controller::BaseController> controller = {}
-    );
+    explicit SwitchContextCommand(const std::string& new_context_name,
+                                  Weak<Controller::BaseController> controller = {});
 
     virtual void execute() override;
 
     virtual ~SwitchContextCommand() override = default;
 };
-};
+};  // namespace Command
 
-#endif // CLIENT_GAME_COMMAND_SWITCH_CONTEXT_COMMAND_H
+#endif  // CLIENT_GAME_COMMAND_SWITCH_CONTEXT_COMMAND_H

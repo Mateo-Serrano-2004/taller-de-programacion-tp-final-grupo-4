@@ -1,30 +1,26 @@
 #include "hud_renderer.h"
 
-#include <iostream>
-#include <cstdint>
 #include <cmath>
+#include <cstdint>
+#include <iostream>
 #include <list>
 #include <utility>
 
+#include <SDL2pp/Point.hh>
+#include <SDL2pp/Rect.hh>
 #include <SDL2pp/Renderer.hh>
 #include <SDL2pp/Texture.hh>
-#include <SDL2pp/Rect.hh>
-#include <SDL2pp/Point.hh>
-
-#include "controller/game_controller.h"
-
-#include "handler/game_state_manager.h"
-
-#include "model/rendered_player.h"
-
-#include "entity/pane.h"
-#include "entity/horizontal_pane.h"
 
 #include "asset/asset_manager.h"
 #include "asset/texture_id.h"
+#include "controller/game_controller.h"
+#include "entity/horizontal_pane.h"
+#include "entity/pane.h"
+#include "handler/game_state_manager.h"
+#include "model/rendered_player.h"
 
 std::vector<uint8_t> View::HUDRenderer::get_units(uint16_t number) {
-    uint8_t number_of_digits = number ? (uint8_t) (log10(number) + 1) : 1;
+    uint8_t number_of_digits = number ? (uint8_t)(log10(number) + 1) : 1;
     std::vector<uint8_t> digits(number_of_digits);
     for (uint8_t i = 0; i < number_of_digits; i++) {
         digits[number_of_digits - i - 1] = number % 10;
@@ -47,10 +43,8 @@ std::vector<uint8_t> View::HUDRenderer::get_units_of_time_left(uint16_t seconds_
     return units_of_time_left;
 }
 
-void View::HUDRenderer::load_separator(
-    std::list<View::Pane>& numbers,
-    View::HorizontalPane& parent
-) {
+void View::HUDRenderer::load_separator(std::list<View::Pane>& numbers,
+                                       View::HorizontalPane& parent) {
     View::Pane separator(controller);
     separator.set_draw_texture(true);
     separator.set_texture(hud_numbers);
@@ -73,11 +67,8 @@ void View::HUDRenderer::render_hud_symbol(std::list<View::Pane>& numbers,
     parent.set_width(parent.get_width() + 37);
 }
 
-void View::HUDRenderer::render_number(
-    std::list<View::Pane>& numbers,
-    View::HorizontalPane& parent,
-    uint8_t number
-) {
+void View::HUDRenderer::render_number(std::list<View::Pane>& numbers, View::HorizontalPane& parent,
+                                      uint8_t number) {
     View::Pane number_pane(controller);
     number_pane.set_draw_texture(true);
     number_pane.set_texture(hud_numbers);
@@ -129,17 +120,17 @@ void View::HUDRenderer::render_money(Shared<View::RenderedPlayer> player) {
     }
 }
 
-View::HUDRenderer::HUDRenderer(Weak<Controller::GameController> controller)
-: View::Renderer(controller),
-  controller(controller),
-  game_state_manager(controller.lock()->get_game_state_manager()),
-  hud_numbers(asset_manager->get_texture(Model::TextureID::HUD_NUMS)),
-  hud_symbols(asset_manager->get_texture(Model::TextureID::HUD_SYMBOLS)),
-  viewport(controller),
-  time(controller),
-  stats(controller),
-  health(controller),
-  money(controller) {
+View::HUDRenderer::HUDRenderer(Weak<Controller::GameController> controller):
+        View::Renderer(controller),
+        controller(controller),
+        game_state_manager(controller.lock()->get_game_state_manager()),
+        hud_numbers(asset_manager->get_texture(Model::TextureID::HUD_NUMS)),
+        hud_symbols(asset_manager->get_texture(Model::TextureID::HUD_SYMBOLS)),
+        viewport(controller),
+        time(controller),
+        stats(controller),
+        health(controller),
+        money(controller) {
     viewport.add_child(&time);
     viewport.add_child(&stats);
     stats.add_child(&health);

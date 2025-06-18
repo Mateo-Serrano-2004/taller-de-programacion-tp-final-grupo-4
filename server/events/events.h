@@ -6,8 +6,8 @@
 #include <variant>
 
 #include "common/model/vector_2d.h"
-#include "common/slot_id.h"
 #include "common/role_id.h"
+#include "common/slot_id.h"
 #include "common/weapon_id.h"
 
 class MovementEvent {
@@ -48,12 +48,12 @@ public:
 
 class UseWeaponEvent {
 public:
-    explicit UseWeaponEvent() {}
+    UseWeaponEvent() {}
 };
 
 class StopUsingWeaponEvent {
 public:
-    explicit StopUsingWeaponEvent() {}
+    StopUsingWeaponEvent() {}
 };
 
 class DefuseBombEvent {
@@ -70,7 +70,7 @@ private:
     Model::SlotID slot_id;
 
 public:
-    explicit SwitchWeaponEvent(Model::SlotID slot_id) : slot_id(slot_id) {}
+    explicit SwitchWeaponEvent(Model::SlotID slot_id): slot_id(slot_id) {}
     Model::SlotID get_slot_id() const { return slot_id; }
 };
 
@@ -88,7 +88,7 @@ private:
     Model::RoleID role_id;
 
 public:
-    PickRoleEvent(Model::RoleID role_id): role_id(role_id) {}
+    explicit PickRoleEvent(Model::RoleID role_id): role_id(role_id) {}
     Model::RoleID get_role_id() const { return role_id; }
 };
 
@@ -163,9 +163,8 @@ public:
 using GameEventVariant =
         std::variant<LeaveGameEvent, MovementEvent, StopMovementEvent, RotationEvent,
                      DropWeaponEvent, UseWeaponEvent, DefuseBombEvent, SwitchWeaponEvent,
-                     ReloadWeaponEvent, BuyEvent, BuyAmmoEvent, QuitEvent,
-                     PickRoleEvent, StopUsingWeaponEvent
-                     >;
+                     ReloadWeaponEvent, BuyEvent, BuyAmmoEvent, QuitEvent, PickRoleEvent,
+                     StopUsingWeaponEvent>;
 
 using EventVariant = std::variant<GameEventVariant, UsernameEvent, CreateGameEvent, MapRequestEvent,
                                   JoinGameEvent, ListGamesEvent>;

@@ -17,12 +17,12 @@ protected:
     virtual void handle_switch_context_event(Shared<SDL_Event> event) = 0;
 
 public:
-    EventHandlerStrategy(Weak<BaseController> controller);
+    explicit EventHandlerStrategy(Weak<BaseController> controller);
 
     virtual void handle(Shared<SDL_Event> event);
 
     virtual ~EventHandlerStrategy() = default;
 };
-};
+};  // namespace Controller
 
-#endif // CLIENT_GAME_HANDLER_EVENT_HANDLER_STRATEGY_H
+#endif  // CLIENT_GAME_HANDLER_EVENT_HANDLER_STRATEGY_H

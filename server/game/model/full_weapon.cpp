@@ -1,19 +1,19 @@
 #include "full_weapon.h"
 
-FullWeapon::FullWeapon(
-    Model::WeaponID weapon_id, Model::SlotID slot_id, uint8_t loaded_ammo, uint16_t total_ammo, bool automatic, uint16_t cooldown_ticks
-): Model::Weapon(weapon_id, loaded_ammo, total_ammo),
-   slot_id(slot_id), triggered(false), trigger_blocked(false), automatic(automatic), cooldown_ticks(cooldown_ticks) {}
+FullWeapon::FullWeapon(Model::WeaponID weapon_id, Model::SlotID slot_id, uint8_t loaded_ammo,
+                       uint16_t total_ammo, bool automatic, uint16_t cooldown_ticks):
+        Model::Weapon(weapon_id, loaded_ammo, total_ammo),
+        slot_id(slot_id),
+        triggered(false),
+        trigger_blocked(false),
+        automatic(automatic),
+        cooldown_ticks(cooldown_ticks) {}
 
 Model::SlotID FullWeapon::get_slot_id() const { return slot_id; }
 
-void FullWeapon::set_slot_id(Model::SlotID new_slot_id) {
-    slot_id = new_slot_id;
-}
+void FullWeapon::set_slot_id(Model::SlotID new_slot_id) { slot_id = new_slot_id; }
 
-void FullWeapon::press_trigger() {
-    triggered = true;
-}
+void FullWeapon::press_trigger() { triggered = true; }
 
 void FullWeapon::release_trigger() {
     triggered = false;
@@ -22,8 +22,8 @@ void FullWeapon::release_trigger() {
 /*
 bool FullWeapon::shoot(uint16_t ticks_to_process) {
     if (!triggered || trigger_blocked){
-        ticks_remaining = (ticks_to_process >= ticks_remaining) ? 0 : ticks_remaining - ticks_to_process;
-        return false;
+        ticks_remaining = (ticks_to_process >= ticks_remaining) ? 0 : ticks_remaining -
+ticks_to_process; return false;
     }
 
     if (ticks_to_process < ticks_remaining) {
@@ -45,8 +45,9 @@ bool FullWeapon::shoot(uint16_t ticks_to_process) {
     return true;
 }*/
 std::optional<WeaponShotInfo> FullWeapon::shoot(uint16_t ticks_to_process) {
-    if (!triggered || trigger_blocked){
-        ticks_remaining = (ticks_to_process >= ticks_remaining) ? 0 : ticks_remaining - ticks_to_process;
+    if (!triggered || trigger_blocked) {
+        ticks_remaining =
+                (ticks_to_process >= ticks_remaining) ? 0 : ticks_remaining - ticks_to_process;
         return std::nullopt;
     }
 
@@ -56,7 +57,8 @@ std::optional<WeaponShotInfo> FullWeapon::shoot(uint16_t ticks_to_process) {
     }
 
     uint8_t ammo = get_loaded_ammo();
-    if (ammo == 0) return std::nullopt;
+    if (ammo == 0)
+        return std::nullopt;
 
     ammo--;
     set_loaded_ammo(ammo);
@@ -65,12 +67,10 @@ std::optional<WeaponShotInfo> FullWeapon::shoot(uint16_t ticks_to_process) {
     if (!automatic)
         trigger_blocked = true;
 
-    //WeaponShotInfo genérico
-    return WeaponShotInfo(
-        1,          // bullets_fired
-        30.0f,      // max_damage
-        0.9f,       // precision
-        0.1f,       // dispersion (radianes)
-        0.05f       // damage_falloff
-    );
+    // WeaponShotInfo genérico
+    return WeaponShotInfo(1,       // bullets_fired
+                          30.0f,   // max_damage
+                          0.9f,    // precision
+                          0.1f,    // dispersion (radianes)
+                          0.05f);  // damage_falloff
 }

@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "common/slot_id.h"
 #include "common/model/weapon.h"
+#include "common/slot_id.h"
 
 Shared<FullWeapon> WeaponFactory::create(Model::WeaponID id) {
     switch (id) {
@@ -19,5 +19,7 @@ Shared<FullWeapon> WeaponFactory::create(Model::WeaponID id) {
             return make_shared<FullWeapon>(id, Model::SlotID::KNIFE_SLOT, 0, 0, false, 0);
         case Model::WeaponID::BOMB:
             return make_shared<FullWeapon>(id, Model::SlotID::BOMB_SLOT, 0, 0, false, 0);
+        default:
+            return nullptr;
     }
 }

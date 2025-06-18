@@ -3,12 +3,10 @@
 #include <memory>
 
 #include "controller/base_controller.h"
-
 #include "event/quit_event.h"
 
-Command::QuitCommand::QuitCommand(
-    Weak<Controller::BaseController> controller
-): Command::BaseCommand(controller) {}
+Command::QuitCommand::QuitCommand(Weak<Controller::BaseController> controller):
+        Command::BaseCommand(controller) {}
 
 void Command::QuitCommand::execute() {
     if (auto controller_locked = controller.lock()) {

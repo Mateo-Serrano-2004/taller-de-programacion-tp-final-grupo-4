@@ -1,6 +1,7 @@
 #include "yaml_parser.h"
 
 #include <iostream>
+
 #include <yaml-cpp/yaml.h>
 
 YamlParser::YamlParser(const std::string& yamlGameConfigPath) {
@@ -10,11 +11,11 @@ YamlParser::YamlParser(const std::string& yamlGameConfigPath) {
 void YamlParser::parseMapYaml(const std::string& yamlPath) {
     YAML::Node root = YAML::LoadFile(yamlPath);
 
-    mapMinWidth = root["map"]["minWidth"].as<int>();
-    mapMaxWidth = root["map"]["maxWidth"].as<int>();
+    int mapMinWidth = root["map"]["minWidth"].as<int>();
+    int mapMaxWidth = root["map"]["maxWidth"].as<int>();
 
-    mapMinHeight = root["map"]["minHeight"].as<int>();
-    mapMaxHeight = root["map"]["maxHeight"].as<int>();
+    int mapMinHeight = root["map"]["minHeight"].as<int>();
+    int mapMaxHeight = root["map"]["maxHeight"].as<int>();
 
     int mapWidth = mapMaxWidth - mapMinWidth + 1;
     int mapHeight = mapMaxHeight - mapMinHeight + 1;
@@ -22,7 +23,7 @@ void YamlParser::parseMapYaml(const std::string& yamlPath) {
     tileMatrix.resize(mapHeight, std::vector<std::string>(mapWidth, ""));
     typeMatrix.resize(mapHeight, std::vector<TileType>(mapWidth, COLLIDABLE));
 
-    for (const auto& tile : root["tiles"]) {
+    for (const auto& tile: root["tiles"]) {
         int initialX = tile["x"].as<int>();
         int initialY = tile["y"].as<int>();
         std::string name = tile["name"].as<std::string>();
@@ -65,7 +66,7 @@ void YamlParser::parseGameConfigYaml(const std::string& yamlGameConfigPath) {
     gameConfig.player.movementSpeed = player["movement_speed"].as<float>();
 
     const auto& weapons = config["weapons"];
-    for (const auto& weapon : weapons) {
+    for (const auto& weapon: weapons) {
         std::string name = weapon.first.as<std::string>();
         const auto& w = weapon.second;
 
@@ -91,23 +92,22 @@ void YamlParser::parseGameConfigYaml(const std::string& yamlGameConfigPath) {
     gameConfig.display.height = config["display"]["height"].as<int>();
 }
 
-std::vector<std::vector<std::string>> YamlParser::getTileMatrix() const{
-    return tileMatrix;
-}
+std::vector<std::vector<std::string>> YamlParser::getTileMatrix() const { return tileMatrix; }
 
-std::vector<std::vector<TileType>> YamlParser::getTypeMatrix() const{
-    return typeMatrix;
-}
+std::vector<std::vector<TileType>> YamlParser::getTypeMatrix() const { return typeMatrix; }
 
 TileType YamlParser::stringToTileType(const std::string& typeStr, const std::string& nameStr) {
-    if (typeStr == "Backgrounds") return NOT_COLLIDABLE;
-    if (typeStr == "Boxes" || typeStr == "Cars" || typeStr == "Walls") return COLLIDABLE;
-    if (typeStr == "Sites") return BOMB_SITE;
-    if (nameStr.find("ct") != std::string::npos) return CT_SPAWN;
-    if (nameStr.find("tt") != std::string::npos) return TT_SPAWN;
-    return NOT_COLLIDABLE;  
+    if (typeStr == "Backgrounds")
+        return NOT_COLLIDABLE;
+    if (typeStr == "Boxes" || typeStr == "Cars" || typeStr == "Walls")
+        return COLLIDABLE;
+    if (typeStr == "Sites")
+        return BOMB_SITE;
+    if (nameStr.find("ct") != std::string::npos)
+        return CT_SPAWN;
+    if (nameStr.find("tt") != std::string::npos)
+        return TT_SPAWN;
+    return NOT_COLLIDABLE;
 }
 
-const ConfigData& YamlParser::getConfigData() const {
-    return gameConfig;
-}
+const ConfigData& YamlParser::getConfigData() const { return gameConfig; }

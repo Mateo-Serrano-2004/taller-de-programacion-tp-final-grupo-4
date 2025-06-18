@@ -6,7 +6,6 @@
 
 #include "common/definitions.h"
 #include "common/socket.h"
-
 #include "server/game/game_manager.h"
 
 #include "acceptor.h"

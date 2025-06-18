@@ -1,8 +1,11 @@
 #ifndef CLIENT_GAME_ASSET_ASSET_LOADER_H
 #define CLIENT_GAME_ASSET_ASSET_LOADER_H
 
-#include "common/definitions.h"
+#include <string>
+#include <vector>
+
 #include "common/asset_addresser.h"
+#include "common/definitions.h"
 
 #include "asset_generator.h"
 #include "texture_id.h"
@@ -41,6 +44,6 @@ public:
 
     ~AssetLoader() = default;
 };
-};
+};  // namespace Model
 
-#endif // CLIENT_GAME_ASSET_ASSET_LOADER_H
+#endif  // CLIENT_GAME_ASSET_ASSET_LOADER_H

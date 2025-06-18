@@ -1,44 +1,35 @@
 #include "cs2d_app.h"
 
 #include <iostream>
-#include <vector>
-#include <string>
 #include <memory>
+#include <string>
 #include <utility>
 #include <variant>
+#include <vector>
 
 #include <SDL2/SDL.h>
+#include <SDL2pp/Renderer.hh>
 #include <SDL2pp/SDL2pp.hh>
 #include <SDL2pp/Window.hh>
-#include <SDL2pp/Renderer.hh>
 
-#include "common/definitions.h"
-
+#include "asset/asset_loader.h"
+#include "asset/asset_manager.h"
 #include "client/net/client_protocol.h"
-
+#include "common/definitions.h"
 #include "context/context_manager.h"
+#include "context/end_of_game_context.h"
 #include "context/in_game_context.h"
 #include "context/menu_context.h"
 #include "context/pick_role_context.h"
 #include "context/shop_context.h"
-#include "context/end_of_game_context.h"
-
-#include "asset/asset_manager.h"
-#include "asset/asset_loader.h"
-
-#include "controller/game_controller.h"
 #include "controller/base_controller.h"
-
+#include "controller/game_controller.h"
 #include "utils/enum_translator.h"
 
 App::CS2DApp::CS2DApp(Shared<Net::ClientProtocol> protocol): App::Application() {
     Model::EnumTranslator::build();
-    auto window = make_shared<SDL2pp::Window>(
-        "In Game",
-        SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-        640, 480,
-        0
-    );
+    auto window = make_shared<SDL2pp::Window>("In Game", SDL_WINDOWPOS_UNDEFINED,
+                                              SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
     auto renderer = make_shared<SDL2pp::Renderer>(*window, -1, SDL_RENDERER_ACCELERATED);
     renderer->SetLogicalSize(640, 480);
 
@@ -48,8 +39,7 @@ App::CS2DApp::CS2DApp(Shared<Net::ClientProtocol> protocol): App::Application() 
 
     context_manager = make_shared<Context::ContextManager>();
     auto game_controller = make_shared<Controller::GameController>(
-        window, renderer, asset_manager, asset_loader, context_manager, protocol
-    );
+            window, renderer, asset_manager, asset_loader, context_manager, protocol);
 
     auto weak_game_controller = Weak<Controller::GameController>(game_controller);
     game_controller->set_self_pointer(weak_game_controller);

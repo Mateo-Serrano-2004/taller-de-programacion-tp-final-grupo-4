@@ -23,24 +23,20 @@ void Round::update_if_finished_playing() {
     state = RoundState::Ended;
 }
 
-Round::Round()
-: state(RoundState::Warmup),
-  number_of_ct_alive(0),
-  number_of_tt_alive(0),
-  ticks_for_warmup_phase(3600),
-  ticks_for_buying_phase(600),
-  ticks_for_playing_phase(3600),
-  active_ticks_remaining(600) {}
+Round::Round():
+        state(RoundState::Warmup),
+        number_of_ct_alive(0),
+        number_of_tt_alive(0),
+        ticks_for_warmup_phase(3600),
+        ticks_for_buying_phase(600),
+        ticks_for_playing_phase(3600),
+        active_ticks_remaining(600) {}
 
-Model::TeamID Round::get_winner_team() const {
-    return winner_team;
-}
+Model::TeamID Round::get_winner_team() const { return winner_team; }
 
 int Round::get_count_of_rounds() const { return count_of_rounds; }
 
-RoundState Round::get_state() const {
-    return state;
-}
+RoundState Round::get_state() const { return state; }
 
 bool Round::is_warmup() const { return state == RoundState::Warmup; }
 
@@ -50,29 +46,17 @@ bool Round::is_active() const { return state == RoundState::Active; }
 
 bool Round::ended() const { return state == RoundState::Ended; }
 
-uint16_t Round::get_ticks_remaining() const {
-    return active_ticks_remaining;
-}
+uint16_t Round::get_ticks_remaining() const { return active_ticks_remaining; }
 
-void Round::set_ticks_for_warmup_phase(int ticks) {
-    ticks_for_warmup_phase = ticks;
-}
+void Round::set_ticks_for_warmup_phase(int ticks) { ticks_for_warmup_phase = ticks; }
 
-void Round::set_ticks_for_buying_phase(int ticks) {
-    ticks_for_buying_phase = ticks;
-}
+void Round::set_ticks_for_buying_phase(int ticks) { ticks_for_buying_phase = ticks; }
 
-void Round::set_ticks_for_playing_phase(int ticks) {
-    ticks_for_playing_phase = ticks;
-}
+void Round::set_ticks_for_playing_phase(int ticks) { ticks_for_playing_phase = ticks; }
 
-void Round::set_ct_count(int count) {
-    number_of_ct_alive = count;
-}
+void Round::set_ct_count(int count) { number_of_ct_alive = count; }
 
-void Round::set_tt_count(int count) {
-    number_of_tt_alive = count;
-}
+void Round::set_tt_count(int count) { number_of_tt_alive = count; }
 
 void Round::to_buying_phase() {
     active_ticks_remaining = ticks_for_buying_phase;
@@ -85,9 +69,12 @@ void Round::update(int frames_to_process) {
         return;
     }
 
-    if (is_warmup()) update_if_finished_warmup();
-    else if (is_buying()) update_if_finished_buying();
-    else if (is_active()) update_if_finished_playing();
+    if (is_warmup())
+        update_if_finished_warmup();
+    else if (is_buying())
+        update_if_finished_buying();
+    else if (is_active())
+        update_if_finished_playing();
 }
 
 void Round::notify_on_one_player_less(Model::TeamID team) {
@@ -114,15 +101,13 @@ void Round::notify_on_one_player_less(Model::TeamID team) {
 
 void Round::notify_player_joined(Model::TeamID team) {
     // Note: Only CT and TT can reach this point
-    if (team == Model::TeamID::CT) number_of_ct_alive++;
-    else number_of_tt_alive++;
+    if (team == Model::TeamID::CT)
+        number_of_ct_alive++;
+    else
+        number_of_tt_alive++;
 }
 
 DTO::RoundDTO Round::to_dto(int fps) const {
-    return DTO::RoundDTO(
-        state,
-        this->ended(),
-        this->get_ticks_remaining() / fps,
-        this->get_winner_team()
-    );
+    return DTO::RoundDTO(state, this->ended(), this->get_ticks_remaining() / fps,
+                         this->get_winner_team());
 }

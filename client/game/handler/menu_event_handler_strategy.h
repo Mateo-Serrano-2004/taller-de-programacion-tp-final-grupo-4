@@ -29,15 +29,12 @@ protected:
     void handle_keydown_event(Shared<SDL_Event> event);
 
 public:
-    MenuEventHandlerStrategy(
-        Weak<GameController> controller,
-        Context::MenuContext* context
-    );
+    MenuEventHandlerStrategy(Weak<GameController> controller, Context::MenuContext* context);
 
     void handle(Shared<SDL_Event> event) override;
 
     ~MenuEventHandlerStrategy() override = default;
 };
-};
+};  // namespace Controller
 
-#endif // CLIENT_GAME_HANDLER_MENU_EVENT_HANDLER_STRATEGY_H
+#endif  // CLIENT_GAME_HANDLER_MENU_EVENT_HANDLER_STRATEGY_H

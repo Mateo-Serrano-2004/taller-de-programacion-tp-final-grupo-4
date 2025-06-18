@@ -11,4 +11,4 @@ public:
     static SDL2pp::Point get_logical_coords(Shared<SDL2pp::Renderer> renderer);
 };
 
-#endif // CLIENT_GAME_UTILS_MOUSE_COORDS_TRANSLATOR_H
+#endif  // CLIENT_GAME_UTILS_MOUSE_COORDS_TRANSLATOR_H

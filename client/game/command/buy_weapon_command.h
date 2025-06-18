@@ -16,15 +16,13 @@ protected:
     Model::WeaponID weapon_id;
 
 public:
-    BuyWeaponCommand(
-        Model::WeaponID weapon_id,
-        Weak<Controller::BaseController> controller = {}
-    );
+    explicit BuyWeaponCommand(Model::WeaponID weapon_id,
+                              Weak<Controller::BaseController> controller = {});
 
     virtual void execute() override;
 
     virtual ~BuyWeaponCommand() override = default;
 };
-};
+};  // namespace Command
 
-#endif // CLIENT_GAME_COMMAND_BUY_WEAPON_COMMAND_H
+#endif  // CLIENT_GAME_COMMAND_BUY_WEAPON_COMMAND_H

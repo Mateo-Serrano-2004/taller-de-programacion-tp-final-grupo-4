@@ -4,7 +4,7 @@
 #include <cstdint>
 
 namespace Model {
-enum class RoleID: uint8_t {
+enum class RoleID : uint8_t {
     CT1 = 0x00,
     CT2 = 0x01,
     CT3 = 0x02,
@@ -17,4 +17,4 @@ enum class RoleID: uint8_t {
 };
 };
 
-#endif // COMMON_ROLE_ID_H
+#endif  // COMMON_ROLE_ID_H

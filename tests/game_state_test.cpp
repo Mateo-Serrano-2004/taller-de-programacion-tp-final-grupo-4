@@ -2,11 +2,10 @@
 #include <thread>
 
 #include "client/net/client_protocol.h"
-#include "server/net/server_protocol.h"
 #include "common/DTO/dto_variant.h"
 #include "common/socket.h"
-
 #include "gtest/gtest.h"
+#include "server/net/server_protocol.h"
 
 TEST(GameStateTest, send_and_receive_game_state) {
     Socket server_socket("8080");
@@ -17,12 +16,14 @@ TEST(GameStateTest, send_and_receive_game_state) {
     DTO::PlayerDTO player2(3, 2, 60, 6000, 4, 26, "Maria", weapon2, 1, 70, 2);
     DTO::RoundDTO round(RoundState::Buying, false, 25, Model::TeamID::NONE);
 
-    DTO::GameStateDTO game_state(GameState::Playing, {player1, player2}, false, Model::TeamID::NONE, round, 1, 3);
+    DTO::GameStateDTO game_state(GameState::Playing, {player1, player2}, false, Model::TeamID::NONE,
+                                 round, 1, 3);
 
     std::thread client_thread([&]() {
         Socket client_socket("localhost", "8080");
         Net::ClientProtocol protocol(client_socket);
-        DTO::GameStateDTO received_game_state = std::get<DTO::GameStateDTO>(protocol.receive_variant());
+        DTO::GameStateDTO received_game_state =
+                std::get<DTO::GameStateDTO>(protocol.receive_variant());
 
         EXPECT_EQ(received_game_state.game_state, GameState::Playing);
         EXPECT_EQ(received_game_state.players.size(), 2);

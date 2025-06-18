@@ -1,12 +1,11 @@
 #ifndef CLIENT_GAME_CONTEXT_CONTEXT_MANAGER_H
 #define CLIENT_GAME_CONTEXT_CONTEXT_MANAGER_H
 
-#include <mutex>
 #include <map>
+#include <mutex>
 #include <string>
 
 #include "common/definitions.h"
-
 #include "event/event.h"
 
 namespace Model {
@@ -16,7 +15,7 @@ class AssetManager;
 namespace SDL2pp {
 class Window;
 class Renderer;
-};
+};  // namespace SDL2pp
 
 namespace Context {
 class BaseContext;
@@ -44,6 +43,6 @@ public:
 
     ~ContextManager() = default;
 };
-};
+};  // namespace Context
 
-#endif // CLIENT_GAME_CONTEXT_CONTEXT_MANAGER_H
+#endif  // CLIENT_GAME_CONTEXT_CONTEXT_MANAGER_H

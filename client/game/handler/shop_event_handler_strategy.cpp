@@ -1,13 +1,12 @@
 #include "shop_event_handler_strategy.h"
 
+#include <memory>
+
 #include <SDL2/SDL.h>
 
 #include "common/event_type.h"
-
-#include "controller/game_controller.h"
-
 #include "context/shop_context.h"
-
+#include "controller/game_controller.h"
 #include "event/switch_context_event.h"
 
 void Controller::ShopEventHandlerStrategy::handle_switch_context_event(Shared<SDL_Event> event) {
@@ -36,8 +35,7 @@ void Controller::ShopEventHandlerStrategy::handle(Shared<SDL_Event> event) {
 
     if (event_type == SDL_KEYDOWN) {
         handle_switch_context_event(event);
-    }
-    else if (event_type == SDL_MOUSEBUTTONDOWN) {
+    } else if (event_type == SDL_MOUSEBUTTONDOWN) {
         handle_click(event);
     }
 }

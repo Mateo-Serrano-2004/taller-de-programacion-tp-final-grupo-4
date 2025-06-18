@@ -19,4 +19,4 @@
 #include "use_weapon_event.h"
 #include "username_event.h"
 
-#endif // CLIENT_GAME_EVENT_EVENTS_H
+#endif  // CLIENT_GAME_EVENT_EVENTS_H

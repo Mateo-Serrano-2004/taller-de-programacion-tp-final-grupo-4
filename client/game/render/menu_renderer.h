@@ -21,13 +21,13 @@ protected:
     std::list<Shared<Rendered>> rendereds;
 
 public:
-    MenuRenderer(Weak<Controller::GameController> controller);
+    explicit MenuRenderer(Weak<Controller::GameController> controller);
 
     void add_to_render(Shared<Rendered> rendered);
     void render() override;
 
     ~MenuRenderer() = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_RENDER_MENU_RENDERER_H
+#endif  // CLIENT_GAME_RENDER_MENU_RENDERER_H

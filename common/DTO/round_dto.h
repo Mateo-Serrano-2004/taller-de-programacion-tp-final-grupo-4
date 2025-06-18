@@ -2,6 +2,7 @@
 #define COMMON_DTO_ROUND_DTO_H
 
 #include <cstdint>
+
 #include "common/round_state.h"
 #include "common/team.h"
 
@@ -16,6 +17,6 @@ public:
     RoundDTO();
     RoundDTO(RoundState state, bool ended, uint16_t time_left, Model::TeamID winner);
 };
-} 
+}  // namespace DTO
 
 #endif  // COMMON_DTO_ROUND_DTO_H

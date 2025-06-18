@@ -21,15 +21,13 @@ protected:
     void handle_switch_context_event(Shared<SDL_Event> event) override;
 
 public:
-    PickRoleEventHandlerStrategy(
-        Weak<GameController> controller,
-        Context::PickRoleContext* context
-    );
+    PickRoleEventHandlerStrategy(Weak<GameController> controller,
+                                 Context::PickRoleContext* context);
 
     void handle(Shared<SDL_Event> event) override;
 
     ~PickRoleEventHandlerStrategy() override = default;
 };
-};
+};  // namespace Controller
 
-#endif // CLIENT_GAME_HANDLER_PICK_ROLE_EVENT_HANDLER_STRATEGY_H
+#endif  // CLIENT_GAME_HANDLER_PICK_ROLE_EVENT_HANDLER_STRATEGY_H

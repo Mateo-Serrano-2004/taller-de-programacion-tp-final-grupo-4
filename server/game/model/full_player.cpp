@@ -1,22 +1,23 @@
 #include "full_player.h"
 
-#include <string>
-#include <memory>
 #include <cstdint>
-#include <utility>
 #include <iostream>
-#include "common/definitions.h"
-#include "common/weapon_id.h"
-#include "common/slot_id.h"
-#include "common/model/weapon.h"
+#include <memory>
+#include <string>
+#include <utility>
 
+#include "common/definitions.h"
+#include "common/model/weapon.h"
+#include "common/slot_id.h"
+#include "common/weapon_id.h"
 #include "server/game/weapon_factory.h"
 
-FullPlayer::FullPlayer(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role)
-: Model::Player(id, name, team, role),
-  movement_direction(0, 0),
-  secondary_weapon(WeaponFactory::create(Model::WeaponID::GLOCK)),
-  knife(WeaponFactory::create(Model::WeaponID::KNIFE)) {
+FullPlayer::FullPlayer(short_id_t id, const std::string& name, Model::TeamID team,
+                       Model::RoleID role):
+        Model::Player(id, name, team, role),
+        movement_direction(0, 0),
+        secondary_weapon(WeaponFactory::create(Model::WeaponID::GLOCK)),
+        knife(WeaponFactory::create(Model::WeaponID::KNIFE)) {
     current_weapon = secondary_weapon;
     money = 1500;
 }
@@ -50,13 +51,16 @@ void FullPlayer::equip_weapon_by_type(Model::SlotID type) {
             current_weapon = knife;
             break;
         case Model::SlotID::SECONDARY_WEAPON:
-            if (secondary_weapon) current_weapon = secondary_weapon;
+            if (secondary_weapon)
+                current_weapon = secondary_weapon;
             break;
         case Model::SlotID::PRIMARY_WEAPON:
-            if (primary_weapon) current_weapon = primary_weapon;
+            if (primary_weapon)
+                current_weapon = primary_weapon;
             break;
         case Model::SlotID::BOMB_SLOT:
-            if (bomb) current_weapon = bomb;
+            if (bomb)
+                current_weapon = bomb;
             break;
     }
 }
@@ -64,7 +68,8 @@ void FullPlayer::equip_weapon_by_type(Model::SlotID type) {
 bool FullPlayer::can_pay(uint16_t price) { return money >= price; }
 
 Shared<FullWeapon> FullPlayer::equip_new_weapon_and_drop_previous(Shared<FullWeapon> new_weapon) {
-    if (!new_weapon) return nullptr;
+    if (!new_weapon)
+        return nullptr;
 
     Model::SlotID type = new_weapon->get_slot_id();
     Shared<FullWeapon> dropped_weapon = nullptr;
@@ -87,17 +92,21 @@ Shared<FullWeapon> FullPlayer::equip_new_weapon_and_drop_previous(Shared<FullWea
 }
 
 void FullPlayer::substract_money(uint16_t amount) {
-    if (amount > money) money = 0;
-    else money -= amount;
+    if (amount > money)
+        money = 0;
+    else
+        money -= amount;
 }
 
 void FullPlayer::start_using_weapon() {
-    if (!current_weapon || !alive) return;
+    if (!current_weapon || !alive)
+        return;
     std::static_pointer_cast<FullWeapon>(current_weapon)->press_trigger();
 }
 
 void FullPlayer::stop_using_weapon() {
-    if (!current_weapon) return;
+    if (!current_weapon)
+        return;
     std::static_pointer_cast<FullWeapon>(current_weapon)->release_trigger();
     shooting = false;
 }
@@ -124,16 +133,12 @@ std::optional<ShotInfo> FullPlayer::shoot(uint16_t frames_to_process) {
     }
 
     shooting = true;
-    return ShotInfo(
-        id,
-        position,
-        angle,
-        shot_info.value()
-    );
+    return ShotInfo(id, position, angle, shot_info.value());
 }
 
-void FullPlayer::take_damage(uint8_t damage){
-    if (!is_alive()) return;
+void FullPlayer::take_damage(uint8_t damage) {
+    if (!is_alive())
+        return;
 
     if (health <= damage) {
         health = 0;
@@ -143,9 +148,7 @@ void FullPlayer::take_damage(uint8_t damage){
     }
 }
 
-void FullPlayer::add_money(uint16_t money_to_be_added) {
-    money += money_to_be_added;
-}
+void FullPlayer::add_money(uint16_t money_to_be_added) { money += money_to_be_added; }
 
 void FullPlayer::reset_for_new_round() {
     alive = true;

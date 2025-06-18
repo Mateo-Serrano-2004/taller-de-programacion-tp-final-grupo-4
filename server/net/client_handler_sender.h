@@ -3,10 +3,10 @@
 
 #include <atomic>
 
+#include "common/DTO/dto_variant.h"
+#include "common/DTO/game_state_dto.h"
 #include "common/queue.h"
 #include "common/thread.h"
-#include "common/DTO/game_state_dto.h"
-#include "common/DTO/dto_variant.h"
 
 #include "server_protocol.h"
 

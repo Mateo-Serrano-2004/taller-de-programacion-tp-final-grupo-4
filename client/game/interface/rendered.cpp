@@ -4,6 +4,5 @@
 
 #include "controller/base_controller.h"
 
-View::Rendered::Rendered(
-    Weak<Controller::BaseController> controller
-):  renderer(controller.lock()->get_renderer()) {}
+View::Rendered::Rendered(Weak<Controller::BaseController> controller):
+        renderer(controller.lock()->get_renderer()) {}

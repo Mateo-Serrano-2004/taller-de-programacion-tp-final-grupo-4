@@ -3,10 +3,9 @@
 
 #include <cstdint>
 
+#include "common/DTO/event_dto.h"
 #include "common/definitions.h"
 #include "common/model/vector_2d.h"
-#include "common/DTO/event_dto.h"
-
 #include "dto_handler/dto_creator_visitor.h"
 
 #include "transfered_event.h"

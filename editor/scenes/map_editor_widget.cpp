@@ -1,44 +1,47 @@
 #include "map_editor_widget.h"
 
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QSizePolicy>
-#include <QMessageBox>
-#include <QLabel>
-#include <QDir>
-#include <QIcon>
-#include <QPixmap>
-#include <QGraphicsPixmapItem>
-#include <QKeyEvent>
-#include <QDrag>
-#include <QMimeData>
 #include <QApplication>
+#include <QDir>
+#include <QDrag>
 #include <QFileDialog>
+#include <QGraphicsPixmapItem>
+#include <QHBoxLayout>
+#include <QIcon>
+#include <QKeyEvent>
+#include <QLabel>
+#include <QMessageBox>
+#include <QMimeData>
+#include <QPixmap>
+#include <QSizePolicy>
+#include <QVBoxLayout>
 
 #include "../widgets/styled_button.h"
 #include "../widgets/styled_file_dialog.h"
-
 #include "common/asset_addresser.h"
-
 #include "common/definitions.h"
+
+#include "constants.h"
 #include "grid_view.h"
 #include "map_serializer.h"
-#include "constants.h"
 
 bool MapEditorWidget::isValidMap() {
-    int hasSpawnCT = 0; 
-    int hasSpawnTT = 0; 
+    int hasSpawnCT = 0;
+    int hasSpawnTT = 0;
     int hasBombSite = 0;
-    for(auto item : gridScene->items()) {
+    for (auto item: gridScene->items()) {
         auto pix = dynamic_cast<QGraphicsPixmapItem*>(item);
-        if (!pix) continue;
+        if (!pix)
+            continue;
         QString path = pix->data(0).toString();
-        if (path.contains("ct")) hasSpawnCT++;
-        if (path.contains("tt")) hasSpawnTT++;
-        if (path.contains("site")) hasBombSite++;
+        if (path.contains("ct"))
+            hasSpawnCT++;
+        if (path.contains("tt"))
+            hasSpawnTT++;
+        if (path.contains("site"))
+            hasBombSite++;
     }
 
-    if (hasSpawnCT != 5 || hasSpawnTT != 5 || hasBombSite < 1)   
+    if (hasSpawnCT != 5 || hasSpawnTT != 5 || hasBombSite < 1)
         return false;
     return true;
 }
@@ -54,7 +57,7 @@ void MapEditorWidget::setUpLeftPanel() {
     leftLayout->addStretch();
     leftPanel->setLayout(leftLayout);
     leftPanel->setStyleSheet("background: #222222;");
-}  
+}
 
 void MapEditorWidget::setUpRightPanel() {
     rightPanel = new QWidget(this);
@@ -76,7 +79,7 @@ void MapEditorWidget::setUpRightPanel() {
     assetsList->viewport()->installEventFilter(this);
 }
 
-MapEditorWidget::MapEditorWidget(QWidget* parent) : QWidget(parent) {
+MapEditorWidget::MapEditorWidget(QWidget* parent): QWidget(parent) {
     setUpLeftPanel();
     setUpRightPanel();
     setUpGrid();
@@ -92,14 +95,16 @@ MapEditorWidget::MapEditorWidget(QWidget* parent) : QWidget(parent) {
         QMessageBox msgBox(QMessageBox::Question, "Confirmar", "¿Estás seguro que quieres volver?");
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         msgBox.setStyleSheet("QPushButton { min-width: 80px; min-height: 30px; }");
-        if (msgBox.exec() == QMessageBox::Yes) emit backClicked();
+        if (msgBox.exec() == QMessageBox::Yes)
+            emit backClicked();
     });
 
     connect(saveButton, &QPushButton::clicked, this, [this]() {
         if (!isValidMap()) {
             QMessageBox msgBox(this);
             msgBox.setWindowTitle("Mapa inválido");
-            msgBox.setText("El mapa debe tener 5 spawn points para los CT y TT, y al menos un bombsite.");
+            msgBox.setText(
+                    "El mapa debe tener 5 spawn points para los CT y TT, y al menos un bombsite.");
             msgBox.setStyleSheet("QLabel{ color : white; }");
             msgBox.setIcon(QMessageBox::Warning);
             msgBox.exec();
@@ -117,7 +122,6 @@ MapEditorWidget::MapEditorWidget(QWidget* parent) : QWidget(parent) {
 
             MapSerializer::saveToYaml(gridScene, filePath);
         }
-        
     });
 
 
@@ -128,50 +132,57 @@ MapEditorWidget::MapEditorWidget(QWidget* parent) : QWidget(parent) {
         }
     });
 
-    connect(static_cast<GridView*>(gridView), &GridView::cellClicked, this, [this](int x, int y, Qt::MouseButton button) {
-        if (button == Qt::RightButton) {
-            removeTileAt(x, y);
-            assetsList->clearSelection();
-            selectedAsset = -1;
-            return;
-        }
-        
-        if (selectedAsset < 0) return;
-        QListWidgetItem* item = assetsList->item(selectedAsset);
-        placeTileAt(x, y, item);
-    });
+    connect(static_cast<GridView*>(gridView), &GridView::cellClicked, this,
+            [this](int x, int y, Qt::MouseButton button) {
+                if (button == Qt::RightButton) {
+                    removeTileAt(x, y);
+                    assetsList->clearSelection();
+                    selectedAsset = -1;
+                    return;
+                }
 
-    connect(static_cast<GridView*>(gridView), &GridView::cellDropped, this, [this](int x, int y, int assetIndex) {
-        if (assetIndex < 0) return;
-        QListWidgetItem* item = assetsList->item(assetIndex);
-        placeTileAt(x, y, item);
-    });
+                if (selectedAsset < 0)
+                    return;
+                QListWidgetItem* item = assetsList->item(selectedAsset);
+                placeTileAt(x, y, item);
+            });
 
-    connect(static_cast<GridView*>(gridView), &GridView::cellTileSelected, this, [this](int x, int y) {
-        for (QGraphicsItem* item : gridScene->items(QRectF(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE))) {
-            if (auto pix = dynamic_cast<QGraphicsPixmapItem*>(item)) {
-                if (pix->pos() == QPointF(x*TILE_SIZE, y*TILE_SIZE)) {
-                    QString fileName = pix->data(0).toString();
-                    QString category = pix->data(1).toString();
-                    for (int i = 0; i < assetsList->count(); ++i) {
-                        QListWidgetItem* asset = assetsList->item(i);
-                        if ((asset->data(Qt::UserRole).toString() == fileName) && (asset->data(Qt::UserRole + 1).toString() == category)) {
-                            assetsList->setCurrentRow(i);
-                            selectedAsset = i;
-                            return;
+    connect(static_cast<GridView*>(gridView), &GridView::cellDropped, this,
+            [this](int x, int y, int assetIndex) {
+                if (assetIndex < 0)
+                    return;
+                QListWidgetItem* item = assetsList->item(assetIndex);
+                placeTileAt(x, y, item);
+            });
+
+    connect(static_cast<GridView*>(gridView), &GridView::cellTileSelected, this,
+            [this](int x, int y) {
+                for (QGraphicsItem* item:
+                     gridScene->items(QRectF(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))) {
+                    if (auto pix = dynamic_cast<QGraphicsPixmapItem*>(item)) {
+                        if (pix->pos() == QPointF(x * TILE_SIZE, y * TILE_SIZE)) {
+                            QString fileName = pix->data(0).toString();
+                            QString category = pix->data(1).toString();
+                            for (int i = 0; i < assetsList->count(); ++i) {
+                                QListWidgetItem* asset = assetsList->item(i);
+                                if ((asset->data(Qt::UserRole).toString() == fileName) &&
+                                    (asset->data(Qt::UserRole + 1).toString() == category)) {
+                                    assetsList->setCurrentRow(i);
+                                    selectedAsset = i;
+                                    return;
+                                }
+                            }
                         }
                     }
                 }
-            }
-        }
-    });
+            });
 }
 
 void MapEditorWidget::setUpGrid() {
     gridScene = new QGraphicsScene(this);
     int tile = TILE_SIZE;
     int cols = MAP_WIDTH;
-    int rows = MAP_HEIGHT; 
+    int rows = MAP_HEIGHT;
     int gridW = cols * tile;
     int gridH = rows * tile;
 
@@ -182,13 +193,11 @@ void MapEditorWidget::setUpGrid() {
 }
 
 void MapEditorWidget::drawGridLines(int width, int height) {
-    int tile = TILE_SIZE;   
+    int tile = TILE_SIZE;
 
     QPen gridPen(QColor("#222222"));
-    for (int x = 0; x <= width; x += tile)
-        gridScene->addLine(x, 0, x, height, gridPen);
-    for (int y = 0; y <= height; y += tile)
-        gridScene->addLine(0, y, width, y, gridPen);
+    for (int x = 0; x <= width; x += tile) gridScene->addLine(x, 0, x, height, gridPen);
+    for (int y = 0; y <= height; y += tile) gridScene->addLine(0, y, width, y, gridPen);
 }
 
 void MapEditorWidget::addCategory(const QString& title) {
@@ -204,7 +213,7 @@ void MapEditorWidget::addCategory(const QString& title) {
 
     QDir dir(QString::fromStdString(addresser.get_tile_path(title.toStdString())));
     QStringList files = dir.entryList(QStringList() << "*.png", QDir::Files);
-    for (const QString& fileName : files) {
+    for (const QString& fileName: files) {
         QListWidgetItem* item = new QListWidgetItem(QIcon(dir.filePath(fileName)), fileName);
         item->setData(Qt::UserRole, fileName);
         item->setData(Qt::UserRole + 1, title);
@@ -226,9 +235,10 @@ void MapEditorWidget::loadAssets() {
 }
 
 void MapEditorWidget::removeTileAt(int x, int y) {
-    for (QGraphicsItem* item : gridScene->items(QRectF(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE))) {
+    for (QGraphicsItem* item:
+         gridScene->items(QRectF(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))) {
         if (auto pix = dynamic_cast<QGraphicsPixmapItem*>(item)) {
-            if (pix->pos() == QPointF(x*TILE_SIZE, y*TILE_SIZE)) {
+            if (pix->pos() == QPointF(x * TILE_SIZE, y * TILE_SIZE)) {
                 gridScene->removeItem(pix);
                 delete pix;
                 break;
@@ -238,7 +248,8 @@ void MapEditorWidget::removeTileAt(int x, int y) {
 }
 
 void MapEditorWidget::placeTileAt(int x, int y, QListWidgetItem* item) {
-    if (!(item->flags() & Qt::ItemIsSelectable)) return;
+    if (!(item->flags() & Qt::ItemIsSelectable))
+        return;
     QIcon icon = item->icon();
     QPixmap pixmap = icon.pixmap(TILE_SIZE, TILE_SIZE);
     removeTileAt(x, y);
@@ -262,21 +273,25 @@ bool MapEditorWidget::eventFilter(QObject* obj, QEvent* event) {
             }
         } else if (event->type() == QEvent::MouseMove) {
             QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
-            if (!(mouseEvent->buttons() & Qt::LeftButton)) return false;
-            if (dragStartPos.isNull()) return false;
+            if (!(mouseEvent->buttons() & Qt::LeftButton))
+                return false;
+            if (dragStartPos.isNull())
+                return false;
 
-            if ((mouseEvent->pos() - dragStartPos).manhattanLength() >= QApplication::startDragDistance()) {
+            if ((mouseEvent->pos() - dragStartPos).manhattanLength() >=
+                QApplication::startDragDistance()) {
                 QListWidgetItem* item = assetsList->itemAt(dragStartPos);
                 if (item && (item->flags() & Qt::ItemIsSelectable)) {
                     QDrag* drag = new QDrag(assetsList);
                     QMimeData* mimeData = new QMimeData;
-                    mimeData->setData("application/x-asset-index", QByteArray::number(assetsList->row(item)));
+                    mimeData->setData("application/x-asset-index",
+                                      QByteArray::number(assetsList->row(item)));
                     drag->setMimeData(mimeData);
-                    
+
                     QPixmap pixmap = item->icon().pixmap(TILE_SIZE, TILE_SIZE);
                     drag->setPixmap(pixmap);
-                    drag->setHotSpot(QPoint(pixmap.width()/2, pixmap.height()/2));
-                    
+                    drag->setHotSpot(QPoint(pixmap.width() / 2, pixmap.height() / 2));
+
                     Qt::DropAction dropAction = drag->exec(Qt::CopyAction);
                     if (dropAction == Qt::CopyAction) {
                         selectedAsset = assetsList->row(item);
@@ -290,7 +305,7 @@ bool MapEditorWidget::eventFilter(QObject* obj, QEvent* event) {
         }
     }
     return QWidget::eventFilter(obj, event);
-} 
+}
 
 void MapEditorWidget::loadMap(const QString& path) {
     MapSerializer::loadFromYaml(path, gridScene);

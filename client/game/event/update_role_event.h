@@ -11,12 +11,12 @@ protected:
     TeamID id;
 
 public:
-    UpdateRoleEvent(TeamID id);
+    explicit UpdateRoleEvent(TeamID id);
 
     TeamID get_team() const;
 
     ~UpdateRoleEvent() override = default;
 };
-};
+};  // namespace Model
 
-#endif // CLIENT_GAME_EVENT_UPDATE_ROLE_EVENT_H
+#endif  // CLIENT_GAME_EVENT_UPDATE_ROLE_EVENT_H

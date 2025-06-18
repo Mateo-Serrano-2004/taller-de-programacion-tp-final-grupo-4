@@ -1,9 +1,8 @@
 #ifndef CLIENT_GAME_EVENT_PICK_ROLE_EVENT_H
 #define CLIENT_GAME_EVENT_PICK_ROLE_EVENT_H
 
-#include "common/role_id.h"
 #include "common/DTO/event_dto.h"
-
+#include "common/role_id.h"
 #include "dto_handler/dto_creator_visitor.h"
 
 #include "transfered_event.h"
@@ -22,6 +21,6 @@ public:
 
     ~PickRoleEvent() override = default;
 };
-};
+};  // namespace Model
 
-#endif // CLIENT_GAME_EVENT_PICK_ROLE_EVENT_H
+#endif  // CLIENT_GAME_EVENT_PICK_ROLE_EVENT_H

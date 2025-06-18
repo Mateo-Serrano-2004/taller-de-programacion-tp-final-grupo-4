@@ -1,30 +1,26 @@
 #include "main_window.h"
 
-#include <vector>
+#include <iostream>
 #include <memory>
 #include <string>
 #include <variant>
-#include <iostream>
+#include <vector>
 
-#include "common/DTO/game_info_dto.h"
-#include "common/definitions.h"
-
+#include "client/exception/closed_app.h"
 #include "client/game/cs2d_app.h"
 #include "client/game/event/create_game_event.h"
 #include "client/game/event/join_game_event.h"
 #include "client/game/event/request_games_list_event.h"
 #include "client/game/event/request_maps_event.h"
 #include "client/game/event/username_event.h"
-
-#include "client/exception/closed_app.h"
+#include "common/DTO/game_info_dto.h"
+#include "common/definitions.h"
 
 MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWindow) {
     setUpWindow();
 }
 
-MainWindow::~MainWindow() {
-    delete ui;
-}
+MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::runGame() {
     this->hide();
@@ -68,7 +64,7 @@ void MainWindow::showWelcomeScene() {
     connect(
             welcomeScene, &WelcomeScene::startClicked, this,
             // [this](QString username, QString ip, QString port) {
-            [this] () {
+            [this]() {
                 // protocol = new Net::ClientProtocol(ip.toStdString(), port.toStdString());
                 std::string username = "user";
                 protocol = make_shared<Net::ClientProtocol>("localhost", "9000");

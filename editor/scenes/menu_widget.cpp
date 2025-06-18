@@ -1,13 +1,13 @@
 #include "menu_widget.h"
 
+#include <QFileDialog>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QFileDialog>
 
 #include "../widgets/styled_button.h"
 #include "../widgets/styled_file_dialog.h"
 
-MenuWidget::MenuWidget(QWidget* parent) : QWidget(parent) {
+MenuWidget::MenuWidget(QWidget* parent): QWidget(parent) {
     createMapBtn = new StyledButton("Crear mapa", this);
     editMapBtn = new StyledButton("Editar mapa", this);
 
@@ -43,4 +43,4 @@ MenuWidget::MenuWidget(QWidget* parent) : QWidget(parent) {
                 emit editMapRequested(filePath);
         }
     });
-} 
+}

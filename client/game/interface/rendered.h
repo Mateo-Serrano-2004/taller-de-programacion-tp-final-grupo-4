@@ -15,12 +15,12 @@ protected:
     Shared<SDL2pp::Renderer> renderer;
 
 public:
-    Rendered(Weak<Controller::BaseController> controller);
+    explicit Rendered(Weak<Controller::BaseController> controller);
 
     virtual void render() = 0;
 
     virtual ~Rendered() = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_ENTITY_RENDERED_H
+#endif  // CLIENT_GAME_ENTITY_RENDERED_H

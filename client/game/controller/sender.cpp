@@ -2,16 +2,13 @@
 
 #include <iostream>
 
+#include "client/net/client_protocol.h"
 #include "common/event_type.h"
-
 #include "event/event.h"
 
-#include "client/net/client_protocol.h"
-
-Controller::Sender::Sender(
-    SharedQueue<Model::TransferedEvent>* sender_queue,
-    Shared<Net::ClientProtocol> protocol
-): keep_running(true), sender_queue(sender_queue), protocol(protocol) {
+Controller::Sender::Sender(SharedQueue<Model::TransferedEvent>* sender_queue,
+                           Shared<Net::ClientProtocol> protocol):
+        keep_running(true), sender_queue(sender_queue), protocol(protocol) {
     start();
 }
 

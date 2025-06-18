@@ -1,17 +1,16 @@
 #include "context_manager.h"
 
 #include <mutex>
-#include <utility>
 #include <string>
+#include <utility>
 
-#include <SDL2pp/Window.hh>
 #include <SDL2pp/Renderer.hh>
-
-#include "base_context.h"
+#include <SDL2pp/Window.hh>
 
 #include "asset/asset_manager.h"
-
 #include "event/switch_context_event.h"
+
+#include "base_context.h"
 
 Shared<Context::BaseContext> Context::ContextManager::get_context(const std::string& context_name) {
     auto context = contexts.find(context_name);
@@ -19,7 +18,7 @@ Shared<Context::BaseContext> Context::ContextManager::get_context(const std::str
 }
 
 void Context::ContextManager::add_context(Shared<Context::BaseContext> context) {
-    contexts.insert({ context->get_name(), context });
+    contexts.insert({context->get_name(), context});
 }
 
 void Context::ContextManager::set_current_context(const std::string& context_name) {

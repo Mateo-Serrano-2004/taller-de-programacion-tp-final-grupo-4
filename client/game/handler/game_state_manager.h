@@ -3,16 +3,13 @@
 
 #include <functional>
 #include <list>
-#include <mutex>
 #include <map>
-
-#include "common/definitions.h"
+#include <mutex>
 
 #include "asset/texture_id.h"
-
-#include "utils/enum_translator.h"
-
+#include "common/definitions.h"
 #include "render/camera.h"
+#include "utils/enum_translator.h"
 
 namespace SDL2pp {
 class Texture;
@@ -25,7 +22,7 @@ class GameStateDTO;
 namespace Model {
 class GameState;
 class Player;
-};
+};  // namespace Model
 
 namespace View {
 class RenderedPlayer;
@@ -45,14 +42,13 @@ private:
     Weak<GameController> controller;
 
 public:
-    GameStateManager(Weak<GameController> controller);
+    explicit GameStateManager(Weak<GameController> controller);
 
     Shared<View::RenderedPlayer> get_reference_player_unsafe();
     Shared<View::RenderedPlayer> get_reference_player();
 
     void call_function_on_players(
-        const std::function<void(std::map<short_id_t, Shared<View::RenderedPlayer>>&)>& func
-    );
+            const std::function<void(std::map<short_id_t, Shared<View::RenderedPlayer>>&)>& func);
 
     uint16_t get_time_left();
     View::Camera get_camera();
@@ -64,6 +60,6 @@ public:
 
     ~GameStateManager() = default;
 };
-};
+};  // namespace Controller
 
-#endif // CLIENT_GAME_HANDLER_GAME_STATE_MANAGER_H
+#endif  // CLIENT_GAME_HANDLER_GAME_STATE_MANAGER_H

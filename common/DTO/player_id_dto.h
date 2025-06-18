@@ -9,8 +9,8 @@ public:
     short_id_t id;
 
     PlayerIDDTO(): id(0) {}
-    PlayerIDDTO(short_id_t id) : id(id) {}
+    explicit PlayerIDDTO(short_id_t id): id(id) {}
 };
-};
+};  // namespace DTO
 
-#endif // COMMON_DTO_PLAYER_ID_DTO_H
+#endif  // COMMON_DTO_PLAYER_ID_DTO_H

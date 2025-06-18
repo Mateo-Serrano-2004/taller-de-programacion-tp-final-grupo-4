@@ -2,23 +2,25 @@
 
 #include <string>
 
-#include <SDL2pp/SDL2pp.hh>
-#include <SDL2pp/Font.hh>
-#include <SDL2pp/Texture.hh>
 #include <SDL2pp/Color.hh>
-#include <SDL2pp/Renderer.hh>
-#include <SDL2pp/Rect.hh>
+#include <SDL2pp/Font.hh>
 #include <SDL2pp/Point.hh>
+#include <SDL2pp/Rect.hh>
+#include <SDL2pp/Renderer.hh>
+#include <SDL2pp/SDL2pp.hh>
+#include <SDL2pp/Texture.hh>
 
-#include "controller/base_controller.h"
 #include "asset/asset_manager.h"
+#include "controller/base_controller.h"
 
-View::Label::Label(
-    Weak<Controller::BaseController> controller
-): View::Pane(controller),
-   View::Padded(),
-   text(""), font_size(12), color(255, 255, 255, 255),
-   font(nullptr), text_texture(nullptr) {
+View::Label::Label(Weak<Controller::BaseController> controller):
+        View::Pane(controller),
+        View::Padded(),
+        text(""),
+        font_size(12),
+        color(255, 255, 255, 255),
+        font(nullptr),
+        text_texture(nullptr) {
     font = asset_manager->generate_font("liberationsans", font_size);
 }
 
@@ -28,9 +30,7 @@ uint8_t View::Label::get_font_size() const { return font_size; }
 
 SDL2pp::Color View::Label::get_font_color() const { return color; }
 
-bool View::Label::empty() const {
-    return text_texture == nullptr;
-}
+bool View::Label::empty() const { return text_texture == nullptr; }
 
 void View::Label::set_text(const std::string& new_text) {
     text = new_text;
@@ -68,13 +68,9 @@ void View::Label::set_size(const SDL2pp::Point& new_size) {
     size.SetY(size.GetY() + (2 * padding));
 }
 
-void View::Label::set_height(int new_height) {
-    size.SetY(new_height + (2 * padding));
-}
+void View::Label::set_height(int new_height) { size.SetY(new_height + (2 * padding)); }
 
-void View::Label::set_width(int new_width) {
-    size.SetX(new_width + (2 * padding));
-}
+void View::Label::set_width(int new_width) { size.SetX(new_width + (2 * padding)); }
 
 void View::Label::set_padding(int new_padding) {
     padding = new_padding;
@@ -87,12 +83,9 @@ void View::Label::render() {
     if (!empty()) {
         SDL2pp::Point absolute_position = get_absolute_position();
         renderer->Copy(
-            *text_texture,
-            SDL2pp::NullOpt,
-            SDL2pp::Point(
-                absolute_position.GetX() + (get_width() - text_texture->GetWidth()) / 2,
-                absolute_position.GetY() + (get_height() - text_texture->GetHeight()) / 2
-            )
-        );
+                *text_texture, SDL2pp::NullOpt,
+                SDL2pp::Point(
+                        absolute_position.GetX() + (get_width() - text_texture->GetWidth()) / 2,
+                        absolute_position.GetY() + (get_height() - text_texture->GetHeight()) / 2));
     }
 }

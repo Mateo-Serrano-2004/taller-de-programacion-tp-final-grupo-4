@@ -2,11 +2,10 @@
 #include <thread>
 
 #include "client/net/client_protocol.h"
-#include "server/net/server_protocol.h"
 #include "common/DTO/dto_variant.h"
 #include "common/socket.h"
-
 #include "gtest/gtest.h"
+#include "server/net/server_protocol.h"
 
 TEST(MapsNameTest, send_and_receive_maps_name) {
     Socket server_socket("8080");
@@ -20,7 +19,8 @@ TEST(MapsNameTest, send_and_receive_maps_name) {
     std::thread client_thread([&]() {
         Socket client_socket("localhost", "8080");
         Net::ClientProtocol protocol(client_socket);
-        DTO::MapNameListDTO received_map_name_list = std::get<DTO::MapNameListDTO>(protocol.receive_variant());
+        DTO::MapNameListDTO received_map_name_list =
+                std::get<DTO::MapNameListDTO>(protocol.receive_variant());
 
         EXPECT_EQ(received_map_name_list.maps_names.size(), 3);
 

@@ -1,26 +1,27 @@
 #include "server_protocol.h"
 
+#include <exception>
 #include <iostream>
 #include <mutex>
+#include <variant>
 
 #include <arpa/inet.h>
 #include <string.h>
-#include <exception>
-#include <variant>
 
+#include "common/DTO/dto_code.h"
 #include "common/DTO/player_dto.h"
 #include "common/DTO/weapon_dto.h"
-#include "common/DTO/dto_code.h"
 #include "common/definitions.h"
-#include "common/overloaded.h"
 #include "common/event_type.h"
-#include "common/slot_id.h"
+#include "common/overloaded.h"
 #include "common/role_id.h"
+#include "common/slot_id.h"
 
 EventVariant ServerProtocol::receive_event() {
     uint8_t size;
-    if (!peer.recvall(&size, sizeof(size))) throw std::runtime_error("End of communication");
-    
+    if (!peer.recvall(&size, sizeof(size)))
+        throw std::runtime_error("End of communication");
+
     std::vector<char> data(size);
     peer.recvall(data.data(), size);
 
@@ -92,14 +93,13 @@ EventVariant ServerProtocol::receive_event() {
 }
 
 void ServerProtocol::send_variant(const DTO::DTOVariant& variant) {
-    std::visit(
-        overloaded{[this](const DTO::GameStateDTO& d) { send_game_state(d); },
-                    [this](const DTO::PlayerIDDTO& d) { send_player_id(d); },
-                    [this](const DTO::TeamIDDTO& d) { send_team_id(d); },
-                    [this](const DTO::MapDTO& d) { send_map(d); },
-                    [this](const DTO::MapNameListDTO& d) { send_all_maps_names(d); },
-                    [this](const DTO::GameListDTO& d) { send_games(d); }},
-            variant);
+    std::visit(overloaded{[this](const DTO::GameStateDTO& d) { send_game_state(d); },
+                          [this](const DTO::PlayerIDDTO& d) { send_player_id(d); },
+                          [this](const DTO::TeamIDDTO& d) { send_team_id(d); },
+                          [this](const DTO::MapDTO& d) { send_map(d); },
+                          [this](const DTO::MapNameListDTO& d) { send_all_maps_names(d); },
+                          [this](const DTO::GameListDTO& d) { send_games(d); }},
+               variant);
 }
 
 void ServerProtocol::send_weapon(const DTO::WeaponDTO& weapon_dto) {

@@ -4,7 +4,7 @@
 #include <cstdint>
 
 namespace Model {
-enum class EventType: uint8_t {
+enum class EventType : uint8_t {
     // Game events
     MOVEMENT = 0x00,
     ROTATION = 0x01,

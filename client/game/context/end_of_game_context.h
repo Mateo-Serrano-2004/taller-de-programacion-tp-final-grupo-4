@@ -4,11 +4,10 @@
 #include <SDL2/SDL.h>
 
 #include "common/definitions.h"
-
-#include "base_context.h"
-
 #include "entity/horizontal_pane.h"
 #include "entity/label.h"
+
+#include "base_context.h"
 
 namespace Controller {
 class BaseController;
@@ -25,9 +24,9 @@ protected:
     void dispatch_events() override;
 
 public:
-    EndOfGameContext(Weak<Controller::BaseController> controller);
+    explicit EndOfGameContext(Weak<Controller::BaseController> controller);
     ~EndOfGameContext() override = default;
 };
-};
+};  // namespace Context
 
-#endif // CLIENT_GAME_CONTEXT_END_OF_GAME_CONTEXT_H
+#endif  // CLIENT_GAME_CONTEXT_END_OF_GAME_CONTEXT_H

@@ -5,7 +5,6 @@
 #include <string>
 
 #include "common/definitions.h"
-
 #include "event/event.h"
 
 namespace Controller {
@@ -43,6 +42,6 @@ public:
 
     virtual ~BaseContext() = default;
 };
-};
+};  // namespace Context
 
-#endif // CLIENT_GAME_CONTEXT_BASE_CONTEXT_H
+#endif  // CLIENT_GAME_CONTEXT_BASE_CONTEXT_H

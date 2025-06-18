@@ -4,7 +4,7 @@
 #include <cstdint>
 
 namespace Model {
-enum class SlotID: uint8_t {
+enum class SlotID : uint8_t {
     PRIMARY_WEAPON = 0x00,
     SECONDARY_WEAPON = 0x01,
     KNIFE_SLOT = 0x02,
@@ -12,4 +12,4 @@ enum class SlotID: uint8_t {
 };
 };
 
-#endif // COMMON_SLOT_ID_H
+#endif  // COMMON_SLOT_ID_H

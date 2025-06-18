@@ -18,7 +18,6 @@ public:
     explicit PeriodicClock(uint16_t fps);
 
     uint64_t sleep_and_get_frames();
-
 };
 
 #endif  // PERIODIC_CLOCK_H
