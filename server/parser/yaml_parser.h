@@ -9,6 +9,8 @@
 
 #include "types.h"
 
+class YamlParser;
+
 struct TileData {
     int x;
     int y;
@@ -65,17 +67,22 @@ struct DisplayConfig {
 };
 
 struct ConfigData {
-    GameConfig game;
-    PlayerConfig player;
-    std::map<std::string, WeaponConfig> weapons;
-    FovConfig fov;
-    DisplayConfig display;
+    friend class YamlParser;
+    private:
+        ConfigData() = default;
+        ConfigData(const ConfigData&) = delete;
+        ConfigData& operator=(const ConfigData&) = delete;
+    public:
+        GameConfig game;
+        PlayerConfig player;
+        std::map<std::string, WeaponConfig> weapons;
+        FovConfig fov;
+        DisplayConfig display;
 };
 
 class YamlParser {
-
 private:
-    ConfigData gameConfig;
+    static ConfigData gameConfig;
     std::vector<std::vector<std::string>> tileMatrix;
     std::vector<std::vector<TileType>> typeMatrix;
 
@@ -87,6 +94,6 @@ public:
     void parseMapYaml(const std::string& yamlMapPath);
     std::vector<std::vector<std::string>> getTileMatrix() const;
     std::vector<std::vector<TileType>> getTypeMatrix() const;
-    const ConfigData& getConfigData() const;
+    static const ConfigData& getConfigData();
 };
 #endif  // YAML_PARSER_H

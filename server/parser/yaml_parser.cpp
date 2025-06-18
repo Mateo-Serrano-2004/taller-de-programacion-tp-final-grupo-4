@@ -4,6 +4,8 @@
 
 #include <yaml-cpp/yaml.h>
 
+ConfigData YamlParser::gameConfig;
+
 YamlParser::YamlParser(const std::string& yamlGameConfigPath) {
     parseGameConfigYaml(yamlGameConfigPath);
 }
@@ -62,7 +64,6 @@ void YamlParser::parseGameConfigYaml(const std::string& yamlGameConfigPath) {
     gameConfig.game.bombPlantMoney = game["bomb_plant_money"].as<int>();
     gameConfig.game.bombDefuseMoney = game["bomb_defuse_money"].as<int>();
 
-
     const auto& player = config["player"];
     gameConfig.player.health = player["health"].as<int>();
     gameConfig.player.initialMoney = player["initial_money"].as<int>();
@@ -113,4 +114,6 @@ TileType YamlParser::stringToTileType(const std::string& typeStr, const std::str
     return NOT_COLLIDABLE;
 }
 
-const ConfigData& YamlParser::getConfigData() const { return gameConfig; }
+const ConfigData& YamlParser::getConfigData() {
+    return gameConfig;
+}
