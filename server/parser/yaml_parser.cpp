@@ -20,6 +20,9 @@ void YamlParser::parseMapYaml(const std::string& yamlPath) {
     int mapWidth = mapMaxWidth - mapMinWidth + 1;
     int mapHeight = mapMaxHeight - mapMinHeight + 1;
 
+    tileMatrix.clear();
+    typeMatrix.clear();
+
     tileMatrix.resize(mapHeight, std::vector<std::string>(mapWidth, ""));
     typeMatrix.resize(mapHeight, std::vector<TileType>(mapWidth, COLLIDABLE));
 
