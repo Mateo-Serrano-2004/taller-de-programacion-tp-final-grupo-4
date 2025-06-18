@@ -11,6 +11,8 @@
 #include "controller/game_controller.h"
 
 #include "asset_manager.h"
+#include "animation_id.h"
+#include "texture_id.h"
 
 void Model::AssetLoader::load_weapon_sprites() {
     manager->load_texture(
@@ -82,6 +84,17 @@ void Model::AssetLoader::load_fov() {
     manager->load_texture(Model::TextureID::FOV, generator.generate_fov());
 }
 
+void Model::AssetLoader::load_animations() {
+    auto animation = generator.generate_animation({
+        addresser.get_animation_path("muzzle-fire/muzzle_01.png"),
+        addresser.get_animation_path("muzzle-fire/muzzle_02.png"),
+        addresser.get_animation_path("muzzle-fire/muzzle_03.png"),
+        addresser.get_animation_path("muzzle-fire/muzzle_04.png"),
+        addresser.get_animation_path("muzzle-fire/muzzle_05.png")
+    });
+    manager->load_animation(Model::AnimationID::MUZZLE_FIRE, animation);
+}
+
 Model::AssetLoader::AssetLoader(Shared<AssetManager> manager, Shared<SDL2pp::Renderer> renderer)
 : player_sprites({
     "ct1.bmp", "ct2.bmp", "ct3.bmp",
@@ -103,4 +116,5 @@ void Model::AssetLoader::load_all_textures() {
     load_player_sprites();
     load_hud_textures();
     load_fov();
+    load_animations();
 };
