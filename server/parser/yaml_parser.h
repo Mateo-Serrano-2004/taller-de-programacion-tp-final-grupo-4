@@ -62,7 +62,7 @@ struct FovConfig {
 };
 
 struct DisplayConfig {
-    int widht;
+    int width;
     int height;
 };
 

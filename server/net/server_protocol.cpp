@@ -98,7 +98,8 @@ void ServerProtocol::send_variant(const DTO::DTOVariant& variant) {
                           [this](const DTO::TeamIDDTO& d) { send_team_id(d); },
                           [this](const DTO::MapDTO& d) { send_map(d); },
                           [this](const DTO::MapNameListDTO& d) { send_all_maps_names(d); },
-                          [this](const DTO::GameListDTO& d) { send_games(d); }},
+                          [this](const DTO::GameListDTO& d) { send_games(d); },
+                          [this](const DTO::ConfigDTO& d) { send_config(d); }},
                variant);
 }
 
@@ -230,4 +231,17 @@ void ServerProtocol::send_map(const DTO::MapDTO& map_dto) {
             peer.sendall(path.c_str(), path_size);
         }
     }
+}
+
+void ServerProtocol::send_config(const DTO::ConfigDTO& config_dto) {
+    DTO::DTOCode code = DTO::DTOCode::CONFIG;
+    peer.sendall(&code, sizeof(code));
+
+    DTO::ConfigDTO config = config_dto;
+    config.width = htons(config.width);
+    config.height = htons(config.height);
+    config.angle = htons(config.angle);
+    config.ratio = htons(config.ratio);
+
+    peer.sendall(&config, sizeof(config));
 }

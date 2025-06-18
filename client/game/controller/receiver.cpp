@@ -54,7 +54,8 @@ void Controller::Receiver::receive_server_info() {
                           [this](DTO::TeamIDDTO&& d) { update_current_team(std::move(d)); },
                           [this](DTO::MapDTO&& d) { generate_map(std::move(d)); },
                           // TODO: Fix this
-                          [](DTO::MapNameListDTO&&) {}, [](DTO::GameListDTO&&) {}},
+                          [](DTO::MapNameListDTO&&) {}, [](DTO::GameListDTO&&) {},
+                          [](DTO::ConfigDTO&&) {}},
                std::move(variant));
 }
 

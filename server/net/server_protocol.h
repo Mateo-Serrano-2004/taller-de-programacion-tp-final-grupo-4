@@ -21,7 +21,7 @@ private:
     void send_player(const DTO::PlayerDTO& player);
     void send_player_list(const std::vector<DTO::PlayerDTO>& players);
     void send_round(const DTO::RoundDTO& round_dto);
-
+    void send_config(const DTO::ConfigDTO& config_dto);
     void send_player_id(const DTO::PlayerIDDTO& player_id_dto);
     void send_team_id(const DTO::TeamIDDTO& team_id_dto);
     void send_game_state(const DTO::GameStateDTO& game_state);

@@ -10,7 +10,8 @@ enum class DTOCode : uint8_t {
     TEAM_ID = 0x02,
     MAP = 0x03,
     MAP_NAMES_LIST = 0x04,
-    GAMES_LIST = 0x05
+    GAMES_LIST = 0x05,
+    CONFIG = 0x06
 };
 };
 

@@ -21,15 +21,13 @@ private:
     void receive_player(DTO::PlayerDTO& player);
     void receive_player_list(std::vector<DTO::PlayerDTO>& players);
     void receive_round(DTO::RoundDTO& round);
+
     DTO::GameStateDTO receive_match_state();
-
     DTO::PlayerIDDTO receive_player_id();
-
     DTO::TeamIDDTO receive_team();
-
     DTO::MapDTO receive_map();
-
     DTO::MapNameListDTO receive_map_list();
+    DTO::ConfigDTO receive_config();
 
     void receive_game_info(DTO::GameInfoDTO& dto);
     DTO::GameListDTO receive_game_list();

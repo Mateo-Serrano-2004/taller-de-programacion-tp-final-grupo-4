@@ -173,6 +173,18 @@ void Net::ClientProtocol::send_event(const DTO::EventDTO& event_dto) {
     skt.sendall(event_dto.data.data(), event_dto.size);
 }
 
+DTO::ConfigDTO Net::ClientProtocol::receive_config() {
+    DTO::ConfigDTO config;
+    skt.recvall(&config, sizeof(config));
+
+    config.width = ntohs(config.width);
+    config.height = ntohs(config.height);
+    config.angle = ntohs(config.angle);
+    config.ratio = ntohs(config.ratio);
+
+    return config;
+}
+
 DTO::DTOVariant Net::ClientProtocol::receive_variant() {
     DTO::DTOCode code;
     skt.recvall(&code, sizeof(code));
@@ -190,6 +202,8 @@ DTO::DTOVariant Net::ClientProtocol::receive_variant() {
             return receive_map_list();
         case DTO::DTOCode::GAMES_LIST:
             return receive_game_list();
+        case DTO::DTOCode::CONFIG:
+            return receive_config();
         default:
             throw std::runtime_error("Invalid DTO code received");
     }

@@ -9,9 +9,9 @@
 
 GameManager::GameManager(const std::string& config_file,
                          const std::vector<std::string>& maps_names):
-        yamlAddresser(), yamlParser(yamlAddresser.get_config_path(config_file)) {
-    this->maps_names = maps_names;
-}
+        yamlAddresser(),
+        yamlParser(yamlAddresser.get_config_path(config_file)),
+        maps_names(maps_names) {}
 
 void GameManager::clear_games() {
     std::lock_guard<std::mutex> lock(mtx);
