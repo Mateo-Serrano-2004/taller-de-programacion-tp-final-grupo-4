@@ -6,14 +6,11 @@
 #include <map>
 #include <mutex>
 
+#include "animation/muzzle_fire_animation.h"
 #include "asset/texture_id.h"
 #include "common/definitions.h"
 #include "render/camera.h"
 #include "utils/enum_translator.h"
-
-#include "render/camera.h"
-
-#include "animation/muzzle_fire_animation.h"
 
 namespace SDL2pp {
 class Texture;
@@ -55,11 +52,9 @@ public:
     Shared<View::RenderedPlayer> get_reference_player();
 
     void call_function_on_players(
-        const std::function<void(std::map<short_id_t, Shared<View::RenderedPlayer>>&)>& func
-    );
+            const std::function<void(std::map<short_id_t, Shared<View::RenderedPlayer>>&)>& func);
     void call_function_on_pending_fires(
-        const std::function<void(std::list<View::MuzzleFireAnimation>&)>& func
-    );
+            const std::function<void(std::list<View::MuzzleFireAnimation>&)>& func);
 
     uint16_t get_time_left();
     View::Camera get_camera();

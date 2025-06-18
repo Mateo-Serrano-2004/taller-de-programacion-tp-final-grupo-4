@@ -1,10 +1,10 @@
 #include "player_renderer.h"
 
-#include <map>
-#include <list>
+#include <algorithm>
 #include <cmath>
 #include <cstdint>
 #include <iostream>
+#include <list>
 #include <map>
 
 #include <SDL2pp/Color.hh>
@@ -16,14 +16,13 @@
 #include <SDL2pp/Texture.hh>
 #include <SDL2pp/Window.hh>
 
+#include "animation/muzzle_fire_animation.h"
 #include "asset/asset_manager.h"
 #include "asset/font_id.h"
 #include "asset/texture_id.h"
 #include "controller/game_controller.h"
 #include "handler/game_state_manager.h"
 #include "model/rendered_player.h"
-
-#include "animation/muzzle_fire_animation.h"
 
 #include "camera.h"
 
@@ -107,7 +106,7 @@ View::PlayerRenderer::PlayerRenderer(Weak<Controller::GameController> controller
 }
 
 void View::PlayerRenderer::render(uint8_t frames) {
-    (void) frames;
+    (void)frames;
     auto camera = game_state_manager->get_camera();
     render_map(camera);
     bool render_ref_player = true;
@@ -125,18 +124,17 @@ void View::PlayerRenderer::render(uint8_t frames) {
                         pair.second->render();
                 }
 
-            if (render_ref_player) {
-                angle = reference_player->get_angle();
-                reference_player->render();
-            }
-        }
-    );
+                if (render_ref_player) {
+                    angle = reference_player->get_angle();
+                    reference_player->render();
+                }
+            });
     game_state_manager->call_function_on_pending_fires(
-        [this](std::list<View::MuzzleFireAnimation>& list) {
-            for (auto& animation: list) {
-                animation.render();
-            }
-        }
-    );
-    if (render_ref_player) render_fov(angle, camera);
-};
+            [this](std::list<View::MuzzleFireAnimation>& list) {
+                for (auto& animation: list) {
+                    animation.render();
+                }
+            });
+    if (render_ref_player)
+        render_fov(angle, camera);
+}

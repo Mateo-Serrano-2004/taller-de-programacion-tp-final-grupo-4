@@ -3,9 +3,8 @@
 
 #include <SDL2pp/Rect.hh>
 
-#include "common/definitions.h"
-
 #include "asset/animation_id.h"
+#include "common/definitions.h"
 
 #include "animation_details.h"
 
@@ -27,12 +26,12 @@ protected:
     virtual void step(uint8_t frames);
 
 public:
-    AnimationIterator(const Model::AnimationDetails& details);
+    explicit AnimationIterator(const Model::AnimationDetails& details);
 
     bool has_ended() const;
 
     virtual ~AnimationIterator() = default;
 };
-};
+};  // namespace Controller
 
-#endif // CLIENT_GAME_ANIMATION_ANIMATION_ITERATOR_H
+#endif  // CLIENT_GAME_ANIMATION_ANIMATION_ITERATOR_H

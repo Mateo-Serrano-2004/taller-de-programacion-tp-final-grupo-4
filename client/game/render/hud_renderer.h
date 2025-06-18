@@ -1,9 +1,9 @@
 #ifndef CLIENT_GAME_RENDER_HUD_RENDERER_H
 #define CLIENT_GAME_RENDER_HUD_RENDERER_H
 
+#include <cstdint>
 #include <list>
 #include <vector>
-#include <cstdint>
 
 #include "common/definitions.h"
 #include "entity/horizontal_pane.h"

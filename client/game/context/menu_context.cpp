@@ -1,6 +1,7 @@
 #include "menu_context.h"
 
 #include <cstdint>
+#include <memory>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/Point.hh>

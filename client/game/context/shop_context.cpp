@@ -1,9 +1,9 @@
 #include "shop_context.h"
 
+#include <cstdint>
 #include <memory>
 #include <string>
 #include <utility>
-#include <cstdint>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/Point.hh>
@@ -36,9 +36,7 @@ void Context::ShopContext::trigger_buttons(Shared<SDL_Event> event) {
     buy_awp.trigger(event);
 }
 
-void Context::ShopContext::render(uint8_t) {
-    background.render();
-}
+void Context::ShopContext::render(uint8_t) { background.render(); }
 
 void Context::ShopContext::dispatch_events() {
     while (SDL_PollEvent(&placeholder)) {

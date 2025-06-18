@@ -1,8 +1,8 @@
 #include "pick_role_context.h"
 
+#include <cstdint>
 #include <memory>
 #include <utility>
-#include <cstdint>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/Point.hh>
@@ -65,7 +65,8 @@ void Context::PickRoleContext::set_buttons_for_tt() {
 }
 
 void Context::PickRoleContext::render(uint8_t) {
-    if (current_team != Model::TeamID::NONE) vertical_pane.render();
+    if (current_team != Model::TeamID::NONE)
+        vertical_pane.render();
 }
 
 void Context::PickRoleContext::dispatch_events() {

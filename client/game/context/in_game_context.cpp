@@ -1,7 +1,8 @@
 #include "in_game_context.h"
 
-#include <functional>
 #include <cstdint>
+#include <functional>
+#include <memory>
 
 #include <SDL2/SDL.h>
 

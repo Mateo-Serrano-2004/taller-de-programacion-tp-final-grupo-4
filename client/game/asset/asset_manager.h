@@ -5,15 +5,14 @@
 #include <string>
 #include <utility>
 
+#include "animation/animation_details.h"
 #include "asset/texture_id.h"
 #include "common/asset_addresser.h"
 
-#include "animation/animation_details.h"
-
-#include "asset_generator.h"
-#include "texture_id.h"
 #include "animation_id.h"
+#include "asset_generator.h"
 #include "font_id.h"
+#include "texture_id.h"
 
 namespace SDL2pp {
 class Renderer;

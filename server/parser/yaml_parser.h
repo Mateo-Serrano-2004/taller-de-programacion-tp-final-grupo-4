@@ -68,16 +68,18 @@ struct DisplayConfig {
 
 struct ConfigData {
     friend class YamlParser;
-    private:
-        ConfigData() = default;
-        ConfigData(const ConfigData&) = delete;
-        ConfigData& operator=(const ConfigData&) = delete;
-    public:
-        GameConfig game;
-        PlayerConfig player;
-        std::map<std::string, WeaponConfig> weapons;
-        FovConfig fov;
-        DisplayConfig display;
+
+public:
+    GameConfig game{};
+    PlayerConfig player{};
+    std::map<std::string, WeaponConfig> weapons;
+    FovConfig fov{};
+    DisplayConfig display{};
+
+private:
+    ConfigData() = default;
+    ConfigData(const ConfigData&) = delete;
+    ConfigData& operator=(const ConfigData&) = delete;
 };
 
 class YamlParser {

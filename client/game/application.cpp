@@ -1,7 +1,7 @@
 #include "application.h"
 
-#include <exception>
 #include <cstdint>
+#include <exception>
 #include <iostream>
 
 #include <SDL2/SDL.h>

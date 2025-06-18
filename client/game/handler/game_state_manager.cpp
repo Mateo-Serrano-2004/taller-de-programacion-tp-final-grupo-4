@@ -1,12 +1,12 @@
 #include "game_state_manager.h"
 
-#include <functional>
 #include <algorithm>
+#include <functional>
+#include <list>
+#include <map>
 #include <memory>
 #include <mutex>
 #include <utility>
-#include <map>
-#include <list>
 
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Renderer.hh>
@@ -31,7 +31,8 @@ Shared<View::RenderedPlayer> Controller::GameStateManager::get_reference_player_
     return game_state->get_player_by_id(reference_player_id);
 }
 
-Shared<View::RenderedPlayer> Controller::GameStateManager::get_player_by_id_unsafe(short_id_t player_id) {
+Shared<View::RenderedPlayer> Controller::GameStateManager::get_player_by_id_unsafe(
+        short_id_t player_id) {
     return game_state->get_player_by_id(player_id);
 }
 
@@ -49,15 +50,10 @@ void Controller::GameStateManager::call_function_on_players(
 }
 
 void Controller::GameStateManager::call_function_on_pending_fires(
-    const std::function<void(std::list<View::MuzzleFireAnimation>&)>& func
-) {
+        const std::function<void(std::list<View::MuzzleFireAnimation>&)>& func) {
     std::lock_guard<std::mutex> lock(mutex);
-    std::remove_if(
-        fire_animations.begin(), fire_animations.end(),
-        [](View::MuzzleFireAnimation& animation) {
-            return animation.has_ended();
-        }
-    );
+    fire_animations.remove_if(
+            [](View::MuzzleFireAnimation& animation) { return animation.has_ended(); });
     func(fire_animations);
 }
 
@@ -95,10 +91,7 @@ void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
         new_game_state->register_player(player);
 
         if (player->is_shooting()) {
-            fire_animations.emplace_back(
-                controller,
-                player->get_id()
-            );
+            fire_animations.emplace_back(controller, player->get_id());
         }
     }
 

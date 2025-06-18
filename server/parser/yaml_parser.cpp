@@ -114,6 +114,4 @@ TileType YamlParser::stringToTileType(const std::string& typeStr, const std::str
     return NOT_COLLIDABLE;
 }
 
-const ConfigData& YamlParser::getConfigData() {
-    return gameConfig;
-}
+const ConfigData& YamlParser::getConfigData() { return gameConfig; }

@@ -1,8 +1,8 @@
 #ifndef CLIENT_GAME_CONTEXT_SHOP_CONTEXT_H
 #define CLIENT_GAME_CONTEXT_SHOP_CONTEXT_H
 
-#include <string>
 #include <cstdint>
+#include <string>
 
 #include <SDL2/SDL.h>
 

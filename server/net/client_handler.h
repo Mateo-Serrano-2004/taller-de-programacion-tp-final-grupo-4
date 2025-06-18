@@ -7,6 +7,7 @@
 #include <memory>
 #include <string>
 
+#include "common/DTO/dto_variant.h"
 #include "common/definitions.h"
 #include "common/queue.h"
 #include "common/thread.h"
@@ -21,11 +22,12 @@ class ClientHandler: public Thread {
 private:
     uint8_t player_id = 0;
     std::atomic<bool> is_alive = true;
-    GameQueue* game_queue = nullptr;
-    Unique<ClientHandlerSender> sender = nullptr;
-    std::string username;
     ServerProtocol protocol;
     GameManager& game_manager;
+    Unique<ClientHandlerSender> sender;
+    Queue<DTO::DTOVariant>& sender_queue;
+    GameQueue* game_queue = nullptr;
+    std::string username;
 
     void handle_create_game(const CreateGameEvent& event);
     void handle_join_game(const JoinGameEvent& event);
