@@ -2,6 +2,7 @@
 #define CLIENT_GAME_TEXTURE_TEXTURE_GENERATOR_H
 
 #include <string>
+#include <unordered_map>
 
 #include <SDL2/SDL.h>
 
@@ -15,6 +16,10 @@ class Color;
 class Font;
 };
 
+namespace DTO {
+struct MapDTO;
+};
+
 namespace View {
 class AssetGenerator {
 protected:
@@ -25,6 +30,13 @@ protected:
     void draw_disk(int size, int radius);
     void draw_triangle(int half_size, int angle);
 
+    std::unordered_map<std::string, Shared<SDL2pp::Texture>> load_tiles(const DTO::MapDTO& map_dto);
+    void insert_tiles(
+        Shared<SDL2pp::Texture> texture,
+        const DTO::MapDTO& map_dto,
+        std::unordered_map<std::string, Shared<SDL2pp::Texture>>& tiles
+    );
+
 public:
     AssetGenerator(Shared<SDL2pp::Renderer> renderer);
 
@@ -34,6 +46,7 @@ public:
     Shared<SDL2pp::Texture> generate_fov();
     Shared<SDL2pp::Texture> generate_plain_texture(const SDL2pp::Point& size, const SDL2pp::Color& color);
     Shared<SDL2pp::Texture> generate_plain_texture(const SDL2pp::Color& color);
+    Shared<SDL2pp::Texture> generate_map(const DTO::MapDTO& map_dto);
     Shared<SDL2pp::Font> generate_font(const std::string& path, uint8_t size);
 
     ~AssetGenerator() = default;

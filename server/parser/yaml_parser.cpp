@@ -1,5 +1,6 @@
 #include "yaml_parser.h"
 
+#include <iostream>
 #include <yaml-cpp/yaml.h>
 
 YamlParser::YamlParser(const std::string& yamlGameConfigPath) {

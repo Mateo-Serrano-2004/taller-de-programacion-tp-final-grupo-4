@@ -18,6 +18,7 @@
 #include "event/end_of_game_event.h"
 #include "event/update_player_id_event.h"
 #include "event/update_role_event.h"
+#include "event/generate_map_event.h"
 
 void Controller::Receiver::update_game_state(DTO::GameStateDTO&& dto) {
     if (dto.ended) {
@@ -44,6 +45,12 @@ void Controller::Receiver::update_current_team(DTO::TeamIDDTO&& dto) {
     } catch (const std::exception&) {}
 }
 
+void Controller::Receiver::generate_map(DTO::MapDTO&& dto) {
+    try {
+        controller.lock()->push_event(make_shared<Model::GenerateMapEvent>(std::move(dto)));
+    } catch (const std::exception&) {}
+}
+
 void Controller::Receiver::receive_server_info() {
     auto variant = protocol->receive_variant();
     std::visit(
@@ -51,10 +58,8 @@ void Controller::Receiver::receive_server_info() {
             [this](DTO::GameStateDTO&& d) { update_game_state(std::move(d)); },
             [this](DTO::PlayerIDDTO&& d) { update_player_id(std::move(d)); },
             [this](DTO::TeamIDDTO&& d) { update_current_team(std::move(d)); },
+            [this](DTO::MapDTO&& d) { generate_map(std::move(d)); },
             // TODO: Fix this
-            [](DTO::MapDTO&&) {
-                std::cout << "\n\nRECEIVED MAP\n\n";
-            },
             [](DTO::MapNameListDTO&&) {},
             [](DTO::GameListDTO&&) {}
         },

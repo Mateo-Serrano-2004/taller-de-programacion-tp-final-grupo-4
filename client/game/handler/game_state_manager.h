@@ -14,6 +14,10 @@
 
 #include "render/camera.h"
 
+namespace SDL2pp {
+class Texture;
+};
+
 namespace DTO {
 class GameStateDTO;
 };
@@ -34,6 +38,7 @@ class GameStateManager {
 
 private:
     std::mutex mutex;
+    Shared<SDL2pp::Texture> map;
     Maybe<short_id_t> reference_player_id;
     Shared<Model::GameState> game_state;
     View::Camera camera;
@@ -51,8 +56,10 @@ public:
 
     uint16_t get_time_left();
     View::Camera get_camera();
+    Shared<SDL2pp::Texture> get_map();
 
     void update_player_id(short_id_t new_id);
+    void update_map(Shared<SDL2pp::Texture> new_map);
     void update(DTO::GameStateDTO&& game_state_dto);
 
     ~GameStateManager() = default;

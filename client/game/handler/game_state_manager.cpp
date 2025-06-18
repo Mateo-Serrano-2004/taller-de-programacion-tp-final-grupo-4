@@ -6,6 +6,8 @@
 #include <utility>
 #include <map>
 
+#include <SDL2pp/Texture.hh>
+
 #include <SDL2pp/Renderer.hh>
 #include <SDL2pp/Point.hh>
 
@@ -18,7 +20,8 @@
 #include "model/rendered_player.h"
 
 Controller::GameStateManager::GameStateManager(Weak<Controller::GameController> controller)
-: reference_player_id(std::nullopt),
+: map(nullptr),
+  reference_player_id(std::nullopt),
   game_state(make_shared<Model::GameState>()),
   controller(controller) {
   SDL2pp::Point viewport_size = controller.lock()->get_renderer()->GetLogicalSize();
@@ -49,11 +52,21 @@ uint16_t Controller::GameStateManager::get_time_left() {
 View::Camera Controller::GameStateManager::get_camera() {
     std::lock_guard<std::mutex> lock(mutex);
     return camera;
+}
+
+Shared<SDL2pp::Texture> Controller::GameStateManager::get_map() {
+    std::lock_guard<std::mutex> lock(mutex);
+    return map;
 };
 
 void Controller::GameStateManager::update_player_id(short_id_t new_id) {
     std::lock_guard<std::mutex> lock(mutex);
     reference_player_id = new_id;
+}
+
+void Controller::GameStateManager::update_map(Shared<SDL2pp::Texture> new_map) {
+    std::lock_guard<std::mutex> lock(mutex);
+    map = new_map;
 }
 
 void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {

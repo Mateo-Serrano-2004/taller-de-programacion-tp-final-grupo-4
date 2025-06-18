@@ -9,10 +9,12 @@
 #include "common/DTO/game_state_dto.h"
 #include "common/DTO/player_id_dto.h"
 #include "common/DTO/team_id_dto.h"
+#include "common/DTO/map_dto.h"
 
 namespace Net {
 class ClientProtocol;
 };
+
 
 namespace Controller {
 class GameController;
@@ -31,6 +33,7 @@ protected:
     void update_game_state(DTO::GameStateDTO&& dto);
     void update_player_id(DTO::PlayerIDDTO&& dto);
     void update_current_team(DTO::TeamIDDTO&& dto);
+    void generate_map(DTO::MapDTO&& dto);
 
     void receive_server_info();
 

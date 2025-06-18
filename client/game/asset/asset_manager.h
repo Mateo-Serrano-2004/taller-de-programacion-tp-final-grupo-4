@@ -20,6 +20,10 @@ class Font;
 class Color;
 };
 
+namespace DTO {
+struct MapDTO;
+};
+
 namespace Model {
 class AssetManager {
 private:
@@ -29,6 +33,7 @@ private:
     std::map<TextureID, Shared<SDL2pp::Texture>> textures;
     std::map<color_tuple, Shared<SDL2pp::Texture>> backgrounds;
     std::map<font_tuple, Shared<SDL2pp::Font>> fonts;
+    Shared<SDL2pp::Texture> current_map;
 
 public:
     AssetManager(Shared<SDL2pp::Renderer> renderer);
@@ -40,6 +45,8 @@ public:
     Shared<SDL2pp::Texture> generate_background(const SDL2pp::Color& color);
 
     Shared<SDL2pp::Font> generate_font(const std::string& name, uint8_t size);
+
+    Shared<SDL2pp::Texture> generate_map(const DTO::MapDTO& map_dto);
 
     Shared<SDL2pp::Texture> get_texture(TextureID id);
 

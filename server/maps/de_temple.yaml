@@ -1,0 +1,4403 @@
+map:
+  minWidth: 56
+  maxWidth: 89
+  minHeight: 51
+  maxHeight: 88
+
+tiles:
+  - x: 86
+    y: 59
+    name: concrete_wall.png
+    type: Walls
+  - x: 80
+    y: 55
+    name: concrete_wall.png
+    type: Walls
+  - x: 82
+    y: 55
+    name: concrete_wall.png
+    type: Walls
+  - x: 84
+    y: 55
+    name: concrete_wall.png
+    type: Walls
+  - x: 86
+    y: 61
+    name: concrete_wall.png
+    type: Walls
+  - x: 86
+    y: 57
+    name: concrete_wall.png
+    type: Walls
+  - x: 86
+    y: 55
+    name: concrete_wall.png
+    type: Walls
+  - x: 73
+    y: 75
+    name: concrete_wall.png
+    type: Walls
+  - x: 77
+    y: 75
+    name: concrete_wall.png
+    type: Walls
+  - x: 84
+    y: 79
+    name: concrete_wall.png
+    type: Walls
+  - x: 80
+    y: 82
+    name: concrete_wall.png
+    type: Walls
+  - x: 74
+    y: 84
+    name: concrete_wall.png
+    type: Walls
+  - x: 71
+    y: 84
+    name: concrete_wall.png
+    type: Walls
+  - x: 59
+    y: 84
+    name: concrete_wall.png
+    type: Walls
+  - x: 62
+    y: 84
+    name: concrete_wall.png
+    type: Walls
+  - x: 65
+    y: 84
+    name: concrete_wall.png
+    type: Walls
+  - x: 68
+    y: 84
+    name: concrete_wall.png
+    type: Walls
+  - x: 68
+    y: 81
+    name: concrete_wall.png
+    type: Walls
+  - x: 63
+    y: 81
+    name: concrete_wall.png
+    type: Walls
+  - x: 78
+    y: 66
+    name: concrete_wall.png
+    type: Walls
+  - x: 76
+    y: 66
+    name: concrete_wall.png
+    type: Walls
+  - x: 74
+    y: 66
+    name: concrete_wall.png
+    type: Walls
+  - x: 72
+    y: 66
+    name: concrete_wall.png
+    type: Walls
+  - x: 66
+    y: 66
+    name: concrete_wall.png
+    type: Walls
+  - x: 66
+    y: 64
+    name: concrete_wall.png
+    type: Walls
+  - x: 66
+    y: 62
+    name: concrete_wall.png
+    type: Walls
+  - x: 66
+    y: 60
+    name: concrete_wall.png
+    type: Walls
+  - x: 76
+    y: 54
+    name: concrete_wall.png
+    type: Walls
+  - x: 73
+    y: 54
+    name: concrete_wall.png
+    type: Walls
+  - x: 70
+    y: 54
+    name: concrete_wall.png
+    type: Walls
+  - x: 67
+    y: 54
+    name: concrete_wall.png
+    type: Walls
+  - x: 64
+    y: 54
+    name: concrete_wall.png
+    type: Walls
+  - x: 64
+    y: 59
+    name: concrete_wall.png
+    type: Walls
+  - x: 62
+    y: 59
+    name: concrete_wall.png
+    type: Walls
+  - x: 60
+    y: 59
+    name: concrete_wall.png
+    type: Walls
+  - x: 58
+    y: 59
+    name: concrete_wall.png
+    type: Walls
+  - x: 61
+    y: 54
+    name: concrete_wall.png
+    type: Walls
+  - x: 58
+    y: 54
+    name: concrete_wall.png
+    type: Walls
+  - x: 56
+    y: 72
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 56
+    y: 71
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 56
+    y: 70
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 56
+    y: 69
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 56
+    y: 68
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 56
+    y: 67
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 56
+    y: 66
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 56
+    y: 65
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 56
+    y: 64
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 63
+    y: 69
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 62
+    y: 69
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 61
+    y: 75
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 61
+    y: 74
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 61
+    y: 73
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 61
+    y: 72
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 61
+    y: 71
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 61
+    y: 70
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 61
+    y: 69
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 61
+    y: 68
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 57
+    y: 64
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 57
+    y: 63
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 57
+    y: 62
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 57
+    y: 61
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 57
+    y: 60
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 57
+    y: 59
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 57
+    y: 58
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 57
+    y: 57
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 57
+    y: 56
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 57
+    y: 55
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 57
+    y: 54
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 57
+    y: 53
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 57
+    y: 52
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 57
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 58
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 59
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 60
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 61
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 62
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 63
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 64
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 65
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 66
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 67
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 68
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 69
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 70
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 71
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 72
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 73
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 74
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 75
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 76
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 77
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 78
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 79
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 80
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 81
+    y: 51
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 79
+    y: 54
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 80
+    y: 54
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 88
+    y: 63
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 89
+    y: 63
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 89
+    y: 62
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 89
+    y: 61
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 89
+    y: 60
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 89
+    y: 59
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 89
+    y: 58
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 89
+    y: 57
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 89
+    y: 56
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 89
+    y: 55
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 89
+    y: 54
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 89
+    y: 53
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 88
+    y: 53
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 89
+    y: 52
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 88
+    y: 52
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 87
+    y: 52
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 86
+    y: 52
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 85
+    y: 52
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 84
+    y: 52
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 83
+    y: 52
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 82
+    y: 52
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 81
+    y: 52
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 80
+    y: 52
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 81
+    y: 79
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 80
+    y: 79
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 68
+    y: 76
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 68
+    y: 77
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 68
+    y: 78
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 68
+    y: 79
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 68
+    y: 80
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 67
+    y: 80
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 66
+    y: 80
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 65
+    y: 80
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 64
+    y: 80
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 63
+    y: 80
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 63
+    y: 79
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 63
+    y: 78
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 63
+    y: 77
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 63
+    y: 76
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 62
+    y: 76
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 61
+    y: 76
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 56
+    y: 86
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 56
+    y: 85
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 56
+    y: 84
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 56
+    y: 83
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 56
+    y: 82
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 56
+    y: 81
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 56
+    y: 80
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 56
+    y: 79
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 56
+    y: 78
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 56
+    y: 77
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 56
+    y: 76
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 56
+    y: 75
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 56
+    y: 74
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 56
+    y: 73
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 56
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 57
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 58
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 59
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 60
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 61
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 62
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 63
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 64
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 65
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 66
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 67
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 68
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 69
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 70
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 71
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 72
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 73
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 74
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 75
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 76
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 77
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 78
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 78
+    y: 86
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 78
+    y: 85
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 77
+    y: 84
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 78
+    y: 84
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 79
+    y: 84
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 80
+    y: 84
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 80
+    y: 85
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 80
+    y: 86
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 80
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 80
+    y: 88
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 81
+    y: 88
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 82
+    y: 88
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 83
+    y: 88
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 84
+    y: 88
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 85
+    y: 88
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 86
+    y: 88
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 86
+    y: 87
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 86
+    y: 86
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 86
+    y: 85
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 86
+    y: 84
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 86
+    y: 83
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 86
+    y: 82
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 86
+    y: 81
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 86
+    y: 80
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 86
+    y: 79
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 87
+    y: 79
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 87
+    y: 78
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 87
+    y: 77
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 87
+    y: 76
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 87
+    y: 75
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 87
+    y: 74
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 87
+    y: 73
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 87
+    y: 72
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 87
+    y: 71
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 87
+    y: 70
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 87
+    y: 69
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 87
+    y: 68
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 87
+    y: 67
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 87
+    y: 66
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 87
+    y: 65
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 87
+    y: 64
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 87
+    y: 63
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 86
+    y: 63
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 71
+    y: 64
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 69
+    y: 67
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 70
+    y: 67
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 70
+    y: 66
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 70
+    y: 65
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 70
+    y: 64
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 70
+    y: 63
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 70
+    y: 62
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 70
+    y: 61
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 69
+    y: 61
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 69
+    y: 60
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 65
+    y: 58
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 65
+    y: 59
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 66
+    y: 59
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 67
+    y: 59
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 68
+    y: 59
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 69
+    y: 59
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 70
+    y: 59
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 71
+    y: 59
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 72
+    y: 59
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 73
+    y: 59
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 74
+    y: 59
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 75
+    y: 59
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 76
+    y: 59
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 77
+    y: 59
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 78
+    y: 59
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 79
+    y: 58
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 79
+    y: 59
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 79
+    y: 60
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 79
+    y: 61
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 79
+    y: 62
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 80
+    y: 63
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 81
+    y: 63
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 82
+    y: 63
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 83
+    y: 63
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 82
+    y: 64
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 82
+    y: 65
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 82
+    y: 66
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 82
+    y: 67
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 82
+    y: 68
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 82
+    y: 69
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 82
+    y: 70
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 82
+    y: 71
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 82
+    y: 72
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 82
+    y: 73
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 82
+    y: 74
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 81
+    y: 74
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 75
+    y: 72
+    name: wood.png
+    type: Backgrounds
+  - x: 75
+    y: 73
+    name: wood.png
+    type: Backgrounds
+  - x: 68
+    y: 75
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 68
+    y: 74
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 68
+    y: 73
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 69
+    y: 73
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 63
+    y: 70
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 64
+    y: 70
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 65
+    y: 70
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 66
+    y: 70
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 67
+    y: 70
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 68
+    y: 70
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 69
+    y: 70
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 69
+    y: 69
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 70
+    y: 69
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 70
+    y: 70
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 70
+    y: 71
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 70
+    y: 72
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 70
+    y: 73
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 71
+    y: 72
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 72
+    y: 72
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 73
+    y: 72
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 74
+    y: 72
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 74
+    y: 73
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 74
+    y: 74
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 73
+    y: 74
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 77
+    y: 74
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 76
+    y: 74
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 76
+    y: 73
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 76
+    y: 72
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 77
+    y: 72
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 78
+    y: 72
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 79
+    y: 72
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 80
+    y: 74
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 80
+    y: 73
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 80
+    y: 72
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 80
+    y: 71
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 80
+    y: 70
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 80
+    y: 69
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 80
+    y: 68
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 80
+    y: 67
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 80
+    y: 66
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 80
+    y: 65
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 80
+    y: 64
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 79
+    y: 64
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 79
+    y: 63
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 78
+    y: 63
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 77
+    y: 63
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 76
+    y: 63
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 75
+    y: 63
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 74
+    y: 63
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 73
+    y: 63
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 72
+    y: 63
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 71
+    y: 63
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 81
+    y: 60
+    name: ct_spawn.png
+    type: Spawns
+  - x: 85
+    y: 60
+    name: ct_spawn.png
+    type: Spawns
+  - x: 85
+    y: 56
+    name: ct_spawn.png
+    type: Spawns
+  - x: 81
+    y: 58
+    name: ct_spawn.png
+    type: Spawns
+  - x: 81
+    y: 56
+    name: ct_spawn.png
+    type: Spawns
+  - x: 83
+    y: 59
+    name: site_B.png
+    type: Sites
+  - x: 85
+    y: 63
+    name: dust.png
+    type: Backgrounds
+  - x: 84
+    y: 63
+    name: dust.png
+    type: Backgrounds
+  - x: 86
+    y: 60
+    name: dust.png
+    type: Backgrounds
+  - x: 85
+    y: 59
+    name: dust.png
+    type: Backgrounds
+  - x: 85
+    y: 58
+    name: dust.png
+    type: Backgrounds
+  - x: 84
+    y: 59
+    name: dust.png
+    type: Backgrounds
+  - x: 84
+    y: 60
+    name: dust.png
+    type: Backgrounds
+  - x: 83
+    y: 60
+    name: dust.png
+    type: Backgrounds
+  - x: 83
+    y: 58
+    name: dust.png
+    type: Backgrounds
+  - x: 82
+    y: 60
+    name: dust.png
+    type: Backgrounds
+  - x: 82
+    y: 59
+    name: dust.png
+    type: Backgrounds
+  - x: 82
+    y: 58
+    name: dust.png
+    type: Backgrounds
+  - x: 84
+    y: 58
+    name: dust.png
+    type: Backgrounds
+  - x: 84
+    y: 57
+    name: dust.png
+    type: Backgrounds
+  - x: 85
+    y: 57
+    name: dust.png
+    type: Backgrounds
+  - x: 86
+    y: 56
+    name: dust.png
+    type: Backgrounds
+  - x: 84
+    y: 56
+    name: dust.png
+    type: Backgrounds
+  - x: 83
+    y: 57
+    name: dust.png
+    type: Backgrounds
+  - x: 83
+    y: 56
+    name: dust.png
+    type: Backgrounds
+  - x: 83
+    y: 55
+    name: dust.png
+    type: Backgrounds
+  - x: 82
+    y: 56
+    name: dust.png
+    type: Backgrounds
+  - x: 82
+    y: 57
+    name: dust.png
+    type: Backgrounds
+  - x: 80
+    y: 56
+    name: dust.png
+    type: Backgrounds
+  - x: 80
+    y: 57
+    name: dust.png
+    type: Backgrounds
+  - x: 80
+    y: 58
+    name: dust.png
+    type: Backgrounds
+  - x: 81
+    y: 57
+    name: dust.png
+    type: Backgrounds
+  - x: 81
+    y: 59
+    name: dust.png
+    type: Backgrounds
+  - x: 80
+    y: 59
+    name: dust.png
+    type: Backgrounds
+  - x: 80
+    y: 60
+    name: dust.png
+    type: Backgrounds
+  - x: 80
+    y: 61
+    name: dust.png
+    type: Backgrounds
+  - x: 81
+    y: 61
+    name: dust.png
+    type: Backgrounds
+  - x: 82
+    y: 61
+    name: dust.png
+    type: Backgrounds
+  - x: 83
+    y: 61
+    name: dust.png
+    type: Backgrounds
+  - x: 84
+    y: 61
+    name: dust.png
+    type: Backgrounds
+  - x: 85
+    y: 61
+    name: dust.png
+    type: Backgrounds
+  - x: 85
+    y: 62
+    name: dust.png
+    type: Backgrounds
+  - x: 84
+    y: 62
+    name: dust.png
+    type: Backgrounds
+  - x: 83
+    y: 62
+    name: dust.png
+    type: Backgrounds
+  - x: 82
+    y: 62
+    name: dust.png
+    type: Backgrounds
+  - x: 81
+    y: 62
+    name: dust.png
+    type: Backgrounds
+  - x: 80
+    y: 62
+    name: dust.png
+    type: Backgrounds
+  - x: 79
+    y: 57
+    name: aztec.png
+    type: Backgrounds
+  - x: 79
+    y: 56
+    name: aztec.png
+    type: Backgrounds
+  - x: 79
+    y: 55
+    name: aztec.png
+    type: Backgrounds
+  - x: 78
+    y: 56
+    name: aztec.png
+    type: Backgrounds
+  - x: 78
+    y: 57
+    name: aztec.png
+    type: Backgrounds
+  - x: 78
+    y: 55
+    name: aztec.png
+    type: Backgrounds
+  - x: 78
+    y: 54
+    name: aztec.png
+    type: Backgrounds
+  - x: 77
+    y: 54
+    name: aztec.png
+    type: Backgrounds
+  - x: 77
+    y: 55
+    name: aztec.png
+    type: Backgrounds
+  - x: 77
+    y: 56
+    name: aztec.png
+    type: Backgrounds
+  - x: 77
+    y: 57
+    name: aztec.png
+    type: Backgrounds
+  - x: 76
+    y: 57
+    name: aztec.png
+    type: Backgrounds
+  - x: 76
+    y: 56
+    name: aztec.png
+    type: Backgrounds
+  - x: 75
+    y: 56
+    name: aztec.png
+    type: Backgrounds
+  - x: 75
+    y: 55
+    name: aztec.png
+    type: Backgrounds
+  - x: 75
+    y: 54
+    name: aztec.png
+    type: Backgrounds
+  - x: 76
+    y: 55
+    name: aztec.png
+    type: Backgrounds
+  - x: 74
+    y: 56
+    name: aztec.png
+    type: Backgrounds
+  - x: 74
+    y: 55
+    name: aztec.png
+    type: Backgrounds
+  - x: 74
+    y: 54
+    name: aztec.png
+    type: Backgrounds
+  - x: 73
+    y: 55
+    name: aztec.png
+    type: Backgrounds
+  - x: 72
+    y: 54
+    name: aztec.png
+    type: Backgrounds
+  - x: 71
+    y: 54
+    name: aztec.png
+    type: Backgrounds
+  - x: 71
+    y: 55
+    name: aztec.png
+    type: Backgrounds
+  - x: 71
+    y: 56
+    name: aztec.png
+    type: Backgrounds
+  - x: 71
+    y: 57
+    name: aztec.png
+    type: Backgrounds
+  - x: 70
+    y: 57
+    name: aztec.png
+    type: Backgrounds
+  - x: 70
+    y: 56
+    name: aztec.png
+    type: Backgrounds
+  - x: 72
+    y: 56
+    name: aztec.png
+    type: Backgrounds
+  - x: 72
+    y: 57
+    name: aztec.png
+    type: Backgrounds
+  - x: 69
+    y: 56
+    name: aztec.png
+    type: Backgrounds
+  - x: 69
+    y: 55
+    name: aztec.png
+    type: Backgrounds
+  - x: 70
+    y: 55
+    name: aztec.png
+    type: Backgrounds
+  - x: 72
+    y: 55
+    name: aztec.png
+    type: Backgrounds
+  - x: 73
+    y: 56
+    name: aztec.png
+    type: Backgrounds
+  - x: 73
+    y: 57
+    name: aztec.png
+    type: Backgrounds
+  - x: 74
+    y: 57
+    name: aztec.png
+    type: Backgrounds
+  - x: 74
+    y: 58
+    name: aztec.png
+    type: Backgrounds
+  - x: 75
+    y: 58
+    name: aztec.png
+    type: Backgrounds
+  - x: 76
+    y: 58
+    name: aztec.png
+    type: Backgrounds
+  - x: 77
+    y: 58
+    name: aztec.png
+    type: Backgrounds
+  - x: 78
+    y: 58
+    name: aztec.png
+    type: Backgrounds
+  - x: 75
+    y: 57
+    name: aztec.png
+    type: Backgrounds
+  - x: 73
+    y: 58
+    name: aztec.png
+    type: Backgrounds
+  - x: 72
+    y: 58
+    name: aztec.png
+    type: Backgrounds
+  - x: 71
+    y: 58
+    name: aztec.png
+    type: Backgrounds
+  - x: 70
+    y: 58
+    name: aztec.png
+    type: Backgrounds
+  - x: 69
+    y: 58
+    name: aztec.png
+    type: Backgrounds
+  - x: 69
+    y: 57
+    name: aztec.png
+    type: Backgrounds
+  - x: 68
+    y: 57
+    name: aztec.png
+    type: Backgrounds
+  - x: 68
+    y: 56
+    name: aztec.png
+    type: Backgrounds
+  - x: 68
+    y: 58
+    name: aztec.png
+    type: Backgrounds
+  - x: 67
+    y: 58
+    name: aztec.png
+    type: Backgrounds
+  - x: 67
+    y: 57
+    name: aztec.png
+    type: Backgrounds
+  - x: 67
+    y: 56
+    name: aztec.png
+    type: Backgrounds
+  - x: 67
+    y: 55
+    name: aztec.png
+    type: Backgrounds
+  - x: 68
+    y: 55
+    name: aztec.png
+    type: Backgrounds
+  - x: 69
+    y: 54
+    name: aztec.png
+    type: Backgrounds
+  - x: 68
+    y: 54
+    name: aztec.png
+    type: Backgrounds
+  - x: 66
+    y: 58
+    name: aztec.png
+    type: Backgrounds
+  - x: 66
+    y: 57
+    name: aztec.png
+    type: Backgrounds
+  - x: 65
+    y: 57
+    name: aztec.png
+    type: Backgrounds
+  - x: 65
+    y: 56
+    name: aztec.png
+    type: Backgrounds
+  - x: 66
+    y: 56
+    name: aztec.png
+    type: Backgrounds
+  - x: 66
+    y: 55
+    name: aztec.png
+    type: Backgrounds
+  - x: 65
+    y: 55
+    name: aztec.png
+    type: Backgrounds
+  - x: 65
+    y: 54
+    name: aztec.png
+    type: Backgrounds
+  - x: 66
+    y: 54
+    name: aztec.png
+    type: Backgrounds
+  - x: 64
+    y: 55
+    name: aztec.png
+    type: Backgrounds
+  - x: 64
+    y: 56
+    name: aztec.png
+    type: Backgrounds
+  - x: 64
+    y: 57
+    name: aztec.png
+    type: Backgrounds
+  - x: 64
+    y: 58
+    name: aztec.png
+    type: Backgrounds
+  - x: 63
+    y: 59
+    name: aztec.png
+    type: Backgrounds
+  - x: 63
+    y: 58
+    name: aztec.png
+    type: Backgrounds
+  - x: 62
+    y: 58
+    name: aztec.png
+    type: Backgrounds
+  - x: 62
+    y: 57
+    name: aztec.png
+    type: Backgrounds
+  - x: 63
+    y: 57
+    name: aztec.png
+    type: Backgrounds
+  - x: 63
+    y: 56
+    name: aztec.png
+    type: Backgrounds
+  - x: 62
+    y: 56
+    name: aztec.png
+    type: Backgrounds
+  - x: 62
+    y: 55
+    name: aztec.png
+    type: Backgrounds
+  - x: 63
+    y: 55
+    name: aztec.png
+    type: Backgrounds
+  - x: 63
+    y: 54
+    name: aztec.png
+    type: Backgrounds
+  - x: 62
+    y: 54
+    name: aztec.png
+    type: Backgrounds
+  - x: 60
+    y: 58
+    name: aztec.png
+    type: Backgrounds
+  - x: 60
+    y: 57
+    name: aztec.png
+    type: Backgrounds
+  - x: 60
+    y: 56
+    name: aztec.png
+    type: Backgrounds
+  - x: 60
+    y: 55
+    name: aztec.png
+    type: Backgrounds
+  - x: 61
+    y: 55
+    name: aztec.png
+    type: Backgrounds
+  - x: 61
+    y: 56
+    name: aztec.png
+    type: Backgrounds
+  - x: 61
+    y: 57
+    name: aztec.png
+    type: Backgrounds
+  - x: 61
+    y: 58
+    name: aztec.png
+    type: Backgrounds
+  - x: 61
+    y: 59
+    name: aztec.png
+    type: Backgrounds
+  - x: 59
+    y: 59
+    name: aztec.png
+    type: Backgrounds
+  - x: 58
+    y: 58
+    name: aztec.png
+    type: Backgrounds
+  - x: 58
+    y: 57
+    name: aztec.png
+    type: Backgrounds
+  - x: 59
+    y: 57
+    name: aztec.png
+    type: Backgrounds
+  - x: 59
+    y: 58
+    name: aztec.png
+    type: Backgrounds
+  - x: 59
+    y: 56
+    name: aztec.png
+    type: Backgrounds
+  - x: 58
+    y: 56
+    name: aztec.png
+    type: Backgrounds
+  - x: 58
+    y: 55
+    name: aztec.png
+    type: Backgrounds
+  - x: 59
+    y: 55
+    name: aztec.png
+    type: Backgrounds
+  - x: 60
+    y: 54
+    name: aztec.png
+    type: Backgrounds
+  - x: 59
+    y: 54
+    name: aztec.png
+    type: Backgrounds
+  - x: 73
+    y: 66
+    name: aztec.png
+    type: Backgrounds
+  - x: 77
+    y: 66
+    name: aztec.png
+    type: Backgrounds
+  - x: 72
+    y: 67
+    name: wood.png
+    type: Backgrounds
+  - x: 72
+    y: 68
+    name: wood.png
+    type: Backgrounds
+  - x: 72
+    y: 69
+    name: wood.png
+    type: Backgrounds
+  - x: 72
+    y: 70
+    name: wood.png
+    type: Backgrounds
+  - x: 72
+    y: 71
+    name: wood.png
+    type: Backgrounds
+  - x: 74
+    y: 71
+    name: wood.png
+    type: Backgrounds
+  - x: 74
+    y: 70
+    name: wood.png
+    type: Backgrounds
+  - x: 74
+    y: 69
+    name: wood.png
+    type: Backgrounds
+  - x: 74
+    y: 68
+    name: wood.png
+    type: Backgrounds
+  - x: 74
+    y: 67
+    name: wood.png
+    type: Backgrounds
+  - x: 78
+    y: 71
+    name: wood.png
+    type: Backgrounds
+  - x: 78
+    y: 70
+    name: wood.png
+    type: Backgrounds
+  - x: 78
+    y: 69
+    name: wood.png
+    type: Backgrounds
+  - x: 78
+    y: 68
+    name: wood.png
+    type: Backgrounds
+  - x: 78
+    y: 67
+    name: wood.png
+    type: Backgrounds
+  - x: 76
+    y: 71
+    name: wood.png
+    type: Backgrounds
+  - x: 76
+    y: 70
+    name: wood.png
+    type: Backgrounds
+  - x: 76
+    y: 69
+    name: wood.png
+    type: Backgrounds
+  - x: 76
+    y: 68
+    name: wood.png
+    type: Backgrounds
+  - x: 76
+    y: 67
+    name: wood.png
+    type: Backgrounds
+  - x: 75
+    y: 69
+    name: site_A.png
+    type: Sites
+  - x: 86
+    y: 74
+    name: wood.png
+    type: Backgrounds
+  - x: 85
+    y: 74
+    name: wood.png
+    type: Backgrounds
+  - x: 84
+    y: 74
+    name: wood.png
+    type: Backgrounds
+  - x: 83
+    y: 74
+    name: wood.png
+    type: Backgrounds
+  - x: 86
+    y: 64
+    name: wood.png
+    type: Backgrounds
+  - x: 85
+    y: 64
+    name: wood.png
+    type: Backgrounds
+  - x: 84
+    y: 64
+    name: wood.png
+    type: Backgrounds
+  - x: 83
+    y: 64
+    name: wood.png
+    type: Backgrounds
+  - x: 85
+    y: 65
+    name: wood.png
+    type: Backgrounds
+  - x: 85
+    y: 66
+    name: wood.png
+    type: Backgrounds
+  - x: 85
+    y: 67
+    name: wood.png
+    type: Backgrounds
+  - x: 85
+    y: 68
+    name: wood.png
+    type: Backgrounds
+  - x: 85
+    y: 69
+    name: wood.png
+    type: Backgrounds
+  - x: 85
+    y: 70
+    name: wood.png
+    type: Backgrounds
+  - x: 85
+    y: 71
+    name: wood.png
+    type: Backgrounds
+  - x: 85
+    y: 72
+    name: wood.png
+    type: Backgrounds
+  - x: 85
+    y: 73
+    name: wood.png
+    type: Backgrounds
+  - x: 84
+    y: 73
+    name: wood.png
+    type: Backgrounds
+  - x: 84
+    y: 72
+    name: wood.png
+    type: Backgrounds
+  - x: 84
+    y: 71
+    name: wood.png
+    type: Backgrounds
+  - x: 84
+    y: 70
+    name: wood.png
+    type: Backgrounds
+  - x: 84
+    y: 69
+    name: wood.png
+    type: Backgrounds
+  - x: 84
+    y: 68
+    name: wood.png
+    type: Backgrounds
+  - x: 84
+    y: 67
+    name: wood.png
+    type: Backgrounds
+  - x: 84
+    y: 66
+    name: wood.png
+    type: Backgrounds
+  - x: 84
+    y: 65
+    name: wood.png
+    type: Backgrounds
+  - x: 85
+    y: 79
+    name: wood.png
+    type: Backgrounds
+  - x: 80
+    y: 83
+    name: wood.png
+    type: Backgrounds
+  - x: 76
+    y: 75
+    name: wood.png
+    type: Backgrounds
+  - x: 75
+    y: 75
+    name: wood.png
+    type: Backgrounds
+  - x: 74
+    y: 75
+    name: wood.png
+    type: Backgrounds
+  - x: 75
+    y: 74
+    name: wood.png
+    type: Backgrounds
+  - x: 57
+    y: 78
+    name: tt_spawn.png
+    type: Spawns
+  - x: 61
+    y: 78
+    name: tt_spawn.png
+    type: Spawns
+  - x: 58
+    y: 82
+    name: tt_spawn.png
+    type: Spawns
+  - x: 60
+    y: 80
+    name: tt_spawn.png
+    type: Spawns
+  - x: 57
+    y: 80
+    name: tt_spawn.png
+    type: Spawns
+  - x: 58
+    y: 76
+    name: aztec.png
+    type: Backgrounds
+  - x: 59
+    y: 76
+    name: aztec.png
+    type: Backgrounds
+  - x: 59
+    y: 77
+    name: aztec.png
+    type: Backgrounds
+  - x: 58
+    y: 77
+    name: aztec.png
+    type: Backgrounds
+  - x: 60
+    y: 77
+    name: aztec.png
+    type: Backgrounds
+  - x: 61
+    y: 77
+    name: aztec.png
+    type: Backgrounds
+  - x: 62
+    y: 77
+    name: aztec.png
+    type: Backgrounds
+  - x: 62
+    y: 78
+    name: aztec.png
+    type: Backgrounds
+  - x: 62
+    y: 79
+    name: aztec.png
+    type: Backgrounds
+  - x: 62
+    y: 80
+    name: aztec.png
+    type: Backgrounds
+  - x: 62
+    y: 81
+    name: aztec.png
+    type: Backgrounds
+  - x: 61
+    y: 81
+    name: aztec.png
+    type: Backgrounds
+  - x: 60
+    y: 81
+    name: aztec.png
+    type: Backgrounds
+  - x: 60
+    y: 79
+    name: aztec.png
+    type: Backgrounds
+  - x: 59
+    y: 80
+    name: aztec.png
+    type: Backgrounds
+  - x: 60
+    y: 78
+    name: aztec.png
+    type: Backgrounds
+  - x: 61
+    y: 79
+    name: aztec.png
+    type: Backgrounds
+  - x: 61
+    y: 80
+    name: aztec.png
+    type: Backgrounds
+  - x: 59
+    y: 81
+    name: aztec.png
+    type: Backgrounds
+  - x: 59
+    y: 79
+    name: aztec.png
+    type: Backgrounds
+  - x: 59
+    y: 78
+    name: aztec.png
+    type: Backgrounds
+  - x: 58
+    y: 81
+    name: aztec.png
+    type: Backgrounds
+  - x: 57
+    y: 81
+    name: aztec.png
+    type: Backgrounds
+  - x: 57
+    y: 79
+    name: aztec.png
+    type: Backgrounds
+  - x: 57
+    y: 77
+    name: aztec.png
+    type: Backgrounds
+  - x: 58
+    y: 78
+    name: aztec.png
+    type: Backgrounds
+  - x: 58
+    y: 79
+    name: aztec.png
+    type: Backgrounds
+  - x: 58
+    y: 80
+    name: aztec.png
+    type: Backgrounds
+  - x: 57
+    y: 82
+    name: aztec.png
+    type: Backgrounds
+  - x: 57
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 57
+    y: 84
+    name: aztec.png
+    type: Backgrounds
+  - x: 58
+    y: 84
+    name: aztec.png
+    type: Backgrounds
+  - x: 58
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 59
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 59
+    y: 82
+    name: aztec.png
+    type: Backgrounds
+  - x: 60
+    y: 82
+    name: aztec.png
+    type: Backgrounds
+  - x: 60
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 60
+    y: 84
+    name: aztec.png
+    type: Backgrounds
+  - x: 61
+    y: 84
+    name: aztec.png
+    type: Backgrounds
+  - x: 61
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 61
+    y: 82
+    name: aztec.png
+    type: Backgrounds
+  - x: 67
+    y: 84
+    name: aztec.png
+    type: Backgrounds
+  - x: 66
+    y: 84
+    name: aztec.png
+    type: Backgrounds
+  - x: 66
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 64
+    y: 84
+    name: aztec.png
+    type: Backgrounds
+  - x: 63
+    y: 84
+    name: aztec.png
+    type: Backgrounds
+  - x: 63
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 64
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 64
+    y: 82
+    name: aztec.png
+    type: Backgrounds
+  - x: 64
+    y: 81
+    name: aztec.png
+    type: Backgrounds
+  - x: 65
+    y: 81
+    name: aztec.png
+    type: Backgrounds
+  - x: 66
+    y: 81
+    name: aztec.png
+    type: Backgrounds
+  - x: 67
+    y: 81
+    name: aztec.png
+    type: Backgrounds
+  - x: 66
+    y: 82
+    name: aztec.png
+    type: Backgrounds
+  - x: 67
+    y: 82
+    name: aztec.png
+    type: Backgrounds
+  - x: 67
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 68
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 65
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 62
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 62
+    y: 82
+    name: aztec.png
+    type: Backgrounds
+  - x: 63
+    y: 82
+    name: aztec.png
+    type: Backgrounds
+  - x: 65
+    y: 82
+    name: aztec.png
+    type: Backgrounds
+  - x: 68
+    y: 82
+    name: aztec.png
+    type: Backgrounds
+  - x: 71
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 71
+    y: 82
+    name: aztec.png
+    type: Backgrounds
+  - x: 70
+    y: 82
+    name: aztec.png
+    type: Backgrounds
+  - x: 70
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 70
+    y: 84
+    name: aztec.png
+    type: Backgrounds
+  - x: 69
+    y: 84
+    name: aztec.png
+    type: Backgrounds
+  - x: 69
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 69
+    y: 82
+    name: aztec.png
+    type: Backgrounds
+  - x: 78
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 78
+    y: 82
+    name: aztec.png
+    type: Backgrounds
+  - x: 77
+    y: 82
+    name: aztec.png
+    type: Backgrounds
+  - x: 77
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 76
+    y: 82
+    name: aztec.png
+    type: Backgrounds
+  - x: 76
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 76
+    y: 84
+    name: aztec.png
+    type: Backgrounds
+  - x: 75
+    y: 84
+    name: aztec.png
+    type: Backgrounds
+  - x: 75
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 74
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 74
+    y: 82
+    name: aztec.png
+    type: Backgrounds
+  - x: 75
+    y: 82
+    name: aztec.png
+    type: Backgrounds
+  - x: 73
+    y: 82
+    name: aztec.png
+    type: Backgrounds
+  - x: 73
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 73
+    y: 84
+    name: aztec.png
+    type: Backgrounds
+  - x: 72
+    y: 84
+    name: aztec.png
+    type: Backgrounds
+  - x: 72
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 72
+    y: 82
+    name: aztec.png
+    type: Backgrounds
+  - x: 72
+    y: 81
+    name: aztec.png
+    type: Backgrounds
+  - x: 73
+    y: 81
+    name: aztec.png
+    type: Backgrounds
+  - x: 74
+    y: 81
+    name: aztec.png
+    type: Backgrounds
+  - x: 75
+    y: 81
+    name: aztec.png
+    type: Backgrounds
+  - x: 76
+    y: 81
+    name: aztec.png
+    type: Backgrounds
+  - x: 77
+    y: 81
+    name: aztec.png
+    type: Backgrounds
+  - x: 78
+    y: 81
+    name: aztec.png
+    type: Backgrounds
+  - x: 78
+    y: 80
+    name: aztec.png
+    type: Backgrounds
+  - x: 77
+    y: 80
+    name: aztec.png
+    type: Backgrounds
+  - x: 76
+    y: 80
+    name: aztec.png
+    type: Backgrounds
+  - x: 75
+    y: 80
+    name: aztec.png
+    type: Backgrounds
+  - x: 74
+    y: 80
+    name: aztec.png
+    type: Backgrounds
+  - x: 73
+    y: 80
+    name: aztec.png
+    type: Backgrounds
+  - x: 72
+    y: 80
+    name: aztec.png
+    type: Backgrounds
+  - x: 72
+    y: 79
+    name: aztec.png
+    type: Backgrounds
+  - x: 73
+    y: 79
+    name: aztec.png
+    type: Backgrounds
+  - x: 74
+    y: 79
+    name: aztec.png
+    type: Backgrounds
+  - x: 75
+    y: 79
+    name: aztec.png
+    type: Backgrounds
+  - x: 76
+    y: 79
+    name: aztec.png
+    type: Backgrounds
+  - x: 77
+    y: 79
+    name: aztec.png
+    type: Backgrounds
+  - x: 78
+    y: 79
+    name: aztec.png
+    type: Backgrounds
+  - x: 78
+    y: 78
+    name: aztec.png
+    type: Backgrounds
+  - x: 77
+    y: 78
+    name: aztec.png
+    type: Backgrounds
+  - x: 76
+    y: 78
+    name: aztec.png
+    type: Backgrounds
+  - x: 75
+    y: 78
+    name: aztec.png
+    type: Backgrounds
+  - x: 74
+    y: 78
+    name: aztec.png
+    type: Backgrounds
+  - x: 73
+    y: 78
+    name: aztec.png
+    type: Backgrounds
+  - x: 72
+    y: 78
+    name: aztec.png
+    type: Backgrounds
+  - x: 72
+    y: 77
+    name: aztec.png
+    type: Backgrounds
+  - x: 73
+    y: 77
+    name: aztec.png
+    type: Backgrounds
+  - x: 74
+    y: 77
+    name: aztec.png
+    type: Backgrounds
+  - x: 75
+    y: 77
+    name: aztec.png
+    type: Backgrounds
+  - x: 76
+    y: 77
+    name: aztec.png
+    type: Backgrounds
+  - x: 77
+    y: 77
+    name: aztec.png
+    type: Backgrounds
+  - x: 78
+    y: 77
+    name: aztec.png
+    type: Backgrounds
+  - x: 79
+    y: 77
+    name: aztec.png
+    type: Backgrounds
+  - x: 80
+    y: 77
+    name: aztec.png
+    type: Backgrounds
+  - x: 80
+    y: 78
+    name: aztec.png
+    type: Backgrounds
+  - x: 81
+    y: 78
+    name: aztec.png
+    type: Backgrounds
+  - x: 81
+    y: 77
+    name: aztec.png
+    type: Backgrounds
+  - x: 79
+    y: 78
+    name: aztec.png
+    type: Backgrounds
+  - x: 79
+    y: 79
+    name: aztec.png
+    type: Backgrounds
+  - x: 79
+    y: 80
+    name: aztec.png
+    type: Backgrounds
+  - x: 79
+    y: 81
+    name: aztec.png
+    type: Backgrounds
+  - x: 79
+    y: 82
+    name: aztec.png
+    type: Backgrounds
+  - x: 79
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 85
+    y: 87
+    name: aztec.png
+    type: Backgrounds
+  - x: 84
+    y: 87
+    name: aztec.png
+    type: Backgrounds
+  - x: 83
+    y: 87
+    name: aztec.png
+    type: Backgrounds
+  - x: 82
+    y: 87
+    name: aztec.png
+    type: Backgrounds
+  - x: 81
+    y: 87
+    name: aztec.png
+    type: Backgrounds
+  - x: 81
+    y: 86
+    name: aztec.png
+    type: Backgrounds
+  - x: 81
+    y: 85
+    name: aztec.png
+    type: Backgrounds
+  - x: 81
+    y: 84
+    name: aztec.png
+    type: Backgrounds
+  - x: 81
+    y: 83
+    name: aztec.png
+    type: Backgrounds
+  - x: 81
+    y: 82
+    name: aztec.png
+    type: Backgrounds
+  - x: 81
+    y: 81
+    name: aztec.png
+    type: Backgrounds
+  - x: 81
+    y: 80
+    name: aztec.png
+    type: Backgrounds
+  - x: 82
+    y: 80
+    name: aztec.png
+    type: Backgrounds
+  - x: 83
+    y: 80
+    name: aztec.png
+    type: Backgrounds
+  - x: 84
+    y: 80
+    name: aztec.png
+    type: Backgrounds
+  - x: 85
+    y: 80
+    name: aztec.png
+    type: Backgrounds
+  - x: 85
+    y: 86
+    name: dust.png
+    type: Backgrounds
+  - x: 84
+    y: 86
+    name: dust.png
+    type: Backgrounds
+  - x: 83
+    y: 86
+    name: dust.png
+    type: Backgrounds
+  - x: 82
+    y: 86
+    name: dust.png
+    type: Backgrounds
+  - x: 82
+    y: 85
+    name: dust.png
+    type: Backgrounds
+  - x: 82
+    y: 84
+    name: dust.png
+    type: Backgrounds
+  - x: 82
+    y: 83
+    name: dust.png
+    type: Backgrounds
+  - x: 82
+    y: 82
+    name: dust.png
+    type: Backgrounds
+  - x: 82
+    y: 81
+    name: dust.png
+    type: Backgrounds
+  - x: 83
+    y: 81
+    name: dust.png
+    type: Backgrounds
+  - x: 84
+    y: 81
+    name: dust.png
+    type: Backgrounds
+  - x: 85
+    y: 81
+    name: dust.png
+    type: Backgrounds
+  - x: 85
+    y: 84
+    name: mural_part4.png
+    type: Walls
+  - x: 84
+    y: 84
+    name: mural_part3.png
+    type: Walls
+  - x: 85
+    y: 83
+    name: mural_part2.png
+    type: Walls
+  - x: 84
+    y: 83
+    name: mural_part1.png
+    type: Walls
+  - x: 85
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 84
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 83
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 83
+    y: 84
+    name: water1.png
+    type: Backgrounds
+  - x: 83
+    y: 83
+    name: water1.png
+    type: Backgrounds
+  - x: 83
+    y: 82
+    name: water1.png
+    type: Backgrounds
+  - x: 84
+    y: 82
+    name: water1.png
+    type: Backgrounds
+  - x: 85
+    y: 82
+    name: water1.png
+    type: Backgrounds
+  - x: 80
+    y: 81
+    name: box7.png
+    type: Boxes
+  - x: 80
+    y: 80
+    name: box7.png
+    type: Boxes
+  - x: 83
+    y: 79
+    name: box7.png
+    type: Boxes
+  - x: 82
+    y: 79
+    name: box7.png
+    type: Boxes
+  - x: 85
+    y: 77
+    name: dust.png
+    type: Backgrounds
+  - x: 85
+    y: 76
+    name: dust.png
+    type: Backgrounds
+  - x: 84
+    y: 77
+    name: dust.png
+    type: Backgrounds
+  - x: 84
+    y: 76
+    name: dust.png
+    type: Backgrounds
+  - x: 83
+    y: 77
+    name: dust.png
+    type: Backgrounds
+  - x: 83
+    y: 76
+    name: dust.png
+    type: Backgrounds
+  - x: 83
+    y: 75
+    name: dust.png
+    type: Backgrounds
+  - x: 84
+    y: 75
+    name: dust.png
+    type: Backgrounds
+  - x: 85
+    y: 75
+    name: dust.png
+    type: Backgrounds
+  - x: 86
+    y: 75
+    name: dust.png
+    type: Backgrounds
+  - x: 86
+    y: 76
+    name: dust.png
+    type: Backgrounds
+  - x: 86
+    y: 77
+    name: dust.png
+    type: Backgrounds
+  - x: 86
+    y: 78
+    name: dust.png
+    type: Backgrounds
+  - x: 85
+    y: 78
+    name: dust.png
+    type: Backgrounds
+  - x: 84
+    y: 78
+    name: dust.png
+    type: Backgrounds
+  - x: 83
+    y: 78
+    name: dust.png
+    type: Backgrounds
+  - x: 82
+    y: 78
+    name: dust.png
+    type: Backgrounds
+  - x: 82
+    y: 77
+    name: dust.png
+    type: Backgrounds
+  - x: 82
+    y: 76
+    name: dust.png
+    type: Backgrounds
+  - x: 82
+    y: 75
+    name: dust.png
+    type: Backgrounds
+  - x: 81
+    y: 75
+    name: aztec.png
+    type: Backgrounds
+  - x: 81
+    y: 76
+    name: aztec.png
+    type: Backgrounds
+  - x: 80
+    y: 76
+    name: aztec.png
+    type: Backgrounds
+  - x: 80
+    y: 75
+    name: aztec.png
+    type: Backgrounds
+  - x: 79
+    y: 76
+    name: aztec.png
+    type: Backgrounds
+  - x: 79
+    y: 75
+    name: aztec.png
+    type: Backgrounds
+  - x: 79
+    y: 74
+    name: aztec.png
+    type: Backgrounds
+  - x: 79
+    y: 73
+    name: aztec.png
+    type: Backgrounds
+  - x: 77
+    y: 73
+    name: dust.png
+    type: Backgrounds
+  - x: 78
+    y: 73
+    name: dust.png
+    type: Backgrounds
+  - x: 78
+    y: 74
+    name: dust.png
+    type: Backgrounds
+  - x: 78
+    y: 75
+    name: dust.png
+    type: Backgrounds
+  - x: 78
+    y: 76
+    name: dust.png
+    type: Backgrounds
+  - x: 77
+    y: 76
+    name: dust.png
+    type: Backgrounds
+  - x: 76
+    y: 76
+    name: dust.png
+    type: Backgrounds
+  - x: 75
+    y: 76
+    name: dust.png
+    type: Backgrounds
+  - x: 74
+    y: 76
+    name: dust.png
+    type: Backgrounds
+  - x: 73
+    y: 76
+    name: dust.png
+    type: Backgrounds
+  - x: 72
+    y: 76
+    name: dust.png
+    type: Backgrounds
+  - x: 72
+    y: 75
+    name: dust.png
+    type: Backgrounds
+  - x: 72
+    y: 74
+    name: dust.png
+    type: Backgrounds
+  - x: 72
+    y: 73
+    name: dust.png
+    type: Backgrounds
+  - x: 73
+    y: 73
+    name: dust.png
+    type: Backgrounds
+  - x: 71
+    y: 81
+    name: aztec.png
+    type: Backgrounds
+  - x: 70
+    y: 81
+    name: aztec.png
+    type: Backgrounds
+  - x: 70
+    y: 80
+    name: aztec.png
+    type: Backgrounds
+  - x: 70
+    y: 79
+    name: aztec.png
+    type: Backgrounds
+  - x: 70
+    y: 78
+    name: aztec.png
+    type: Backgrounds
+  - x: 70
+    y: 77
+    name: aztec.png
+    type: Backgrounds
+  - x: 71
+    y: 80
+    name: aztec.png
+    type: Backgrounds
+  - x: 71
+    y: 79
+    name: aztec.png
+    type: Backgrounds
+  - x: 71
+    y: 78
+    name: aztec.png
+    type: Backgrounds
+  - x: 71
+    y: 77
+    name: aztec.png
+    type: Backgrounds
+  - x: 69
+    y: 81
+    name: aztec.png
+    type: Backgrounds
+  - x: 69
+    y: 80
+    name: aztec.png
+    type: Backgrounds
+  - x: 69
+    y: 79
+    name: aztec.png
+    type: Backgrounds
+  - x: 69
+    y: 78
+    name: aztec.png
+    type: Backgrounds
+  - x: 69
+    y: 77
+    name: aztec.png
+    type: Backgrounds
+  - x: 69
+    y: 76
+    name: aztec.png
+    type: Backgrounds
+  - x: 71
+    y: 76
+    name: aztec.png
+    type: Backgrounds
+  - x: 71
+    y: 75
+    name: aztec.png
+    type: Backgrounds
+  - x: 70
+    y: 75
+    name: aztec.png
+    type: Backgrounds
+  - x: 70
+    y: 76
+    name: aztec.png
+    type: Backgrounds
+  - x: 69
+    y: 75
+    name: aztec.png
+    type: Backgrounds
+  - x: 69
+    y: 74
+    name: aztec.png
+    type: Backgrounds
+  - x: 70
+    y: 74
+    name: aztec.png
+    type: Backgrounds
+  - x: 71
+    y: 74
+    name: aztec.png
+    type: Backgrounds
+  - x: 71
+    y: 73
+    name: aztec.png
+    type: Backgrounds
+  - x: 59
+    y: 70
+    name: water1.png
+    type: Backgrounds
+  - x: 59
+    y: 71
+    name: water1.png
+    type: Backgrounds
+  - x: 59
+    y: 72
+    name: water1.png
+    type: Backgrounds
+  - x: 59
+    y: 73
+    name: water1.png
+    type: Backgrounds
+  - x: 59
+    y: 74
+    name: water1.png
+    type: Backgrounds
+  - x: 58
+    y: 74
+    name: water1.png
+    type: Backgrounds
+  - x: 58
+    y: 73
+    name: water1.png
+    type: Backgrounds
+  - x: 58
+    y: 72
+    name: water1.png
+    type: Backgrounds
+  - x: 58
+    y: 71
+    name: water1.png
+    type: Backgrounds
+  - x: 58
+    y: 70
+    name: water1.png
+    type: Backgrounds
+  - x: 77
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 76
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 75
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 74
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 73
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 72
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 71
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 70
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 69
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 68
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 67
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 66
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 65
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 64
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 63
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 62
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 61
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 60
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 59
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 58
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 58
+    y: 86
+    name: water1.png
+    type: Backgrounds
+  - x: 57
+    y: 86
+    name: water1.png
+    type: Backgrounds
+  - x: 57
+    y: 85
+    name: water1.png
+    type: Backgrounds
+  - x: 59
+    y: 86
+    name: water1.png
+    type: Backgrounds
+  - x: 60
+    y: 86
+    name: water1.png
+    type: Backgrounds
+  - x: 61
+    y: 86
+    name: water1.png
+    type: Backgrounds
+  - x: 62
+    y: 86
+    name: water1.png
+    type: Backgrounds
+  - x: 63
+    y: 86
+    name: water1.png
+    type: Backgrounds
+  - x: 64
+    y: 86
+    name: water1.png
+    type: Backgrounds
+  - x: 65
+    y: 86
+    name: water1.png
+    type: Backgrounds
+  - x: 66
+    y: 86
+    name: water1.png
+    type: Backgrounds
+  - x: 67
+    y: 86
+    name: water1.png
+    type: Backgrounds
+  - x: 68
+    y: 86
+    name: water1.png
+    type: Backgrounds
+  - x: 69
+    y: 86
+    name: water1.png
+    type: Backgrounds
+  - x: 70
+    y: 86
+    name: water1.png
+    type: Backgrounds
+  - x: 71
+    y: 86
+    name: water1.png
+    type: Backgrounds
+  - x: 72
+    y: 86
+    name: water1.png
+    type: Backgrounds
+  - x: 73
+    y: 86
+    name: water1.png
+    type: Backgrounds
+  - x: 74
+    y: 86
+    name: water1.png
+    type: Backgrounds
+  - x: 75
+    y: 86
+    name: water1.png
+    type: Backgrounds
+  - x: 76
+    y: 86
+    name: water1.png
+    type: Backgrounds
+  - x: 77
+    y: 86
+    name: water1.png
+    type: Backgrounds
+  - x: 83
+    y: 73
+    name: water1.png
+    type: Backgrounds
+  - x: 83
+    y: 72
+    name: water1.png
+    type: Backgrounds
+  - x: 83
+    y: 71
+    name: water1.png
+    type: Backgrounds
+  - x: 83
+    y: 70
+    name: water1.png
+    type: Backgrounds
+  - x: 83
+    y: 69
+    name: water1.png
+    type: Backgrounds
+  - x: 83
+    y: 68
+    name: water1.png
+    type: Backgrounds
+  - x: 83
+    y: 67
+    name: water1.png
+    type: Backgrounds
+  - x: 83
+    y: 66
+    name: water1.png
+    type: Backgrounds
+  - x: 83
+    y: 65
+    name: water1.png
+    type: Backgrounds
+  - x: 86
+    y: 73
+    name: water1.png
+    type: Backgrounds
+  - x: 86
+    y: 72
+    name: water1.png
+    type: Backgrounds
+  - x: 86
+    y: 71
+    name: water1.png
+    type: Backgrounds
+  - x: 86
+    y: 70
+    name: water1.png
+    type: Backgrounds
+  - x: 86
+    y: 69
+    name: water1.png
+    type: Backgrounds
+  - x: 86
+    y: 68
+    name: water1.png
+    type: Backgrounds
+  - x: 86
+    y: 67
+    name: water1.png
+    type: Backgrounds
+  - x: 86
+    y: 66
+    name: water1.png
+    type: Backgrounds
+  - x: 86
+    y: 65
+    name: water1.png
+    type: Backgrounds
+  - x: 86
+    y: 58
+    name: box7.png
+    type: Boxes
+  - x: 86
+    y: 62
+    name: box7.png
+    type: Boxes
+  - x: 85
+    y: 55
+    name: box7.png
+    type: Boxes
+  - x: 81
+    y: 55
+    name: box7.png
+    type: Boxes
+  - x: 57
+    y: 75
+    name: dust.png
+    type: Backgrounds
+  - x: 60
+    y: 76
+    name: box7.png
+    type: Boxes
+  - x: 57
+    y: 76
+    name: box7.png
+    type: Boxes
+  - x: 57
+    y: 68
+    name: box7.png
+    type: Boxes
+  - x: 60
+    y: 68
+    name: box7.png
+    type: Boxes
+  - x: 71
+    y: 66
+    name: box7.png
+    type: Boxes
+  - x: 75
+    y: 66
+    name: box7.png
+    type: Boxes
+  - x: 79
+    y: 66
+    name: box7.png
+    type: Boxes
+  - x: 66
+    y: 61
+    name: dust.png
+    type: Backgrounds
+  - x: 57
+    y: 70
+    name: dust.png
+    type: Backgrounds
+  - x: 57
+    y: 71
+    name: dust.png
+    type: Backgrounds
+  - x: 57
+    y: 72
+    name: dust.png
+    type: Backgrounds
+  - x: 57
+    y: 73
+    name: dust.png
+    type: Backgrounds
+  - x: 57
+    y: 74
+    name: dust.png
+    type: Backgrounds
+  - x: 58
+    y: 75
+    name: dust.png
+    type: Backgrounds
+  - x: 59
+    y: 75
+    name: dust.png
+    type: Backgrounds
+  - x: 60
+    y: 75
+    name: dust.png
+    type: Backgrounds
+  - x: 60
+    y: 74
+    name: dust.png
+    type: Backgrounds
+  - x: 60
+    y: 73
+    name: dust.png
+    type: Backgrounds
+  - x: 60
+    y: 72
+    name: dust.png
+    type: Backgrounds
+  - x: 60
+    y: 71
+    name: dust.png
+    type: Backgrounds
+  - x: 60
+    y: 70
+    name: dust.png
+    type: Backgrounds
+  - x: 60
+    y: 69
+    name: dust.png
+    type: Backgrounds
+  - x: 59
+    y: 69
+    name: dust.png
+    type: Backgrounds
+  - x: 58
+    y: 69
+    name: dust.png
+    type: Backgrounds
+  - x: 57
+    y: 69
+    name: dust.png
+    type: Backgrounds
+  - x: 57
+    y: 65
+    name: dust.png
+    type: Backgrounds
+  - x: 57
+    y: 66
+    name: dust.png
+    type: Backgrounds
+  - x: 57
+    y: 67
+    name: dust.png
+    type: Backgrounds
+  - x: 59
+    y: 68
+    name: dust.png
+    type: Backgrounds
+  - x: 58
+    y: 68
+    name: dust.png
+    type: Backgrounds
+  - x: 62
+    y: 68
+    name: dust.png
+    type: Backgrounds
+  - x: 63
+    y: 68
+    name: dust.png
+    type: Backgrounds
+  - x: 64
+    y: 68
+    name: dust.png
+    type: Backgrounds
+  - x: 65
+    y: 68
+    name: dust.png
+    type: Backgrounds
+  - x: 66
+    y: 68
+    name: dust.png
+    type: Backgrounds
+  - x: 66
+    y: 67
+    name: dust.png
+    type: Backgrounds
+  - x: 66
+    y: 65
+    name: dust.png
+    type: Backgrounds
+  - x: 66
+    y: 63
+    name: dust.png
+    type: Backgrounds
+  - x: 68
+    y: 62
+    name: dust.png
+    type: Backgrounds
+  - x: 68
+    y: 63
+    name: dust.png
+    type: Backgrounds
+  - x: 68
+    y: 64
+    name: dust.png
+    type: Backgrounds
+  - x: 68
+    y: 65
+    name: dust.png
+    type: Backgrounds
+  - x: 68
+    y: 66
+    name: dust.png
+    type: Backgrounds
+  - x: 68
+    y: 67
+    name: dust.png
+    type: Backgrounds
+  - x: 68
+    y: 68
+    name: dust.png
+    type: Backgrounds
+  - x: 67
+    y: 68
+    name: dust.png
+    type: Backgrounds
+  - x: 67
+    y: 67
+    name: dust.png
+    type: Backgrounds
+  - x: 67
+    y: 66
+    name: dust.png
+    type: Backgrounds
+  - x: 67
+    y: 65
+    name: dust.png
+    type: Backgrounds
+  - x: 67
+    y: 64
+    name: dust.png
+    type: Backgrounds
+  - x: 67
+    y: 63
+    name: dust.png
+    type: Backgrounds
+  - x: 67
+    y: 62
+    name: dust.png
+    type: Backgrounds
+  - x: 67
+    y: 61
+    name: dust.png
+    type: Backgrounds
+  - x: 67
+    y: 60
+    name: dust.png
+    type: Backgrounds
+  - x: 68
+    y: 60
+    name: dust.png
+    type: Backgrounds
+  - x: 68
+    y: 61
+    name: dust.png
+    type: Backgrounds
+  - x: 70
+    y: 68
+    name: aztec.png
+    type: Backgrounds
+  - x: 69
+    y: 68
+    name: aztec.png
+    type: Backgrounds
+  - x: 71
+    y: 71
+    name: aztec.png
+    type: Backgrounds
+  - x: 71
+    y: 70
+    name: aztec.png
+    type: Backgrounds
+  - x: 71
+    y: 69
+    name: aztec.png
+    type: Backgrounds
+  - x: 71
+    y: 68
+    name: aztec.png
+    type: Backgrounds
+  - x: 71
+    y: 67
+    name: aztec.png
+    type: Backgrounds
+  - x: 73
+    y: 71
+    name: aztec.png
+    type: Backgrounds
+  - x: 73
+    y: 70
+    name: aztec.png
+    type: Backgrounds
+  - x: 73
+    y: 69
+    name: aztec.png
+    type: Backgrounds
+  - x: 73
+    y: 68
+    name: aztec.png
+    type: Backgrounds
+  - x: 73
+    y: 67
+    name: aztec.png
+    type: Backgrounds
+  - x: 79
+    y: 71
+    name: aztec.png
+    type: Backgrounds
+  - x: 79
+    y: 70
+    name: aztec.png
+    type: Backgrounds
+  - x: 79
+    y: 69
+    name: aztec.png
+    type: Backgrounds
+  - x: 79
+    y: 68
+    name: aztec.png
+    type: Backgrounds
+  - x: 79
+    y: 67
+    name: aztec.png
+    type: Backgrounds
+  - x: 77
+    y: 71
+    name: aztec.png
+    type: Backgrounds
+  - x: 77
+    y: 70
+    name: aztec.png
+    type: Backgrounds
+  - x: 77
+    y: 69
+    name: aztec.png
+    type: Backgrounds
+  - x: 77
+    y: 68
+    name: aztec.png
+    type: Backgrounds
+  - x: 77
+    y: 67
+    name: aztec.png
+    type: Backgrounds
+  - x: 75
+    y: 71
+    name: aztec.png
+    type: Backgrounds
+  - x: 75
+    y: 70
+    name: aztec.png
+    type: Backgrounds
+  - x: 75
+    y: 68
+    name: aztec.png
+    type: Backgrounds
+  - x: 75
+    y: 67
+    name: aztec.png
+    type: Backgrounds
+  - x: 64
+    y: 69
+    name: water1.png
+    type: Backgrounds
+  - x: 65
+    y: 69
+    name: water1.png
+    type: Backgrounds
+  - x: 66
+    y: 69
+    name: water1.png
+    type: Backgrounds
+  - x: 67
+    y: 69
+    name: water1.png
+    type: Backgrounds
+  - x: 68
+    y: 69
+    name: water1.png
+    type: Backgrounds
+  - x: 59
+    y: 67
+    name: mural_part4.png
+    type: Walls
+  - x: 61
+    y: 67
+    name: mural_part4.png
+    type: Walls
+  - x: 63
+    y: 67
+    name: mural_part4.png
+    type: Walls
+  - x: 65
+    y: 67
+    name: mural_part4.png
+    type: Walls
+  - x: 64
+    y: 67
+    name: mural_part3.png
+    type: Walls
+  - x: 62
+    y: 67
+    name: mural_part3.png
+    type: Walls
+  - x: 60
+    y: 67
+    name: mural_part3.png
+    type: Walls
+  - x: 58
+    y: 67
+    name: mural_part3.png
+    type: Walls
+  - x: 65
+    y: 66
+    name: mural_part2.png
+    type: Walls
+  - x: 63
+    y: 66
+    name: mural_part2.png
+    type: Walls
+  - x: 61
+    y: 66
+    name: mural_part2.png
+    type: Walls
+  - x: 59
+    y: 66
+    name: mural_part2.png
+    type: Walls
+  - x: 64
+    y: 66
+    name: mural_part1.png
+    type: Walls
+  - x: 62
+    y: 66
+    name: mural_part1.png
+    type: Walls
+  - x: 60
+    y: 66
+    name: mural_part1.png
+    type: Walls
+  - x: 58
+    y: 66
+    name: mural_part1.png
+    type: Walls
+  - x: 61
+    y: 64
+    name: mural_part2.png
+    type: Walls
+  - x: 59
+    y: 64
+    name: mural_part2.png
+    type: Walls
+  - x: 59
+    y: 62
+    name: mural_part2.png
+    type: Walls
+  - x: 61
+    y: 62
+    name: mural_part2.png
+    type: Walls
+  - x: 65
+    y: 64
+    name: mural_part2.png
+    type: Walls
+  - x: 63
+    y: 64
+    name: mural_part2.png
+    type: Walls
+  - x: 63
+    y: 62
+    name: mural_part2.png
+    type: Walls
+  - x: 65
+    y: 62
+    name: mural_part2.png
+    type: Walls
+  - x: 64
+    y: 63
+    name: mural_part3.png
+    type: Walls
+  - x: 62
+    y: 63
+    name: mural_part3.png
+    type: Walls
+  - x: 60
+    y: 63
+    name: mural_part3.png
+    type: Walls
+  - x: 58
+    y: 63
+    name: mural_part3.png
+    type: Walls
+  - x: 64
+    y: 65
+    name: mural_part3.png
+    type: Walls
+  - x: 62
+    y: 65
+    name: mural_part3.png
+    type: Walls
+  - x: 60
+    y: 65
+    name: mural_part3.png
+    type: Walls
+  - x: 58
+    y: 65
+    name: mural_part3.png
+    type: Walls
+  - x: 65
+    y: 65
+    name: mural_part4.png
+    type: Walls
+  - x: 63
+    y: 65
+    name: mural_part4.png
+    type: Walls
+  - x: 61
+    y: 65
+    name: mural_part4.png
+    type: Walls
+  - x: 59
+    y: 65
+    name: mural_part4.png
+    type: Walls
+  - x: 59
+    y: 63
+    name: mural_part4.png
+    type: Walls
+  - x: 61
+    y: 63
+    name: mural_part4.png
+    type: Walls
+  - x: 63
+    y: 63
+    name: mural_part4.png
+    type: Walls
+  - x: 65
+    y: 63
+    name: mural_part4.png
+    type: Walls
+  - x: 64
+    y: 64
+    name: mural_part1.png
+    type: Walls
+  - x: 64
+    y: 62
+    name: mural_part1.png
+    type: Walls
+  - x: 62
+    y: 64
+    name: mural_part1.png
+    type: Walls
+  - x: 60
+    y: 64
+    name: mural_part1.png
+    type: Walls
+  - x: 62
+    y: 62
+    name: mural_part1.png
+    type: Walls
+  - x: 60
+    y: 62
+    name: mural_part1.png
+    type: Walls
+  - x: 58
+    y: 64
+    name: mural_part1.png
+    type: Walls
+  - x: 58
+    y: 62
+    name: mural_part1.png
+    type: Walls
+  - x: 69
+    y: 66
+    name: water1.png
+    type: Backgrounds
+  - x: 69
+    y: 65
+    name: water1.png
+    type: Backgrounds
+  - x: 69
+    y: 64
+    name: water1.png
+    type: Backgrounds
+  - x: 69
+    y: 63
+    name: water1.png
+    type: Backgrounds
+  - x: 69
+    y: 62
+    name: water1.png
+    type: Backgrounds
+  - x: 65
+    y: 61
+    name: mural_part4.png
+    type: Walls
+  - x: 63
+    y: 61
+    name: mural_part4.png
+    type: Walls
+  - x: 61
+    y: 61
+    name: mural_part4.png
+    type: Walls
+  - x: 59
+    y: 61
+    name: mural_part4.png
+    type: Walls
+  - x: 64
+    y: 61
+    name: mural_part3.png
+    type: Walls
+  - x: 62
+    y: 61
+    name: mural_part3.png
+    type: Walls
+  - x: 60
+    y: 61
+    name: mural_part3.png
+    type: Walls
+  - x: 58
+    y: 61
+    name: mural_part3.png
+    type: Walls
+  - x: 65
+    y: 60
+    name: mural_part2.png
+    type: Walls
+  - x: 63
+    y: 60
+    name: mural_part2.png
+    type: Walls
+  - x: 61
+    y: 60
+    name: mural_part2.png
+    type: Walls
+  - x: 59
+    y: 60
+    name: mural_part2.png
+    type: Walls
+  - x: 64
+    y: 60
+    name: mural_part1.png
+    type: Walls
+  - x: 62
+    y: 60
+    name: mural_part1.png
+    type: Walls
+  - x: 60
+    y: 60
+    name: mural_part1.png
+    type: Walls
+  - x: 58
+    y: 60
+    name: mural_part1.png
+    type: Walls
+  - x: 88
+    y: 55
+    name: water1.png
+    type: Backgrounds
+  - x: 88
+    y: 56
+    name: water1.png
+    type: Backgrounds
+  - x: 88
+    y: 57
+    name: water1.png
+    type: Backgrounds
+  - x: 88
+    y: 58
+    name: water1.png
+    type: Backgrounds
+  - x: 88
+    y: 59
+    name: water1.png
+    type: Backgrounds
+  - x: 88
+    y: 60
+    name: water1.png
+    type: Backgrounds
+  - x: 88
+    y: 61
+    name: water1.png
+    type: Backgrounds
+  - x: 88
+    y: 62
+    name: water1.png
+    type: Backgrounds
+  - x: 87
+    y: 62
+    name: water1.png
+    type: Backgrounds
+  - x: 87
+    y: 61
+    name: water1.png
+    type: Backgrounds
+  - x: 87
+    y: 60
+    name: water1.png
+    type: Backgrounds
+  - x: 87
+    y: 59
+    name: water1.png
+    type: Backgrounds
+  - x: 87
+    y: 58
+    name: water1.png
+    type: Backgrounds
+  - x: 87
+    y: 57
+    name: water1.png
+    type: Backgrounds
+  - x: 87
+    y: 56
+    name: water1.png
+    type: Backgrounds
+  - x: 87
+    y: 55
+    name: water1.png
+    type: Backgrounds
+  - x: 87
+    y: 54
+    name: water1.png
+    type: Backgrounds
+  - x: 88
+    y: 54
+    name: water1.png
+    type: Backgrounds
+  - x: 87
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 86
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 86
+    y: 54
+    name: water1.png
+    type: Backgrounds
+  - x: 85
+    y: 54
+    name: water1.png
+    type: Backgrounds
+  - x: 85
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 84
+    y: 54
+    name: water1.png
+    type: Backgrounds
+  - x: 84
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 83
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 83
+    y: 54
+    name: water1.png
+    type: Backgrounds
+  - x: 82
+    y: 54
+    name: water1.png
+    type: Backgrounds
+  - x: 82
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 81
+    y: 54
+    name: water1.png
+    type: Backgrounds
+  - x: 81
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 80
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 58
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 59
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 60
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 61
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 62
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 63
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 64
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 65
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 66
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 67
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 68
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 69
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 70
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 71
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 72
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 73
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 74
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 75
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 76
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 77
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 78
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 79
+    y: 53
+    name: water1.png
+    type: Backgrounds
+  - x: 79
+    y: 52
+    name: water1.png
+    type: Backgrounds
+  - x: 78
+    y: 52
+    name: water1.png
+    type: Backgrounds
+  - x: 77
+    y: 52
+    name: water1.png
+    type: Backgrounds
+  - x: 76
+    y: 52
+    name: water1.png
+    type: Backgrounds
+  - x: 75
+    y: 52
+    name: water1.png
+    type: Backgrounds
+  - x: 74
+    y: 52
+    name: water1.png
+    type: Backgrounds
+  - x: 73
+    y: 52
+    name: water1.png
+    type: Backgrounds
+  - x: 72
+    y: 52
+    name: water1.png
+    type: Backgrounds
+  - x: 71
+    y: 52
+    name: water1.png
+    type: Backgrounds
+  - x: 70
+    y: 52
+    name: water1.png
+    type: Backgrounds
+  - x: 69
+    y: 52
+    name: water1.png
+    type: Backgrounds
+  - x: 68
+    y: 52
+    name: water1.png
+    type: Backgrounds
+  - x: 67
+    y: 52
+    name: water1.png
+    type: Backgrounds
+  - x: 66
+    y: 52
+    name: water1.png
+    type: Backgrounds
+  - x: 65
+    y: 52
+    name: water1.png
+    type: Backgrounds
+  - x: 64
+    y: 52
+    name: water1.png
+    type: Backgrounds
+  - x: 63
+    y: 52
+    name: water1.png
+    type: Backgrounds
+  - x: 62
+    y: 52
+    name: water1.png
+    type: Backgrounds
+  - x: 61
+    y: 52
+    name: water1.png
+    type: Backgrounds
+  - x: 60
+    y: 52
+    name: water1.png
+    type: Backgrounds
+  - x: 59
+    y: 52
+    name: water1.png
+    type: Backgrounds
+  - x: 58
+    y: 52
+    name: water1.png
+    type: Backgrounds
+  - x: 79
+    y: 65
+    name: water1.png
+    type: Backgrounds
+  - x: 78
+    y: 65
+    name: water1.png
+    type: Backgrounds
+  - x: 78
+    y: 64
+    name: water1.png
+    type: Backgrounds
+  - x: 77
+    y: 64
+    name: water1.png
+    type: Backgrounds
+  - x: 77
+    y: 65
+    name: water1.png
+    type: Backgrounds
+  - x: 76
+    y: 65
+    name: water1.png
+    type: Backgrounds
+  - x: 76
+    y: 64
+    name: water1.png
+    type: Backgrounds
+  - x: 75
+    y: 65
+    name: water1.png
+    type: Backgrounds
+  - x: 74
+    y: 65
+    name: water1.png
+    type: Backgrounds
+  - x: 75
+    y: 64
+    name: water1.png
+    type: Backgrounds
+  - x: 74
+    y: 64
+    name: water1.png
+    type: Backgrounds
+  - x: 73
+    y: 64
+    name: water1.png
+    type: Backgrounds
+  - x: 73
+    y: 65
+    name: water1.png
+    type: Backgrounds
+  - x: 72
+    y: 65
+    name: water1.png
+    type: Backgrounds
+  - x: 71
+    y: 65
+    name: water1.png
+    type: Backgrounds
+  - x: 72
+    y: 64
+    name: water1.png
+    type: Backgrounds

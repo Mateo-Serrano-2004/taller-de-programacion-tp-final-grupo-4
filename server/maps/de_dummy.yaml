@@ -3,144 +3,145 @@ map:
   maxWidth: 68
   minHeight: 56
   maxHeight: 60
-  tiles:
-    - x: 63
-      y: 58
-      name: water1.png
-      type: Backgrounds
-    - x: 64
-      y: 58
-      name: water1.png
-      type: Backgrounds
-    - x: 67
-      y: 58
-      name: water1.png
-      type: Backgrounds
-    - x: 66
-      y: 58
-      name: water1.png
-      type: Backgrounds
-    - x: 62
-      y: 57
-      name: dark_stone_wall.png
-      type: Walls
-    - x: 62
-      y: 58
-      name: dark_stone_wall.png
-      type: Walls
-    - x: 62
-      y: 59
-      name: dark_stone_wall.png
-      type: Walls
-    - x: 62
-      y: 60
-      name: dark_stone_wall.png
-      type: Walls
-    - x: 63
-      y: 60
-      name: dark_stone_wall.png
-      type: Walls
-    - x: 64
-      y: 60
-      name: dark_stone_wall.png
-      type: Walls
-    - x: 65
-      y: 60
-      name: dark_stone_wall.png
-      type: Walls
-    - x: 66
-      y: 60
-      name: dark_stone_wall.png
-      type: Walls
-    - x: 67
-      y: 60
-      name: dark_stone_wall.png
-      type: Walls
-    - x: 68
-      y: 60
-      name: dark_stone_wall.png
-      type: Walls
-    - x: 68
-      y: 59
-      name: dark_stone_wall.png
-      type: Walls
-    - x: 68
-      y: 58
-      name: dark_stone_wall.png
-      type: Walls
-    - x: 68
-      y: 57
-      name: dark_stone_wall.png
-      type: Walls
-    - x: 68
-      y: 56
-      name: dark_stone_wall.png
-      type: Walls
-    - x: 67
-      y: 56
-      name: dark_stone_wall.png
-      type: Walls
-    - x: 66
-      y: 56
-      name: dark_stone_wall.png
-      type: Walls
-    - x: 65
-      y: 56
-      name: dark_stone_wall.png
-      type: Walls
-    - x: 64
-      y: 56
-      name: dark_stone_wall.png
-      type: Walls
-    - x: 63
-      y: 56
-      name: dark_stone_wall.png
-      type: Walls
-    - x: 62
-      y: 56
-      name: dark_stone_wall.png
-      type: Walls
-    - x: 65
-      y: 58
-      name: site_A.png
-      type: Sites
-    - x: 67
-      y: 57
-      name: tt_spawn.png
-      type: Spawns
-    - x: 66
-      y: 57
-      name: tt_spawn.png
-      type: Spawns
-    - x: 65
-      y: 57
-      name: tt_spawn.png
-      type: Spawns
-    - x: 64
-      y: 57
-      name: tt_spawn.png
-      type: Spawns
-    - x: 63
-      y: 57
-      name: tt_spawn.png
-      type: Spawns
-    - x: 67
-      y: 59
-      name: ct_spawn.png
-      type: Spawns
-    - x: 66
-      y: 59
-      name: ct_spawn.png
-      type: Spawns
-    - x: 65
-      y: 59
-      name: ct_spawn.png
-      type: Spawns
-    - x: 64
-      y: 59
-      name: ct_spawn.png
-      type: Spawns
-    - x: 63
-      y: 59
-      name: ct_spawn.png
-      type: Spawns
+
+tiles:
+  - x: 63
+    y: 58
+    name: water1.png
+    type: Backgrounds
+  - x: 64
+    y: 58
+    name: water1.png
+    type: Backgrounds
+  - x: 67
+    y: 58
+    name: water1.png
+    type: Backgrounds
+  - x: 66
+    y: 58
+    name: water1.png
+    type: Backgrounds
+  - x: 62
+    y: 57
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 62
+    y: 58
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 62
+    y: 59
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 62
+    y: 60
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 63
+    y: 60
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 64
+    y: 60
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 65
+    y: 60
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 66
+    y: 60
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 67
+    y: 60
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 68
+    y: 60
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 68
+    y: 59
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 68
+    y: 58
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 68
+    y: 57
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 68
+    y: 56
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 67
+    y: 56
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 66
+    y: 56
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 65
+    y: 56
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 64
+    y: 56
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 63
+    y: 56
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 62
+    y: 56
+    name: dark_stone_wall.png
+    type: Walls
+  - x: 65
+    y: 58
+    name: site_A.png
+    type: Sites
+  - x: 67
+    y: 57
+    name: tt_spawn.png
+    type: Spawns
+  - x: 66
+    y: 57
+    name: tt_spawn.png
+    type: Spawns
+  - x: 65
+    y: 57
+    name: tt_spawn.png
+    type: Spawns
+  - x: 64
+    y: 57
+    name: tt_spawn.png
+    type: Spawns
+  - x: 63
+    y: 57
+    name: tt_spawn.png
+    type: Spawns
+  - x: 67
+    y: 59
+    name: ct_spawn.png
+    type: Spawns
+  - x: 66
+    y: 59
+    name: ct_spawn.png
+    type: Spawns
+  - x: 65
+    y: 59
+    name: ct_spawn.png
+    type: Spawns
+  - x: 64
+    y: 59
+    name: ct_spawn.png
+    type: Spawns
+  - x: 63
+    y: 59
+    name: ct_spawn.png
+    type: Spawns

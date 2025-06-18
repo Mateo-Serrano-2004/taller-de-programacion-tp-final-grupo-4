@@ -34,7 +34,7 @@ void ClientHandler::handle_join_game(const JoinGameEvent& event) {
         sender->get_queue().push(map);
         sender->get_queue().push(DTO::TeamIDDTO(player_id % 2));
     } catch (const InvalidGameException& e) {
-        std::cout << "An exception happend\n";
+        std::cout << "An exception happend: \n" << e.what() << std::endl;
         sender->get_queue().push(DTO::GameStateDTO());
         close();
     }

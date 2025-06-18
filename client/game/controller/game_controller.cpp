@@ -24,6 +24,7 @@
 #include "event/quit_event.h"
 #include "event/update_player_id_event.h"
 #include "event/update_role_event.h"
+#include "event/generate_map_event.h"
 #include "event/transfered_event.h"
 
 Controller::GameController::GameController(
@@ -61,6 +62,12 @@ void Controller::GameController::handle_update_role(Shared<Model::Event> event) 
 	);
 }
 
+void Controller::GameController::handle_generate_map(Shared<Model::Event> event) {
+	auto generate_map_event = std::static_pointer_cast<Model::GenerateMapEvent>(event);
+	auto new_map = asset_manager->generate_map(generate_map_event->get_map_dto());
+	game_state_manager->update_map(new_map);
+}
+
 bool Controller::GameController::try_handle(Shared<Model::Event> event) {
 	auto handler = handlers.find(event->get_type());
 	if (handler == handlers.end()) return false;
@@ -80,6 +87,9 @@ void Controller::GameController::bind_handlers() {
 	};
 	handlers[Model::EventType::UPDATE_ROLE] = [this](Shared<Model::Event> event) {
 		handle_update_role(event);
+	};
+	handlers[Model::EventType::GENERATE_MAP] = [this](Shared<Model::Event> event) {
+		handle_generate_map(event);
 	};
 }
 

@@ -34,7 +34,8 @@ enum class EventType: uint8_t {
     SWITCH_CONTEXT = 0xA0,
     END_OF_GAME = 0xA1,
     UPDATE_PLAYER_ID = 0xA2,
-    UPDATE_ROLE = 0xA3
+    UPDATE_ROLE = 0xA3,
+    GENERATE_MAP = 0xA4
 };
 };
 

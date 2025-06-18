@@ -84,6 +84,7 @@ std::string GameManager::get_game_map(const uint8_t& game_id) {
 }
 
 DTO::MapDTO GameManager::get_map(const std::string& map_name) {
+    std::lock_guard<std::mutex> lock(mtx);
     yamlParser.parseMapYaml(yamlAddresser.get_map_path(map_name));
     return DTO::MapDTO(yamlParser.getTileMatrix());
 }

@@ -9,9 +9,12 @@
 #include <SDL2pp/Font.hh>
 #include <SDL2pp/Color.hh>
 
+#include "common/DTO/map_dto.h"
+
 Model::AssetManager::AssetManager(Shared<SDL2pp::Renderer> renderer)
 : renderer(renderer),
-  asset_generator(renderer) {}
+  asset_generator(renderer),
+  current_map(nullptr) {}
 
 void Model::AssetManager::load_texture(Model::TextureID id, const std::string& path) {
     textures.insert({id, make_shared<SDL2pp::Texture>(*renderer, path)});
@@ -37,6 +40,11 @@ Shared<SDL2pp::Texture> Model::AssetManager::generate_background(
 
 Shared<SDL2pp::Texture> Model::AssetManager::generate_background(const SDL2pp::Color& color) {
     return generate_background(color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha());
+}
+
+Shared<SDL2pp::Texture> Model::AssetManager::generate_map(const DTO::MapDTO& map_dto) {
+    current_map = asset_generator.generate_map(map_dto);
+    return current_map;
 }
 
 Shared<SDL2pp::Font> Model::AssetManager::generate_font(const std::string& name, uint8_t size) {

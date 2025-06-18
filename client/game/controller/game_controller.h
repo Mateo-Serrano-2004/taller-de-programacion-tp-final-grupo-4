@@ -49,6 +49,7 @@ protected:
     void handle_end_of_game(Shared<Model::Event>);
     void handle_update_player_id(Shared<Model::Event> event);
     void handle_update_role(Shared<Model::Event> event);
+    void handle_generate_map(Shared<Model::Event> event);
     bool try_handle(Shared<Model::Event> event);
     void bind_handlers();
 
