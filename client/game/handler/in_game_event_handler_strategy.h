@@ -37,6 +37,8 @@ public:
     void handle(Shared<SDL_Event> event) override;
     void handle_current_game_state();
 
+    void update_on_switch_context();
+
     ~InGameEventHandlerStrategy() override = default;
 };
 };  // namespace Controller

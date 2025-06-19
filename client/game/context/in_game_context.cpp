@@ -7,11 +7,16 @@
 #include <SDL2/SDL.h>
 
 #include "common/event_type.h"
+#include "common/event_type.h"
 #include "common/model/player.h"
+
 #include "controller/game_controller.h"
-#include "exception/closed_window.h"
+
 #include "handler/game_state_manager.h"
+
 #include "model/game_state.h"
+
+#include "exception/closed_window.h"
 
 void Context::InGameContext::render(uint8_t frames) {
     Model::GameState game_state = game_state_manager->get_game_state();
@@ -33,3 +38,9 @@ Context::InGameContext::InGameContext(Weak<Controller::GameController> controlle
         hud_renderer(controller),
         event_handler_strategy(controller),
         game_state_manager(controller.lock()->get_game_state_manager()) {}
+
+void Context::InGameContext::notify_event(Shared<Model::Event> event) {
+    if (event->get_type() == Model::EventType::SWITCH_CONTEXT) {
+        event_handler_strategy.update_on_switch_context();
+    }
+}

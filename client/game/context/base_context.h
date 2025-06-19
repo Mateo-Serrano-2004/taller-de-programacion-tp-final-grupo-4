@@ -6,6 +6,7 @@
 #include <string>
 
 #include "common/definitions.h"
+
 #include "event/event.h"
 
 namespace Controller {
@@ -36,6 +37,7 @@ public:
 
     const std::string& get_name() const;
 
+    virtual void notify_event(Shared<Model::Event> event);
     void update(uint8_t frames);
 
     BaseContext(BaseContext&&) = default;
