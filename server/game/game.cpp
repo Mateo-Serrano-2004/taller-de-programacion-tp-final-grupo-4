@@ -26,6 +26,19 @@ void Game::handle_use_weapon(const uint8_t& player_id) {
     gamelogic.start_using_weapon(player->get(), round);
 }
 
+void Game::handle_start_defusing_bomb(const uint8_t& player_id) {
+    if (this->state != GameState::Playing) return;
+    auto player = find_player_by_id(player_id);
+    if (!player.has_value()) return;
+    gamelogic.start_defusing_bomb(player->get(), round);
+}
+
+void Game::handle_stop_defusing_bomb(const uint8_t& player_id) {
+    auto player = find_player_by_id(player_id);
+    if (!player.has_value()) return;
+    gamelogic.stop_defusing_bomb(player->get());
+}
+
 void Game::handle_stop_using_weapon(const uint8_t& player_id) {
     auto player = find_player_by_id(player_id);
     if (!player.has_value()) return;
@@ -101,7 +114,8 @@ void Game::handle(uint8_t player_id, const GameEventVariant& event) {
                        [this](const DropWeaponEvent&) {},
                        [player_id, this](const UseWeaponEvent&) { handle_use_weapon(player_id); }, 
                        [player_id, this](const StopUsingWeaponEvent&) { handle_stop_using_weapon(player_id); }, 
-                       [this](const DefuseBombEvent&) {},
+                       [player_id, this](const DefuseBombEvent&) {handle_start_defusing_bomb(player_id); },
+                       [player_id, this](const StopDefusingBombEvent&) {handle_stop_defusing_bomb(player_id); },
                        [this](const ReloadWeaponEvent&) {}, [this](const BuyAmmoEvent&) {}},
             event);
 }
@@ -120,7 +134,7 @@ void Game::start_new_round() {
 
     for (auto& [id, player] : players) {
         player.reset_for_new_round();
-        handle_stop_using_weapon(id);
+        handle_stop_using_weapon(id); // o capaz esto lo ahce cada player en cada arma al recibir reset e
         if (player.get_team() == Model::TeamID::CT) ct_count++;
         else tt_count++;
     }
@@ -152,6 +166,7 @@ void Game::update_players_that_won() {
 
 void Game::process_frames(uint16_t frames_to_process) {
     movement_system.process_movements(players, frames_to_process);
+    gamelogic.process_defusing(players, round);
     round.update(frames_to_process);
     gamelogic.process_shooting(players, round, frames_to_process);
 
