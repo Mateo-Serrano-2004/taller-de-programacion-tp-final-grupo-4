@@ -14,6 +14,9 @@ Round::Round(int ct_alive, int tt_alive)
       ticks_for_playing_phase(3600),
       bomb_total_ticks(600),
       active_ticks_remaining(600),
+      defusing_ticks(300),
+      defusing_ticks_remaining(300),
+      bomb_being_defused(false),
       is_warmup_round(false) {}
 
 Round Round::create_warmup_round() {
@@ -45,13 +48,28 @@ void Round::update_if_finished_playing() {
     } else {
         winner_team = Model::TeamID::CT;
     }
-    
-    active_ticks_remaining = 0;
     state = RoundState::Ended;
+}
+
+void Round::check_if_finished_defusing(int frames_to_process) {
+    if (bomb_being_defused && !bomb_defused && bomb_planted) {
+
+        if (active_ticks_remaining >= defusing_ticks_remaining) {
+
+            defusing_ticks_remaining -= frames_to_process;
+
+            if(defusing_ticks_remaining <= 0){
+                bomb_defused = true;
+                active_ticks_remaining = 0;
+            }
+        }
+    }
 }
 
 void Round::update(int frames_to_process) {
     if (state == RoundState::Ended) return;
+
+    check_if_finished_defusing(frames_to_process);
 
     if (active_ticks_remaining > frames_to_process) {
         active_ticks_remaining -= frames_to_process;
@@ -129,15 +147,17 @@ void Round::notify_bomb_planted(Physics::Vector2D position) {
     active_ticks_remaining = bomb_total_ticks;
 }
 
-void Round::notify_bomb_defused() {
-    if (!bomb_planted || bomb_defused || !is_active()) return;
-
-    bomb_defused = true;
-    active_ticks_remaining = 0;
-    winner_team = Model::TeamID::CT;
-    state = RoundState::Ended;
+bool Round::notify_bomb_is_being_defused() {
+    if (!bomb_planted || bomb_defused || !is_active()) return false;
+    bomb_being_defused = true;
+    return bomb_being_defused;
 }
 
+void Round::notify_bomb_is_not_longer_being_defused() {
+    if (!bomb_planted || bomb_defused || !is_active()) return;
+    defusing_ticks_remaining = defusing_ticks;
+    bomb_being_defused = false;
+}
 
 DTO::RoundDTO Round::to_dto(int fps) const {
     return DTO::RoundDTO(

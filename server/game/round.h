@@ -26,12 +26,17 @@ private:
     int bomb_total_ticks;
 
     int active_ticks_remaining;
+    int defusing_ticks;
+    int defusing_ticks_remaining;
 
+    bool bomb_being_defused;
     bool is_warmup_round;
 
     void update_if_finished_warmup();
     void update_if_finished_buying();
     void update_if_finished_playing();
+    int get_ticks_remaining() const;
+    void check_if_finished_defusing(int frames_to_process);
 
 public:
     Round(int ct_alive, int tt_alive);
@@ -52,9 +57,8 @@ public:
     void notify_player_joined(Model::TeamID team);
 
     void notify_bomb_planted(Physics::Vector2D position);
-    void notify_bomb_defused();
-
-    int get_ticks_remaining() const;
+    bool notify_bomb_is_being_defused();
+    void notify_bomb_is_not_longer_being_defused();
 
     DTO::RoundDTO to_dto(int fps) const;
 };
