@@ -15,6 +15,7 @@ protected:
 public:
     Camera();
     Camera(coord_t viewport_width, coord_t viewport_height);
+    Camera(const Camera& other);
 
     SDL2pp::Point get_viewport() const;
     coord_t get_viewport_width() const;
@@ -29,10 +30,7 @@ public:
 
     SDL2pp::Point get_camera_view(const Physics::Vector2D& point) const;
 
-    Camera(const Camera&) = default;
-    Camera& operator=(const Camera&) = default;
-    Camera(Camera&&) = default;
-    Camera& operator=(Camera&&) = default;
+    Camera& operator=(const Camera& other) = default;
 
     ~Camera() = default;
 };

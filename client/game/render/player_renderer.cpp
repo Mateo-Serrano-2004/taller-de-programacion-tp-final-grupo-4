@@ -22,12 +22,13 @@
 #include "asset/texture_id.h"
 #include "controller/game_controller.h"
 #include "handler/game_state_manager.h"
+#include "model/game_state.h"
 #include "model/rendered_player.h"
 
 #include "camera.h"
 
-void View::PlayerRenderer::render_fov(angle_t angle, const Camera& camera) {
-    auto viewport = camera.get_viewport();
+void View::PlayerRenderer::render_fov(const Model::GameState& game_state) {
+    auto viewport = game_state.camera.get_viewport();
     int viewport_width = viewport.GetX();
     int viewport_height = viewport.GetY();
 
@@ -47,11 +48,46 @@ void View::PlayerRenderer::render_fov(angle_t angle, const Camera& camera) {
                    SDL2pp::Rect((viewport_width - 2 * length_to_corners) / 2,
                                 (viewport_height - 2 * length_to_corners) / 2,
                                 2 * length_to_corners, 2 * length_to_corners),
-                   angle);
+                   game_state.get_reference_player()->get_angle());
+}
+
+void View::PlayerRenderer::render_muzzle_fires(const Model::GameState& game_state, uint8_t frames) {
+    auto camera = game_state.camera;
+    for (auto& animation: game_state.fires) {
+        auto player = game_state.get_player_by_id(animation->get_player_id());
+        if (!player) {
+            animation->end();
+            continue;
+        }
+        animation->set_frames_to_process(frames);
+        animation->set_camera(camera);
+        animation->set_player(player);
+        animation->render();
+    }
+}
+
+bool View::PlayerRenderer::render_players(const Model::GameState& game_state) {
+    auto reference_player = game_state.get_reference_player();
+    bool render_ref_player = (bool)reference_player;
+    auto camera = game_state.camera;
+
+    for (auto& [id, p]: game_state.players) {
+        if (!render_ref_player || id != reference_player->get_id()) {
+            p->set_camera(camera);
+            p->render();
+        }
+    }
+
+    if (render_ref_player) {
+        reference_player->set_camera(camera);
+        reference_player->render();
+    }
+
+    return render_ref_player;
 }
 
 SDL2pp::Rect View::PlayerRenderer::get_map_slice(Shared<SDL2pp::Texture> map,
-                                                 const Camera& camera) {
+                                                 const View::Camera& camera) {
     auto logical_width = renderer->GetLogicalWidth();
     auto logical_height = renderer->GetLogicalHeight();
     auto camera_x = camera.get_center().GetX() + 16;
@@ -73,8 +109,8 @@ SDL2pp::Rect View::PlayerRenderer::get_map_slice(Shared<SDL2pp::Texture> map,
     return SDL2pp::Rect(x, y, w, h);
 }
 
-SDL2pp::Rect View::PlayerRenderer::get_viewport_slice(const SDL2pp::Rect map_slice,
-                                                      const Camera& camera) {
+SDL2pp::Rect View::PlayerRenderer::get_viewport_slice(const SDL2pp::Rect& map_slice,
+                                                      const View::Camera& camera) {
     auto logical_width = renderer->GetLogicalWidth();
     auto logical_height = renderer->GetLogicalHeight();
     auto camera_x = camera.get_center().GetX() + 16;
@@ -89,8 +125,9 @@ SDL2pp::Rect View::PlayerRenderer::get_viewport_slice(const SDL2pp::Rect map_sli
     return SDL2pp::Rect(x, y, w, h);
 }
 
-void View::PlayerRenderer::render_map(const View::Camera& camera) {
-    auto map = game_state_manager->get_map();
+void View::PlayerRenderer::render_map(const Model::GameState& game_state) {
+    auto map = game_state.map;
+    auto camera = game_state.camera;
     if (!map)
         return;
     auto map_slice = get_map_slice(map, camera);
@@ -105,36 +142,10 @@ View::PlayerRenderer::PlayerRenderer(Weak<Controller::GameController> controller
     font = asset_manager->generate_font("liberationsans", 16);
 }
 
-void View::PlayerRenderer::render(uint8_t frames) {
-    (void)frames;
-    auto camera = game_state_manager->get_camera();
-    render_map(camera);
-    bool render_ref_player = true;
-    angle_t angle = 0;
-
-    game_state_manager->call_function_on_players(
-            [this, &angle,
-             &render_ref_player](std::map<short_id_t, Shared<View::RenderedPlayer>>& map) {
-                Shared<View::RenderedPlayer> reference_player =
-                        game_state_manager->get_reference_player_unsafe();
-                render_ref_player = (bool)reference_player;
-
-                for (auto& pair: map) {
-                    if (pair.second != reference_player)
-                        pair.second->render();
-                }
-
-                if (render_ref_player) {
-                    angle = reference_player->get_angle();
-                    reference_player->render();
-                }
-            });
-    game_state_manager->call_function_on_pending_fires(
-            [this](std::list<View::MuzzleFireAnimation>& list) {
-                for (auto& animation: list) {
-                    animation.render();
-                }
-            });
+void View::PlayerRenderer::render(const Model::GameState& game_state, uint8_t frames) {
+    render_map(game_state);
+    auto render_ref_player = render_players(game_state);
+    render_muzzle_fires(game_state, frames);
     if (render_ref_player)
-        render_fov(angle, camera);
+        render_fov(game_state);
 }

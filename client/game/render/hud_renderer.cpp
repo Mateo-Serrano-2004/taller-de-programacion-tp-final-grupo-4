@@ -17,6 +17,7 @@
 #include "entity/horizontal_pane.h"
 #include "entity/pane.h"
 #include "handler/game_state_manager.h"
+#include "model/game_state.h"
 #include "model/rendered_player.h"
 
 std::vector<uint8_t> View::HUDRenderer::get_units(uint16_t number) {
@@ -79,9 +80,8 @@ void View::HUDRenderer::render_number(std::list<View::Pane>& numbers, View::Hori
     parent.set_width(parent.get_width() + 22);
 }
 
-void View::HUDRenderer::render_time() {
-    uint16_t seconds_left = game_state_manager->get_time_left();
-    auto units = get_units_of_time_left(seconds_left);
+void View::HUDRenderer::render_time(uint16_t time_left) {
+    auto units = get_units_of_time_left(time_left);
 
     time.clear_children();
     time.set_width(0);
@@ -147,10 +147,9 @@ View::HUDRenderer::HUDRenderer(Weak<Controller::GameController> controller):
     money.set_height(37);
 }
 
-void View::HUDRenderer::render(uint8_t) {
-    render_time();
-    auto player = game_state_manager->get_reference_player();
-    if (player) {
+void View::HUDRenderer::render(const Model::GameState& game_state, uint8_t) {
+    render_time(game_state.time_left);
+    if (auto player = game_state.get_reference_player()) {
         render_money(player);
         render_life_points(player);
     }

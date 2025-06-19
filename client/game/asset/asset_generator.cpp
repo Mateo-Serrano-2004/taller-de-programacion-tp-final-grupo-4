@@ -172,11 +172,9 @@ Shared<SDL2pp::Texture> View::AssetGenerator::generate_map(const DTO::MapDTO& ma
 
 Shared<SDL2pp::Texture> View::AssetGenerator::generate_animation(const IList<std::string>& list) {
     std::vector<Shared<SDL2pp::Texture>> paths;
-
-    std::transform(list.begin(), list.end(), std::back_inserter(paths),
-                   [this](const std::string& path) {
-                       return make_shared<SDL2pp::Texture>(*renderer, path);
-                   });
+    std::transform(list.begin(), list.end(), std::back_inserter(paths), [this](const auto& path) {
+        return make_shared<SDL2pp::Texture>(*renderer, path);
+    });
     return generate_animation(paths);
 }
 

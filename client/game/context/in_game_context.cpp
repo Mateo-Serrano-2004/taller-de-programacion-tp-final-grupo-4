@@ -10,10 +10,13 @@
 #include "common/model/player.h"
 #include "controller/game_controller.h"
 #include "exception/closed_window.h"
+#include "handler/game_state_manager.h"
+#include "model/game_state.h"
 
 void Context::InGameContext::render(uint8_t frames) {
-    player_renderer.render(frames);
-    hud_renderer.render(frames);
+    Model::GameState game_state = game_state_manager->get_game_state();
+    player_renderer.render(game_state, frames);
+    hud_renderer.render(game_state, frames);
 }
 
 void Context::InGameContext::dispatch_events() {
@@ -28,4 +31,11 @@ Context::InGameContext::InGameContext(Weak<Controller::GameController> controlle
         Context::BaseContext("in-game", controller),
         player_renderer(controller),
         hud_renderer(controller),
-        event_handler_strategy(controller) {}
+        event_handler_strategy(controller),
+        game_state_manager(controller.lock()->get_game_state_manager()) {}
+
+void Context::InGameContext::notify_event(Shared<Model::Event> event) {
+    if (event->get_type() == Model::EventType::SWITCH_CONTEXT) {
+        event_handler_strategy.update_on_switch_context();
+    }
+}

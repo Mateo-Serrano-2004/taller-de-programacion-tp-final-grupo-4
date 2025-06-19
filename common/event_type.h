@@ -19,6 +19,7 @@ enum class EventType : uint8_t {
     LEAVE_GAME = 0x0A,
     STOP_MOVEMENT = 0x0B,
     STOP_USING_WEAPON = 0x0C,
+    STOP_DEFUSING_BOMB = 0x0D,
 
     // Lobby events
     USERNAME = 0x10,

@@ -26,6 +26,10 @@ void Context::ContextManager::set_current_context(const std::string& context_nam
     current_context_name = context_name;
 }
 
+void Context::ContextManager::notify_event(Shared<Model::Event> event) {
+    contexts.at(current_context_name)->notify_event(event);
+}
+
 void Context::ContextManager::update_current_context(uint8_t frames) {
     if (current_context_name.empty()) {
         return;

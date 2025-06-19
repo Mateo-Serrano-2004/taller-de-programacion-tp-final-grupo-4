@@ -12,7 +12,8 @@ class Renderer;
 
 namespace Model {
 class AssetManager;
-};
+struct GameState;
+};  // namespace Model
 
 namespace Controller {
 class BaseController;
@@ -28,7 +29,7 @@ protected:
 public:
     explicit Renderer(Weak<Controller::BaseController> controller);
 
-    virtual void render(uint8_t frames) = 0;
+    virtual void render(const Model::GameState& game_state, uint8_t frames) = 0;
 
     virtual ~Renderer() = default;
 };

@@ -18,7 +18,8 @@
 
 namespace Controller {
 class GameController;
-};
+class GameStateManager;
+};  // namespace Controller
 
 namespace Context {
 class MenuContext: public BaseContext {
@@ -31,6 +32,8 @@ protected:
     SDL_Event placeholder;
     Controller::MenuEventHandlerStrategy strategy;
     View::PlayerRenderer player_renderer;
+    Shared<Controller::GameStateManager> game_state_manager;
+
     View::VerticalPane viewport;
     View::VerticalPane background;
     View::Label ask_to_leave_label;

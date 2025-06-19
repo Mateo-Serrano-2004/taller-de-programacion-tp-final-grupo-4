@@ -216,3 +216,20 @@ void Controller::InGameEventHandlerStrategy::handle_current_game_state() {
 
     controller.lock()->push_event(std::move(rotation_event));
 }
+
+void Controller::InGameEventHandlerStrategy::update_on_switch_context() {
+    auto locked_controller = controller.lock();
+    if (handler_state.moving_horizontally) {
+        locked_controller->push_event(std::move(make_shared<Model::StopMovementEvent>(true)));
+        handler_state.moving_horizontally = false;
+    }
+    if (handler_state.moving_vertically) {
+        locked_controller->push_event(std::move(make_shared<Model::StopMovementEvent>(false)));
+        handler_state.moving_vertically = false;
+    }
+    if (handler_state.is_shooting) {
+        locked_controller->push_event(std::move(make_shared<Model::StopUsingWeaponEvent>()));
+        handler_state.is_shooting = false;
+    }
+    handler_state.switching_weapon = false;
+}

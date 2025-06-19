@@ -37,6 +37,7 @@ Controller::GameController::GameController(Shared<SDL2pp::Window> window,
 
 void Controller::GameController::handle_switch_context(Shared<Model::Event> event) {
     auto switch_context_event = std::static_pointer_cast<Model::SwitchContextEvent>(event);
+    context_manager->notify_event(switch_context_event);
     context_manager->set_current_context(switch_context_event->get_new_context_name());
 }
 

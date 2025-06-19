@@ -36,6 +36,7 @@ public:
     void add_context(Shared<BaseContext> context);
     void set_current_context(const std::string& context_name);
 
+    void notify_event(Shared<Model::Event> event);
     void update_current_context(uint8_t frames);
 
     ContextManager(ContextManager&&) = default;

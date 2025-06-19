@@ -21,7 +21,7 @@ protected:
     Shared<Controller::GameStateManager> game_state_manager;
 
 public:
-    explicit Animation(Weak<Controller::GameController> controller, Model::AnimationID id);
+    Animation(Weak<Controller::GameController> controller, Model::AnimationID id);
 
     void set_frames_to_process(uint8_t frames);
 

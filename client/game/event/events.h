@@ -3,6 +3,7 @@
 
 #include "common/event_type.h"
 
+#include "buy_ammo_event.h"
 #include "buy_weapon_event.h"
 #include "create_game_event.h"
 #include "join_game_event.h"
