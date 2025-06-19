@@ -18,6 +18,10 @@ namespace Controller {
 class GameController;
 };
 
+namespace DTO {
+struct ConfigDTO;
+}
+
 namespace Model {
 class AssetManager;
 
@@ -35,13 +39,13 @@ private:
     void load_player_sprites();
     void load_hud_texture(Model::TextureID id, int index);
     void load_hud_textures();
-    void load_fov();
+    void load_fov(const DTO::ConfigDTO& config);
     void load_animations();
 
 public:
     AssetLoader(Shared<AssetManager> manager, Shared<SDL2pp::Renderer> renderer);
 
-    void load_all_textures();
+    void load_all_textures(const DTO::ConfigDTO& config);
 
     ~AssetLoader() = default;
 };

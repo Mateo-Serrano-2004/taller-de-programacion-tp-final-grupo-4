@@ -12,6 +12,7 @@
 
 #include "animation/animation_details.h"
 #include "controller/game_controller.h"
+#include "common/DTO/config_dto.h"
 
 #include "animation_id.h"
 #include "asset_manager.h"
@@ -66,8 +67,8 @@ void Model::AssetLoader::load_hud_textures() {
     load_hud_texture(Model::TextureID::HUD_SYMBOLS, 1);
 }
 
-void Model::AssetLoader::load_fov() {
-    manager->load_texture(Model::TextureID::FOV, generator.generate_fov());
+void Model::AssetLoader::load_fov(const DTO::ConfigDTO& config) {
+    manager->load_texture(Model::TextureID::FOV, generator.generate_fov(config));
 }
 
 void Model::AssetLoader::load_animations() {
@@ -90,10 +91,10 @@ Model::AssetLoader::AssetLoader(Shared<AssetManager> manager, Shared<SDL2pp::Ren
         renderer(renderer),
         generator(renderer) {}
 
-void Model::AssetLoader::load_all_textures() {
+void Model::AssetLoader::load_all_textures(const DTO::ConfigDTO& config) {
     load_weapon_sprites();
     load_player_sprites();
     load_hud_textures();
-    load_fov();
+    load_fov(config);
     load_animations();
 }

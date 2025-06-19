@@ -84,9 +84,9 @@ weapons:
     reload_time: 3.7
 
 fov:
-  angle: 35
-  ratio: 32
+  angle: 45
+  ratio: 40
 
 display:
-  width: 640
-  height: 400
+  width: 800
+  height: 560

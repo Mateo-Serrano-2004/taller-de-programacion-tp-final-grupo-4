@@ -18,10 +18,10 @@ void ClientHandler::handle_create_game(const CreateGameEvent& event) {
     game_queue = game_manager.create_game(event.get_party_name(), event.get_map_name(), username,
                                           sender_queue);
     player_id = 0;
-    // const ConfigData& config = YamlParser::getConfigData();
-    // DTO::ConfigDTO config_dto(config.display.width, config.display.height, config.fov.angle,
-    //                           config.fov.ratio);
-    // sender_queue.push(config_dto);
+    const ConfigData& config = YamlParser::getConfigData();
+    DTO::ConfigDTO config_dto(config.display.width, config.display.height, config.fov.angle,
+                              config.fov.ratio);
+    sender_queue.push(config_dto);
     sender_queue.push(DTO::PlayerIDDTO(player_id));
     sender_queue.push(DTO::TeamIDDTO((short_id_t)Model::TeamID::CT));
     auto map = game_manager.get_map(event.get_map_name());
@@ -33,10 +33,10 @@ void ClientHandler::handle_join_game(const JoinGameEvent& event) {
         auto pair = game_manager.join_game(event.get_game_id(), username, sender_queue);
         player_id = pair.first;
         game_queue = pair.second;
-        // const ConfigData& config = YamlParser::getConfigData();
-        // DTO::ConfigDTO config_dto(config.display.width, config.display.height, config.fov.angle,
-        //                           config.fov.ratio);
-        // sender_queue.push(config_dto);
+        const ConfigData& config = YamlParser::getConfigData();
+        DTO::ConfigDTO config_dto(config.display.width, config.display.height, config.fov.angle,
+                                  config.fov.ratio);
+        sender_queue.push(config_dto);
         sender_queue.push(DTO::PlayerIDDTO(player_id));
         auto map = game_manager.get_map(game_manager.get_game_map(event.get_game_id()));
         sender_queue.push(map);

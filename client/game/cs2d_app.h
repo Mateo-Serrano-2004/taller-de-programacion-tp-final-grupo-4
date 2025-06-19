@@ -11,6 +11,10 @@ namespace Net {
 class ClientProtocol;
 };
 
+namespace Controller {
+class GameController;
+};
+
 namespace App {
 class CS2DApp: public Application {
 protected:
@@ -18,6 +22,9 @@ protected:
     CS2DApp& operator=(const CS2DApp&) = delete;
     CS2DApp(CS2DApp&&) = delete;
     CS2DApp& operator=(CS2DApp&&) = delete;
+
+    Shared<Controller::GameController> set_up_graphics(Shared<Net::ClientProtocol> protocol);
+    void set_up_contexts(Weak<Controller::GameController> game_controller);
 
 public:
     explicit CS2DApp(Shared<Net::ClientProtocol> protocol);

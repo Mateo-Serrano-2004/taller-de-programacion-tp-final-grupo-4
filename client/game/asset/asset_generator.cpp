@@ -16,6 +16,7 @@
 #include <SDL2pp/Renderer.hh>
 #include <SDL2pp/Texture.hh>
 
+#include "common/DTO/config_dto.h"
 #include "common/DTO/map_dto.h"
 #include "common/asset_addresser.h"
 
@@ -94,18 +95,15 @@ Shared<SDL2pp::Texture> View::AssetGenerator::generate_animation(
 View::AssetGenerator::AssetGenerator(Shared<SDL2pp::Renderer> renderer): renderer(renderer) {}
 
 
-Shared<SDL2pp::Texture> View::AssetGenerator::generate_fov() {
-    SDL_Rect bounds = get_bounds();
-
+Shared<SDL2pp::Texture> View::AssetGenerator::generate_fov(const DTO::ConfigDTO& config) {
     // The size of the fov must be enough to cover
-    // the whole screen even when rotated
-    int max_fov_size = std::ceil(std::sqrt((bounds.w * bounds.w) + (bounds.h * bounds.h)) / 2.0);
+    // the logical size of the screen even when rotated
+    int fov_size = std::ceil(std::sqrt((config.width * config.width) + (config.height * config.height)) / 2.0);
 
     auto fov_texture = make_shared<SDL2pp::Texture>(*renderer, SDL_PIXELFORMAT_RGBA8888,
-                                                    SDL_TEXTUREACCESS_TARGET, 2 * max_fov_size,
-                                                    2 * max_fov_size);
+                                                    SDL_TEXTUREACCESS_TARGET, 2 * fov_size,
+                                                    2 * fov_size);
 
-    // Allow blend
     fov_texture->SetBlendMode(SDL_BLENDMODE_BLEND);
 
     SDL2pp::Color color = renderer->GetDrawColor();
@@ -121,8 +119,8 @@ Shared<SDL2pp::Texture> View::AssetGenerator::generate_fov() {
     renderer->SetDrawBlendMode(SDL_BLENDMODE_NONE);  // Override the black transparency
     renderer->SetDrawColor(0, 0, 0, 0);              // Transparent
 
-    draw_disk(max_fov_size, 30);
-    draw_triangle(max_fov_size, 30);  // 30deg
+    draw_disk(fov_size, config.ratio);
+    draw_triangle(fov_size, config.angle);
 
     // Restore
     renderer->SetDrawColor(color);

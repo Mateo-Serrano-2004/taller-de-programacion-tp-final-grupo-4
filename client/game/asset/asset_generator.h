@@ -19,6 +19,7 @@ class Font;
 
 namespace DTO {
 struct MapDTO;
+struct ConfigDTO;
 };
 
 namespace View {
@@ -42,7 +43,7 @@ public:
     // Generate assets from scratch
 
     // FOV = Field of view
-    Shared<SDL2pp::Texture> generate_fov();
+    Shared<SDL2pp::Texture> generate_fov(const DTO::ConfigDTO& config);
     Shared<SDL2pp::Texture> generate_plain_texture(const SDL2pp::Point& size,
                                                    const SDL2pp::Color& color);
     Shared<SDL2pp::Texture> generate_plain_texture(const SDL2pp::Color& color);
