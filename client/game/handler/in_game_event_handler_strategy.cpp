@@ -11,9 +11,11 @@
 
 #include "common/slot_id.h"
 #include "controller/game_controller.h"
+#include "event/defuse_bomb_event.h"
 #include "event/movement_event.h"
 #include "event/quit_event.h"
 #include "event/rotation_event.h"
+#include "event/stop_defusing_bomb_event.h"
 #include "event/stop_movement_event.h"
 #include "event/stop_using_weapon_event.h"
 #include "event/switch_context_event.h"
@@ -131,6 +133,24 @@ void Controller::InGameEventHandlerStrategy::handle_stop_switching_weapon_event(
     handler_state.switching_weapon = false;
 }
 
+void Controller::InGameEventHandlerStrategy::handle_defuse_bomb() {
+    if (handler_state.is_defusing) return;
+    std::cout << "DEFUSING\n";
+    controller.lock()->push_event(
+        make_shared<Model::DefuseBombEvent>()
+    );
+    handler_state.is_defusing = true;
+}
+
+void Controller::InGameEventHandlerStrategy::handle_stop_defusing_bomb() {
+    if (!handler_state.is_defusing) return;
+    std::cout << "STOPPPPPPPPPP\n";
+    controller.lock()->push_event(
+        make_shared<Model::StopDefusingBombEvent>()
+    );
+    handler_state.is_defusing = false;
+}
+
 void Controller::InGameEventHandlerStrategy::handle_click() {
     if (handler_state.is_shooting)
         return;
@@ -149,7 +169,9 @@ void Controller::InGameEventHandlerStrategy::handle_click_release() {
 
 void Controller::InGameEventHandlerStrategy::handle_keydown_event(Shared<SDL_Event> event) {
     auto key_symbol = event->key.keysym.sym;
-    if (key_symbol == SDLK_ESCAPE || key_symbol == SDLK_b) {
+    if (key_symbol == SDLK_e) {
+        handle_defuse_bomb();
+    } else if (key_symbol == SDLK_ESCAPE || key_symbol == SDLK_b) {
         handle_switch_context_event(event);
     } else if (key_symbol == SDLK_w || key_symbol == SDLK_a || key_symbol == SDLK_s ||
                key_symbol == SDLK_d) {
@@ -162,7 +184,9 @@ void Controller::InGameEventHandlerStrategy::handle_keydown_event(Shared<SDL_Eve
 
 void Controller::InGameEventHandlerStrategy::handle_keyup_event(Shared<SDL_Event> event) {
     auto key_symbol = event->key.keysym.sym;
-    if (key_symbol == SDLK_w || key_symbol == SDLK_a || key_symbol == SDLK_s ||
+    if (key_symbol == SDLK_e) {
+        handle_stop_defusing_bomb();
+    } else if (key_symbol == SDLK_w || key_symbol == SDLK_a || key_symbol == SDLK_s ||
         key_symbol == SDLK_d) {
         handle_stop_movement_event(std::move(event));
     } else if (key_symbol == SDLK_1 || key_symbol == SDLK_2 || key_symbol == SDLK_3 ||
@@ -230,6 +254,10 @@ void Controller::InGameEventHandlerStrategy::update_on_switch_context() {
     if (handler_state.is_shooting) {
         locked_controller->push_event(std::move(make_shared<Model::StopUsingWeaponEvent>()));
         handler_state.is_shooting = false;
+    }
+    if (handler_state.is_defusing) {
+        locked_controller->push_event(std::move(make_shared<Model::StopDefusingBombEvent>()));
+        handler_state.is_defusing = false;
     }
     handler_state.switching_weapon = false;
 }

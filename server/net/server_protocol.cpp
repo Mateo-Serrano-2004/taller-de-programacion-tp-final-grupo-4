@@ -87,6 +87,12 @@ EventVariant ServerProtocol::receive_event() {
             Model::WeaponID weapon_id = Model::WeaponID(data[1]);
             return BuyEvent(weapon_id);
         }
+        case Model::EventType::DEFUSE_BOMB: {
+            return DefuseBombEvent();
+        }
+        case Model::EventType::STOP_DEFUSING_BOMB: {
+            return StopDefusingBombEvent();
+        }
         default:
             throw std::invalid_argument("Invalid event code");
     }

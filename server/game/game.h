@@ -97,6 +97,7 @@ public:
     std::string get_map_name();
     GameQueue& get_queue();
 
+    bool is_valid();
     bool is_dead();
 
     void add_player(const std::string& username, ClientQueue& client_queue, short_id_t player_id,

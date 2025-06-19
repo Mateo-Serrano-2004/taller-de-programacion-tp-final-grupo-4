@@ -270,6 +270,10 @@ GameQueue& Game::get_queue() {
     return game_queue;
 }
 
+bool Game::is_valid() {
+    return round.is_warmup() && is_not_finished;
+}
+
 bool Game::is_dead() {
     std::lock_guard<std::mutex> lock(mutex);
     return !is_not_finished;

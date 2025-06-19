@@ -25,6 +25,9 @@ protected:
     void handle_stop_movement_event(Shared<SDL_Event> event);
     void handle_stop_switching_weapon_event();
 
+    void handle_defuse_bomb();
+    void handle_stop_defusing_bomb();
+
     void handle_click();
     void handle_click_release();
 
