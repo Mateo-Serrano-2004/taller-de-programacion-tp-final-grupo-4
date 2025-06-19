@@ -1,6 +1,7 @@
 #ifndef SERVER_GAME_MODEL_SHOT_INFO_H
 #define SERVER_GAME_MODEL_SHOT_INFO_H
 
+#include "weapon_shot_info.h"
 #include "common/definitions.h"
 #include "common/model/vector_2d.h"
 #include "common/weapon_id.h"
@@ -24,4 +25,4 @@ struct ShotInfo {
           weapon_info(weapon_info) {}
 };
 
-#endif  // SERVER_GAME_MODEL_SHOT_INFO_H
+#endif // SERVER_GAME_MODEL_SHOT_INFO_H
