@@ -17,8 +17,7 @@ FullPlayer::FullPlayer(short_id_t id, const std::string& name, Model::TeamID tea
   movement_direction(0, 0),
   size(32,32),
   secondary_weapon(WeaponFactory::create(Model::WeaponID::GLOCK)),
-  knife(WeaponFactory::create(Model::WeaponID::KNIFE)),
-  defusing_bomb(false) {
+  knife(WeaponFactory::create(Model::WeaponID::KNIFE)) {
     current_weapon = secondary_weapon;
     money = 1500;
 }
@@ -114,10 +113,6 @@ void FullPlayer::start_defusing_bomb() {
 
 void FullPlayer::stop_defusing_bomb() {
     defusing_bomb = false;
-}
-
-bool FullPlayer::is_defusing() const {
-    return defusing_bomb;
 }
 
 std::optional<ShotInfo> FullPlayer::shoot(uint16_t frames_to_process) {

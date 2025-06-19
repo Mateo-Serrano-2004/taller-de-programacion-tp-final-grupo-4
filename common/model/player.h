@@ -20,6 +20,7 @@ class Player {
 protected:
     bool alive;
     bool shooting;
+    bool defusing_bomb;
     short_id_t id;
     Model::RoleID role_id;
     angle_t angle;
@@ -35,6 +36,7 @@ public:
 
     Player(
         bool shooting,
+        bool defusing_bomb,
         short_id_t id,
         Model::RoleID role_id,
         angle_t angle,
@@ -53,6 +55,7 @@ public:
 
     bool is_alive() const;
     bool is_shooting() const;
+    bool is_defusing() const;
     short_id_t get_id() const;
     Model::RoleID get_role_id() const;
     angle_t get_angle() const;

@@ -11,6 +11,7 @@
 Model::Player::Player(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role_id)
 : alive(true),
   shooting(false),
+  defusing_bomb(false),
   id(id),
   role_id(role_id),
   angle(0),
@@ -22,6 +23,7 @@ Model::Player::Player(short_id_t id, const std::string& name, Model::TeamID team
 
 Model::Player::Player(
     bool shooting,
+    bool defusing_bomb,
     short_id_t id,
     Model::RoleID role_id,
     angle_t angle,
@@ -33,6 +35,7 @@ Model::Player::Player(
     Model::TeamID team
 ): alive(true),
    shooting(shooting),
+   defusing_bomb(defusing_bomb),
    id(id),
    role_id(role_id),
    angle(angle),
@@ -46,6 +49,8 @@ Model::Player::Player(
 bool Model::Player::is_alive() const { return alive; }
 
 bool Model::Player::is_shooting() const { return shooting; }
+
+bool Model::Player::is_defusing() const { return defusing_bomb; }
 
 short_id_t Model::Player::get_id() const { return id; }
 
@@ -100,6 +105,7 @@ DTO::PlayerDTO Model::Player::to_dto() const {
         name,
         current_weapon->to_dto(),
         shooting,
+        defusing_bomb,
         health,
         team
     );

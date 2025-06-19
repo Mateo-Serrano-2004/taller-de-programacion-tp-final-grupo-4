@@ -16,8 +16,6 @@
 class GameLogic {
 private:
     Shop shop;
-    bool bomb_being_defused = false;
-    uint8_t player_defusing_bomb = -1;
     void apply_impacts(const std::vector<Impact>& impacts, Round& round, std::map<uint8_t, FullPlayer>& players) const;
     bool is_in_bomb_zone(Physics::Vector2D player_position) const;
     public:

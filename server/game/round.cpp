@@ -17,6 +17,7 @@ Round::Round(int ct_alive, int tt_alive)
       defusing_ticks(300),
       defusing_ticks_remaining(300),
       bomb_being_defused(false),
+      player_defusing_bomb(-1),
       is_warmup_round(false) {}
 
 Round Round::create_warmup_round() {
@@ -147,9 +148,10 @@ void Round::notify_bomb_planted(Physics::Vector2D position) {
     active_ticks_remaining = bomb_total_ticks;
 }
 
-bool Round::notify_bomb_is_being_defused() {
+bool Round::notify_bomb_is_being_defused(uint8_t player_id) {
     if (!bomb_planted || bomb_defused || !is_active()) return false;
     bomb_being_defused = true;
+    player_defusing_bomb = player_id; // ojo int y uint
     return bomb_being_defused;
 }
 
@@ -157,6 +159,12 @@ void Round::notify_bomb_is_not_longer_being_defused() {
     if (!bomb_planted || bomb_defused || !is_active()) return;
     defusing_ticks_remaining = defusing_ticks;
     bomb_being_defused = false;
+    player_defusing_bomb = -1; // ojo int y uint
+}
+
+int Round::player_id_defusing_bomb() const {
+    if (!bomb_planted || !bomb_being_defused || bomb_defused || !is_active()) return -1;
+    return player_defusing_bomb;
 }
 
 DTO::RoundDTO Round::to_dto(int fps) const {
@@ -173,4 +181,8 @@ DTO::RoundDTO Round::to_dto(int fps) const {
 
 int Round::get_ticks_remaining() const {
     return active_ticks_remaining;
+}
+
+bool Round::bomb_is_being_defused() const {
+    return bomb_being_defused;
 }

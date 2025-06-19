@@ -33,7 +33,7 @@ void GameLogic::start_defusing_bomb(FullPlayer& player, const Round& round) cons
     if (!round.bomb_is_planted()) return; // tiene sentido
     if (player.get_team() != Model::TeamID::CT) return;
     if (!is_in_bomb_zone(player.get_position())) return;
-    if (bomb_being_defused) return;
+    if (round.bomb_is_being_defused()) return;
 
     player.start_defusing_bomb();
 }
@@ -49,10 +49,11 @@ void GameLogic::stop_using_weapon(FullPlayer& player) const {
 void GameLogic::process_defusing(std::map<uint8_t, FullPlayer>& players, Round& round) {
     if (!round.is_active()) return;
 
-    if(bomb_being_defused){
-        auto it = players.find(player_defusing_bomb);
+    if(round.bomb_is_being_defused()){
+        if(round.player_id_defusing_bomb() == -1){ return; } // Solo chequeo seguridad, si esta siendo defuseada te da el int
+
+        auto it = players.find(round.player_id_defusing_bomb()); // parseo int a uint 
         if (it == players.end()){
-            bomb_being_defused = false;
             round.notify_bomb_is_not_longer_being_defused();
             return;
         } else {
@@ -60,14 +61,13 @@ void GameLogic::process_defusing(std::map<uint8_t, FullPlayer>& players, Round& 
 
             if(!player.is_alive() || !is_in_bomb_zone(player.get_position()) || !player.is_defusing()){
                 player.stop_defusing_bomb();
-                bomb_being_defused = false;
                 round.notify_bomb_is_not_longer_being_defused();
                 return;
             }
         }
     }
 
-    if(!bomb_being_defused){
+    if(!round.bomb_is_being_defused()){
         for (auto& [id, player] : players) {
             if (!player.is_alive()) continue;
             if (player.get_team() != Model::TeamID::CT) continue;
@@ -78,11 +78,8 @@ void GameLogic::process_defusing(std::map<uint8_t, FullPlayer>& players, Round& 
             } // ojo que deberia dejar de defusear si no esta plantada?
             if (!player.is_defusing()) continue;
     
-            bomb_being_defused = round.notify_bomb_is_being_defused();
+            round.notify_bomb_is_being_defused(id);
 
-            if(bomb_being_defused){
-                player_defusing_bomb = id;
-            }
             break;
         }
     }

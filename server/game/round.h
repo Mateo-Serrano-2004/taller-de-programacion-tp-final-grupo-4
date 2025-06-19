@@ -30,6 +30,7 @@ private:
     int defusing_ticks_remaining;
 
     bool bomb_being_defused;
+    int player_defusing_bomb;
     bool is_warmup_round;
 
     void update_if_finished_warmup();
@@ -57,8 +58,10 @@ public:
     void notify_player_joined(Model::TeamID team);
 
     void notify_bomb_planted(Physics::Vector2D position);
-    bool notify_bomb_is_being_defused();
+    bool notify_bomb_is_being_defused(uint8_t player_id);
     void notify_bomb_is_not_longer_being_defused();
+    bool bomb_is_being_defused() const;
+    int player_id_defusing_bomb() const;
 
     DTO::RoundDTO to_dto(int fps) const;
 };
