@@ -33,6 +33,7 @@ void GameLogic::start_defusing_bomb(FullPlayer& player, const Round& round) cons
     if (!round.bomb_is_planted()) return; // tiene sentido
     if (player.get_team() != Model::TeamID::CT) return;
     if (!is_in_bomb_zone(player.get_position())) return;
+    if (bomb_being_defused) return;
 
     player.start_defusing_bomb();
 }
@@ -58,6 +59,7 @@ void GameLogic::process_defusing(std::map<uint8_t, FullPlayer>& players, Round& 
             auto& player = it->second;
 
             if(!player.is_alive() || !is_in_bomb_zone(player.get_position()) || !player.is_defusing()){
+                player.stop_defusing_bomb();
                 bomb_being_defused = false;
                 round.notify_bomb_is_not_longer_being_defused();
                 return;
