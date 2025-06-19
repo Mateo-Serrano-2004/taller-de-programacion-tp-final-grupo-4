@@ -18,17 +18,19 @@
 class GameLogic {
 private:
     Shop shop;
-    void apply_impacts(const std::vector<Impact>& impacts, Round& round,
-                       std::map<uint8_t, FullPlayer>& players) const;
-
-public:
+    void apply_impacts(const std::vector<Impact>& impacts, Round& round, std::map<uint8_t, FullPlayer>& players) const;
+    bool is_in_bomb_zone(Physics::Vector2D player_position) const;
+    public:
     GameLogic() = default;
 
     void buy_weapon(FullPlayer& player, Model::WeaponID weapon_id, const Round& round) const;
     void start_using_weapon(FullPlayer& player, const Round& round) const;
     void stop_using_weapon(FullPlayer& player) const;
-    void process_shooting(std::map<uint8_t, FullPlayer>& players, Round& round,
-                          uint16_t frames_to_process) const;
+    void process_shooting(std::map<uint8_t, FullPlayer>& players, Round& round, uint16_t frames_to_process) const;
+    void assign_bomb_to_random_tt(std::map<uint8_t, FullPlayer>& players);
+    void start_defusing_bomb(FullPlayer& player, const Round& round) const;
+    void stop_defusing_bomb(FullPlayer& player) const;
+    void process_defusing(std::map<uint8_t, FullPlayer>& players, Round& round);
 
     ~GameLogic() = default;
 };

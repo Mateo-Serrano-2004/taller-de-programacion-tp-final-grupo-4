@@ -4,6 +4,7 @@
 #include <cstdint>
 
 #include "common/definitions.h"
+#include "common/weapon_id.h"
 #include "model/full_weapon.h"
 
 namespace Model {
@@ -15,4 +16,4 @@ public:
     static Shared<FullWeapon> create(Model::WeaponID id);
 };
 
-#endif  // SERVER_GAME_WEAPON_FACTORY_H
+#endif // SERVER_GAME_WEAPON_FACTORY_H

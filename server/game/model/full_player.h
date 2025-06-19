@@ -15,6 +15,7 @@
 class FullPlayer: public Model::Player {
 private:
     Physics::Vector2D movement_direction;
+    Physics::Vector2D size;
 
     Shared<FullWeapon> primary_weapon;
     Shared<FullWeapon> secondary_weapon;
@@ -28,6 +29,7 @@ public:
     FullPlayer& operator=(FullPlayer&&) = default;
 
     Physics::Vector2D get_direction() const;
+    Physics::Vector2D get_size() const;
 
     void update_movement_direction_by_merge(const Physics::Vector2D& direction);
     void stop_vertical_movement();
@@ -42,10 +44,18 @@ public:
     void equip_weapon_by_type(Model::SlotID type);
 
     bool can_pay(uint16_t price);
+    bool has_bomb_equipped() const;
     void substract_money(uint16_t amount);
     Shared<FullWeapon> equip_new_weapon_and_drop_previous(Shared<FullWeapon> new_weapon);
 
     void reset_for_new_round();
+
+    Shared<FullWeapon> remove_bomb();
+
+    void give_bomb(Shared<FullWeapon> new_bomb);
+
+    void start_defusing_bomb();
+    void stop_defusing_bomb();
 
     ~FullPlayer() override = default;
 };

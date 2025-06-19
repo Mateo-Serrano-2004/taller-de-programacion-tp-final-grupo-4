@@ -5,56 +5,62 @@
 #include <iostream>
 
 #include "common/DTO/round_dto.h"
-#include "common/round_state.h"
-#include "common/team.h"
+#include "common/model/vector_2d.h"
 
 class Round {
 private:
     Model::TeamID winner_team = Model::TeamID::NONE;
-    int count_of_rounds = 0;
 
     RoundState state;
     int number_of_ct_alive;
     int number_of_tt_alive;
 
-    // X seconds = N frames / M FPS
-    // For 60FPS, X seconds = N frames / 60FPS
+    bool bomb_planted;
+    bool bomb_defused;
+    Physics::Vector2D bomb_position;
+
     int ticks_for_warmup_phase;
     int ticks_for_buying_phase;
     int ticks_for_playing_phase;
+    int bomb_total_ticks;
 
     int active_ticks_remaining;
+    int defusing_ticks;
+    int defusing_ticks_remaining;
+
+    bool bomb_being_defused;
+    int player_defusing_bomb;
+    bool is_warmup_round;
 
     void update_if_finished_warmup();
     void update_if_finished_buying();
     void update_if_finished_playing();
+    int get_ticks_remaining() const;
+    void check_if_finished_defusing(int frames_to_process);
 
 public:
-    // Builds a base round in warmup state
-    Round();
+    Round(int ct_alive, int tt_alive);
+
+    static Round create_warmup_round();
 
     Model::TeamID get_winner_team() const;
-    int get_count_of_rounds() const;
     RoundState get_state() const;
     bool is_warmup() const;
     bool is_buying() const;
     bool is_active() const;
     bool ended() const;
-    uint16_t get_ticks_remaining() const;
+    bool bomb_is_planted() const;
 
-    void set_ticks_for_warmup_phase(int ticks);
-    void set_ticks_for_buying_phase(int ticks);
-    void set_ticks_for_playing_phase(int ticks);
-
-    void set_ct_count(int count);
-    void set_tt_count(int count);
-
-    void to_buying_phase();
     void update(int frames_to_process);
 
-    // Si la bomba está plantada, NO debe terminar la ronda falta esa lógica
     void notify_on_one_player_less(Model::TeamID team);
     void notify_player_joined(Model::TeamID team);
+
+    void notify_bomb_planted(Physics::Vector2D position);
+    bool notify_bomb_is_being_defused(uint8_t player_id);
+    void notify_bomb_is_not_longer_being_defused();
+    bool bomb_is_being_defused() const;
+    int player_id_defusing_bomb() const;
 
     DTO::RoundDTO to_dto(int fps) const;
 };

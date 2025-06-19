@@ -12,12 +12,12 @@
 #include "common/weapon_id.h"
 #include "server/game/weapon_factory.h"
 
-FullPlayer::FullPlayer(short_id_t id, const std::string& name, Model::TeamID team,
-                       Model::RoleID role):
-        Model::Player(id, name, team, role),
-        movement_direction(0, 0),
-        secondary_weapon(WeaponFactory::create(Model::WeaponID::GLOCK)),
-        knife(WeaponFactory::create(Model::WeaponID::KNIFE)) {
+FullPlayer::FullPlayer(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role)
+: Model::Player(id, name, team, role),
+  movement_direction(0, 0),
+  size(32,32),
+  secondary_weapon(WeaponFactory::create(Model::WeaponID::GLOCK)),
+  knife(WeaponFactory::create(Model::WeaponID::KNIFE)) {
     current_weapon = secondary_weapon;
     money = 1500;
 }
@@ -36,6 +36,8 @@ void FullPlayer::stop_vertical_movement() { movement_direction.set_y(0); }
 void FullPlayer::stop_horizontal_movement() { movement_direction.set_x(0); }
 
 Physics::Vector2D FullPlayer::get_direction() const { return movement_direction; }
+
+Physics::Vector2D FullPlayer::get_size() const { return size; }
 
 void FullPlayer::update_position() {
     position += movement_direction;
@@ -87,7 +89,8 @@ Shared<FullWeapon> FullPlayer::equip_new_weapon_and_drop_previous(Shared<FullWea
             current_weapon = primary_weapon;
             break;
     }
-
+    dropped_weapon->release_trigger();
+    shooting = false;
     return dropped_weapon;
 }
 
@@ -110,14 +113,16 @@ void FullPlayer::stop_using_weapon() {
     std::static_pointer_cast<FullWeapon>(current_weapon)->release_trigger();
     shooting = false;
 }
-/*
-void FullPlayer::shoot(uint16_t frames_to_process) {
-    if (!current_weapon || !alive) {
-        shooting = false;
-        return;
-    }
-    shooting = std::static_pointer_cast<FullWeapon>(current_weapon)->shoot(frames_to_process);
-}*/
+
+void FullPlayer::start_defusing_bomb() {
+    if (!alive || team != Model::TeamID::CT) return;
+    defusing_bomb = true;
+}
+
+void FullPlayer::stop_defusing_bomb() {
+    defusing_bomb = false;
+}
+
 std::optional<ShotInfo> FullPlayer::shoot(uint16_t frames_to_process) {
     if (!current_weapon || !alive) {
         shooting = false;
@@ -133,7 +138,13 @@ std::optional<ShotInfo> FullPlayer::shoot(uint16_t frames_to_process) {
     }
 
     shooting = true;
-    return ShotInfo(id, position, angle, shot_info.value());
+    return ShotInfo(
+        id,
+        position,
+        angle,
+        weapon->get_weapon_id(),
+        shot_info.value()
+    );
 }
 
 void FullPlayer::take_damage(uint8_t damage) {
@@ -144,6 +155,7 @@ void FullPlayer::take_damage(uint8_t damage) {
         health = 0;
         alive = false;
     } else {
+        std::cout << "player id: " << static_cast<int>(get_id()) << "daño " << static_cast<int>(damage) << std::endl;
         health -= damage;
     }
 }
@@ -153,4 +165,37 @@ void FullPlayer::add_money(uint16_t money_to_be_added) { money += money_to_be_ad
 void FullPlayer::reset_for_new_round() {
     alive = true;
     health = 100;
+    defusing_bomb = false;
+    bomb.reset();
+}
+
+bool FullPlayer::has_bomb_equipped() const {
+    if (!current_weapon) return false;
+    return current_weapon->get_weapon_id() == Model::WeaponID::BOMB;
+}
+
+Shared<FullWeapon> FullPlayer::remove_bomb() {
+    if (!current_weapon) return nullptr;
+
+    Shared<FullWeapon> dropped_bomb = nullptr;
+
+    if (current_weapon->get_weapon_id() == Model::WeaponID::BOMB) {
+        
+        dropped_bomb = bomb;
+        bomb.reset();
+
+        if (primary_weapon) {
+            equip_weapon_by_type(Model::SlotID::PRIMARY_WEAPON);
+        } else if (secondary_weapon) {
+            equip_weapon_by_type(Model::SlotID::SECONDARY_WEAPON);
+        } else if (knife) {
+            equip_weapon_by_type(Model::SlotID::KNIFE_SLOT);
+        }
+    }
+
+    return dropped_bomb;
+}
+
+void FullPlayer::give_bomb(Shared<FullWeapon> new_bomb) {
+    bomb = new_bomb;
 }

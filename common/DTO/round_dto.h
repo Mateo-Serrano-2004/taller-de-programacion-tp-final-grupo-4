@@ -5,6 +5,7 @@
 
 #include "common/round_state.h"
 #include "common/team.h"
+#include "common/model/vector_2d.h" 
 
 namespace DTO {
 struct RoundDTO {
@@ -13,9 +14,19 @@ public:
     bool ended;
     uint16_t time_left;
     Model::TeamID winner;
+    bool bomb_planted;
+    bool bomb_defused;
+    Physics::Vector2D bomb_position;
 
     RoundDTO();
-    RoundDTO(RoundState state, bool ended, uint16_t time_left, Model::TeamID winner);
+    RoundDTO(
+        RoundState state, 
+        bool ended, 
+        uint16_t time_left, 
+        Model::TeamID winner,
+        bool bomb_planted,
+        bool bomb_defused,
+        Physics::Vector2D bomb_position);
 };
 }  // namespace DTO
 
