@@ -52,13 +52,13 @@ std::optional<WeaponShotInfo> AK47::shoot(uint16_t ticks_to_process) {
 
     return WeaponShotInfo(
         1,          // bullets_fired
-        22.0f,      // base_damage
+        20.0f,      // base_damage
         8.0f,       // min_damage
-        100.0f,      // max_range
+        200.0f,      // max_range
         0.75f,      // precision
         0.07f,      // dispersion
         DamageMode::LINEAR_FALLOFF,
-        0.035f,     // falloff_factor
+        0.12,     // falloff_factor
         0.0f,       // close_range_threshold
         1.0f        // close_range_multiplier
     );

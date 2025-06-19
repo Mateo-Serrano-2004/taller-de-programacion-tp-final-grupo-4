@@ -88,7 +88,7 @@ std::vector<Impact> ShotManager::calculate_shot_impacts(
         for (const auto& [id, player] : players) {
             if (id == shot_info.shooter_id || !player.is_alive()) continue;
             if (!does_bullet_hit_player(origin, direction, winfo.max_range, player)) continue;
-
+            // solo chequea con players
             float dist = origin.distance_to(player.get_position());
             if (dist < closest_dist) {
                 closest_dist = dist;

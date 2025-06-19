@@ -20,7 +20,7 @@ std::optional<WeaponShotInfo> Knife::shoot(uint16_t ticks_to_process) {
         /* bullets_fired */         1,
         /* base_damage */           35.0f,
         /* min_damage */            35.0f,
-        /* max_range */             30.0f,
+        /* max_range */             32.0f,
         /* precision */             1.0f,
         /* dispersion */            0.0f,
         /* damage_mode */           DamageMode::CONSTANT,

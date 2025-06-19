@@ -22,7 +22,7 @@ std::optional<WeaponShotInfo> Glock::shoot(uint16_t ticks_to_process) {
         /* bullets_fired */         1,
         /* base_damage */           30.0f,
         /* min_damage */            10.0f,
-        /* max_range */             100.0f,
+        /* max_range */             200.0f,
         /* precision */             0.9f,
         /* dispersion */            0.05f,
         /* damage_mode */           DamageMode::LINEAR_FALLOFF,
