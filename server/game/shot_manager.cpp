@@ -16,7 +16,6 @@ bool does_bullet_hit_player(
     float max_x = pos.get_x() + size.get_x();
     float max_y = pos.get_y() + size.get_y();
 
-
     Physics::Vector2D end = origin + direction.normalized() * max_range;
 
     if (end.get_x() < min_x && origin.get_x() < min_x) return false;

@@ -89,7 +89,7 @@ Shared<FullWeapon> FullPlayer::equip_new_weapon_and_drop_previous(Shared<FullWea
             current_weapon = primary_weapon;
             break;
     }
-    dropped_weapon->release_trigger();
+    if (dropped_weapon) dropped_weapon->release_trigger();
     shooting = false;
     return dropped_weapon;
 }

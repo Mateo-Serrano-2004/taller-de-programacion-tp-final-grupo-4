@@ -100,11 +100,10 @@ void Game::handle_rotation(const uint8_t& player_id, const RotationEvent& event)
     player->get().set_angle(event.get_angle_in_degrees());
 }
 
-// TODO: Update GameManager so this is not needed
 void Game::handle_pick_role(const uint8_t player_id, const PickRoleEvent& event) {
     auto player = find_player_by_id(player_id);
     if (!player.has_value()) {
-        std::cout << "Could not find player\n";
+        return;
     }
     player->get().set_role_id(event.get_role_id());
 }
@@ -146,8 +145,6 @@ void Game::start_new_round() {
         if (player.get_team() == Model::TeamID::CT) ct_count++;
         else tt_count++;
     }
-    std::cout << "NUEVA RONDA" << std::endl;
-
     gamelogic.assign_bomb_to_random_tt(players);
 
     round = Round(ct_count, tt_count);

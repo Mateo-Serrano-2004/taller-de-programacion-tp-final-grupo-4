@@ -101,7 +101,7 @@ void GameLogic::process_shooting(std::map<uint8_t, FullPlayer>& players, Round& 
         }
 
         auto shot_info = player.shoot(frames_to_process);
-        
+
         if (!shot_info.has_value()) continue;
 
         if (shot_info->weapon_id == Model::WeaponID::BOMB) {

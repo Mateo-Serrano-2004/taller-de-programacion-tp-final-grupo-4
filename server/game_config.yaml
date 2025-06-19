@@ -88,5 +88,5 @@ fov:
   ratio: 40
 
 display:
-  width: 800
-  height: 560
+  width: 580
+  height: 400

@@ -17,14 +17,13 @@ std::optional<WeaponShotInfo> Glock::shoot(uint16_t ticks_to_process) {
     if (get_loaded_ammo() == 0) return std::nullopt;
     set_loaded_ammo(get_loaded_ammo() - 1);
     trigger_blocked = true;
-    std::cout << "------------------------------------------------------- MUNICIÓN DE GLOCK " << static_cast<int>(get_loaded_ammo()) << std::endl;
     return WeaponShotInfo(
         /* bullets_fired */         1,
         /* base_damage */           30.0f,
         /* min_damage */            10.0f,
         /* max_range */             200.0f,
         /* precision */             0.9f,
-        /* dispersion */            0.05f,
+        /* dispersion */            0.0f,
         /* damage_mode */           DamageMode::LINEAR_FALLOFF,
         /* falloff_factor */        0.03f,
         /* close_range_threshold */ 0.0f,

@@ -89,7 +89,7 @@ Shared<Model::Weapon> Model::Player::get_current_weapon() const { return current
 DTO::PlayerDTO Model::Player::to_dto() const {
     return DTO::PlayerDTO(
         id,
-        role_id,
+        (short_id_t) (role_id),
         angle,
         money,
         position.get_x(),
@@ -99,6 +99,6 @@ DTO::PlayerDTO Model::Player::to_dto() const {
         shooting,
         defusing_bomb,
         health,
-        team
+        (short_id_t) (team)
     );
 }
