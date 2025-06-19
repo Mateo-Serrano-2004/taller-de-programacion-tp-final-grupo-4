@@ -27,8 +27,63 @@ void GameLogic::start_using_weapon(FullPlayer& player, const Round& round) const
     player.start_using_weapon();
 }
 
+void GameLogic::start_defusing_bomb(FullPlayer& player, const Round& round) const {
+    if (!round.is_active()) return;
+    if (!player.is_alive()) return;
+    if (!round.bomb_is_planted()) return; // tiene sentido
+    if (player.get_team() != Model::TeamID::CT) return;
+    if (!is_in_bomb_zone(player.get_position())) return;
+
+    player.start_defusing_bomb();
+}
+
+void GameLogic::stop_defusing_bomb(FullPlayer& player) const {
+    player.stop_defusing_bomb();
+}
+
 void GameLogic::stop_using_weapon(FullPlayer& player) const {
     player.stop_using_weapon();
+}
+
+void GameLogic::process_defusing(std::map<uint8_t, FullPlayer>& players, Round& round) {
+    if (!round.is_active()) return;
+
+    if(bomb_being_defused){
+        auto it = players.find(player_defusing_bomb);
+        if (it == players.end()){
+            bomb_being_defused = false;
+            round.notify_bomb_is_not_longer_being_defused();
+            return;
+        } else {
+            auto& player = it->second;
+
+            if(!player.is_alive() || !is_in_bomb_zone(player.get_position()) || !player.is_defusing()){
+                bomb_being_defused = false;
+                round.notify_bomb_is_not_longer_being_defused();
+                return;
+            }
+        }
+    }
+
+    if(!bomb_being_defused){
+        for (auto& [id, player] : players) {
+            if (!player.is_alive()) continue;
+            if (player.get_team() != Model::TeamID::CT) continue;
+            if (!round.bomb_is_planted()) continue;
+            if(!is_in_bomb_zone(player.get_position())){
+                player.stop_defusing_bomb();
+                continue;
+            } // ojo que deberia dejar de defusear si no esta plantada?
+            if (!player.is_defusing()) continue;
+    
+            bomb_being_defused = round.notify_bomb_is_being_defused();
+
+            if(bomb_being_defused){
+                player_defusing_bomb = id;
+            }
+            break;
+        }
+    }
 }
 
 void GameLogic::process_shooting(std::map<uint8_t, FullPlayer>& players, Round& round, uint16_t frames_to_process) const {
