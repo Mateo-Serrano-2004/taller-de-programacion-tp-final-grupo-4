@@ -57,12 +57,13 @@ public:
 };
 
 class DefuseBombEvent {
-private:
-    bool defusing;
-
 public:
-    explicit DefuseBombEvent(bool defusing): defusing(defusing) {}
-    bool is_defusing() const { return defusing; }
+    DefuseBombEvent() {}
+};
+
+class StopDefusingBombEvent {
+public:
+    StopDefusingBombEvent() {}
 };
 
 class SwitchWeaponEvent {
@@ -164,7 +165,7 @@ using GameEventVariant =
         std::variant<LeaveGameEvent, MovementEvent, StopMovementEvent, RotationEvent,
                      DropWeaponEvent, UseWeaponEvent, DefuseBombEvent, SwitchWeaponEvent,
                      ReloadWeaponEvent, BuyEvent, BuyAmmoEvent, QuitEvent,
-                     PickRoleEvent, StopUsingWeaponEvent
+                     PickRoleEvent, StopUsingWeaponEvent, StopDefusingBombEvent
                      >;
 
 using EventVariant = std::variant<GameEventVariant, UsernameEvent, CreateGameEvent, MapRequestEvent,
