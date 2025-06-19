@@ -19,12 +19,11 @@
 #include "entity/horizontal_pane.h"
 #include "entity/pane.h"
 
+#include "model/game_state.h"
+#include "model/rendered_player.h"
+
 #include "asset/asset_manager.h"
 #include "asset/texture_id.h"
-
-#include "render/render_context.h"
-
-#include "model/rendered_player.h"
 
 std::vector<uint8_t> View::HUDRenderer::get_units(uint16_t number) {
     uint8_t number_of_digits = number ? (uint8_t)(log10(number) + 1) : 1;
@@ -153,12 +152,11 @@ View::HUDRenderer::HUDRenderer(Weak<Controller::GameController> controller):
     money.set_height(37);
 }
 
-void View::HUDRenderer::render(uint8_t) {
-    auto render_context = game_state_manager->get_render_context();
-    render_time(render_context.time_left);
-    if (render_context.ref_player) {
-        render_money(render_context.ref_player);
-        render_life_points(render_context.ref_player);
+void View::HUDRenderer::render(const Model::GameState& game_state, uint8_t) {
+    render_time(game_state.time_left);
+    if (auto player = game_state.get_reference_player()) {
+        render_money(player);
+        render_life_points(player);
     }
     viewport.render();
 }

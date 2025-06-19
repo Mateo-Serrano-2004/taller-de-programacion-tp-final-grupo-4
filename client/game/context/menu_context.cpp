@@ -6,10 +6,16 @@
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Renderer.hh>
 
+#include "common/event_type.h"
+
 #include "command/quit_command.h"
 #include "command/switch_context_command.h"
-#include "common/event_type.h"
+
 #include "controller/game_controller.h"
+
+#include "handler/game_state_manager.h"
+
+#include "model/game_state.h"
 
 void Context::MenuContext::trigger_buttons(Shared<SDL_Event> event) {
     if (exit_button.trigger(event)) {
@@ -18,8 +24,8 @@ void Context::MenuContext::trigger_buttons(Shared<SDL_Event> event) {
 }
 
 void Context::MenuContext::render(uint8_t frames) {
-    player_renderer.render(frames);
-
+    Model::GameState game_state = game_state_manager->get_game_state();
+    player_renderer.render(game_state, frames);
     viewport.render();
 }
 
@@ -40,6 +46,7 @@ Context::MenuContext::MenuContext(Weak<Controller::GameController> controller):
         Context::BaseContext("menu", controller),
         strategy(controller, this),
         player_renderer(controller),
+        game_state_manager(controller.lock()->get_game_state_manager()),
         viewport(controller),
         background(controller),
         ask_to_leave_label(controller),

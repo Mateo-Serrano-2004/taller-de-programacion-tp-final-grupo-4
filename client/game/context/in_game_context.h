@@ -5,9 +5,11 @@
 
 #include <SDL2/SDL.h>
 
+#include "handler/in_game_event_handler_strategy.h"
+
 #include "entity/pane.h"
 #include "event/event.h"
-#include "handler/in_game_event_handler_strategy.h"
+
 #include "render/hud_renderer.h"
 #include "render/player_renderer.h"
 
@@ -15,6 +17,7 @@
 
 namespace Controller {
 class GameController;
+class GameStateManager;
 }
 
 namespace Context {
@@ -24,6 +27,7 @@ protected:
     View::PlayerRenderer player_renderer;
     View::HUDRenderer hud_renderer;
     Controller::InGameEventHandlerStrategy event_handler_strategy;
+    Shared<Controller::GameStateManager> game_state_manager;
 
     void render(uint8_t frames) override;
     void dispatch_events() override;

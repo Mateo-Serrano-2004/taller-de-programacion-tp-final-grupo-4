@@ -7,12 +7,19 @@
 
 #include "common/event_type.h"
 #include "common/model/player.h"
+
 #include "controller/game_controller.h"
+
+#include "handler/game_state_manager.h"
+
+#include "model/game_state.h"
+
 #include "exception/closed_window.h"
 
 void Context::InGameContext::render(uint8_t frames) {
-    player_renderer.render(frames);
-    hud_renderer.render(frames);
+    Model::GameState game_state = game_state_manager->get_game_state();
+    player_renderer.render(game_state, frames);
+    hud_renderer.render(game_state, frames);
 }
 
 void Context::InGameContext::dispatch_events() {
@@ -27,4 +34,5 @@ Context::InGameContext::InGameContext(Weak<Controller::GameController> controlle
         Context::BaseContext("in-game", controller),
         player_renderer(controller),
         hud_renderer(controller),
-        event_handler_strategy(controller) {}
+        event_handler_strategy(controller),
+        game_state_manager(controller.lock()->get_game_state_manager()) {}

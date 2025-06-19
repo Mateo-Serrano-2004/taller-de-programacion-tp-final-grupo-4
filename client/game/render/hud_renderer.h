@@ -55,7 +55,7 @@ protected:
 public:
     explicit HUDRenderer(Weak<Controller::GameController> controller);
 
-    void render(uint8_t) override;
+    void render(const Model::GameState& game_state, uint8_t frames) override;
 
     ~HUDRenderer() override = default;
 };

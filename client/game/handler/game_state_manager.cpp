@@ -23,36 +23,20 @@
 #include "render/camera.h"
 
 Controller::GameStateManager::GameStateManager(Weak<Controller::GameController> controller):
-        reference_player_id(std::nullopt),
         game_state(make_shared<Model::GameState>()),
         controller(controller) {
     SDL2pp::Point viewport_size = controller.lock()->get_renderer()->GetLogicalSize();
     game_state->camera.set_viewport_size(viewport_size.GetX(), viewport_size.GetY());
 }
 
-Model::RenderContext Controller::GameStateManager::get_render_context() {
+Model::GameState Controller::GameStateManager::get_game_state() {
     std::lock_guard<std::mutex> lock(mutex);
-    return Model::RenderContext(
-        game_state->time_left,
-        game_state->get_player_by_id(reference_player_id)
-    );
-}
-
-Model::FullRenderContext Controller::GameStateManager::get_full_render_context() {
-    std::lock_guard<std::mutex> lock(mutex);
-    return Model::FullRenderContext(
-        game_state->time_left,
-        game_state->get_player_by_id(reference_player_id),
-        game_state->players,
-        game_state->fires,
-        game_state->map,
-        game_state->camera
-    );
+    return *game_state;
 }
 
 void Controller::GameStateManager::update_player_id(short_id_t new_id) {
     std::lock_guard<std::mutex> lock(mutex);
-    reference_player_id = new_id;
+    game_state->reference_player_id = new_id;
 }
 
 void Controller::GameStateManager::update_map(Shared<SDL2pp::Texture> new_map) {
@@ -75,13 +59,11 @@ void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
         }
     }
 
-    new_game_state->map = game_state->map;
-
     std::lock_guard<std::mutex> lock(mutex);
     game_state->time_left = game_state_dto.round.time_left;
     game_state->players = new_game_state->players;
 
-    auto ref_player = game_state->get_player_by_id(reference_player_id);
+    auto ref_player = game_state->get_reference_player();
     if (ref_player) {
         auto reference_player_position = ref_player->get_position();
         game_state->camera.set_center(reference_player_position.get_x(), reference_player_position.get_y());

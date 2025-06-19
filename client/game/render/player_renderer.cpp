@@ -24,16 +24,15 @@
 #include "asset/font_id.h"
 #include "asset/texture_id.h"
 
+#include "model/game_state.h"
 #include "model/rendered_player.h"
 
 #include "animation/muzzle_fire_animation.h"
 
 #include "camera.h"
-#include "render_context.h"
-#include "full_render_context.h"
 
-void View::PlayerRenderer::render_fov(const Model::FullRenderContext& render_context) {
-    auto viewport = render_context.camera.get_viewport();
+void View::PlayerRenderer::render_fov(const Model::GameState& game_state) {
+    auto viewport = game_state.camera.get_viewport();
     int viewport_width = viewport.GetX();
     int viewport_height = viewport.GetY();
 
@@ -53,31 +52,31 @@ void View::PlayerRenderer::render_fov(const Model::FullRenderContext& render_con
                    SDL2pp::Rect((viewport_width - 2 * length_to_corners) / 2,
                                 (viewport_height - 2 * length_to_corners) / 2,
                                 2 * length_to_corners, 2 * length_to_corners),
-                   render_context.ref_player->get_angle());
+                   game_state.get_reference_player()->get_angle());
 }
 
-void View::PlayerRenderer::render_muzzle_fires(const Model::FullRenderContext& render_context, uint8_t frames) {
-    auto camera = render_context.camera;
-    for (auto& animation: render_context.fires) {
-        auto player = render_context.players.find(animation->get_player_id());
-        if (player == render_context.players.end()) {
+void View::PlayerRenderer::render_muzzle_fires(const Model::GameState& game_state, uint8_t frames) {
+    auto camera = game_state.camera;
+    for (auto& animation: game_state.fires) {
+        auto player = game_state.get_player_by_id(animation->get_player_id());
+        if (!player) {
             animation->end();
             continue;
         }
         animation->set_frames_to_process(frames);
         animation->set_camera(camera);
-        animation->set_player(player->second);
+        animation->set_player(player);
         animation->render();
     }
 }
 
-bool View::PlayerRenderer::render_players(const Model::FullRenderContext& render_context) {
-    auto reference_player = render_context.ref_player;
+bool View::PlayerRenderer::render_players(const Model::GameState& game_state) {
+    auto reference_player = game_state.get_reference_player();
     bool render_ref_player = (bool) reference_player;
-    auto camera = render_context.camera;
+    auto camera = game_state.camera;
 
-    for (auto& [id, p]: render_context.players) {
-        if (id != reference_player->get_id()) {
+    for (auto& [id, p]: game_state.players) {
+        if (!render_ref_player || id != reference_player->get_id()) {
             p->set_camera(camera);
             p->render();
         }
@@ -134,9 +133,9 @@ SDL2pp::Rect View::PlayerRenderer::get_viewport_slice(
     return SDL2pp::Rect(x, y, w, h);
 }
 
-void View::PlayerRenderer::render_map(const Model::FullRenderContext& render_context) {
-    auto map = render_context.map;
-    auto camera = render_context.camera;
+void View::PlayerRenderer::render_map(const Model::GameState& game_state) {
+    auto map = game_state.map;
+    auto camera = game_state.camera;
     if (!map)
         return;
     auto map_slice = get_map_slice(map, camera);
@@ -151,11 +150,9 @@ View::PlayerRenderer::PlayerRenderer(Weak<Controller::GameController> controller
     font = asset_manager->generate_font("liberationsans", 16);
 }
 
-void View::PlayerRenderer::render(uint8_t frames) {
-    Model::FullRenderContext render_context = game_state_manager->get_full_render_context();
-
-    render_map(render_context);
-    auto render_ref_player = render_players(render_context);
-    render_muzzle_fires(render_context, frames);
-    if (render_ref_player) render_fov(render_context);
+void View::PlayerRenderer::render(const Model::GameState& game_state, uint8_t frames) {
+    render_map(game_state);
+    auto render_ref_player = render_players(game_state);
+    render_muzzle_fires(game_state, frames);
+    if (render_ref_player) render_fov(game_state);
 };

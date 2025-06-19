@@ -10,9 +10,6 @@
 #include "render/camera.h"
 #include "utils/enum_translator.h"
 
-#include "render/render_context.h"
-#include "render/full_render_context.h"
-
 namespace SDL2pp {
 class Texture;
 };
@@ -22,9 +19,8 @@ class GameStateDTO;
 };
 
 namespace Model {
-class GameState;
-class Player;
-};  // namespace Model
+struct GameState;
+};
 
 namespace View {
 class RenderedPlayer;
@@ -36,15 +32,13 @@ class GameController;
 class GameStateManager {
 private:
     std::mutex mutex;
-    Maybe<short_id_t> reference_player_id;
     Shared<Model::GameState> game_state;
     Weak<GameController> controller;
 
 public:
     explicit GameStateManager(Weak<GameController> controller);
 
-    Model::RenderContext get_render_context();
-    Model::FullRenderContext get_full_render_context();
+    Model::GameState get_game_state();
 
     void update_player_id(short_id_t new_id);
     void update_map(Shared<SDL2pp::Texture> new_map);
