@@ -10,9 +10,7 @@
 #include <SDL2pp/Window.hh>
 
 #include "common/slot_id.h"
-
 #include "controller/game_controller.h"
-
 #include "event/movement_event.h"
 #include "event/quit_event.h"
 #include "event/rotation_event.h"
@@ -21,10 +19,8 @@
 #include "event/switch_context_event.h"
 #include "event/switch_weapon_event.h"
 #include "event/use_weapon_event.h"
-
-#include "utils/mouse_coords_translator.h"
-
 #include "exception/closed_window.h"
+#include "utils/mouse_coords_translator.h"
 
 #include "game_state_manager.h"
 
@@ -224,21 +220,15 @@ void Controller::InGameEventHandlerStrategy::handle_current_game_state() {
 void Controller::InGameEventHandlerStrategy::update_on_switch_context() {
     auto locked_controller = controller.lock();
     if (handler_state.moving_horizontally) {
-        locked_controller->push_event(std::move(
-            make_shared<Model::StopMovementEvent>(true)
-        ));
+        locked_controller->push_event(std::move(make_shared<Model::StopMovementEvent>(true)));
         handler_state.moving_horizontally = false;
     }
     if (handler_state.moving_vertically) {
-        locked_controller->push_event(std::move(
-            make_shared<Model::StopMovementEvent>(false)
-        ));
+        locked_controller->push_event(std::move(make_shared<Model::StopMovementEvent>(false)));
         handler_state.moving_vertically = false;
     }
     if (handler_state.is_shooting) {
-        locked_controller->push_event(std::move(
-            make_shared<Model::StopUsingWeaponEvent>()
-        ));
+        locked_controller->push_event(std::move(make_shared<Model::StopUsingWeaponEvent>()));
         handler_state.is_shooting = false;
     }
     handler_state.switching_weapon = false;

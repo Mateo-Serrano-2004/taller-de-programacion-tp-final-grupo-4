@@ -6,7 +6,6 @@
 #include <string>
 
 #include "common/definitions.h"
-
 #include "event/event.h"
 
 namespace Model {
