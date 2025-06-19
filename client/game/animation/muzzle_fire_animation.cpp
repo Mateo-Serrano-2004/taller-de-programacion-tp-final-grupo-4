@@ -2,23 +2,18 @@
 
 #include <cstdint>
 
-#include <SDL2pp/SDL2pp.hh>
-#include <SDL2pp/Renderer.hh>
-#include <SDL2pp/Texture.hh>
-#include <SDL2pp/Rect.hh>
 #include <SDL2pp/Point.hh>
-
-#include "common/weapon_id.h"
-#include "common/model/weapon.h"
-
-#include "controller/game_controller.h"
-
-#include "handler/game_state_manager.h"
+#include <SDL2pp/Rect.hh>
+#include <SDL2pp/Renderer.hh>
+#include <SDL2pp/SDL2pp.hh>
+#include <SDL2pp/Texture.hh>
 
 #include "asset/animation_id.h"
-
+#include "common/model/weapon.h"
+#include "common/weapon_id.h"
+#include "controller/game_controller.h"
+#include "handler/game_state_manager.h"
 #include "model/rendered_player.h"
-
 #include "render/camera.h"
 
 int View::MuzzleFireAnimation::get_fire_distance() {
@@ -45,13 +40,8 @@ void View::MuzzleFireAnimation::render_muzzle() {
     SDL2pp::Rect fire_coords(camera_view_x - 16, camera_view_y - 32 - fire_distance, 32, 32);
     SDL2pp::Point point_to_rotate(16, 32 + fire_distance);
 
-    renderer->Copy(
-        *details.animation,
-        get_frame(),
-        fire_coords,
-        player->get_angle(),
-        point_to_rotate
-    );
+    renderer->Copy(*details.animation, get_frame(), fire_coords, player->get_angle(),
+                   point_to_rotate);
 }
 
 View::MuzzleFireAnimation::MuzzleFireAnimation(Weak<Controller::GameController> controller,
@@ -60,17 +50,13 @@ View::MuzzleFireAnimation::MuzzleFireAnimation(Weak<Controller::GameController> 
 
 short_id_t View::MuzzleFireAnimation::get_player_id() const { return player_id; }
 
-void View::MuzzleFireAnimation::set_camera(const Camera& new_camera) {
-    camera = new_camera;
-}
+void View::MuzzleFireAnimation::set_camera(const Camera& new_camera) { camera = new_camera; }
 
 void View::MuzzleFireAnimation::set_player(Shared<RenderedPlayer> new_player) {
     player = new_player;
 }
 
-void View::MuzzleFireAnimation::end() {
-    ended = true;
-}
+void View::MuzzleFireAnimation::end() { ended = true; }
 
 void View::MuzzleFireAnimation::render() {
     if (!ended) {

@@ -1,20 +1,17 @@
 #include "in_game_context.h"
 
-#include <functional>
 #include <cstdint>
+#include <functional>
+#include <memory>
 
 #include <SDL2/SDL.h>
 
 #include "common/event_type.h"
 #include "common/model/player.h"
-
 #include "controller/game_controller.h"
-
-#include "handler/game_state_manager.h"
-
-#include "model/game_state.h"
-
 #include "exception/closed_window.h"
+#include "handler/game_state_manager.h"
+#include "model/game_state.h"
 
 void Context::InGameContext::render(uint8_t frames) {
     Model::GameState game_state = game_state_manager->get_game_state();

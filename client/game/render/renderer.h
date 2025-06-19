@@ -8,12 +8,12 @@
 namespace SDL2pp {
 class Window;
 class Renderer;
-};
+};  // namespace SDL2pp
 
 namespace Model {
 class AssetManager;
 struct GameState;
-};
+};  // namespace Model
 
 namespace Controller {
 class BaseController;

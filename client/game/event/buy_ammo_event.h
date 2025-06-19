@@ -1,8 +1,8 @@
 #ifndef CLIENT_EVENT_BUY_AMMO_EVENT_H
 #define CLIENT_EVENT_BUY_AMMO_EVENT_H
 
-#include "common/slot_id.h"
 #include "common/DTO/event_dto.h"
+#include "common/slot_id.h"
 
 #include "transfered_event.h"
 

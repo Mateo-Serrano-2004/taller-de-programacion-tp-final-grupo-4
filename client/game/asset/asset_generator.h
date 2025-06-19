@@ -32,11 +32,8 @@ protected:
     void draw_triangle(int half_size, int angle);
 
     std::unordered_map<std::string, Shared<SDL2pp::Texture>> load_tiles(const DTO::MapDTO& map_dto);
-    void insert_tiles(
-        Shared<SDL2pp::Texture> texture,
-        const DTO::MapDTO& map_dto,
-        std::unordered_map<std::string, Shared<SDL2pp::Texture>>& tiles
-    );
+    void insert_tiles(Shared<SDL2pp::Texture> texture, const DTO::MapDTO& map_dto,
+                      std::unordered_map<std::string, Shared<SDL2pp::Texture>>& tiles);
     Shared<SDL2pp::Texture> generate_animation(const std::vector<Shared<SDL2pp::Texture>>& frames);
 
 public:

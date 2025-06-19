@@ -7,10 +7,10 @@ View::Camera::Camera(): viewport_width(0), viewport_height(0) {}
 View::Camera::Camera(coord_t viewport_width, coord_t viewport_height):
         viewport_width(viewport_width), viewport_height(viewport_height) {}
 
-View::Camera::Camera(const Camera& other)
-: center(other.center),
-  viewport_width(other.viewport_width),
-  viewport_height(other.viewport_height) {}
+View::Camera::Camera(const Camera& other):
+        center(other.center),
+        viewport_width(other.viewport_width),
+        viewport_height(other.viewport_height) {}
 
 SDL2pp::Point View::Camera::get_viewport() const {
     return SDL2pp::Point(viewport_width, viewport_height);

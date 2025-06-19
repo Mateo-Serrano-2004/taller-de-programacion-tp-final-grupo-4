@@ -14,6 +14,6 @@ public:
 
     ~StopDefusingBombEvent() override = default;
 };
-};
+};  // namespace Model
 
-#endif // CLIENT_GAME_EVENT_STOP_DEFUSING_BOMB_EVENT_H
+#endif  // CLIENT_GAME_EVENT_STOP_DEFUSING_BOMB_EVENT_H

@@ -11,19 +11,14 @@
 #include <SDL2pp/Renderer.hh>
 #include <SDL2pp/Texture.hh>
 
-
-#include "controller/game_controller.h"
-
-#include "handler/game_state_manager.h"
-
-#include "entity/horizontal_pane.h"
-#include "entity/pane.h"
-
-#include "model/game_state.h"
-#include "model/rendered_player.h"
-
 #include "asset/asset_manager.h"
 #include "asset/texture_id.h"
+#include "controller/game_controller.h"
+#include "entity/horizontal_pane.h"
+#include "entity/pane.h"
+#include "handler/game_state_manager.h"
+#include "model/game_state.h"
+#include "model/rendered_player.h"
 
 std::vector<uint8_t> View::HUDRenderer::get_units(uint16_t number) {
     uint8_t number_of_digits = number ? (uint8_t)(log10(number) + 1) : 1;

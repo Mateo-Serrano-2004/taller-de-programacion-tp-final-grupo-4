@@ -61,9 +61,7 @@ View::RenderedPlayer::RenderedPlayer(Weak<Controller::GameController> controller
         weapon_sprite_id(
                 Model::EnumTranslator::get_texture_from_weapon(current_weapon->get_weapon_id())) {}
 
-void View::RenderedPlayer::set_camera(const Camera& new_camera) {
-    camera = new_camera;
-}
+void View::RenderedPlayer::set_camera(const Camera& new_camera) { camera = new_camera; }
 
 void View::RenderedPlayer::render() {
     if (team == Model::TeamID::NONE)

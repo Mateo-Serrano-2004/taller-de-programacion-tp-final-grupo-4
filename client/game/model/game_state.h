@@ -1,15 +1,13 @@
 #ifndef COMMON_MODEL_GAME_STATE_H
 #define COMMON_MODEL_GAME_STATE_H
 
-#include <map>
-#include <list>
 #include <cstdint>
-
-#include "common/definitions.h"
-
-#include "render/camera.h"
+#include <list>
+#include <map>
 
 #include "animation/muzzle_fire_animation.h"
+#include "common/definitions.h"
+#include "render/camera.h"
 
 namespace SDL2pp {
 class Texture;
@@ -22,7 +20,7 @@ class GameStateManager;
 namespace View {
 class RenderedPlayer;
 class MuzzleFireAnimation;
-};
+};  // namespace View
 
 namespace Model {
 struct GameState {
@@ -42,6 +40,6 @@ public:
 
     ~GameState() = default;
 };
-};
+};  // namespace Model
 
 #endif  // COMMON_MODEL_GAME_STATE_H

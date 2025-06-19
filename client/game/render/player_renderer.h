@@ -1,8 +1,8 @@
 #ifndef CLIENT_GAME_RENDER_PLAYER_RENDERER_H
 #define CLIENT_GAME_RENDER_PLAYER_RENDERER_H
 
-#include <map>
 #include <cstdint>
+#include <map>
 
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Rect.hh>
@@ -20,7 +20,7 @@ class Font;
 namespace Controller {
 class GameController;
 class GameStateManager;
-};
+};  // namespace Controller
 
 namespace View {
 class Camera;

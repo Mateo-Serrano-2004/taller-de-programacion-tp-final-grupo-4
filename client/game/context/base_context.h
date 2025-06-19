@@ -1,9 +1,9 @@
 #ifndef CLIENT_GAME_CONTEXT_BASE_CONTEXT_H
 #define CLIENT_GAME_CONTEXT_BASE_CONTEXT_H
 
+#include <cstdint>
 #include <list>
 #include <string>
-#include <cstdint>
 
 #include "common/definitions.h"
 #include "event/event.h"

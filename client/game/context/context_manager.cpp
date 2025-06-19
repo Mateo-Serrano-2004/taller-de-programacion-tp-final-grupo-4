@@ -1,10 +1,9 @@
 #include "context_manager.h"
 
+#include <cstdint>
 #include <mutex>
 #include <string>
 #include <utility>
-#include <string>
-#include <cstdint>
 
 #include <SDL2pp/Renderer.hh>
 #include <SDL2pp/Window.hh>

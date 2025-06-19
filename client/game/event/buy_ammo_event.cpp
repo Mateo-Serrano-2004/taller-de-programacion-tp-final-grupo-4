@@ -1,7 +1,6 @@
 #include "buy_ammo_event.h"
 
 #include "common/event_type.h"
-
 #include "dto_handler/dto_creator_visitor.h"
 
 Model::BuyAmmoEvent::BuyAmmoEvent(Model::SlotID slot_id):

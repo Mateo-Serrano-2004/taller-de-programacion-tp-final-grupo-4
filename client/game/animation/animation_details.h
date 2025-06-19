@@ -18,16 +18,11 @@ public:
     uint8_t animation_duration_in_frames;
     Shared<SDL2pp::Texture> animation;
 
-    AnimationDetails(
-        uint8_t width,
-        uint8_t height,
-        uint8_t total_frames,
-        uint8_t animation_duration_in_frames,
-        Shared<SDL2pp::Texture> animation
-    );
+    AnimationDetails(uint8_t width, uint8_t height, uint8_t total_frames,
+                     uint8_t animation_duration_in_frames, Shared<SDL2pp::Texture> animation);
 
     ~AnimationDetails() = default;
 };
-};
+};  // namespace Model
 
-#endif // CLIENT_GAME_ANIMATION_ANIMATION_DETAILS_H
+#endif  // CLIENT_GAME_ANIMATION_ANIMATION_DETAILS_H

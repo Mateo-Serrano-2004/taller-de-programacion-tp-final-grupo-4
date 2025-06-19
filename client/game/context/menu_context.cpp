@@ -1,20 +1,17 @@
 #include "menu_context.h"
 
 #include <cstdint>
+#include <memory>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Renderer.hh>
 
-#include "common/event_type.h"
-
 #include "command/quit_command.h"
 #include "command/switch_context_command.h"
-
+#include "common/event_type.h"
 #include "controller/game_controller.h"
-
 #include "handler/game_state_manager.h"
-
 #include "model/game_state.h"
 
 void Context::MenuContext::trigger_buttons(Shared<SDL_Event> event) {

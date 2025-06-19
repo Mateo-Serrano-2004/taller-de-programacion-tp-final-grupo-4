@@ -6,17 +6,14 @@
 
 #include <SDL2pp/Point.hh>
 
+#include "asset/texture_id.h"
 #include "common/definitions.h"
 #include "common/model/player.h"
 #include "common/model/vector_2d.h"
 #include "common/model/weapon.h"
 #include "common/role_id.h"
 #include "common/weapon_id.h"
-
-#include "asset/texture_id.h"
-
 #include "interface/rendered.h"
-
 #include "render/camera.h"
 
 namespace SDL2pp {

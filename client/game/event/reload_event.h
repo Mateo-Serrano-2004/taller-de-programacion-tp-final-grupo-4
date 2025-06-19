@@ -14,6 +14,6 @@ public:
 
     ~ReloadEvent() override = default;
 };
-};
+};  // namespace Model
 
-#endif // CLIENT_GAME_EVENT_RELOAD_EVENT_H
+#endif  // CLIENT_GAME_EVENT_RELOAD_EVENT_H

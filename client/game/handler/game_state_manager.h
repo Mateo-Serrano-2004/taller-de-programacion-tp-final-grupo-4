@@ -1,9 +1,9 @@
 #ifndef CLIENT_GAME_HANDLER_GAME_STATE_MANAGER_H
 #define CLIENT_GAME_HANDLER_GAME_STATE_MANAGER_H
 
-#include <mutex>
 #include <list>
 #include <map>
+#include <mutex>
 
 #include "asset/texture_id.h"
 #include "common/definitions.h"
@@ -46,6 +46,6 @@ public:
 
     ~GameStateManager() = default;
 };
-};
+};  // namespace Controller
 
 #endif  // CLIENT_GAME_HANDLER_GAME_STATE_MANAGER_H

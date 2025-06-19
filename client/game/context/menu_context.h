@@ -19,7 +19,7 @@
 namespace Controller {
 class GameController;
 class GameStateManager;
-};
+};  // namespace Controller
 
 namespace Context {
 class MenuContext: public BaseContext {

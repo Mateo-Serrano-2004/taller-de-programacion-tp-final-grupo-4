@@ -14,6 +14,6 @@ public:
 
     ~DefuseBombEvent() override = default;
 };
-};
+};  // namespace Model
 
-#endif // CLIENT_GAME_EVENT_DEFUSE_BOMB_EVENT_H
+#endif  // CLIENT_GAME_EVENT_DEFUSE_BOMB_EVENT_H

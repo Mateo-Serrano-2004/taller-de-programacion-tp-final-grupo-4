@@ -4,7 +4,6 @@
 #include <cstdint>
 
 #include "common/definitions.h"
-
 #include "render/camera.h"
 
 #include "animation.h"
@@ -27,10 +26,7 @@ protected:
     void render_muzzle();
 
 public:
-    MuzzleFireAnimation(
-        Weak<Controller::GameController> controller,
-        short_id_t player_id
-    );
+    MuzzleFireAnimation(Weak<Controller::GameController> controller, short_id_t player_id);
 
     short_id_t get_player_id() const;
 
@@ -43,6 +39,6 @@ public:
 
     ~MuzzleFireAnimation() override = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_MIZZLE_FIRE_ANIMATION_H
+#endif  // CLIENT_GAME_MIZZLE_FIRE_ANIMATION_H

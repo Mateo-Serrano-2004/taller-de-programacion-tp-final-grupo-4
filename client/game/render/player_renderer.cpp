@@ -1,10 +1,10 @@
 #include "player_renderer.h"
 
-#include <map>
-#include <list>
+#include <algorithm>
 #include <cmath>
 #include <cstdint>
 #include <iostream>
+#include <list>
 #include <map>
 
 #include <SDL2pp/Color.hh>
@@ -16,18 +16,14 @@
 #include <SDL2pp/Texture.hh>
 #include <SDL2pp/Window.hh>
 
-#include "controller/game_controller.h"
-
-#include "handler/game_state_manager.h"
-
+#include "animation/muzzle_fire_animation.h"
 #include "asset/asset_manager.h"
 #include "asset/font_id.h"
 #include "asset/texture_id.h"
-
+#include "controller/game_controller.h"
+#include "handler/game_state_manager.h"
 #include "model/game_state.h"
 #include "model/rendered_player.h"
-
-#include "animation/muzzle_fire_animation.h"
 
 #include "camera.h"
 
@@ -72,7 +68,7 @@ void View::PlayerRenderer::render_muzzle_fires(const Model::GameState& game_stat
 
 bool View::PlayerRenderer::render_players(const Model::GameState& game_state) {
     auto reference_player = game_state.get_reference_player();
-    bool render_ref_player = (bool) reference_player;
+    bool render_ref_player = (bool)reference_player;
     auto camera = game_state.camera;
 
     for (auto& [id, p]: game_state.players) {
@@ -90,10 +86,8 @@ bool View::PlayerRenderer::render_players(const Model::GameState& game_state) {
     return render_ref_player;
 }
 
-SDL2pp::Rect View::PlayerRenderer::get_map_slice(
-    Shared<SDL2pp::Texture> map,
-    const View::Camera& camera
-) {
+SDL2pp::Rect View::PlayerRenderer::get_map_slice(Shared<SDL2pp::Texture> map,
+                                                 const View::Camera& camera) {
     auto logical_width = renderer->GetLogicalWidth();
     auto logical_height = renderer->GetLogicalHeight();
     auto camera_x = camera.get_center().GetX() + 16;
@@ -115,10 +109,8 @@ SDL2pp::Rect View::PlayerRenderer::get_map_slice(
     return SDL2pp::Rect(x, y, w, h);
 }
 
-SDL2pp::Rect View::PlayerRenderer::get_viewport_slice(
-    const SDL2pp::Rect& map_slice,
-    const View::Camera& camera
-) {
+SDL2pp::Rect View::PlayerRenderer::get_viewport_slice(const SDL2pp::Rect& map_slice,
+                                                      const View::Camera& camera) {
     auto logical_width = renderer->GetLogicalWidth();
     auto logical_height = renderer->GetLogicalHeight();
     auto camera_x = camera.get_center().GetX() + 16;
@@ -154,5 +146,6 @@ void View::PlayerRenderer::render(const Model::GameState& game_state, uint8_t fr
     render_map(game_state);
     auto render_ref_player = render_players(game_state);
     render_muzzle_fires(game_state, frames);
-    if (render_ref_player) render_fov(game_state);
-};
+    if (render_ref_player)
+        render_fov(game_state);
+}

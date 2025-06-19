@@ -5,11 +5,9 @@
 
 #include <SDL2/SDL.h>
 
-#include "handler/in_game_event_handler_strategy.h"
-
 #include "entity/pane.h"
 #include "event/event.h"
-
+#include "handler/in_game_event_handler_strategy.h"
 #include "render/hud_renderer.h"
 #include "render/player_renderer.h"
 
@@ -18,7 +16,7 @@
 namespace Controller {
 class GameController;
 class GameStateManager;
-}
+}  // namespace Controller
 
 namespace Context {
 class InGameContext: public BaseContext {
