@@ -20,6 +20,8 @@ private:
     Shared<FullWeapon> knife;
     Shared<FullWeapon> bomb;
 
+    bool defusing_bomb;
+
 public:
     FullPlayer(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role);
 
@@ -51,6 +53,10 @@ public:
     Shared<FullWeapon> remove_bomb();
 
     void give_bomb(Shared<FullWeapon> new_bomb);
+
+    void start_defusing_bomb();
+    void stop_defusing_bomb();
+    bool is_defusing() const;
 
     ~FullPlayer() override = default;
 };

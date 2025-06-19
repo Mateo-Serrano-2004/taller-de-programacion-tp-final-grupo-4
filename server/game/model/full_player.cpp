@@ -17,7 +17,8 @@ FullPlayer::FullPlayer(short_id_t id, const std::string& name, Model::TeamID tea
   movement_direction(0, 0),
   size(32,32),
   secondary_weapon(WeaponFactory::create(Model::WeaponID::GLOCK)),
-  knife(WeaponFactory::create(Model::WeaponID::KNIFE)) {
+  knife(WeaponFactory::create(Model::WeaponID::KNIFE)),
+  defusing_bomb(false) {
     current_weapon = secondary_weapon;
     money = 1500;
 }
@@ -85,7 +86,8 @@ Shared<FullWeapon> FullPlayer::equip_new_weapon_and_drop_previous(Shared<FullWea
             current_weapon = primary_weapon;
             break;
     }
-
+    dropped_weapon->release_trigger();
+    shooting = false;
     return dropped_weapon;
 }
 
@@ -103,6 +105,19 @@ void FullPlayer::stop_using_weapon() {
     if (!current_weapon) return;
     std::static_pointer_cast<FullWeapon>(current_weapon)->release_trigger();
     shooting = false;
+}
+
+void FullPlayer::start_defusing_bomb() {
+    if (!alive || team != Model::TeamID::CT) return;
+    defusing_bomb = true;
+}
+
+void FullPlayer::stop_defusing_bomb() {
+    defusing_bomb = false;
+}
+
+bool FullPlayer::is_defusing() const {
+    return defusing_bomb;
 }
 
 std::optional<ShotInfo> FullPlayer::shoot(uint16_t frames_to_process) {
@@ -148,6 +163,7 @@ void FullPlayer::add_money(uint16_t money_to_be_added) {
 void FullPlayer::reset_for_new_round() {
     alive = true;
     health = 100;
+    defusing_bomb = false;
     bomb.reset();
 }
 
