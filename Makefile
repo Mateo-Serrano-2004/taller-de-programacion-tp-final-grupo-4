@@ -76,7 +76,7 @@ test_round:
 	mkdir -p build
 	g++ -std=c++20 -I. \
 	    test/test_round.cpp \
-		server/game/round2.cpp \
+		server/game/round.cpp \
 		common/DTO/round_dto.cpp \
 	    common/model/vector_2d.cpp \
 	    -o build/test_round \

@@ -1,4 +1,4 @@
-#include "../server/game/round2.h"
+#include "../server/game/round.h"
 #include <cassert>
 #include <iostream>
 
@@ -120,7 +120,8 @@ void test_bomb_planted_and_defused_ct_wins() {
     round.update(600);  // pasa a active
     round.notify_bomb_planted(Physics::Vector2D(5, 5));
     round.update(300);
-    round.notify_bomb_defused();
+    round.notify_bomb_is_being_defused();
+    round.update(300);
     expect_dto(round, RoundState::Ended, true, 0, Model::TeamID::CT, true, true, Physics::Vector2D(5, 5));
     std::cout << "✔ test_bomb_planted_and_defused_ct_wins OK\n";
 }
@@ -150,20 +151,48 @@ void test_bomb_planted_before_timeout_extends_round() {
     std::cout << "✔ test_bomb_planted_before_timeout_extends_round OK\n";
 }
 
-void test_double_defuse_is_ignored() {
-    std::cout << "TESTEANDO: test_double_defuse_is_ignored\n";
+void test_not_enough_time_to_defuse_bomb_explodes() {
+    std::cout << "TESTEANDO: test_not_enough_time_to_defuse_bomb_explodes\n";
     Round round(1, 1);
-    round.update(600);
+    round.update(600); // PASO A WARMUP
     round.notify_bomb_planted(Physics::Vector2D(4, 4));
-    round.update(120);
-    round.notify_bomb_defused();
+    round.update(360); // (10s de bomba - 6s que avanzo, no alcanza a defusear bomb aporque encesita 5s)
+    assert(round.notify_bomb_is_being_defused());
+    round.update(300); // aunque avance los 5 segundos
+    expect_dto(round, RoundState::Ended, true, 0, Model::TeamID::TT, true, false, Physics::Vector2D(4, 4));
 
-    expect_dto(round, RoundState::Ended, true, 0, Model::TeamID::CT, true, true, Physics::Vector2D(4, 4));
+    std::cout << "✔ test_not_enough_time_to_defuse_bomb_explodes OK\n";
+}
 
-    round.notify_bomb_defused();  // ignorado
-    expect_dto(round, RoundState::Ended, true, 0, Model::TeamID::CT, true, true, Physics::Vector2D(4, 4));
+void test_defusing_is_interrupted_and_bomb_explodes() {
+    std::cout << "TESTEANDO: test_defusing_is_interrupted_and_bomb_explodes\n";
+    Round round(1, 1);
+    round.update(600); // PASO A WARMUP
+    round.notify_bomb_planted(Physics::Vector2D(4, 4));
+    round.update(120); // (10s de bomba - 2s que avanzo)
+    assert(round.notify_bomb_is_being_defused());
+    round.update(120); // quedas en 6s
+    round.notify_bomb_is_not_longer_being_defused();
+    round.update(360); // queda en 0, te da el tiempo de defuseo pero no debería porque soltó
+    expect_dto(round, RoundState::Ended, true, 0, Model::TeamID::TT, true, false, Physics::Vector2D(4, 4));
 
-    std::cout << "✔ test_double_defuse_is_ignored OK\n";
+    std::cout << "✔ test_defusing_is_interrupted_and_bomb_explodes OK\n";
+}
+
+void test_defusing_restarts_and_previous_progress_is_lost() {
+    std::cout << "TESTEANDO: test_defusing_restarts_and_previous_progress_is_lost\n";
+    Round round(1, 1);
+    round.update(600); // PASO A WARMUP
+    round.notify_bomb_planted(Physics::Vector2D(4, 4));
+    round.update(120); // (10s de bomba - 2s que avanzo)
+    assert(round.notify_bomb_is_being_defused());
+    round.update(240); // quedas en 4s
+    round.notify_bomb_is_not_longer_being_defused();
+    assert(round.notify_bomb_is_being_defused());
+    round.update(300); // haces que le alcance el tiempo, pero como solto tenía 4s y no deberia defusear
+    expect_dto(round, RoundState::Ended, true, 0, Model::TeamID::TT, true, false, Physics::Vector2D(4, 4));
+
+    std::cout << "✔ test_defusing_restarts_and_previous_progress_is_lost OK\n";
 }
 
 void test_bomb_planted_during_invalid_phase_is_ignored() {
@@ -188,7 +217,9 @@ int main() {
     test_bomb_planted_and_defused_ct_wins();
     test_bomb_tick_override();
     test_bomb_planted_before_timeout_extends_round();
-    test_double_defuse_is_ignored();
+    test_not_enough_time_to_defuse_bomb_explodes();
+    test_defusing_is_interrupted_and_bomb_explodes();
+    test_defusing_restarts_and_previous_progress_is_lost();
     test_bomb_planted_during_invalid_phase_is_ignored();
 
     std::cout << "✅ TODOS LOS TEST PASARON CORRECTAMENTE ✅" << std::endl;
