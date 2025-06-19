@@ -7,6 +7,17 @@
 #include "common/definitions.h"
 #include "event/events.h"
 
+DTO::EventDTO DTO::DTOCreatorVisitor::visit_buy_ammo_event(Model::BuyAmmoEvent* event) {
+    DTO::EventDTO event_dto;
+
+    event_dto.data.push_back(static_cast<char>(Model::EventType::BUY_AMMO));
+    event_dto.data.push_back(static_cast<char>(event->get_slot_id()));
+
+    event_dto.size = 2;
+
+    return event_dto;
+}
+
 DTO::EventDTO DTO::DTOCreatorVisitor::visit_buy_weapon_event(Model::BuyWeaponEvent* event) {
     DTO::EventDTO event_dto;
 
@@ -37,6 +48,16 @@ DTO::EventDTO DTO::DTOCreatorVisitor::visit_create_game_event(Model::CreateGameE
     return event_dto;
 }
 
+DTO::EventDTO DTO::DTOCreatorVisitor::visit_defuse_bomb_event() {
+    DTO::EventDTO event_dto;
+
+    event_dto.data.push_back(static_cast<char>(Model::EventType::DEFUSE_BOMB));
+
+    event_dto.size = 1;
+
+    return event_dto;
+}
+
 
 DTO::EventDTO DTO::DTOCreatorVisitor::visit_join_game_event(Model::JoinGameEvent* event) {
     DTO::EventDTO event_dto;
@@ -49,7 +70,7 @@ DTO::EventDTO DTO::DTOCreatorVisitor::visit_join_game_event(Model::JoinGameEvent
     return event_dto;
 }
 
-DTO::EventDTO DTO::DTOCreatorVisitor::visit_leave_event() { return EventDTO(); }
+DTO::EventDTO DTO::DTOCreatorVisitor::visit_leave_event() { return DTO::EventDTO(); }
 
 DTO::EventDTO DTO::DTOCreatorVisitor::visit_movement_event(Model::MovementEvent* event) {
     DTO::EventDTO event_dto;
@@ -80,6 +101,16 @@ DTO::EventDTO DTO::DTOCreatorVisitor::visit_quit_event() {
     DTO::EventDTO event_dto;
 
     event_dto.data.push_back(static_cast<char>(Model::EventType::LEAVE_GAME));
+
+    event_dto.size = 1;
+
+    return event_dto;
+}
+
+DTO::EventDTO DTO::DTOCreatorVisitor::visit_reload_event() {
+    DTO::EventDTO event_dto;
+
+    event_dto.data.push_back(static_cast<char>(Model::EventType::RELOAD_WEAPON));
 
     event_dto.size = 1;
 
@@ -117,6 +148,16 @@ DTO::EventDTO DTO::DTOCreatorVisitor::visit_rotation_event(Model::RotationEvent*
     event_dto.data.push_back(ptr[1]);
 
     event_dto.size = 3;
+
+    return event_dto;
+}
+
+DTO::EventDTO DTO::DTOCreatorVisitor::visit_stop_defusing_bomb_event() {
+    DTO::EventDTO event_dto;
+
+    event_dto.data.push_back(static_cast<char>(Model::EventType::STOP_DEFUSING_BOMB));
+
+    event_dto.size = 1;
 
     return event_dto;
 }
