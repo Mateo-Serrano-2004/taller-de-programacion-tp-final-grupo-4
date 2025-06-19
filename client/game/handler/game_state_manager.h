@@ -1,19 +1,17 @@
 #ifndef CLIENT_GAME_HANDLER_GAME_STATE_MANAGER_H
 #define CLIENT_GAME_HANDLER_GAME_STATE_MANAGER_H
 
-#include <functional>
+#include <mutex>
 #include <list>
 #include <map>
-#include <mutex>
 
 #include "asset/texture_id.h"
 #include "common/definitions.h"
 #include "render/camera.h"
 #include "utils/enum_translator.h"
 
-#include "render/camera.h"
-
-#include "animation/muzzle_fire_animation.h"
+#include "render/render_context.h"
+#include "render/full_render_context.h"
 
 namespace SDL2pp {
 class Texture;
@@ -38,32 +36,15 @@ class GameController;
 class GameStateManager {
 private:
     std::mutex mutex;
-    std::list<View::MuzzleFireAnimation> fire_animations;
-    Shared<SDL2pp::Texture> map;
     Maybe<short_id_t> reference_player_id;
     Shared<Model::GameState> game_state;
-    View::Camera camera;
     Weak<GameController> controller;
 
 public:
     explicit GameStateManager(Weak<GameController> controller);
 
-    Shared<View::RenderedPlayer> get_reference_player_unsafe();
-    Shared<View::RenderedPlayer> get_player_by_id_unsafe(short_id_t player_id);
-    View::Camera get_camera_unsafe();
-
-    Shared<View::RenderedPlayer> get_reference_player();
-
-    void call_function_on_players(
-        const std::function<void(std::map<short_id_t, Shared<View::RenderedPlayer>>&)>& func
-    );
-    void call_function_on_pending_fires(
-        const std::function<void(std::list<View::MuzzleFireAnimation>&)>& func
-    );
-
-    uint16_t get_time_left();
-    View::Camera get_camera();
-    Shared<SDL2pp::Texture> get_map();
+    Model::RenderContext get_render_context();
+    Model::FullRenderContext get_full_render_context();
 
     void update_player_id(short_id_t new_id);
     void update_map(Shared<SDL2pp::Texture> new_map);
@@ -71,6 +52,6 @@ public:
 
     ~GameStateManager() = default;
 };
-};  // namespace Controller
+};
 
 #endif  // CLIENT_GAME_HANDLER_GAME_STATE_MANAGER_H

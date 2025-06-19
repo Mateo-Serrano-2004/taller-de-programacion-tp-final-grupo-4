@@ -18,13 +18,13 @@ class Font;
 };
 
 namespace Model {
-class Player;
+struct FullRenderContext;
 };
 
 namespace Controller {
 class GameController;
 class GameStateManager;
-};  // namespace Controller
+};
 
 namespace View {
 class Camera;
@@ -35,11 +35,13 @@ protected:
     Shared<Controller::GameStateManager> game_state_manager;
     Shared<SDL2pp::Font> font;
 
-    void render_fov(angle_t angle, const Camera& camera);
+    void render_fov(const Model::FullRenderContext& render_context);
+    void render_muzzle_fires(const Model::FullRenderContext& render_context, uint8_t frames);
+    bool render_players(const Model::FullRenderContext& render_context);
 
     SDL2pp::Rect get_map_slice(Shared<SDL2pp::Texture> map, const Camera& camera);
-    SDL2pp::Rect get_viewport_slice(const SDL2pp::Rect map_slice, const Camera& camera);
-    void render_map(const Camera& camera);
+    SDL2pp::Rect get_viewport_slice(const SDL2pp::Rect& map_slice, const Camera& camera);
+    void render_map(const Model::FullRenderContext& render_context);
 
 public:
     explicit PlayerRenderer(Weak<Controller::GameController> controller);

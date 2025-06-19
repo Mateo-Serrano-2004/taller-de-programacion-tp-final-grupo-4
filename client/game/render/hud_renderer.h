@@ -48,7 +48,7 @@ protected:
     void render_number(std::list<View::Pane>& numbers, View::HorizontalPane& parent,
                        uint8_t number);
 
-    void render_time();
+    void render_time(uint16_t time_left);
     void render_life_points(Shared<RenderedPlayer> player);
     void render_money(Shared<RenderedPlayer> player);
 

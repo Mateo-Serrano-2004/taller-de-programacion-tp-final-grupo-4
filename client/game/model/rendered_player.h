@@ -6,14 +6,17 @@
 
 #include <SDL2pp/Point.hh>
 
-#include "asset/texture_id.h"
 #include "common/definitions.h"
 #include "common/model/player.h"
 #include "common/model/vector_2d.h"
 #include "common/model/weapon.h"
 #include "common/role_id.h"
 #include "common/weapon_id.h"
+
+#include "asset/texture_id.h"
+
 #include "interface/rendered.h"
+
 #include "render/camera.h"
 
 namespace SDL2pp {
@@ -32,8 +35,9 @@ class GameController;
 namespace View {
 class RenderedPlayer: public Rendered, public Model::Player {
 protected:
-    Shared<Model::AssetManager> asset_manager;
     Camera camera;
+
+    Shared<Model::AssetManager> asset_manager;
 
     Model::TextureID sprite_id;
     short_id_t sprite_piece;
@@ -46,9 +50,9 @@ protected:
     void render_name(const SDL2pp::Point& player_center);
 
 public:
-    RenderedPlayer(Weak<Controller::GameController> controller, Model::Player&& player,
-                   const Camera& camera);
+    RenderedPlayer(Weak<Controller::GameController> controller, Model::Player&& player);
 
+    void set_camera(const Camera& new_camera);
     void render() override;
 
     ~RenderedPlayer() override = default;
