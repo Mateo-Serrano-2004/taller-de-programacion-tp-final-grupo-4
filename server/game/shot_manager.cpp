@@ -84,7 +84,7 @@ std::vector<Impact> ShotManager::calculate_shot_impacts(
 
     const WeaponShotInfo& winfo = shot_info.weapon_info;
     const Physics::Vector2D& origin = shot_info.origin;
-    float base_angle = shot_info.angle;
+    float base_angle = shot_info.angle - 2 * (shot_info.angle - 270);
 
     for (int i = 0; i < winfo.bullets_fired; ++i) {
         Physics::Vector2D end = calculate_bullet_endpoint(origin, base_angle, winfo.dispersion, winfo.max_range);
