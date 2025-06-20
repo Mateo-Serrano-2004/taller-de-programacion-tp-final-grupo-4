@@ -36,7 +36,8 @@ public:
     void start_reloading_weapon(FullPlayer& player, const Round& round) const;
     void stop_reloading_weapon(FullPlayer& player) const;
     void process_defusing(std::map<uint8_t, FullPlayer>& players, Round& round);
-    void process_reloading(std::map<uint8_t, FullPlayer>& players, Round& round, uint16_t frames_to_process) const;
+    void process_reloading(std::map<uint8_t, FullPlayer>& players, Round& round,
+                           uint16_t frames_to_process) const;
 
     ~GameLogic() = default;
 };

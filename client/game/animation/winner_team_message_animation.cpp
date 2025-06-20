@@ -15,9 +15,7 @@ SDL2pp::Color View::WinnerTeamMessageAnimation::get_color(Model::TeamID winner_t
 
 View::WinnerTeamMessageAnimation::WinnerTeamMessageAnimation(
         Weak<Controller::GameController> controller, Model::TeamID team):
-        View::FramedAnimation(controller),
-        viewport(controller),
-        message(controller) {
+        View::FramedAnimation(controller), viewport(controller), message(controller) {
     viewport.add_child(&message);
     viewport.set_vertical_alignment(0.2f);
     message.set_text(get_message(team));
@@ -27,6 +25,4 @@ View::WinnerTeamMessageAnimation::WinnerTeamMessageAnimation(
     set_total_frames(160);
 }
 
-void View::WinnerTeamMessageAnimation::render() {
-    viewport.render();
-}
+void View::WinnerTeamMessageAnimation::render() { viewport.render(); }

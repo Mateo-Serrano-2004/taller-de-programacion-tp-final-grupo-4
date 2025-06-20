@@ -1,10 +1,11 @@
 #include "interpolated_animation.h"
 
-View::InterpolatedAnimation::InterpolatedAnimation(Weak<Controller::BaseController> controller)
-: View::Animation(controller) {}
+View::InterpolatedAnimation::InterpolatedAnimation(Weak<Controller::BaseController> controller):
+        View::Animation(controller) {}
 
 void View::InterpolatedAnimation::progress(int value) {
-    if (ended) return;
+    if (ended)
+        return;
     render();
     current_progression = value;
     ended = current_progression > 100;

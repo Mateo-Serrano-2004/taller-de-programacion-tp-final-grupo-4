@@ -84,10 +84,9 @@ Shared<SDL2pp::Texture> View::AssetGenerator::generate_animation(
     return animation;
 }
 
-View::AssetGenerator::AssetGenerator(
-    Shared<SDL2pp::Renderer> renderer,
-    const DTO::ConfigDTO& config
-): renderer(renderer), config(config) {}
+View::AssetGenerator::AssetGenerator(Shared<SDL2pp::Renderer> renderer,
+                                     const DTO::ConfigDTO& config):
+        renderer(renderer), config(config) {}
 
 
 Shared<SDL2pp::Texture> View::AssetGenerator::generate_fov() {

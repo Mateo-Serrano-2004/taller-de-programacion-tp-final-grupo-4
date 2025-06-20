@@ -7,8 +7,8 @@
 
 #include <SDL2/SDL.h>
 
-#include "common/definitions.h"
 #include "common/DTO/config_dto.h"
+#include "common/definitions.h"
 
 namespace SDL2pp {
 class Renderer;

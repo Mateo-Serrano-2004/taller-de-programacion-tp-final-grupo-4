@@ -16,4 +16,4 @@ public:
     virtual ~Fixed() = default;
 };
 
-#endif // CLIENT_GAME_INTERFACE_FIXED_H
+#endif  // CLIENT_GAME_INTERFACE_FIXED_H

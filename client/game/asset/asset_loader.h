@@ -4,9 +4,9 @@
 #include <string>
 #include <vector>
 
+#include "common/DTO/config_dto.h"
 #include "common/asset_addresser.h"
 #include "common/definitions.h"
-#include "common/DTO/config_dto.h"
 
 #include "asset_generator.h"
 #include "texture_id.h"
@@ -42,11 +42,8 @@ private:
     void load_white_background();
 
 public:
-    AssetLoader(
-        Shared<AssetManager> manager,
-        Shared<SDL2pp::Renderer> renderer,
-        const DTO::ConfigDTO& config
-    );
+    AssetLoader(Shared<AssetManager> manager, Shared<SDL2pp::Renderer> renderer,
+                const DTO::ConfigDTO& config);
 
     void load_all_textures();
 

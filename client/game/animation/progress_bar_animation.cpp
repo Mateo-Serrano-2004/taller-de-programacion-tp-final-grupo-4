@@ -2,10 +2,8 @@
 
 #include "controller/base_controller.h"
 
-View::ProgressBarAnimation::ProgressBarAnimation(Weak<Controller::BaseController> controller)
-: View::InterpolatedAnimation(controller),
-  viewport(controller),
-  progress_bar(controller) {
+View::ProgressBarAnimation::ProgressBarAnimation(Weak<Controller::BaseController> controller):
+        View::InterpolatedAnimation(controller), viewport(controller), progress_bar(controller) {
     viewport.add_child(&progress_bar);
     viewport.set_vertical_alignment(0.1);
 

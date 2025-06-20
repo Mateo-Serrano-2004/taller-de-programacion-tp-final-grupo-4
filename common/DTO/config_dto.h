@@ -12,7 +12,8 @@ public:
     uint16_t ratio;
 
     ConfigDTO(): width(0), height(0), angle(0), ratio(0) {}
-    ConfigDTO(uint16_t width, uint16_t height, uint16_t angle, uint16_t ratio) : width(width), height(height), angle(angle), ratio(ratio) {}
+    ConfigDTO(uint16_t width, uint16_t height, uint16_t angle, uint16_t ratio):
+            width(width), height(height), angle(angle), ratio(ratio) {}
     ConfigDTO(const ConfigDTO&) = default;
 };
 }  // namespace DTO

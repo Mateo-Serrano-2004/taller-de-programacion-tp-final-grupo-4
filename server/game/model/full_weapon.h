@@ -19,7 +19,8 @@ protected:
     uint16_t ticks_remaining_to_reload;
 
 public:
-    FullWeapon(Model::WeaponID weapon_id, Model::SlotID slot_id, uint8_t loaded_ammo, uint16_t total_ammo, uint16_t ticks_to_reload, uint16_t ticks_remaining_to_reload);
+    FullWeapon(Model::WeaponID weapon_id, Model::SlotID slot_id, uint8_t loaded_ammo,
+               uint16_t total_ammo, uint16_t ticks_to_reload, uint16_t ticks_remaining_to_reload);
 
     Model::SlotID get_slot_id() const;
 

@@ -27,15 +27,13 @@ private:
     SDL2pp::Color get_color(Model::TeamID winner_team);
 
 public:
-    WinnerTeamMessageAnimation(
-        Weak<Controller::GameController> controller,
-        Model::TeamID winner_team
-    );
+    WinnerTeamMessageAnimation(Weak<Controller::GameController> controller,
+                               Model::TeamID winner_team);
 
     void render() override;
 
     ~WinnerTeamMessageAnimation() override = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_ANIMATION_WINNER_TEAM_MESSAGE_ANIMATION_H
+#endif  // CLIENT_GAME_ANIMATION_WINNER_TEAM_MESSAGE_ANIMATION_H

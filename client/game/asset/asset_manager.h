@@ -7,8 +7,8 @@
 
 #include "animation/animation_details.h"
 #include "asset/texture_id.h"
-#include "common/asset_addresser.h"
 #include "common/DTO/config_dto.h"
+#include "common/asset_addresser.h"
 
 #include "animation_id.h"
 #include "asset_generator.h"

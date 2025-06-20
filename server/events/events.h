@@ -77,12 +77,12 @@ public:
 
 class ReloadWeaponEvent {
 public:
-    explicit ReloadWeaponEvent(){}
+    ReloadWeaponEvent() {}
 };
 
 class StopReloadingEvent {
 public:
-    explicit StopReloadingEvent(){}
+    StopReloadingEvent() {}
 };
 
 class PickRoleEvent {
@@ -166,8 +166,7 @@ using GameEventVariant =
         std::variant<LeaveGameEvent, MovementEvent, StopMovementEvent, RotationEvent,
                      DropWeaponEvent, UseWeaponEvent, DefuseBombEvent, SwitchWeaponEvent,
                      ReloadWeaponEvent, StopReloadingEvent, BuyEvent, BuyAmmoEvent, QuitEvent,
-                     PickRoleEvent, StopUsingWeaponEvent, StopDefusingBombEvent
-                     >;
+                     PickRoleEvent, StopUsingWeaponEvent, StopDefusingBombEvent>;
 
 using EventVariant = std::variant<GameEventVariant, UsernameEvent, CreateGameEvent, MapRequestEvent,
                                   JoinGameEvent, ListGamesEvent>;

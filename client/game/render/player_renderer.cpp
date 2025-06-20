@@ -29,7 +29,8 @@
 
 #include "camera.h"
 
-void View::PlayerRenderer::render_winner_message(const Model::GameState& game_state, uint8_t frames) {
+void View::PlayerRenderer::render_winner_message(const Model::GameState& game_state,
+                                                 uint8_t frames) {
     if (game_state.winner_message) {
         game_state.winner_message->step(frames);
     }
@@ -81,11 +82,7 @@ void View::PlayerRenderer::render_muzzle_fires(const Model::GameState& game_stat
 void View::PlayerRenderer::render_bomb(const Model::GameState& game_state) {
     if (game_state.bomb_position.has_value()) {
         auto point = game_state.camera.get_camera_view(game_state.bomb_position.value());
-        renderer->Copy(
-            *bomb_texture,
-            SDL2pp::NullOpt,
-            point
-        );
+        renderer->Copy(*bomb_texture, SDL2pp::NullOpt, point);
     }
 }
 

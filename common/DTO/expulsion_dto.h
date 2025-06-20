@@ -7,6 +7,6 @@ public:
     ExpulsionDTO() = default;
     ~ExpulsionDTO() = default;
 };
-};
+};  // namespace DTO
 
-#endif // COMMON_DTO_EXCPULSION_DTO_H
+#endif  // COMMON_DTO_EXCPULSION_DTO_H

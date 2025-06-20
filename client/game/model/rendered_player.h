@@ -13,8 +13,8 @@
 #include "common/model/weapon.h"
 #include "common/role_id.h"
 #include "common/weapon_id.h"
-#include "interface/rendered.h"
 #include "interface/fixed.h"
+#include "interface/rendered.h"
 #include "render/camera.h"
 
 namespace SDL2pp {

@@ -86,18 +86,16 @@ void Model::AssetLoader::load_white_background() {
     manager->generate_background(255, 255, 255, 255);
 }
 
-Model::AssetLoader::AssetLoader(
-    Shared<AssetManager> manager,
-    Shared<SDL2pp::Renderer> renderer,
-    const DTO::ConfigDTO& config
-): player_sprites({"ct1.bmp", "ct2.bmp", "ct3.bmp", "ct4.bmp", "t1.bmp", "t2.bmp", "t3.bmp",
+Model::AssetLoader::AssetLoader(Shared<AssetManager> manager, Shared<SDL2pp::Renderer> renderer,
+                                const DTO::ConfigDTO& config):
+        player_sprites({"ct1.bmp", "ct2.bmp", "ct3.bmp", "ct4.bmp", "t1.bmp", "t2.bmp", "t3.bmp",
                         "t4.bmp"}),
-   weapon_sprites({"ak47.bmp", "awp.bmp", "bomb_d.bmp", "glock.bmp", "knife.bmp", "m3.bmp"}),
-   hud_textures({"hud_nums.bmp", "hud_symbols.bmp"}),
-   manager(manager),
-   renderer(renderer),
-   config(config),
-   generator(renderer, config) {}
+        weapon_sprites({"ak47.bmp", "awp.bmp", "bomb_d.bmp", "glock.bmp", "knife.bmp", "m3.bmp"}),
+        hud_textures({"hud_nums.bmp", "hud_symbols.bmp"}),
+        manager(manager),
+        renderer(renderer),
+        config(config),
+        generator(renderer, config) {}
 
 void Model::AssetLoader::load_all_textures() {
     load_weapon_sprites();

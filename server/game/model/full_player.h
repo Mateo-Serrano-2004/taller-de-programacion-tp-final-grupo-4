@@ -25,7 +25,8 @@ private:
     Physics::Vector2D weapon_position() const;
 
 public:
-    FullPlayer(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role, Physics::Vector2D position);
+    FullPlayer(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role,
+               Physics::Vector2D position);
 
     FullPlayer(FullPlayer&&) = default;
     FullPlayer& operator=(FullPlayer&&) = default;

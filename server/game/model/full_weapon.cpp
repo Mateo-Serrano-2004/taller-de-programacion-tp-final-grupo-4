@@ -1,7 +1,12 @@
 #include "full_weapon.h"
 
-FullWeapon::FullWeapon(Model::WeaponID weapon_id, Model::SlotID slot_id, uint8_t loaded_ammo, uint16_t total_ammo, uint16_t ticks_to_reload, uint16_t ticks_remaining_to_reload)
-    : Model::Weapon(weapon_id, loaded_ammo, total_ammo), slot_id(slot_id), ticks_to_reload(ticks_to_reload), ticks_remaining_to_reload(ticks_remaining_to_reload) {}
+FullWeapon::FullWeapon(Model::WeaponID weapon_id, Model::SlotID slot_id, uint8_t loaded_ammo,
+                       uint16_t total_ammo, uint16_t ticks_to_reload,
+                       uint16_t ticks_remaining_to_reload):
+        Model::Weapon(weapon_id, loaded_ammo, total_ammo),
+        slot_id(slot_id),
+        ticks_to_reload(ticks_to_reload),
+        ticks_remaining_to_reload(ticks_remaining_to_reload) {}
 
 Model::SlotID FullWeapon::get_slot_id() const { return slot_id; }
 
@@ -12,9 +17,7 @@ void FullWeapon::release_trigger() {
     trigger_blocked = false;
 }
 
-void FullWeapon::start_reloading() {
-    reloading = true;
-}
+void FullWeapon::start_reloading() { reloading = true; }
 
 void FullWeapon::stop_reloading() {
     reloading = false;
@@ -22,8 +25,9 @@ void FullWeapon::stop_reloading() {
 }
 
 bool FullWeapon::reload(uint16_t ticks_to_process) {
-    if(!reloading) return false;
-    if(ticks_to_process >= ticks_remaining_to_reload){
+    if (!reloading)
+        return false;
+    if (ticks_to_process >= ticks_remaining_to_reload) {
         set_loaded_ammo(get_total_ammo());
         stop_reloading();
     }

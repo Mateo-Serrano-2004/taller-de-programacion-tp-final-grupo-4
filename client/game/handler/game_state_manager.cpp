@@ -11,7 +11,6 @@
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Renderer.hh>
 #include <SDL2pp/Texture.hh>
-#include <SDL2pp/Point.hh>
 
 #include "animation/muzzle_fire_animation.h"
 #include "animation/progress_bar_animation.h"
@@ -94,8 +93,7 @@ void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
     game_state->game_winner = game_state_dto.winner;
 
     if (game_state_dto.round.ended) {
-        game_state->winner_message = make_shared<View::WinnerTeamMessageAnimation>(
-            controller, game_state->round_winner
-        );
+        game_state->winner_message =
+                make_shared<View::WinnerTeamMessageAnimation>(controller, game_state->round_winner);
     }
 }

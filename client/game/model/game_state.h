@@ -12,7 +12,7 @@
 namespace SDL2pp {
 class Texture;
 class Point;
-}
+}  // namespace SDL2pp
 
 namespace Controller {
 class GameStateManager;

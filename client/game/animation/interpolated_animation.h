@@ -12,12 +12,12 @@ protected:
     int current_progression;
 
 public:
-    InterpolatedAnimation(Weak<Controller::BaseController> controller);
+    explicit InterpolatedAnimation(Weak<Controller::BaseController> controller);
 
     virtual void progress(int value);
 
     ~InterpolatedAnimation() override = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_ANIMATION_INTERPOLATED_ANIMATION_H
+#endif  // CLIENT_GAME_ANIMATION_INTERPOLATED_ANIMATION_H

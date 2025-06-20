@@ -39,9 +39,7 @@ SDL2pp::Rect View::MuzzleFireAnimation::get_dsrect() {
     return SDL2pp::Rect(camera_view_x - 16, camera_view_y - 32 - fire_distance, 32, 32);
 }
 
-angle_t View::MuzzleFireAnimation::get_angle() {
-    return player->get_angle();
-}
+angle_t View::MuzzleFireAnimation::get_angle() { return player->get_angle(); }
 
 SDL2pp::Point View::MuzzleFireAnimation::get_rpoint() {
     auto fire_distance = get_fire_distance();
@@ -59,6 +57,4 @@ void View::MuzzleFireAnimation::set_player(Shared<RenderedPlayer> new_player) {
     player = new_player;
 }
 
-bool View::MuzzleFireAnimation::has_ended() const {
-    return ended && player;
-}
+bool View::MuzzleFireAnimation::has_ended() const { return ended && player; }

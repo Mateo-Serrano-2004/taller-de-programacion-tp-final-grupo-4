@@ -3,20 +3,20 @@
 
 #include <cstdint>
 
-#include <SDL2pp/Rect.hh>
 #include <SDL2pp/Point.hh>
+#include <SDL2pp/Rect.hh>
 
 #include "asset/animation_id.h"
 #include "common/definitions.h"
 #include "render/camera.h"
 
-#include "framed_animation.h"
 #include "animation_details.h"
+#include "framed_animation.h"
 
 namespace Controller {
 class BaseController;
 class AnimationIterator;
-};
+};  // namespace Controller
 
 namespace View {
 class RenderedPlayer;

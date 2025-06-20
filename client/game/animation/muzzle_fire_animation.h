@@ -3,8 +3,8 @@
 
 #include <cstdint>
 
-#include <SDL2pp/Rect.hh>
 #include <SDL2pp/Point.hh>
+#include <SDL2pp/Rect.hh>
 
 #include "common/definitions.h"
 
@@ -13,7 +13,7 @@
 namespace Controller {
 class GameController;
 class AnimationIterator;
-};
+};  // namespace Controller
 
 namespace View {
 class RenderedPlayer;
