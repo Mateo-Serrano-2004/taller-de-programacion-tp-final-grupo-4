@@ -105,7 +105,8 @@ void ServerProtocol::send_variant(const DTO::DTOVariant& variant) {
                           [this](const DTO::MapDTO& d) { send_map(d); },
                           [this](const DTO::MapNameListDTO& d) { send_all_maps_names(d); },
                           [this](const DTO::GameListDTO& d) { send_games(d); },
-                          [this](const DTO::ConfigDTO& d) { send_config(d); }},
+                          [this](const DTO::ConfigDTO& d) { send_config(d); },
+                          [this](const DTO::ExpulsionDTO&) {}},
                variant);
 }
 
