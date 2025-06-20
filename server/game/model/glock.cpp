@@ -5,7 +5,9 @@ Glock::Glock()
         Model::WeaponID::GLOCK,
         Model::SlotID::SECONDARY_WEAPON,
         20,     // loaded_ammo
-        20      // total_ammo
+        20,      // total_ammo
+        90,
+        90
     )
 {}
 

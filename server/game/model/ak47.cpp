@@ -5,7 +5,9 @@ AK47::AK47()
         Model::WeaponID::AK47,
         Model::SlotID::PRIMARY_WEAPON,
         30, // loaded_ammo
-        30  // total_ammo
+        30,  // total_ammo
+        90,
+        90
     )
 {}
 

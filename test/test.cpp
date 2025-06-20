@@ -409,6 +409,115 @@ void test_rotacion_y_disparo_m3() {
     std::cout << "✅ Test rotacion_y_disparo_M3 pasó correctamente\n";
 }
 
+void test_disparo_con_reload() {
+    std::cout << "[TEST] - PARTIDA 1 RONDA. PLAYER 2 DISPARA 2 VECES, RECARGA, Y DISPARA 2 VECES MÁS\n";
+
+    using namespace std::chrono;
+
+    ClientQueue client_queue1;
+    ClientQueue client_queue2;
+    Game game("test_party", "test_map");
+
+    uint8_t ct_id = 1;
+    uint8_t tt_id = 2;
+
+    game.add_player("CT", client_queue1, ct_id, Model::TeamID::CT, Model::RoleID::CT1);
+    game.add_player("TT", client_queue2, tt_id, Model::TeamID::TT, Model::RoleID::T1);
+
+    std::this_thread::sleep_for(seconds(12));  // Warmup + buy
+
+    // 🌀 Rotar a 90 grados
+    game.get_queue().push({tt_id, RotationEvent(90)});
+    std::this_thread::sleep_for(milliseconds(32));
+
+    // 🔫 Disparar 2 veces
+    for (int i = 0; i < 2; ++i) {
+        game.get_queue().push({tt_id, UseWeaponEvent()});
+        std::this_thread::sleep_for(milliseconds(32));
+        game.get_queue().push({tt_id, StopUsingWeaponEvent()});
+        std::this_thread::sleep_for(milliseconds(32));
+    }
+
+    // 🔁 Recargar arma
+    game.get_queue().push({tt_id, ReloadWeaponEvent()});
+    std::this_thread::sleep_for(seconds(2));
+    game.get_queue().push({tt_id, StopReloadingEvent()});
+    std::this_thread::sleep_for(milliseconds(32));
+
+    // 🔫 Disparar otras 2 veces
+    for (int i = 0; i < 2; ++i) {
+        game.get_queue().push({tt_id, UseWeaponEvent()});
+        std::this_thread::sleep_for(milliseconds(32));
+        game.get_queue().push({tt_id, StopUsingWeaponEvent()});
+        std::this_thread::sleep_for(milliseconds(32));
+    }
+
+    std::this_thread::sleep_for(seconds(2));
+    game.stop();
+
+    DTO::DTOVariant dto;
+    DTO::GameStateDTO final_dto;
+    DTO::GameStateDTO last_dto;
+    bool first = true;
+
+    std::unordered_map<uint8_t, bool> was_reloading;
+
+    while (client_queue1.try_pop(dto)) {
+        if (!std::holds_alternative<DTO::GameStateDTO>(dto)) continue;
+        const auto& g_dto = std::get<DTO::GameStateDTO>(dto);
+        final_dto = g_dto;
+
+        for (const auto& p : g_dto.players) {
+            uint8_t pid = p.player_id;
+
+            // 🔄 Mostrar solo si reloading cambia de false a true
+            bool prev_reloading = was_reloading[pid];
+            if (p.reloading && !prev_reloading) {
+                std::cout << "\n♻️ [RECARGANDO] ------------------------" << std::endl;
+                std::cout << "👤 Player " << static_cast<int>(p.player_id)
+                          << " está recargando su arma." << std::endl;
+            }
+            was_reloading[pid] = p.reloading;
+
+            // 💥 Mostrar si cambia loaded_ammo (usando p.weapon.loaded_ammo)
+            if (!first) {
+                auto it = std::find_if(last_dto.players.begin(), last_dto.players.end(),
+                                       [&](const DTO::PlayerDTO& old_p) {
+                                           return old_p.player_id == p.player_id;
+                                       });
+
+                if (it != last_dto.players.end() &&
+                    it->weapon_dto.loaded_ammo != p.weapon_dto.loaded_ammo) {
+                    std::cout << "\n🔫 [AMMO CAMBIADO] ------------------------" << std::endl;
+                    std::cout << "👤 Player " << static_cast<int>(p.player_id)
+                              << " | Munición cargada: " << static_cast<int>(p.weapon_dto.loaded_ammo)
+                              << " (antes: " << static_cast<int>(it->weapon_dto.loaded_ammo) << ")\n";
+                }
+            }
+        }
+
+        last_dto = g_dto;
+        first = false;
+    }
+
+    // Asserts
+    assert(final_dto.round.state == RoundState::Ended);
+    assert(final_dto.game_state == GameState::Finished);
+    assert(final_dto.winner == Model::TeamID::TT);
+    assert(final_dto.tt_rounds_won == 1);
+    assert(final_dto.ct_rounds_won == 0);
+
+    bool tt_money_ok = false;
+    for (const auto& p : final_dto.players) {
+        if (p.player_id == tt_id && p.money == 3300) {
+            tt_money_ok = true;
+        }
+    }
+
+    assert(tt_money_ok && "El TT debería tener $3300 tras ganar la ronda");
+    std::cout << "✅ Test disparo_con_reload pasó correctamente\n";
+}
+
 void test_bomba_y_estado_round() {
     std::cout << "[TEST] - Simulación de bomba plantada y estados de ronda" << std::endl;
     using namespace std::chrono;
@@ -678,12 +787,13 @@ void test_tt_defuse_interrumpido_dos_veces() {
 int main() {
     //test_cambio_ronda();
     //test_finaliza_por_muerte_ct();
-    //test_rotacion_y_disparo(); este
+    //test_rotacion_y_disparo();
     //test_rotacion_y_disparo_2(); este
     //test_rotacion_y_disparo_m3(); este
+    test_disparo_con_reload();
     //test_bomba_y_estado_round();
     //test_tt_plants_and_bomb_explodes();
-    //test_tt_plants_and_ct_defuses(); este
+    //test_tt_plants_and_ct_defuses();
     //test_tt_defuse_interrumpido_dos_veces(); este
     std::cout << "Pasaron los test" << std::endl;
     return 0;

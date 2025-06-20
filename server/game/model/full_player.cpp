@@ -101,6 +101,27 @@ void FullPlayer::substract_money(uint16_t amount) {
         money -= amount;
 }
 
+void FullPlayer::start_reloading_weapon() {
+    if (!current_weapon || !alive) return;
+    reloading = true;
+    std::static_pointer_cast<FullWeapon>(current_weapon)->start_reloading(); 
+}
+
+void FullPlayer::stop_reloading_weapon() {
+    if (!current_weapon) return;
+    std::static_pointer_cast<FullWeapon>(current_weapon)->stop_reloading();
+    reloading = false;
+}
+
+void FullPlayer::reload(uint16_t frames_to_process) {
+    if (!current_weapon || !alive || !reloading) {
+        reloading = false;
+        return;
+    }
+    auto weapon = std::static_pointer_cast<FullWeapon>(current_weapon);
+    reloading = weapon->reload(frames_to_process); // devuelve true si esta recargando bien, false si por algun motivo no puede
+}
+
 void FullPlayer::start_using_weapon() {
     if (!current_weapon || !alive)
         return;
@@ -174,6 +195,7 @@ void FullPlayer::reset_for_new_round(Physics::Vector2D new_position) {
     alive = true;
     health = 100;
     defusing_bomb = false;
+    reloading = false;
     bomb.reset();
 }
 

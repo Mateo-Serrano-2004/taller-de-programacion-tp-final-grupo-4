@@ -26,6 +26,19 @@ void Game::handle_use_weapon(const uint8_t& player_id) {
     gamelogic.start_using_weapon(player->get(), round);
 }
 
+void Game::handle_reload(const uint8_t& player_id) {
+    if (this->state != GameState::Playing) return;
+    auto player = find_player_by_id(player_id);
+    if (!player.has_value()) return;
+    gamelogic.start_reloading_weapon(player->get(), round);
+}
+
+void Game::handle_stop_reloading(const uint8_t& player_id) {
+    auto player = find_player_by_id(player_id);
+    if (!player.has_value()) return;
+    gamelogic.stop_reloading_weapon(player->get());
+}
+
 void Game::handle_start_defusing_bomb(const uint8_t& player_id) {
     if (this->state != GameState::Playing) return;
     auto player = find_player_by_id(player_id);
@@ -123,7 +136,9 @@ void Game::handle(uint8_t player_id, const GameEventVariant& event) {
                        [player_id, this](const StopUsingWeaponEvent&) { handle_stop_using_weapon(player_id); }, 
                        [player_id, this](const DefuseBombEvent&) {handle_start_defusing_bomb(player_id); },
                        [player_id, this](const StopDefusingBombEvent&) {handle_stop_defusing_bomb(player_id); },
-                       [this](const ReloadWeaponEvent&) {}, [this](const BuyAmmoEvent&) {}},
+                       [player_id, this](const ReloadWeaponEvent&) {handle_reload(player_id); },
+                       [player_id, this](const StopReloadingEvent&) {handle_stop_reloading(player_id); }, 
+                       [this](const BuyAmmoEvent&) {}},
             event);
 }
 
@@ -195,6 +210,7 @@ void Game::process_frames(uint16_t frames_to_process) {
     movement_system.process_movements(players, frames_to_process);
     gamelogic.process_defusing(players, round);
     round.update(frames_to_process);
+    gamelogic.process_reloading(players, round, frames_to_process);
     gamelogic.process_shooting(players, round, frames_to_process);
 
     if (round.ended()) {
@@ -206,7 +222,7 @@ void Game::process_frames(uint16_t frames_to_process) {
             is_not_finished = false;
             return;
         }
-
+        //broadcast_game_state(); con esto le mando antes que cambie
         start_new_round();
     }
 }

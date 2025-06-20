@@ -5,7 +5,9 @@ M3::M3()
         Model::WeaponID::M3,
         Model::SlotID::PRIMARY_WEAPON,
         8,     // loaded_ammo
-        8      // total_ammo
+        8,      // total_ammo
+        100,
+        100
     )
 {}
 

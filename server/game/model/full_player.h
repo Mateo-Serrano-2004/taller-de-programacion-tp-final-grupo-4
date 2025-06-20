@@ -39,6 +39,9 @@ public:
     void update_position();
     void start_using_weapon();
     void stop_using_weapon();
+    void start_reloading_weapon();
+    void stop_reloading_weapon();
+    void reload(uint16_t frames_to_process);
     std::optional<ShotInfo> shoot(uint16_t frames_to_process);
     void take_damage(uint8_t damage);
     // no maneja tope de dinero
