@@ -11,6 +11,7 @@
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Renderer.hh>
 #include <SDL2pp/Texture.hh>
+#include <SDL2pp/Point.hh>
 
 #include "common/DTO/game_state_dto.h"
 #include "common/model/player.h"
@@ -54,17 +55,24 @@ void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
     }
 
     std::lock_guard<std::mutex> lock(mutex);
-    game_state->time_left = game_state_dto.round.time_left;
     game_state->players = new_game_state->players;
+    game_state->fires.remove_if(
+            [](Shared<View::MuzzleFireAnimation>& a) { return a->has_ended(); });
+    game_state->fires.splice(game_state->fires.end(), new_game_state->fires);
 
+    game_state->time_left = game_state_dto.round.time_left;
+    if (game_state_dto.round.bomb_planted && !game_state->bomb_position.has_value()) {
+        auto pos = game_state_dto.round.bomb_position;
+        game_state->bomb_position = SDL2pp::Point(pos.get_x(), pos.get_y());
+    }
     auto ref_player = game_state->get_reference_player();
     if (ref_player) {
         auto reference_player_position = ref_player->get_position();
         game_state->camera.set_center(reference_player_position.get_x(),
                                       reference_player_position.get_y());
     }
-
-    game_state->fires.remove_if(
-            [](Shared<View::MuzzleFireAnimation>& a) { return a->has_ended(); });
-    game_state->fires.splice(game_state->fires.end(), new_game_state->fires);
+    game_state->first_team_victories = game_state_dto.ct_rounds_won;
+    game_state->second_team_victories = game_state_dto.tt_rounds_won;
+    game_state->round_winner = game_state_dto.round.winner;
+    game_state->game_winner = game_state_dto.winner;
 }

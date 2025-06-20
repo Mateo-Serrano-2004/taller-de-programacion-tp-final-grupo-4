@@ -7,10 +7,12 @@
 
 #include "animation/muzzle_fire_animation.h"
 #include "common/definitions.h"
+#include "common/team.h"
 #include "render/camera.h"
 
 namespace SDL2pp {
 class Texture;
+class Point;
 }
 
 namespace Controller {
@@ -30,7 +32,12 @@ public:
     View::Camera camera;
     Shared<SDL2pp::Texture> map;
     Maybe<short_id_t> reference_player_id;
+    Maybe<SDL2pp::Point> bomb_position;
     uint16_t time_left;
+    uint8_t first_team_victories;
+    uint8_t second_team_victories;
+    Model::TeamID round_winner;
+    Model::TeamID game_winner;
 
     GameState();
     GameState(const GameState& other);
