@@ -22,6 +22,7 @@ void Net::ClientProtocol::receive_player(DTO::PlayerDTO& player) {
     skt.recvall(&player.player_id, sizeof(player.player_id));
     skt.recvall(&player.role_id, sizeof(player.role_id));
     skt.recvall(&player.shooting, sizeof(player.shooting));
+    skt.recvall(&player.defusing_bomb, sizeof(player.defusing_bomb));
     skt.recvall(&player.health, sizeof(player.health));
     skt.recvall(&player.team, sizeof(player.team));
 
@@ -60,6 +61,15 @@ void Net::ClientProtocol::receive_round(DTO::RoundDTO& round) {
     skt.recvall(&round.ended, sizeof(round.ended));
     skt.recvall(&round.time_left, sizeof(round.time_left));
     skt.recvall(&round.winner, sizeof(round.winner));
+    skt.recvall(&round.bomb_planted, sizeof(round.bomb_planted));
+    skt.recvall(&round.bomb_defused, sizeof(round.bomb_defused));
+    
+    coord_t bomb_position_x, bomb_position_y;
+    skt.recvall(&bomb_position_x, sizeof(bomb_position_x));
+    skt.recvall(&bomb_position_y, sizeof(bomb_position_y));
+
+    round.bomb_position.set_x(ntohs(bomb_position_x));
+    round.bomb_position.set_y(ntohs(bomb_position_y));
 
     round.time_left = htons(round.time_left);
 }
