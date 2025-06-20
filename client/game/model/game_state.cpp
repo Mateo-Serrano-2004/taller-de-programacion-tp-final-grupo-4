@@ -7,6 +7,7 @@
 #include <SDL2pp/Point.hh>
 
 #include "animation/muzzle_fire_animation.h"
+#include "animation/progress_bar_animation.h"
 #include "animation/winner_team_message_animation.h"
 #include "model/rendered_player.h"
 
@@ -14,6 +15,7 @@ Model::GameState::GameState():
     reference_player_id(std::nullopt),
     bomb_position(std::nullopt),
     time_left(0),
+    defusing_progress(0),
     first_team_victories(0),
     second_team_victories(0),
     round_winner(Model::TeamID::NONE),
@@ -23,11 +25,13 @@ Model::GameState::GameState(const GameState& other):
         players(other.players),
         fires(other.fires),
         winner_message(other.winner_message),
+        bomb_defusing(other.bomb_defusing),
         camera(other.camera),
         map(other.map),
         reference_player_id(other.reference_player_id),
         bomb_position(other.bomb_position),
         time_left(other.time_left),
+        defusing_progress(other.defusing_progress),
         first_team_victories(other.first_team_victories),
         second_team_victories(other.second_team_victories),
         round_winner(other.round_winner),

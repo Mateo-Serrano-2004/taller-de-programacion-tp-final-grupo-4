@@ -33,6 +33,7 @@ protected:
     Shared<SDL2pp::Texture> bomb_texture;
 
     void render_winner_message(const Model::GameState& game_state, uint8_t frames);
+    void render_defusing_progress(const Model::GameState& game_state);
     void render_fov(const Model::GameState& game_state);
     void render_muzzle_fires(const Model::GameState& game_state, uint8_t frames);
     void render_bomb(const Model::GameState& game_state);

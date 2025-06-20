@@ -20,14 +20,6 @@
 #include "common/DTO/map_dto.h"
 #include "common/asset_addresser.h"
 
-SDL_Rect View::AssetGenerator::get_bounds() {
-    SDL_Rect bounds;
-    if (SDL_GetDisplayBounds(0, &bounds) != 0) {
-        throw std::runtime_error(std::string(SDL_GetError()));
-    }
-    return bounds;
-}
-
 void View::AssetGenerator::draw_disk(int half_size, int radius) {
     for (int y = -radius; y <= radius; y++) {
         for (int x = -radius; x <= radius; x++) {
@@ -92,10 +84,13 @@ Shared<SDL2pp::Texture> View::AssetGenerator::generate_animation(
     return animation;
 }
 
-View::AssetGenerator::AssetGenerator(Shared<SDL2pp::Renderer> renderer): renderer(renderer) {}
+View::AssetGenerator::AssetGenerator(
+    Shared<SDL2pp::Renderer> renderer,
+    const DTO::ConfigDTO& config
+): renderer(renderer), config(config) {}
 
 
-Shared<SDL2pp::Texture> View::AssetGenerator::generate_fov(const DTO::ConfigDTO& config) {
+Shared<SDL2pp::Texture> View::AssetGenerator::generate_fov() {
     // The size of the fov must be enough to cover
     // the logical size of the screen even when rotated
     int fov_size = std::ceil(std::sqrt((config.width * config.width) + (config.height * config.height)) / 2.0);
@@ -140,18 +135,18 @@ Shared<SDL2pp::Texture> View::AssetGenerator::generate_plain_texture(const SDL2p
 
     renderer->SetTarget(*texture);
     renderer->SetDrawColor(color);
+    renderer->SetDrawBlendMode(SDL_BLENDMODE_BLEND);
     renderer->Clear();
 
+    renderer->SetTarget();
     renderer->SetDrawColor(prev_color);
     renderer->SetDrawBlendMode(blend_mode);
-    renderer->SetTarget();
 
     return texture;
 }
 
 Shared<SDL2pp::Texture> View::AssetGenerator::generate_plain_texture(const SDL2pp::Color& color) {
-    SDL_Rect bounds = get_bounds();
-    return generate_plain_texture(SDL2pp::Point(bounds.w, bounds.h), color);
+    return generate_plain_texture(SDL2pp::Point(config.width, config.height), color);
 }
 
 Shared<SDL2pp::Texture> View::AssetGenerator::generate_map(const DTO::MapDTO& map_dto) {

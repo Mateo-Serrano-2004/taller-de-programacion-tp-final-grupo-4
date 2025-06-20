@@ -35,9 +35,9 @@ Shared<Controller::GameController> App::CS2DApp::set_up_graphics(Shared<Net::Cli
     auto renderer = make_shared<SDL2pp::Renderer>(*window, -1, SDL_RENDERER_ACCELERATED);
     renderer->SetLogicalSize(config.width, config.height);
 
-    auto asset_manager = make_shared<Model::AssetManager>(renderer);
-    auto asset_loader = make_shared<Model::AssetLoader>(asset_manager, renderer);
-    asset_loader->load_all_textures(config);
+    auto asset_manager = make_shared<Model::AssetManager>(renderer, config);
+    auto asset_loader = make_shared<Model::AssetLoader>(asset_manager, renderer, config);
+    asset_loader->load_all_textures();
 
     context_manager = make_shared<Context::ContextManager>();
     auto game_controller = make_shared<Controller::GameController>(

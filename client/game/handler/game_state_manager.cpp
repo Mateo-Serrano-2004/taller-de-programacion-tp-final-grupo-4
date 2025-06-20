@@ -14,6 +14,7 @@
 #include <SDL2pp/Point.hh>
 
 #include "animation/muzzle_fire_animation.h"
+#include "animation/progress_bar_animation.h"
 #include "animation/winner_team_message_animation.h"
 #include "common/DTO/game_state_dto.h"
 #include "common/model/player.h"
@@ -74,7 +75,13 @@ void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
         auto reference_player_position = ref_player->get_position();
         game_state->camera.set_center(reference_player_position.get_x(),
                                       reference_player_position.get_y());
+        if (!game_state->bomb_defusing && ref_player->is_defusing()) {
+            game_state->bomb_defusing = make_shared<View::ProgressBarAnimation>(controller);
+        } else if (!ref_player->is_defusing()) {
+            game_state->bomb_defusing = nullptr;
+        }
     }
+    game_state->defusing_progress = game_state_dto.round.defusing_progress;
     if (!(game_state->bomb_position.has_value()) && game_state_dto.round.bomb_planted) {
         game_state->bomb_position = SDL2pp::Point();
         game_state->bomb_position.value().SetX(game_state_dto.round.bomb_position.get_x());

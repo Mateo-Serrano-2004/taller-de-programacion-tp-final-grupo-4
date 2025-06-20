@@ -9,7 +9,7 @@
 View::IterativeAnimation::IterativeAnimation(
     Weak<Controller::BaseController> controller,
     Model::AnimationID id
-): View::Animation(controller),
+): View::FramedAnimation(controller),
    details(controller.lock()->get_asset_manager()->get_animation(id)) {
     total_frames = details.total_frames;
 }

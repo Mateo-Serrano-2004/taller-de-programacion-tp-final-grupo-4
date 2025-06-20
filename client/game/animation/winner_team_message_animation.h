@@ -11,14 +11,14 @@
 #include "entity/label.h"
 #include "entity/vertical_pane.h"
 
-#include "animation.h"
+#include "framed_animation.h"
 
 namespace Controller {
 class GameController;
 };
 
 namespace View {
-class WinnerTeamMessageAnimation: public Animation {
+class WinnerTeamMessageAnimation: public FramedAnimation {
 private:
     VerticalPane viewport;
     Label message;

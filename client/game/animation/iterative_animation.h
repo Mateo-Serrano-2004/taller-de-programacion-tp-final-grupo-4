@@ -10,7 +10,7 @@
 #include "common/definitions.h"
 #include "render/camera.h"
 
-#include "animation.h"
+#include "framed_animation.h"
 #include "animation_details.h"
 
 namespace Controller {
@@ -21,7 +21,7 @@ class AnimationIterator;
 namespace View {
 class RenderedPlayer;
 
-class IterativeAnimation: public Animation {
+class IterativeAnimation: public FramedAnimation {
 protected:
     Model::AnimationDetails details;
 
