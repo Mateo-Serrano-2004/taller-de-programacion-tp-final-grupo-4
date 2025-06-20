@@ -214,13 +214,7 @@ Shared<FullWeapon> FullPlayer::remove_bomb() {
         dropped_bomb = bomb;
         bomb.reset();
 
-        if (primary_weapon) {
-            equip_weapon_by_type(Model::SlotID::PRIMARY_WEAPON);
-        } else if (secondary_weapon) {
-            equip_weapon_by_type(Model::SlotID::SECONDARY_WEAPON);
-        } else if (knife) {
-            equip_weapon_by_type(Model::SlotID::KNIFE_SLOT);
-        }
+        equip_weapon_by_type(Model::SlotID::KNIFE_SLOT);
     }
 
     return dropped_bomb;

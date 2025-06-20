@@ -51,7 +51,8 @@ void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
         auto player = make_shared<View::RenderedPlayer>(controller, std::move(dto.to_player()));
         new_game_state->players.insert({player->get_id(), player});
 
-        if (player->is_shooting() && player->get_current_weapon()->get_weapon_id() != Model::WeaponID::KNIFE) {
+        if (player->is_shooting() &&
+            player->get_current_weapon()->get_weapon_id() != Model::WeaponID::KNIFE) {
             new_game_state->fires.push_back(
                     make_shared<View::MuzzleFireAnimation>(controller, player->get_id()));
         }
