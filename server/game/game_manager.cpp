@@ -22,14 +22,12 @@ void GameManager::clear_games() {
 }
 
 void GameManager::reap_games() {
-    for (auto& [id, game]: games) {
-        if (game && game->is_dead()) {
-            game.reset();
-        }
-    }
-    for (auto it = games.begin(); it != games.end(); it++) {
-        if (!(it->second)) {
+    for (auto it = games.begin(); it != games.end();) {
+        if (it->second && it->second->is_dead()) {
+            it->second.reset();
             it = games.erase(it);
+        } else {
+            ++it;
         }
     }
 }
@@ -38,6 +36,7 @@ GameQueue* GameManager::create_game(const std::string& party_name, const std::st
                                     const std::string& username,
                                     Queue<DTO::DTOVariant>& client_queue) {
     std::lock_guard<std::mutex> lock(mtx);
+    reap_games();
     short_id_t game_id = static_cast<short_id_t>(games.size());
     games[game_id] = std::move(std::make_unique<Game>(party_name, map_name));
     games[game_id]->add_player(username, client_queue, 0, Model::TeamID::CT,
@@ -49,6 +48,7 @@ std::pair<short_id_t, GameQueue*> GameManager::join_game(const uint8_t& game_id,
                                                          const std::string& username,
                                                          Queue<DTO::DTOVariant>& client_queue) {
     std::lock_guard<std::mutex> lock(mtx);
+    reap_games();
     auto it = games.find(game_id);
     if (it == games.end())
         throw InvalidGameException("Invalid game id");
