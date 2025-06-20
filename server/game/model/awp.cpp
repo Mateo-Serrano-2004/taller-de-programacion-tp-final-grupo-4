@@ -5,7 +5,9 @@ AWP::AWP()
         Model::WeaponID::AWP,
         Model::SlotID::PRIMARY_WEAPON,
         10,    // loaded_ammo
-        10     // total_ammo
+        10,     // total_ammo
+        120,
+        120
     )
 {}
 

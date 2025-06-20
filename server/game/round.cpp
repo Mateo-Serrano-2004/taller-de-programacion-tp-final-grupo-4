@@ -23,8 +23,8 @@ Round::Round(int ct_alive, int tt_alive)
 Round Round::create_warmup_round() {
     Round r(0, 0);
     r.state = RoundState::Warmup;
-    r.ticks_for_warmup_phase = 600;
-    r.active_ticks_remaining = 600;
+    r.ticks_for_warmup_phase = 90;
+    r.active_ticks_remaining = 90;
     r.is_warmup_round = true;
     return r;
 }
@@ -162,6 +162,13 @@ int Round::player_id_defusing_bomb() const {
 }
 
 DTO::RoundDTO Round::to_dto(int fps) const {
+    
+    uint8_t defuse_progress = 0;
+
+    if (bomb_being_defused && bomb_planted && !bomb_defused && is_active()) {
+        defuse_progress = static_cast<uint8_t>((defusing_ticks - defusing_ticks_remaining) * 100 / defusing_ticks);
+    }
+
     return DTO::RoundDTO(
         state,
         this->ended(),
@@ -169,7 +176,8 @@ DTO::RoundDTO Round::to_dto(int fps) const {
         this->get_winner_team(),
         this->bomb_planted,
         this->bomb_defused,
-        this->bomb_position
+        this->bomb_position,
+        defuse_progress
     );
 }
 

@@ -5,6 +5,8 @@ Knife::Knife()
         Model::WeaponID::KNIFE,
         Model::SlotID::KNIFE_SLOT,
         1,
+        1,
+        1,
         1
     )
 {}
@@ -28,4 +30,8 @@ std::optional<WeaponShotInfo> Knife::shoot(uint16_t ticks_to_process) {
         /* close_range_threshold */ 0.0f,
         /* close_range_multiplier */1.0f
     );
+}
+
+bool Knife::reload(uint16_t ticks_to_process) {
+    return false;
 }

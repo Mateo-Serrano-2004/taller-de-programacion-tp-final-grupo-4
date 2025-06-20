@@ -17,6 +17,7 @@ public:
     bool bomb_planted;
     bool bomb_defused;
     Physics::Vector2D bomb_position;
+    uint8_t defusing_progress;
 
     RoundDTO();
     RoundDTO(
@@ -26,7 +27,8 @@ public:
         Model::TeamID winner,
         bool bomb_planted,
         bool bomb_defused,
-        Physics::Vector2D bomb_position);
+        Physics::Vector2D bomb_position,
+        uint8_t defusing_progress);
 };
 }  // namespace DTO
 

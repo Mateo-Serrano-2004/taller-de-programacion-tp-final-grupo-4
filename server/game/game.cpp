@@ -26,6 +26,19 @@ void Game::handle_use_weapon(const uint8_t& player_id) {
     gamelogic.start_using_weapon(player->get(), round);
 }
 
+void Game::handle_reload(const uint8_t& player_id) {
+    if (this->state != GameState::Playing) return;
+    auto player = find_player_by_id(player_id);
+    if (!player.has_value()) return;
+    gamelogic.start_reloading_weapon(player->get(), round);
+}
+
+void Game::handle_stop_reloading(const uint8_t& player_id) {
+    auto player = find_player_by_id(player_id);
+    if (!player.has_value()) return;
+    gamelogic.stop_reloading_weapon(player->get());
+}
+
 void Game::handle_start_defusing_bomb(const uint8_t& player_id) {
     if (this->state != GameState::Playing) return;
     auto player = find_player_by_id(player_id);
@@ -123,13 +136,25 @@ void Game::handle(uint8_t player_id, const GameEventVariant& event) {
                        [player_id, this](const StopUsingWeaponEvent&) { handle_stop_using_weapon(player_id); }, 
                        [player_id, this](const DefuseBombEvent&) {handle_start_defusing_bomb(player_id); },
                        [player_id, this](const StopDefusingBombEvent&) {handle_stop_defusing_bomb(player_id); },
-                       [this](const ReloadWeaponEvent&) {}, [this](const BuyAmmoEvent&) {}},
+                       [player_id, this](const ReloadWeaponEvent&) {handle_reload(player_id); },
+                       [player_id, this](const StopReloadingEvent&) {handle_stop_reloading(player_id); }, 
+                       [this](const BuyAmmoEvent&) {}},
             event);
 }
 
 void Game::clear_game_queue() {
     std::pair<uint8_t, GameEventVariant> event_info;
     while (game_queue.try_pop(event_info)) {}
+}
+
+Physics::Vector2D Game::get_position_for_player(Model::TeamID team, uint8_t i){
+    // preguntar lugares disponibles de spanw
+    // reservar uno
+    // devovlerlo
+    if(team == Model::TeamID::CT){
+        return Physics::Vector2D(140, 100);
+    }
+    return Physics::Vector2D(100, 100);
 }
 
 // Resets players
@@ -140,11 +165,22 @@ void Game::start_new_round() {
     int tt_count = 0;
 
     for (auto& [id, player]: players) {
-        player.reset_for_new_round();
-        handle_stop_using_weapon(id); // o capaz esto lo ahce cada player en cada arma al recibir reset e
-        if (player.get_team() == Model::TeamID::CT) ct_count++;
-        else tt_count++;
+        handle_stop_using_weapon(id);
+        // DUMMY POR AHORA PARA CAMBIARLOS A UNA POSICION
+        Model::TeamID player_team = player.get_team();
+        if (player_team == Model::TeamID::CT) {
+            ct_count++;
+            player.reset_for_new_round(get_position_for_player(player_team, tt_count)); // ojo solo para alinearlos
+        } else {
+            tt_count++;
+            player.reset_for_new_round(get_position_for_player(player_team, tt_count));
+        }
+        const auto& pos = player.get_position();
+        std::cout << "Jugador ID: " << static_cast<int>(id)
+          << " - Posición: (" << pos.get_x() << ", " << pos.get_y() << ")\n";
+
     }
+
     gamelogic.assign_bomb_to_random_tt(players);
 
     round = Round(ct_count, tt_count);
@@ -174,6 +210,7 @@ void Game::process_frames(uint16_t frames_to_process) {
     movement_system.process_movements(players, frames_to_process);
     gamelogic.process_defusing(players, round);
     round.update(frames_to_process);
+    gamelogic.process_reloading(players, round, frames_to_process);
     gamelogic.process_shooting(players, round, frames_to_process);
 
     if (round.ended()) {
@@ -185,12 +222,7 @@ void Game::process_frames(uint16_t frames_to_process) {
             is_not_finished = false;
             return;
         }
-
-        /*
-            Here, if the round ended, the player
-            is never told so, because we immediately
-            start another round
-        */
+        //broadcast_game_state(); con esto le mando antes que cambie
         start_new_round();
     }
 }
@@ -293,7 +325,7 @@ void Game::add_player(const std::string& username, ClientQueue& client_queue, sh
         throw InvalidGameException("Game no longer accepts players");
     }
 
-    players.emplace(player_id, FullPlayer(player_id, username, team_id, role_id));
+    players.emplace(player_id, FullPlayer(player_id, username, team_id, role_id, get_position_for_player(team_id, players.size())));
     client_queues[player_id] = &client_queue;
 
     round.notify_player_joined(team_id);

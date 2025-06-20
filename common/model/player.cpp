@@ -8,22 +8,24 @@
 #include "common/DTO/weapon_dto.h"
 #include "common/weapon_id.h"
 
-Model::Player::Player(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role_id)
+Model::Player::Player(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role_id, Physics::Vector2D position)
 : alive(true),
   shooting(false),
   defusing_bomb(false),
+  reloading(false),
   id(id),
   role_id(role_id),
   angle(0),
   money(0),
   name(name),
-  position(0, 0),
+  position(position),
   health(100),
   team(team) {}
 
 Model::Player::Player(
     bool shooting,
     bool defusing_bomb,
+    bool reloading,
     short_id_t id,
     Model::RoleID role_id,
     angle_t angle,
@@ -36,6 +38,7 @@ Model::Player::Player(
 ): alive(true),
    shooting(shooting),
    defusing_bomb(defusing_bomb),
+   reloading(reloading),
    id(id),
    role_id(role_id),
    angle(angle),
@@ -51,6 +54,8 @@ bool Model::Player::is_alive() const { return alive; }
 bool Model::Player::is_shooting() const { return shooting; }
 
 bool Model::Player::is_defusing() const { return defusing_bomb; }
+
+bool Model::Player::is_reloading() const { return reloading; }
 
 short_id_t Model::Player::get_id() const { return id; }
 
@@ -98,6 +103,7 @@ DTO::PlayerDTO Model::Player::to_dto() const {
         current_weapon->to_dto(),
         shooting,
         defusing_bomb,
+        reloading,
         health,
         (short_id_t) (team)
     );
