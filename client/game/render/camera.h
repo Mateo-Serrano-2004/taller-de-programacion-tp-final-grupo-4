@@ -22,6 +22,7 @@ public:
     coord_t get_viewport_height() const;
     SDL2pp::Point get_center() const;
     SDL2pp::Point get_camera_view(const Physics::Vector2D& point) const;
+    SDL2pp::Point get_camera_view(const SDL2pp::Point& point) const;
 
     void set_viewport_width(coord_t new_width);
     void set_viewport_height(coord_t new_height);

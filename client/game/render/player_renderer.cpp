@@ -30,7 +30,6 @@
 
 void View::PlayerRenderer::render_winner_message(const Model::GameState& game_state, uint8_t frames) {
     if (game_state.winner_message) {
-        std::cout << "WINNER MESSAGE\n";
         game_state.winner_message->step(frames);
     }
 }
@@ -69,6 +68,17 @@ void View::PlayerRenderer::render_muzzle_fires(const Model::GameState& game_stat
         }
         animation->set_player(player);
         animation->step(frames);
+    }
+}
+
+void View::PlayerRenderer::render_bomb(const Model::GameState& game_state) {
+    if (game_state.bomb_position.has_value()) {
+        auto point = game_state.camera.get_camera_view(game_state.bomb_position.value());
+        renderer->Copy(
+            *bomb_texture,
+            SDL2pp::NullOpt,
+            point
+        );
     }
 }
 
@@ -146,11 +156,13 @@ View::PlayerRenderer::PlayerRenderer(Weak<Controller::GameController> controller
     auto controller_locked = controller.lock();
     game_state_manager = controller_locked->get_game_state_manager();
     font = asset_manager->generate_font("liberationsans", 16);
+    bomb_texture = asset_manager->get_texture(Model::TextureID::SPRITE_BOMB);
 }
 
 void View::PlayerRenderer::render(const Model::GameState& game_state, uint8_t frames) {
     render_map(game_state);
     auto render_ref_player = render_players(game_state);
+    render_bomb(game_state);
     render_muzzle_fires(game_state, frames);
     if (render_ref_player)
         render_fov(game_state);

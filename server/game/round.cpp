@@ -23,8 +23,8 @@ Round::Round(int ct_alive, int tt_alive)
 Round Round::create_warmup_round() {
     Round r(0, 0);
     r.state = RoundState::Warmup;
-    r.ticks_for_warmup_phase = 90;
-    r.active_ticks_remaining = 90;
+    r.ticks_for_warmup_phase = 600;
+    r.active_ticks_remaining = 600;
     r.is_warmup_round = true;
     return r;
 }

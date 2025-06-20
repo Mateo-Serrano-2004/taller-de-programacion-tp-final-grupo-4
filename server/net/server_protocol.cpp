@@ -130,6 +130,7 @@ void ServerProtocol::send_player(const DTO::PlayerDTO& player) {
     peer.sendall(&player.shooting, sizeof(player.shooting));
     peer.sendall(&player.defusing_bomb, sizeof(player.defusing_bomb));
     peer.sendall(&player.health, sizeof(player.health));
+    peer.sendall(&player.reloading, sizeof(player.reloading));
     peer.sendall(&player.team, sizeof(player.team));
     peer.sendall(&angle, sizeof(angle));
     peer.sendall(&money, sizeof(money));
@@ -160,6 +161,7 @@ void ServerProtocol::send_round(const DTO::RoundDTO& round_dto) {
     coord_t bomb_position_y = htons(round_dto.bomb_position.get_y());
     peer.sendall(&bomb_position_x, sizeof(bomb_position_x));
     peer.sendall(&bomb_position_y, sizeof(bomb_position_y));
+    peer.sendall(&round_dto.defusing_progress, sizeof(round_dto.defusing_progress));
 }
 
 void ServerProtocol::send_game_state(const DTO::GameStateDTO& game_state_dto) {

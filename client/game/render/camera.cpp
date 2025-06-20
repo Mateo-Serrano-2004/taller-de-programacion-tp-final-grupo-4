@@ -27,6 +27,11 @@ SDL2pp::Point View::Camera::get_camera_view(const Physics::Vector2D& point) cons
                          point.get_y() - center.y + (viewport_height / 2));
 }
 
+SDL2pp::Point View::Camera::get_camera_view(const SDL2pp::Point& point) const {
+    return SDL2pp::Point(point.GetX() - center.x + (viewport_width / 2),
+                         point.GetY() - center.y + (viewport_height / 2));
+}
+
 void View::Camera::set_viewport_width(coord_t new_width) { viewport_width = new_width; }
 
 void View::Camera::set_viewport_height(coord_t new_height) { viewport_height = new_height; }

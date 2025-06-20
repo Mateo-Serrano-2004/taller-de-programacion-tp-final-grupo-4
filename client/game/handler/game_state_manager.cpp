@@ -50,7 +50,7 @@ void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
         auto player = make_shared<View::RenderedPlayer>(controller, std::move(dto.to_player()));
         new_game_state->players.insert({player->get_id(), player});
 
-        if (player->is_shooting()) {
+        if (player->is_shooting() && player->get_current_weapon()->get_weapon_id() != Model::WeaponID::KNIFE) {
             new_game_state->fires.push_back(
                     make_shared<View::MuzzleFireAnimation>(controller, player->get_id()));
         }
@@ -75,13 +75,17 @@ void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
         game_state->camera.set_center(reference_player_position.get_x(),
                                       reference_player_position.get_y());
     }
+    if (!(game_state->bomb_position.has_value()) && game_state_dto.round.bomb_planted) {
+        game_state->bomb_position = SDL2pp::Point();
+        game_state->bomb_position.value().SetX(game_state_dto.round.bomb_position.get_x());
+        game_state->bomb_position.value().SetX(game_state_dto.round.bomb_position.get_y());
+    }
     game_state->first_team_victories = game_state_dto.ct_rounds_won;
     game_state->second_team_victories = game_state_dto.tt_rounds_won;
     game_state->round_winner = game_state_dto.round.winner;
     game_state->game_winner = game_state_dto.winner;
 
     if (game_state_dto.round.ended) {
-        std::cout << "END OF ROUND\n";
         game_state->winner_message = make_shared<View::WinnerTeamMessageAnimation>(
             controller, game_state->round_winner
         );
