@@ -12,8 +12,8 @@
 #include "common/weapon_id.h"
 #include "server/game/weapon_factory.h"
 
-FullPlayer::FullPlayer(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role)
-: Model::Player(id, name, team, role),
+FullPlayer::FullPlayer(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role, Physics::Vector2D position)
+: Model::Player(id, name, team, role, position),
   movement_direction(0, 0),
   size(32,32),
   secondary_weapon(WeaponFactory::create(Model::WeaponID::GLOCK)),
@@ -123,6 +123,14 @@ void FullPlayer::stop_defusing_bomb() {
     defusing_bomb = false;
 }
 
+Physics::Vector2D FullPlayer::weapon_position() const {
+    return Physics::Vector2D(
+        position.get_x() + size.get_x() / 2,
+        position.get_y() + size.get_y() / 2
+    );
+}
+
+
 std::optional<ShotInfo> FullPlayer::shoot(uint16_t frames_to_process) {
     if (!current_weapon || !alive) {
         shooting = false;
@@ -140,7 +148,7 @@ std::optional<ShotInfo> FullPlayer::shoot(uint16_t frames_to_process) {
     shooting = true;
     return ShotInfo(
         id,
-        position,
+        weapon_position(),
         angle,
         weapon->get_weapon_id(),
         shot_info.value()
@@ -150,19 +158,19 @@ std::optional<ShotInfo> FullPlayer::shoot(uint16_t frames_to_process) {
 void FullPlayer::take_damage(uint8_t damage) {
     if (!is_alive())
         return;
-
+    std::cout << "player id: " << static_cast<int>(get_id()) << "daño " << static_cast<int>(damage) << std::endl;
     if (health <= damage) {
         health = 0;
         alive = false;
     } else {
-        std::cout << "player id: " << static_cast<int>(get_id()) << "daño " << static_cast<int>(damage) << std::endl;
         health -= damage;
     }
 }
 
 void FullPlayer::add_money(uint16_t money_to_be_added) { money += money_to_be_added; }
 
-void FullPlayer::reset_for_new_round() {
+void FullPlayer::reset_for_new_round(Physics::Vector2D new_position) {
+    position = new_position;
     alive = true;
     health = 100;
     defusing_bomb = false;

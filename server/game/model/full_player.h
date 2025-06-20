@@ -22,8 +22,10 @@ private:
     Shared<FullWeapon> knife;
     Shared<FullWeapon> bomb;
 
+    Physics::Vector2D weapon_position() const;
+
 public:
-    FullPlayer(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role);
+    FullPlayer(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role, Physics::Vector2D position);
 
     FullPlayer(FullPlayer&&) = default;
     FullPlayer& operator=(FullPlayer&&) = default;
@@ -48,7 +50,7 @@ public:
     void substract_money(uint16_t amount);
     Shared<FullWeapon> equip_new_weapon_and_drop_previous(Shared<FullWeapon> new_weapon);
 
-    void reset_for_new_round();
+    void reset_for_new_round(Physics::Vector2D new_position);
 
     Shared<FullWeapon> remove_bomb();
 
