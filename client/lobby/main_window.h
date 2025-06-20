@@ -6,6 +6,7 @@
 // #include <QMediaPlaylist>
 // #include <QAudioOutput>
 // #include <QDir>
+#include <string>
 
 #include "client/net/client_protocol.h"
 #include "common/definitions.h"

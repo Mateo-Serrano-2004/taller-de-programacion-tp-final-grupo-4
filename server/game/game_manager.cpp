@@ -55,8 +55,8 @@ std::pair<short_id_t, GameQueue*> GameManager::join_game(const uint8_t& game_id,
     auto pair = std::make_pair<short_id_t, GameQueue*>(it->second->get_number_of_players(),
                                                        &it->second->get_queue());
     Model::TeamID next_team_to_join = (Model::TeamID)(pair.first % 2);
-    it->second->add_player(username, client_queue, pair.first,
-                           next_team_to_join, Model::RoleID::NO_ROLE);
+    it->second->add_player(username, client_queue, pair.first, next_team_to_join,
+                           Model::RoleID::NO_ROLE);
     return pair;
 }
 
@@ -65,7 +65,8 @@ std::vector<DTO::GameInfoDTO> GameManager::get_games() {
     reap_games();
     std::vector<DTO::GameInfoDTO> games_info;
     for (const auto& game: games) {
-        if (!game.second->is_valid()) continue;
+        if (!game.second->is_valid())
+            continue;
         DTO::GameInfoDTO game_info = {game.first, game.second->get_party_name(),
                                       game.second->get_number_of_players(),
                                       game.second->get_map_name()};

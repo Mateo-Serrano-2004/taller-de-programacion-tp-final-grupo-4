@@ -15,8 +15,8 @@
 #include "asset/asset_loader.h"
 #include "asset/asset_manager.h"
 #include "client/net/client_protocol.h"
-#include "common/definitions.h"
 #include "common/DTO/config_dto.h"
+#include "common/definitions.h"
 #include "context/context_manager.h"
 #include "context/end_of_game_context.h"
 #include "context/in_game_context.h"
@@ -27,11 +27,12 @@
 #include "controller/game_controller.h"
 #include "utils/enum_translator.h"
 
-Shared<Controller::GameController> App::CS2DApp::set_up_graphics(Shared<Net::ClientProtocol> protocol) {
+Shared<Controller::GameController> App::CS2DApp::set_up_graphics(
+        Shared<Net::ClientProtocol> protocol) {
     auto config = std::get<DTO::ConfigDTO>(protocol->receive_variant());
-    auto window = make_shared<SDL2pp::Window>("In Game", SDL_WINDOWPOS_UNDEFINED,
-                                              SDL_WINDOWPOS_UNDEFINED,
-                                              config.width, config.height, 0);
+    auto window =
+            make_shared<SDL2pp::Window>("In Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                                        config.width, config.height, 0);
     auto renderer = make_shared<SDL2pp::Renderer>(*window, -1, SDL_RENDERER_ACCELERATED);
     renderer->SetLogicalSize(config.width, config.height);
 

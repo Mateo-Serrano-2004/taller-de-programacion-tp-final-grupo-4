@@ -11,8 +11,8 @@
 #include <SDL2pp/Texture.hh>
 
 #include "animation/animation_details.h"
-#include "controller/game_controller.h"
 #include "common/DTO/config_dto.h"
+#include "controller/game_controller.h"
 
 #include "animation_id.h"
 #include "asset_manager.h"

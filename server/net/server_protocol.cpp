@@ -158,7 +158,7 @@ void ServerProtocol::send_round(const DTO::RoundDTO& round_dto) {
     peer.sendall(&round_dto.winner, sizeof(round_dto.winner));
     peer.sendall(&round_dto.bomb_planted, sizeof(round_dto.bomb_planted));
     peer.sendall(&round_dto.bomb_defused, sizeof(round_dto.bomb_defused));
-    coord_t bomb_position_x = htons(round_dto.bomb_position.get_x());   
+    coord_t bomb_position_x = htons(round_dto.bomb_position.get_x());
     coord_t bomb_position_y = htons(round_dto.bomb_position.get_y());
     peer.sendall(&bomb_position_x, sizeof(bomb_position_x));
     peer.sendall(&bomb_position_y, sizeof(bomb_position_y));

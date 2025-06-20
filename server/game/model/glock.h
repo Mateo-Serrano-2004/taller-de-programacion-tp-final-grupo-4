@@ -4,11 +4,11 @@
 #include "full_weapon.h"
 #include "weapon_shot_info.h"
 
-class Glock : public FullWeapon {
+class Glock: public FullWeapon {
 public:
     Glock();
 
     std::optional<WeaponShotInfo> shoot(uint16_t ticks_to_process) override;
 };
 
-#endif // SERVER_GAME_MODEL_WEAPONS_GLOCK_H
+#endif  // SERVER_GAME_MODEL_WEAPONS_GLOCK_H

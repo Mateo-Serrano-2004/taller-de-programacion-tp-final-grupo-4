@@ -1,24 +1,25 @@
 #include "round.h"
+
 #include <iostream>
 
-Round::Round(int ct_alive, int tt_alive)
-    : winner_team(Model::TeamID::NONE),
-      state(RoundState::Buying),
-      number_of_ct_alive(ct_alive),
-      number_of_tt_alive(tt_alive),
-      bomb_planted(false),
-      bomb_defused(false),
-      bomb_position(0, 0),
-      ticks_for_warmup_phase(0),
-      ticks_for_buying_phase(600),
-      ticks_for_playing_phase(3600),
-      bomb_total_ticks(600),
-      active_ticks_remaining(600),
-      defusing_ticks(300),
-      defusing_ticks_remaining(300),
-      bomb_being_defused(false),
-      player_defusing_bomb(-1),
-      is_warmup_round(false) {}
+Round::Round(int ct_alive, int tt_alive):
+        winner_team(Model::TeamID::NONE),
+        state(RoundState::Buying),
+        number_of_ct_alive(ct_alive),
+        number_of_tt_alive(tt_alive),
+        bomb_planted(false),
+        bomb_defused(false),
+        bomb_position(0, 0),
+        ticks_for_warmup_phase(0),
+        ticks_for_buying_phase(600),
+        ticks_for_playing_phase(3600),
+        bomb_total_ticks(600),
+        active_ticks_remaining(600),
+        defusing_ticks(300),
+        defusing_ticks_remaining(300),
+        bomb_being_defused(false),
+        player_defusing_bomb(-1),
+        is_warmup_round(false) {}
 
 Round Round::create_warmup_round() {
     Round r(0, 0);
@@ -40,7 +41,7 @@ void Round::update_if_finished_buying() {
 }
 
 void Round::update_if_finished_playing() {
-    if (bomb_planted && !bomb_defused){
+    if (bomb_planted && !bomb_defused) {
         winner_team = Model::TeamID::TT;
     } else {
         winner_team = Model::TeamID::CT;
@@ -55,7 +56,7 @@ void Round::check_if_finished_defusing(int frames_to_process) {
 
             defusing_ticks_remaining -= frames_to_process;
 
-            if(defusing_ticks_remaining <= 0){
+            if (defusing_ticks_remaining <= 0) {
                 bomb_defused = true;
                 active_ticks_remaining = 0;
             }
@@ -64,7 +65,8 @@ void Round::check_if_finished_defusing(int frames_to_process) {
 }
 
 void Round::update(int frames_to_process) {
-    if (state == RoundState::Ended) return;
+    if (state == RoundState::Ended)
+        return;
 
     check_if_finished_defusing(frames_to_process);
 
@@ -84,34 +86,23 @@ void Round::update(int frames_to_process) {
     }
 }
 
-Model::TeamID Round::get_winner_team() const {
-    return winner_team;
-}
+Model::TeamID Round::get_winner_team() const { return winner_team; }
 
 RoundState Round::get_state() const { return state; }
 
-bool Round::is_warmup() const {
-    return state == RoundState::Warmup;
-}
+bool Round::is_warmup() const { return state == RoundState::Warmup; }
 
-bool Round::is_buying() const {
-    return state == RoundState::Buying;
-}
+bool Round::is_buying() const { return state == RoundState::Buying; }
 
-bool Round::is_active() const {
-    return state == RoundState::Active;
-}
+bool Round::is_active() const { return state == RoundState::Active; }
 
-bool Round::ended() const {
-    return state == RoundState::Ended;
-}
+bool Round::ended() const { return state == RoundState::Ended; }
 
-bool Round::bomb_is_planted() const {
-    return bomb_planted;
-}
+bool Round::bomb_is_planted() const { return bomb_planted; }
 
 void Round::notify_on_one_player_less(Model::TeamID team) {
-    if (state == RoundState::Ended || state == RoundState::Warmup) return;
+    if (state == RoundState::Ended || state == RoundState::Warmup)
+        return;
 
     if (team == Model::TeamID::CT) {
         number_of_ct_alive--;
@@ -131,52 +122,48 @@ void Round::notify_on_one_player_less(Model::TeamID team) {
 }
 
 void Round::notify_player_joined(Model::TeamID team) {
-    if (team == Model::TeamID::CT) number_of_ct_alive++;
-    else if (team == Model::TeamID::TT) number_of_tt_alive++;
+    if (team == Model::TeamID::CT)
+        number_of_ct_alive++;
+    else if (team == Model::TeamID::TT)
+        number_of_tt_alive++;
 }
 
 void Round::notify_bomb_planted(Physics::Vector2D position) {
-    if (!is_active() || bomb_planted) return;
+    if (!is_active() || bomb_planted)
+        return;
     bomb_planted = true;
     bomb_position = position;
     active_ticks_remaining = bomb_total_ticks;
 }
 
 bool Round::notify_bomb_is_being_defused(uint8_t player_id) {
-    if (!bomb_planted || bomb_defused || !is_active()) return false;
+    if (!bomb_planted || bomb_defused || !is_active())
+        return false;
     bomb_being_defused = true;
-    player_defusing_bomb = player_id; // ojo int y uint
+    player_defusing_bomb = player_id;  // ojo int y uint
     return bomb_being_defused;
 }
 
 void Round::notify_bomb_is_not_longer_being_defused() {
-    if (!bomb_planted || bomb_defused || !is_active()) return;
+    if (!bomb_planted || bomb_defused || !is_active())
+        return;
     defusing_ticks_remaining = defusing_ticks;
     bomb_being_defused = false;
-    player_defusing_bomb = -1; // ojo int y uint
+    player_defusing_bomb = -1;  // ojo int y uint
 }
 
 int Round::player_id_defusing_bomb() const {
-    if (!bomb_planted || !bomb_being_defused || bomb_defused || !is_active()) return -1;
+    if (!bomb_planted || !bomb_being_defused || bomb_defused || !is_active())
+        return -1;
     return player_defusing_bomb;
 }
 
 DTO::RoundDTO Round::to_dto(int fps) const {
-    return DTO::RoundDTO(
-        state,
-        this->ended(),
-        this->get_ticks_remaining() / fps,
-        this->get_winner_team(),
-        this->bomb_planted,
-        this->bomb_defused,
-        this->bomb_position
-    );
+    return DTO::RoundDTO(state, this->ended(), this->get_ticks_remaining() / fps,
+                         this->get_winner_team(), this->bomb_planted, this->bomb_defused,
+                         this->bomb_position);
 }
 
-int Round::get_ticks_remaining() const {
-    return active_ticks_remaining;
-}
+int Round::get_ticks_remaining() const { return active_ticks_remaining; }
 
-bool Round::bomb_is_being_defused() const {
-    return bomb_being_defused;
-}
+bool Round::bomb_is_being_defused() const { return bomb_being_defused; }

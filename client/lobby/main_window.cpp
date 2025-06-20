@@ -35,11 +35,11 @@ void MainWindow::connectToServer() {
 
 void MainWindow::runGame() {
     this->hide();
-    
+
     // if (musicPlayer) {
     //     musicPlayer->pause();
     // }
-    
+
     try {
         App::CS2DApp game(protocol);
         game.launch();
@@ -101,10 +101,10 @@ void MainWindow::showLobbyScene() {
             Qt::QueuedConnection);
     connect(lobbyScene, &LobbyScene::joinClicked, this, &MainWindow::showJoinGameScene,
             Qt::QueuedConnection);
-    
-        // if (musicPlayer) {
-        //     musicPlayer->play();
-        // }
+
+    // if (musicPlayer) {
+    //     musicPlayer->play();
+    // }
 }
 
 void MainWindow::showGameCreationScene() {

@@ -4,13 +4,13 @@
 #include "full_weapon.h"
 #include "weapon_shot_info.h"
 
-class Bomb : public FullWeapon {
+class Bomb: public FullWeapon {
 private:
     bool is_planting = false;
     uint16_t planting_ticks = 0;
     bool planted = false;
 
-    static constexpr uint16_t required_ticks_to_plant = 180; // 3 segundos a 60 FPS
+    static constexpr uint16_t required_ticks_to_plant = 180;  // 3 segundos a 60 FPS
 
 public:
     Bomb();
@@ -19,7 +19,7 @@ public:
     void release_trigger() override;
     std::optional<WeaponShotInfo> shoot(uint16_t ticks_to_process) override;
 
-    bool is_planted() const; // creo que no uso
+    bool is_planted() const;  // creo que no uso
 };
 
 #endif  // SERVER_GAME_MODEL_WEAPONS_BOMB_H

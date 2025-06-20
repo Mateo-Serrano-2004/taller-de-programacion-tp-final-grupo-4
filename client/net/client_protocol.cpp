@@ -63,7 +63,7 @@ void Net::ClientProtocol::receive_round(DTO::RoundDTO& round) {
     skt.recvall(&round.winner, sizeof(round.winner));
     skt.recvall(&round.bomb_planted, sizeof(round.bomb_planted));
     skt.recvall(&round.bomb_defused, sizeof(round.bomb_defused));
-    
+
     coord_t bomb_position_x, bomb_position_y;
     skt.recvall(&bomb_position_x, sizeof(bomb_position_x));
     skt.recvall(&bomb_position_y, sizeof(bomb_position_y));

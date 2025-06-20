@@ -1,10 +1,10 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <atomic>
 #include <chrono>
 #include <cmath>
 #include <cstdint>
-#include <atomic>
 #include <map>
 #include <mutex>
 #include <string>
@@ -101,8 +101,8 @@ public:
     bool is_valid();
     bool is_dead();
 
-    void add_player(const std::string& username, ClientQueue& client_queue,
-                    short_id_t player_id, Model::TeamID team_id, Model::RoleID role_id);
+    void add_player(const std::string& username, ClientQueue& client_queue, short_id_t player_id,
+                    Model::TeamID team_id, Model::RoleID role_id);
 
     void kill();
     void run() override;

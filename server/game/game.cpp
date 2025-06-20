@@ -20,22 +20,27 @@ Maybe<Ref<FullPlayer>> Game::find_player_by_id(short_id_t player_id) {
 }
 
 void Game::handle_use_weapon(const uint8_t& player_id) {
-    if (this->state != GameState::Playing) return;
+    if (this->state != GameState::Playing)
+        return;
     auto player = find_player_by_id(player_id);
-    if (!player.has_value()) return;
+    if (!player.has_value())
+        return;
     gamelogic.start_using_weapon(player->get(), round);
 }
 
 void Game::handle_start_defusing_bomb(const uint8_t& player_id) {
-    if (this->state != GameState::Playing) return;
+    if (this->state != GameState::Playing)
+        return;
     auto player = find_player_by_id(player_id);
-    if (!player.has_value()) return;
+    if (!player.has_value())
+        return;
     gamelogic.start_defusing_bomb(player->get(), round);
 }
 
 void Game::handle_stop_defusing_bomb(const uint8_t& player_id) {
     auto player = find_player_by_id(player_id);
-    if (!player.has_value()) return;
+    if (!player.has_value())
+        return;
     gamelogic.stop_defusing_bomb(player->get());
 }
 
@@ -74,7 +79,8 @@ void Game::handle_leave_game(const uint8_t& player_id) {
     auto queue_it = client_queues.find(player_id);
     client_queues.erase(queue_it);
 
-    if (players.empty()) kill();
+    if (players.empty())
+        kill();
 }
 
 void Game::handle_movement(const uint8_t& player_id, const MovementEvent& event) {
@@ -112,20 +118,31 @@ void Game::handle_pick_role(const uint8_t player_id, const PickRoleEvent& event)
 
 void Game::handle(uint8_t player_id, const GameEventVariant& event) {
     std::visit(
-            overloaded{[player_id, this](const MovementEvent& e) { handle_movement(player_id, e); },
-                       [player_id, this](const StopMovementEvent& e) { handle_stop_movement(player_id, e); },
-                       [player_id, this](const LeaveGameEvent&) { handle_leave_game(player_id); },
-                       [player_id, this](const QuitEvent&) { handle_leave_game(player_id); },
-                       [player_id, this](const RotationEvent& e) { handle_rotation(player_id, e); },
-                       [player_id, this](const PickRoleEvent& e) { handle_pick_role(player_id, e); },
-                       [player_id, this](const SwitchWeaponEvent& e) { handle_switch_weapon(player_id, e); },
-                       [player_id, this](const BuyEvent& e) { handle_buy_weapon(player_id, e); },
-                       [this](const DropWeaponEvent&) {},
-                       [player_id, this](const UseWeaponEvent&) { handle_use_weapon(player_id); }, 
-                       [player_id, this](const StopUsingWeaponEvent&) { handle_stop_using_weapon(player_id); }, 
-                       [player_id, this](const DefuseBombEvent&) {handle_start_defusing_bomb(player_id); },
-                       [player_id, this](const StopDefusingBombEvent&) {handle_stop_defusing_bomb(player_id); },
-                       [this](const ReloadWeaponEvent&) {}, [this](const BuyAmmoEvent&) {}},
+            overloaded{
+                    [player_id, this](const MovementEvent& e) { handle_movement(player_id, e); },
+                    [player_id, this](const StopMovementEvent& e) {
+                        handle_stop_movement(player_id, e);
+                    },
+                    [player_id, this](const LeaveGameEvent&) { handle_leave_game(player_id); },
+                    [player_id, this](const QuitEvent&) { handle_leave_game(player_id); },
+                    [player_id, this](const RotationEvent& e) { handle_rotation(player_id, e); },
+                    [player_id, this](const PickRoleEvent& e) { handle_pick_role(player_id, e); },
+                    [player_id, this](const SwitchWeaponEvent& e) {
+                        handle_switch_weapon(player_id, e);
+                    },
+                    [player_id, this](const BuyEvent& e) { handle_buy_weapon(player_id, e); },
+                    [this](const DropWeaponEvent&) {},
+                    [player_id, this](const UseWeaponEvent&) { handle_use_weapon(player_id); },
+                    [player_id, this](const StopUsingWeaponEvent&) {
+                        handle_stop_using_weapon(player_id);
+                    },
+                    [player_id, this](const DefuseBombEvent&) {
+                        handle_start_defusing_bomb(player_id);
+                    },
+                    [player_id, this](const StopDefusingBombEvent&) {
+                        handle_stop_defusing_bomb(player_id);
+                    },
+                    [this](const ReloadWeaponEvent&) {}, [this](const BuyAmmoEvent&) {}},
             event);
 }
 
@@ -143,9 +160,12 @@ void Game::start_new_round() {
 
     for (auto& [id, player]: players) {
         player.reset_for_new_round();
-        handle_stop_using_weapon(id); // o capaz esto lo ahce cada player en cada arma al recibir reset e
-        if (player.get_team() == Model::TeamID::CT) ct_count++;
-        else tt_count++;
+        handle_stop_using_weapon(
+                id);  // o capaz esto lo ahce cada player en cada arma al recibir reset e
+        if (player.get_team() == Model::TeamID::CT)
+            ct_count++;
+        else
+            tt_count++;
     }
     gamelogic.assign_bomb_to_random_tt(players);
 
@@ -258,8 +278,8 @@ void Game::close() {
     join();
 }
 
-Game::Game(const std::string& party_name, const std::string& map_name)
-: party_name(party_name), map_name(map_name), round(Round::create_warmup_round()) {
+Game::Game(const std::string& party_name, const std::string& map_name):
+        party_name(party_name), map_name(map_name), round(Round::create_warmup_round()) {
     start();
 }
 
@@ -268,29 +288,19 @@ uint8_t Game::get_number_of_players() {
     return players.size();
 }
 
-std::string Game::get_party_name() {
-    return party_name;
-}
+std::string Game::get_party_name() { return party_name; }
 
-std::string Game::get_map_name() {
-    return map_name;
-}
+std::string Game::get_map_name() { return map_name; }
 
-GameQueue& Game::get_queue() {
-    return game_queue;
-}
+GameQueue& Game::get_queue() { return game_queue; }
 
-bool Game::is_valid() {
-    return round.is_warmup() && is_not_finished;
-}
+bool Game::is_valid() { return round.is_warmup() && is_not_finished; }
 
-bool Game::is_dead() {
-    return !is_not_finished;
-}
+bool Game::is_dead() { return !is_not_finished; }
 
 // FALTA: ESTO ESTA ARRANCANDO LA RONDA CON 1 SOLO PLAYER, QUE EVENTUALMENTE GANARÍA TODO Y TERMINA
-void Game::add_player(const std::string& username, ClientQueue& client_queue,
-                      short_id_t player_id, Model::TeamID team_id, Model::RoleID role_id) {
+void Game::add_player(const std::string& username, ClientQueue& client_queue, short_id_t player_id,
+                      Model::TeamID team_id, Model::RoleID role_id) {
     std::lock_guard<std::mutex> lock(mutex);
 
     if (state != GameState::WaitingStart || players.size() == max_players) {
@@ -303,9 +313,7 @@ void Game::add_player(const std::string& username, ClientQueue& client_queue,
     round.notify_player_joined(team_id);
 }
 
-void Game::kill() {
-    is_not_finished = false;
-}
+void Game::kill() { is_not_finished = false; }
 
 void Game::run() {
     PeriodicClock clock(GAME_FPS);

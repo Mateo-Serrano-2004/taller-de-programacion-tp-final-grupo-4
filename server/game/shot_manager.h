@@ -15,4 +15,4 @@ public:
                                                       const std::map<uint8_t, FullPlayer>& players);
 };
 
-#endif // SERVER_GAME_LOGIC_SHOT_MANAGER_H
+#endif  // SERVER_GAME_LOGIC_SHOT_MANAGER_H

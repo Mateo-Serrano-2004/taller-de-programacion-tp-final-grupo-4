@@ -98,11 +98,12 @@ View::AssetGenerator::AssetGenerator(Shared<SDL2pp::Renderer> renderer): rendere
 Shared<SDL2pp::Texture> View::AssetGenerator::generate_fov(const DTO::ConfigDTO& config) {
     // The size of the fov must be enough to cover
     // the logical size of the screen even when rotated
-    int fov_size = std::ceil(std::sqrt((config.width * config.width) + (config.height * config.height)) / 2.0);
+    int fov_size = std::ceil(
+            std::sqrt((config.width * config.width) + (config.height * config.height)) / 2.0);
 
-    auto fov_texture = make_shared<SDL2pp::Texture>(*renderer, SDL_PIXELFORMAT_RGBA8888,
-                                                    SDL_TEXTUREACCESS_TARGET, 2 * fov_size,
-                                                    2 * fov_size);
+    auto fov_texture =
+            make_shared<SDL2pp::Texture>(*renderer, SDL_PIXELFORMAT_RGBA8888,
+                                         SDL_TEXTUREACCESS_TARGET, 2 * fov_size, 2 * fov_size);
 
     fov_texture->SetBlendMode(SDL_BLENDMODE_BLEND);
 

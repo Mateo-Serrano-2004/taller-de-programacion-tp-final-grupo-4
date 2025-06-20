@@ -15,7 +15,8 @@ TEST(GameStateTest, send_and_receive_game_state) {
     DTO::WeaponDTO weapon2(2, 15, 70);
     DTO::PlayerDTO player1(1, 1, 30, 1500, 2, 40, "Juan", weapon1, 0, 0, 100, 1);
     DTO::PlayerDTO player2(3, 2, 60, 6000, 4, 26, "Maria", weapon2, 1, 1, 70, 2);
-    DTO::RoundDTO round(RoundState::Buying, false, 25, Model::TeamID::NONE, false, false, Physics::Vector2D(0, 0));
+    DTO::RoundDTO round(RoundState::Buying, false, 25, Model::TeamID::NONE, false, false,
+                        Physics::Vector2D(0, 0));
 
     DTO::GameStateDTO game_state(GameState::Playing, {player1, player2}, false, Model::TeamID::NONE,
                                  round, 1, 3);

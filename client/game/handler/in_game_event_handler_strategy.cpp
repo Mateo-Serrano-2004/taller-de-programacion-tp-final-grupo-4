@@ -133,20 +133,18 @@ void Controller::InGameEventHandlerStrategy::handle_stop_switching_weapon_event(
 }
 
 void Controller::InGameEventHandlerStrategy::handle_defuse_bomb() {
-    if (handler_state.is_defusing) return;
+    if (handler_state.is_defusing)
+        return;
     std::cout << "DEFUSING\n";
-    controller.lock()->push_event(
-        make_shared<Model::DefuseBombEvent>()
-    );
+    controller.lock()->push_event(make_shared<Model::DefuseBombEvent>());
     handler_state.is_defusing = true;
 }
 
 void Controller::InGameEventHandlerStrategy::handle_stop_defusing_bomb() {
-    if (!handler_state.is_defusing) return;
+    if (!handler_state.is_defusing)
+        return;
     std::cout << "STOPPPPPPPPPP\n";
-    controller.lock()->push_event(
-        make_shared<Model::StopDefusingBombEvent>()
-    );
+    controller.lock()->push_event(make_shared<Model::StopDefusingBombEvent>());
     handler_state.is_defusing = false;
 }
 
@@ -186,7 +184,7 @@ void Controller::InGameEventHandlerStrategy::handle_keyup_event(Shared<SDL_Event
     if (key_symbol == SDLK_e) {
         handle_stop_defusing_bomb();
     } else if (key_symbol == SDLK_w || key_symbol == SDLK_a || key_symbol == SDLK_s ||
-        key_symbol == SDLK_d) {
+               key_symbol == SDLK_d) {
         handle_stop_movement_event(std::move(event));
     } else if (key_symbol == SDLK_1 || key_symbol == SDLK_2 || key_symbol == SDLK_3 ||
                key_symbol == SDLK_4) {

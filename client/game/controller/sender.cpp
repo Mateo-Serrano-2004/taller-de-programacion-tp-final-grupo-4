@@ -17,7 +17,8 @@ void Controller::Sender::run() {
         try {
             Shared<Model::TransferedEvent> event = sender_queue->pop();
             auto event_type = event->get_type();
-            if (event_type == Model::EventType::QUIT || event_type == Model::EventType::LEAVE_GAME) {
+            if (event_type == Model::EventType::QUIT ||
+                event_type == Model::EventType::LEAVE_GAME) {
                 if (event_type == Model::EventType::QUIT) {
                     std::cout << "Received a QUIT event in Sender\n";
                 }

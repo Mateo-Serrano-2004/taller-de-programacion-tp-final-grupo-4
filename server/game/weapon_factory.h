@@ -16,4 +16,4 @@ public:
     static Shared<FullWeapon> create(Model::WeaponID id);
 };
 
-#endif // SERVER_GAME_WEAPON_FACTORY_H
+#endif  // SERVER_GAME_WEAPON_FACTORY_H

@@ -20,7 +20,7 @@ class Font;
 namespace DTO {
 struct MapDTO;
 struct ConfigDTO;
-};
+};  // namespace DTO
 
 namespace View {
 class AssetGenerator {

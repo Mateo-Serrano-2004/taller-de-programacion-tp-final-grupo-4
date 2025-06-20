@@ -1,10 +1,10 @@
 #include "client_handler.h"
 
-#include <exception>
-#include <utility>
 #include <condition_variable>
-#include <variant>
+#include <exception>
 #include <iostream>
+#include <utility>
+#include <variant>
 
 #include "common/DTO/dto_variant.h"
 #include "common/overloaded.h"
@@ -19,10 +19,10 @@ void ClientHandler::handle_map_request() {
 void ClientHandler::handle_create_game(const CreateGameEvent& event) {
     const ConfigData& config = YamlParser::getConfigData();
     DTO::ConfigDTO config_dto(config.display.width, config.display.height, config.fov.angle,
-    config.fov.ratio);
+                              config.fov.ratio);
     sender_queue.push(config_dto);
     game_queue = game_manager.create_game(event.get_party_name(), event.get_map_name(), username,
-                                            sender_queue);
+                                          sender_queue);
     player_id = 0;
     sender_queue.push(DTO::PlayerIDDTO(player_id));
     sender_queue.push(DTO::TeamIDDTO((short_id_t)Model::TeamID::CT));

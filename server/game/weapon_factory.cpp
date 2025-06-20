@@ -1,11 +1,14 @@
 #include "weapon_factory.h"
+
 #include <iostream>
-#include "model/glock.h"
+#include <memory>
+
 #include "model/ak47.h"
-#include "model/m3.h"
 #include "model/awp.h"
-#include "model/knife.h"
 #include "model/bomb.h"
+#include "model/glock.h"
+#include "model/knife.h"
+#include "model/m3.h"
 
 Shared<FullWeapon> WeaponFactory::create(Model::WeaponID id) {
     switch (id) {
