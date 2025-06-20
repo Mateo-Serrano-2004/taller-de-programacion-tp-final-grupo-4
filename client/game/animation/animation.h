@@ -3,27 +3,29 @@
 
 #include <cstdint>
 
-#include "asset/animation_id.h"
 #include "common/definitions.h"
 #include "interface/rendered.h"
 
-#include "animation_iterator.h"
-
 namespace Controller {
-class GameController;
-class GameStateManager;
-};  // namespace Controller
+class BaseController;
+};
 
 namespace View {
-class Animation: public Rendered, public Controller::AnimationIterator {
+class Animation: public Rendered {
 protected:
-    uint8_t frames_to_process;
-    Shared<Controller::GameStateManager> game_state_manager;
+    int current_frame;
+    bool ended;
+    int total_frames;
 
 public:
-    Animation(Weak<Controller::GameController> controller, Model::AnimationID id);
+    explicit Animation(
+        Weak<Controller::BaseController> controller,
+        int total_frames = 0
+    );
 
-    void set_frames_to_process(uint8_t frames);
+    virtual void step(int frames);
+    virtual bool has_ended() const;
+    void end();
 
     virtual ~Animation() = default;
 };

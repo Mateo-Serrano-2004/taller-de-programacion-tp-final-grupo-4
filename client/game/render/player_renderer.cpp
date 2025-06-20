@@ -59,10 +59,8 @@ void View::PlayerRenderer::render_muzzle_fires(const Model::GameState& game_stat
             animation->end();
             continue;
         }
-        animation->set_frames_to_process(frames);
-        animation->set_camera(camera);
         animation->set_player(player);
-        animation->render();
+        animation->step(frames);
     }
 }
 
@@ -73,13 +71,13 @@ bool View::PlayerRenderer::render_players(const Model::GameState& game_state) {
 
     for (auto& [id, p]: game_state.players) {
         if (!render_ref_player || id != reference_player->get_id()) {
-            p->set_camera(camera);
+            p->fix(camera);
             p->render();
         }
     }
 
     if (render_ref_player) {
-        reference_player->set_camera(camera);
+        reference_player->fix(camera);
         reference_player->render();
     }
 

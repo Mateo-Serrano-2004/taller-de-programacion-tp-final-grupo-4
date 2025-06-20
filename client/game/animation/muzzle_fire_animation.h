@@ -3,39 +3,40 @@
 
 #include <cstdint>
 
-#include "common/definitions.h"
-#include "render/camera.h"
+#include <SDL2pp/Rect.hh>
+#include <SDL2pp/Point.hh>
 
-#include "animation.h"
+#include "common/definitions.h"
+
+#include "iterative_animation.h"
 
 namespace Controller {
 class GameController;
+class AnimationIterator;
 };
 
 namespace View {
 class RenderedPlayer;
 
-class MuzzleFireAnimation: public Animation {
+class MuzzleFireAnimation: public IterativeAnimation {
 protected:
-    Camera camera;
     Shared<RenderedPlayer> player;
-
     short_id_t player_id;
 
     int get_fire_distance();
-    void render_muzzle();
+
+    SDL2pp::Rect get_dsrect() override;
+    angle_t get_angle() override;
+    SDL2pp::Point get_rpoint() override;
 
 public:
     MuzzleFireAnimation(Weak<Controller::GameController> controller, short_id_t player_id);
 
     short_id_t get_player_id() const;
 
-    void set_camera(const Camera& new_camera);
     void set_player(Shared<RenderedPlayer> new_player);
 
-    void end();
-
-    void render() override;
+    bool has_ended() const override;
 
     ~MuzzleFireAnimation() override = default;
 };

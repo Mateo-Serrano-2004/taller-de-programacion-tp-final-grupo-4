@@ -14,6 +14,7 @@
 #include "common/role_id.h"
 #include "common/weapon_id.h"
 #include "interface/rendered.h"
+#include "interface/fixed.h"
 #include "render/camera.h"
 
 namespace SDL2pp {
@@ -30,10 +31,8 @@ class GameController;
 };
 
 namespace View {
-class RenderedPlayer: public Rendered, public Model::Player {
+class RenderedPlayer: public Rendered, public Fixed, public Model::Player {
 protected:
-    Camera camera;
-
     Shared<Model::AssetManager> asset_manager;
 
     Model::TextureID sprite_id;
@@ -49,7 +48,6 @@ protected:
 public:
     RenderedPlayer(Weak<Controller::GameController> controller, Model::Player&& player);
 
-    void set_camera(const Camera& new_camera);
     void render() override;
 
     ~RenderedPlayer() override = default;

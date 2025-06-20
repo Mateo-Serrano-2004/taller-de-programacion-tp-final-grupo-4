@@ -54,14 +54,13 @@ void View::RenderedPlayer::render_name(const SDL2pp::Point& player_center) {
 View::RenderedPlayer::RenderedPlayer(Weak<Controller::GameController> controller,
                                      Model::Player&& player):
         View::Rendered(controller),
+        Fixed(),
         Model::Player(std::move(player)),
         asset_manager(controller.lock()->get_asset_manager()),
         sprite_id(Model::EnumTranslator::get_texture_from_role(role_id)),
         sprite_piece(get_sprite_piece_from_weapon()),
         weapon_sprite_id(
                 Model::EnumTranslator::get_texture_from_weapon(current_weapon->get_weapon_id())) {}
-
-void View::RenderedPlayer::set_camera(const Camera& new_camera) { camera = new_camera; }
 
 void View::RenderedPlayer::render() {
     if (team == Model::TeamID::NONE)
