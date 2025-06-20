@@ -8,7 +8,7 @@
 #include "common/DTO/weapon_dto.h"
 #include "common/weapon_id.h"
 
-Model::Player::Player(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role_id)
+Model::Player::Player(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role_id, Physics::Vector2D position)
 : alive(true),
   shooting(false),
   defusing_bomb(false),
@@ -17,7 +17,7 @@ Model::Player::Player(short_id_t id, const std::string& name, Model::TeamID team
   angle(0),
   money(0),
   name(name),
-  position(0, 0),
+  position(position),
   health(100),
   team(team) {}
 

@@ -32,7 +32,7 @@ protected:
     Model::TeamID team;
 
 public:
-    Player(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role_id);
+    Player(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role_id, Physics::Vector2D position);
 
     Player(
         bool shooting,
