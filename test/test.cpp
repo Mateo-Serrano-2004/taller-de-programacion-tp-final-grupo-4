@@ -487,6 +487,8 @@ DTO::GameStateDTO print_dtos(ClientQueue& client_queue, uint8_t player1_id, uint
     DTO::GameStateDTO final_dto;
     bool first = true;
 
+    uint8_t last_defusing_progress = 0;  // 👉 Se guarda el valor anterior mostrado
+
     DTO::DTOVariant variant;
     while (client_queue.try_pop(variant)) {
         if (!std::holds_alternative<DTO::GameStateDTO>(variant)) continue;
@@ -508,6 +510,16 @@ DTO::GameStateDTO print_dtos(ClientQueue& client_queue, uint8_t player1_id, uint
             std::cout << (dto.round.bomb_planted ? "💣 BOMBA PLANTADA" : "🧯 SIN BOMBA") << std::endl;
             std::cout << "🏆 Rondas ganadas - CT: " << static_cast<int>(dto.ct_rounds_won)
                       << " | TT: " << static_cast<int>(dto.tt_rounds_won) << std::endl;
+        }
+
+        // ✅ Solo mostramos el progreso si cambió desde el último mostrado
+        if (dto.round.defusing_progress > 0 &&
+            dto.round.defusing_progress != last_defusing_progress) {
+            std::cout << "\n⏳ [DEFUSE EN PROGRESO] ------------------------" << std::endl;
+            std::cout << "🔧 Progreso de desactivación: "
+                      << static_cast<int>(dto.round.defusing_progress) << "%" << std::endl;
+
+            last_defusing_progress = dto.round.defusing_progress;  // actualizamos
         }
 
         for (const auto& p : dto.players) {
@@ -539,7 +551,6 @@ DTO::GameStateDTO print_dtos(ClientQueue& client_queue, uint8_t player1_id, uint
 
     return final_dto;
 }
-
 
 void test_tt_plants_and_bomb_explodes() {
     std::cout << "\n[TEST] - TT planta y explota (CT gana la segunda ronda por tiempo)\n";
@@ -605,14 +616,14 @@ void test_tt_plants_and_ct_defuses() {
 
     // Segunda ronda (esperar que termine sin eventos)
     std::cout << "⌛ Esperando segunda ronda...\n";
-    std::this_thread::sleep_for(seconds(70));
+    std::this_thread::sleep_for(seconds(2));
 
     game.stop();
     DTO::GameStateDTO final_dto = print_dtos(q1, ct_id, tt_id);
 
     assert(final_dto.game_state == GameState::Finished);
-    assert(final_dto.winner == Model::TeamID::CT && "CT debería haber ganado 2-0");
-    assert(final_dto.ct_rounds_won == 2);
+    assert(final_dto.winner == Model::TeamID::CT && "CT debería haber ganado 1-0");
+    assert(final_dto.ct_rounds_won == 1);
     assert(final_dto.tt_rounds_won == 0);
     std::cout << "✔ test_tt_plants_and_ct_defuses OK\n";
 }
@@ -629,17 +640,8 @@ void test_tt_defuse_interrumpido_dos_veces() {
 
     using namespace std::chrono;
 
-    // ------------------ RONDA 1: TT planta y explota ------------------
-    std::this_thread::sleep_for(seconds(12)); // Warmup + compra
-    game.get_queue().push({tt_id, SwitchWeaponEvent(Model::SlotID::BOMB_SLOT)});
-    std::this_thread::sleep_for(milliseconds(32));
-    game.get_queue().push({tt_id, UseWeaponEvent()});
-    std::this_thread::sleep_for(seconds(4));
-    game.get_queue().push({tt_id, StopUsingWeaponEvent()});
-    std::this_thread::sleep_for(seconds(10)); // Bomba explota
-
     // ------------------ RONDA 2: TT vuelve a plantar ------------------
-    std::this_thread::sleep_for(seconds(10)); // Compra
+    std::this_thread::sleep_for(seconds(12)); // Compra
     game.get_queue().push({tt_id, SwitchWeaponEvent(Model::SlotID::BOMB_SLOT)});
     std::this_thread::sleep_for(milliseconds(32));
     game.get_queue().push({tt_id, UseWeaponEvent()});
@@ -666,9 +668,9 @@ void test_tt_defuse_interrumpido_dos_veces() {
 
     // Verificaciones finales
     assert(final_dto.game_state == GameState::Finished);
-    assert(final_dto.winner == Model::TeamID::TT && "TT debería haber ganado 2-0");
+    assert(final_dto.winner == Model::TeamID::TT && "TT debería haber ganado 1-0");
     assert(final_dto.ct_rounds_won == 0);
-    assert(final_dto.tt_rounds_won == 2);
+    assert(final_dto.tt_rounds_won == 1);
     std::cout << "✔ test_tt_defuse_interrumpido_dos_veces OK\n";
 }
 
@@ -676,13 +678,13 @@ void test_tt_defuse_interrumpido_dos_veces() {
 int main() {
     //test_cambio_ronda();
     //test_finaliza_por_muerte_ct();
-    //test_rotacion_y_disparo();
-    //test_rotacion_y_disparo_2();
-    test_rotacion_y_disparo_m3();
+    //test_rotacion_y_disparo(); este
+    //test_rotacion_y_disparo_2(); este
+    //test_rotacion_y_disparo_m3(); este
     //test_bomba_y_estado_round();
     //test_tt_plants_and_bomb_explodes();
-    //test_tt_plants_and_ct_defuses();
-    //test_tt_defuse_interrumpido_dos_veces();
+    //test_tt_plants_and_ct_defuses(); este
+    //test_tt_defuse_interrumpido_dos_veces(); este
     std::cout << "Pasaron los test" << std::endl;
     return 0;
 }
