@@ -22,7 +22,7 @@ void ClientHandler::handle_create_game(const CreateGameEvent& event) {
     config.fov.ratio);
     sender_queue.push(config_dto);
     game_queue = game_manager.create_game(event.get_party_name(), event.get_map_name(), username,
-                                            sender_queue, wait_for_queue_removed);
+                                            sender_queue);
     player_id = 0;
     sender_queue.push(DTO::PlayerIDDTO(player_id));
     sender_queue.push(DTO::TeamIDDTO((short_id_t)Model::TeamID::CT));
@@ -36,8 +36,7 @@ void ClientHandler::handle_join_game(const JoinGameEvent& event) {
         DTO::ConfigDTO config_dto(config.display.width, config.display.height, config.fov.angle,
                                   config.fov.ratio);
         sender_queue.push(config_dto);
-        auto pair = game_manager.join_game(event.get_game_id(), username, sender_queue,
-                                           wait_for_queue_removed);
+        auto pair = game_manager.join_game(event.get_game_id(), username, sender_queue);
         player_id = pair.first;
         game_queue = pair.second;
         sender_queue.push(DTO::PlayerIDDTO(player_id));
@@ -61,7 +60,6 @@ void ClientHandler::handle_game_event(const GameEventVariant& event) {
     game_queue->push(std::make_pair(player_id, event));
 
     if (std::holds_alternative<QuitEvent>(event)) {
-        wait_for_queue_removed.wait_for_notification();
         close();
     }
 }

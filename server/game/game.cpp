@@ -73,9 +73,11 @@ void Game::handle_leave_game(const uint8_t& player_id) {
     players.erase(actual_player.get_id());
     auto queue_it = client_queues.find(player_id);
     client_queues.erase(queue_it);
-    auto notifier = notifiers.find(player_id);
-    notifier->second->notify();
-    notifiers.erase(notifier);
+    
+    // if (players.size() == 0) {
+    //     state = GameState::Finished;
+    //     kill();
+    // }
 }
 
 void Game::handle_movement(const uint8_t& player_id, const MovementEvent& event) {
@@ -185,7 +187,7 @@ void Game::process_frames(uint16_t frames_to_process) {
 
         if (rounds_played == max_rounds) {
             state = GameState::Finished;
-            is_not_finished = false;
+            kill();
             return;
         }
 
@@ -270,17 +272,14 @@ uint8_t Game::get_number_of_players() {
 }
 
 std::string Game::get_party_name() {
-    std::lock_guard<std::mutex> lock(mutex);
     return party_name;
 }
 
 std::string Game::get_map_name() {
-    std::lock_guard<std::mutex> lock(mutex);
     return map_name;
 }
 
 GameQueue& Game::get_queue() {
-    std::lock_guard<std::mutex> lock(mutex);
     return game_queue;
 }
 
@@ -289,14 +288,12 @@ bool Game::is_valid() {
 }
 
 bool Game::is_dead() {
-    std::lock_guard<std::mutex> lock(mutex);
     return !is_not_finished;
 }
 
 // FALTA: ESTO ESTA ARRANCANDO LA RONDA CON 1 SOLO PLAYER, QUE EVENTUALMENTE GANARÍA TODO Y TERMINA
 void Game::add_player(const std::string& username, ClientQueue& client_queue,
-                      Notifier& notify_queue_removed, short_id_t player_id,
-                      Model::TeamID team_id, Model::RoleID role_id) {
+                      short_id_t player_id, Model::TeamID team_id, Model::RoleID role_id) {
     std::lock_guard<std::mutex> lock(mutex);
 
     if (state != GameState::WaitingStart || players.size() == max_players) {
@@ -305,13 +302,11 @@ void Game::add_player(const std::string& username, ClientQueue& client_queue,
 
     players.emplace(player_id, FullPlayer(player_id, username, team_id, role_id));
     client_queues[player_id] = &client_queue;
-    notifiers[player_id] = &notify_queue_removed;
 
     round.notify_player_joined(team_id);
 }
 
 void Game::kill() {
-    std::lock_guard<std::mutex> lock(mutex);
     is_not_finished = false;
 }
 

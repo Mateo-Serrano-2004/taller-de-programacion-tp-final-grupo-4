@@ -2,10 +2,10 @@
 #define MAIN_WINDOW_H
 
 #include <QMainWindow>
-#include <QMediaPlayer>
-#include <QMediaPlaylist>
-#include <QAudioOutput>
-#include <QDir>
+// #include <QMediaPlayer>
+// #include <QMediaPlaylist>
+// #include <QAudioOutput>
+// #include <QDir>
 
 #include "client/net/client_protocol.h"
 #include "common/definitions.h"
@@ -49,8 +49,8 @@ private:
     std::string port;
     std::string username;
 
-    QMediaPlayer* musicPlayer = nullptr;
-    QAudioOutput* audioOutput = nullptr;
+    // QMediaPlayer* musicPlayer = nullptr;
+    // QAudioOutput* audioOutput = nullptr;
 
     void setUpWindow();
 

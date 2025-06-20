@@ -16,7 +16,6 @@
 #include "server/game/game_manager.h"
 
 #include "client_handler_sender.h"
-#include "notifier.h"
 #include "server_protocol.h"
 
 class ClientHandler: public Thread {
@@ -24,7 +23,6 @@ private:
     uint8_t player_id = 0;
     std::atomic<bool> is_alive = true;
     ServerProtocol protocol;
-    Notifier wait_for_queue_removed;
     GameManager& game_manager;
     Unique<ClientHandlerSender> sender;
     Queue<DTO::DTOVariant>& sender_queue;

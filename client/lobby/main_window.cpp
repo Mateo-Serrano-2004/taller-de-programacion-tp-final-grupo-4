@@ -23,8 +23,8 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWin
 
 MainWindow::~MainWindow() {
     delete ui;
-    delete musicPlayer;
-    delete audioOutput;
+    // delete musicPlayer;
+    // delete audioOutput;
 }
 
 void MainWindow::connectToServer() {
@@ -36,9 +36,9 @@ void MainWindow::connectToServer() {
 void MainWindow::runGame() {
     this->hide();
     
-    if (musicPlayer) {
-        musicPlayer->pause();
-    }
+    // if (musicPlayer) {
+    //     musicPlayer->pause();
+    // }
     
     try {
         App::CS2DApp game(protocol);
@@ -102,9 +102,9 @@ void MainWindow::showLobbyScene() {
     connect(lobbyScene, &LobbyScene::joinClicked, this, &MainWindow::showJoinGameScene,
             Qt::QueuedConnection);
     
-    if (musicPlayer) {
-        musicPlayer->play();
-    }
+        // if (musicPlayer) {
+        //     musicPlayer->play();
+        // }
 }
 
 void MainWindow::showGameCreationScene() {
@@ -177,18 +177,18 @@ void MainWindow::setUpWindow() {
     ui->mainView->setRenderHint(QPainter::SmoothPixmapTransform);
     ui->mainView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
-    musicPlayer = new QMediaPlayer(this);
-    audioOutput = new QAudioOutput(QAudioFormat(), this);
+    // musicPlayer = new QMediaPlayer(this);
+    // audioOutput = new QAudioOutput(QAudioFormat(), this);
 
-    QString musicPath = QDir::currentPath() + "/assets/sfx/menu.wav";
-    QUrl musicUrl = QUrl::fromLocalFile(musicPath);
+    // QString musicPath = QDir::currentPath() + "/assets/sfx/menu.wav";
+    // QUrl musicUrl = QUrl::fromLocalFile(musicPath);
 
-    musicPlayer->setMedia(musicUrl);
-    musicPlayer->setVolume(40);
-    musicPlayer->setPlaylist(new QMediaPlaylist());
-    musicPlayer->playlist()->addMedia(musicUrl);
-    musicPlayer->playlist()->setPlaybackMode(QMediaPlaylist::Loop);
-    musicPlayer->play();
+    // musicPlayer->setMedia(musicUrl);
+    // musicPlayer->setVolume(40);
+    // musicPlayer->setPlaylist(new QMediaPlaylist());
+    // musicPlayer->playlist()->addMedia(musicUrl);
+    // musicPlayer->playlist()->setPlaybackMode(QMediaPlaylist::Loop);
+    // musicPlayer->play();
 
     showWelcomeScene();
 
