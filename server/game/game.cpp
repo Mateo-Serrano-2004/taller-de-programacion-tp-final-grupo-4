@@ -309,7 +309,7 @@ void Game::add_player(const std::string& username, ClientQueue& client_queue, sh
         throw InvalidGameException("Game no longer accepts players");
     }
 
-    players.emplace(player_id, FullPlayer(player_id, username, team_id, role_id, round.get_position_for_new_player(team_id)));
+    players.emplace(player_id, FullPlayer(player_id, username, team_id, role_id, get_position_for_player(team_id, players.size())));
     client_queues[player_id] = &client_queue;
 
     round.notify_player_joined(team_id);
