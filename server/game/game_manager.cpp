@@ -65,6 +65,7 @@ std::vector<DTO::GameInfoDTO> GameManager::get_games() {
     reap_games();
     std::vector<DTO::GameInfoDTO> games_info;
     for (const auto& game: games) {
+        if (!game.second->is_valid()) continue;
         DTO::GameInfoDTO game_info = {game.first, game.second->get_party_name(),
                                       game.second->get_number_of_players(),
                                       game.second->get_map_name()};
