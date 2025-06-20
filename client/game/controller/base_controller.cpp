@@ -13,7 +13,6 @@
 #include "context/context_manager.h"
 #include "event/event.h"
 #include "event/switch_context_event.h"
-#include "exception/closed_window.h"
 
 Controller::BaseController::BaseController(Shared<SDL2pp::Window> window,
                                            Shared<SDL2pp::Renderer> renderer,

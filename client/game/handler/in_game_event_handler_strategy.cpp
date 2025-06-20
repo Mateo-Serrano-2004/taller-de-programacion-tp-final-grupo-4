@@ -21,7 +21,6 @@
 #include "event/switch_context_event.h"
 #include "event/switch_weapon_event.h"
 #include "event/use_weapon_event.h"
-#include "exception/closed_window.h"
 #include "utils/mouse_coords_translator.h"
 
 #include "game_state_manager.h"

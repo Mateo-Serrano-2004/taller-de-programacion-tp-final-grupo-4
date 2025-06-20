@@ -12,6 +12,7 @@
 #include "common/definitions.h"
 #include "common/queue.h"
 #include "server/events/events.h"
+#include "server/net/notifier.h"
 #include "server/parser/yaml_addresser.h"
 #include "server/parser/yaml_parser.h"
 
@@ -37,9 +38,11 @@ public:
     GameManager(const std::string& config_file, const std::vector<std::string>& maps_names);
 
     GameQueue* create_game(const std::string& party_name, const std::string& map_name,
-                           const std::string& username, Queue<DTO::DTOVariant>& client_queue);
+                           const std::string& username, Queue<DTO::DTOVariant>& client_queue,
+                            Notifier& notify_queue_removed);
     std::pair<short_id_t, GameQueue*> join_game(const uint8_t& game_id, const std::string& username,
-                                                Queue<DTO::DTOVariant>& client_queue);
+                                                Queue<DTO::DTOVariant>& client_queue,
+                                                Notifier& notify_queue_removed);
 
     uint8_t get_number_of_games();
     std::vector<DTO::GameInfoDTO> get_games();

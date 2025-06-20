@@ -20,6 +20,7 @@
 #include "common/thread.h"
 #include "model/full_player.h"
 #include "server/events/events.h"
+#include "server/net/notifier.h"
 
 #include "game_logic.h"
 #include "movement_system.h"
@@ -47,6 +48,7 @@ private:
     GameQueue game_queue;
     std::map<short_id_t, FullPlayer> players;
     std::map<short_id_t, ClientQueue*> client_queues;
+    std::map<short_id_t, Notifier*> notifiers;
     std::vector<uint8_t> dropped_weapons;
     MovementSystem movement_system;
     GameLogic gamelogic;
@@ -100,7 +102,8 @@ public:
     bool is_valid();
     bool is_dead();
 
-    void add_player(const std::string& username, ClientQueue& client_queue, short_id_t player_id,
+    void add_player(const std::string& username, ClientQueue& client_queue,
+                    Notifier& notify_queue_removed, short_id_t player_id,
                     Model::TeamID team_id, Model::RoleID role_id);
 
     void kill();

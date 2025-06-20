@@ -69,6 +69,9 @@ EventVariant ServerProtocol::receive_event() {
         case Model::EventType::LEAVE_GAME: {
             return LeaveGameEvent();
         }
+        case Model::EventType::QUIT: {
+            return QuitEvent();
+        }
         case Model::EventType::PICK_ROLE: {
             Model::RoleID role_id = Model::RoleID(data[1]);
             return PickRoleEvent(role_id);

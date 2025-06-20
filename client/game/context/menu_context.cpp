@@ -7,7 +7,7 @@
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Renderer.hh>
 
-#include "command/quit_command.h"
+#include "command/leave_game_command.h"
 #include "command/switch_context_command.h"
 #include "common/event_type.h"
 #include "controller/game_controller.h"
@@ -76,6 +76,6 @@ Context::MenuContext::MenuContext(Weak<Controller::GameController> controller):
     exit_button.set_text("Exit");
     return_game_button.set_text("Return game");
 
-    exit_button.set_command(make_unique<Command::QuitCommand>());
+    exit_button.set_command(make_unique<Command::LeaveGameCommand>());
     return_game_button.set_command(make_unique<Command::SwitchContextCommand>("in-game"));
 }

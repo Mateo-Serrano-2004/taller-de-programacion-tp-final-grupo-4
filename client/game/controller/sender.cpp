@@ -16,8 +16,11 @@ void Controller::Sender::run() {
     while (keep_running) {
         try {
             Shared<Model::TransferedEvent> event = sender_queue->pop();
-            if (event->get_type() == Model::EventType::QUIT) {
-                std::cout << "Received a QUIT event in Sender\n";
+            auto event_type = event->get_type();
+            if (event_type == Model::EventType::QUIT || event_type == Model::EventType::LEAVE_GAME) {
+                if (event_type == Model::EventType::QUIT) {
+                    std::cout << "Received a QUIT event in Sender\n";
+                }
                 keep_running = false;
             }
             protocol->send_event(event->as_dto());

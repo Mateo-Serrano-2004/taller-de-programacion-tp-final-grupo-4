@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "client/exception/closed_app.h"
+#include "client/exception/closed_game.h"
 #include "client/game/cs2d_app.h"
 #include "client/game/event/create_game_event.h"
 #include "client/game/event/join_game_event.h"
@@ -27,7 +28,7 @@ void MainWindow::runGame() {
     try {
         App::CS2DApp game(protocol);
         game.launch();
-    } catch (const ClosedAppException& e) {
+    } catch (const ClosedAppException&) {
         clearCurrentScene();
         QApplication::quit();
         return;

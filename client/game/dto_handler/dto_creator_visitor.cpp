@@ -70,7 +70,15 @@ DTO::EventDTO DTO::DTOCreatorVisitor::visit_join_game_event(Model::JoinGameEvent
     return event_dto;
 }
 
-DTO::EventDTO DTO::DTOCreatorVisitor::visit_leave_event() { return DTO::EventDTO(); }
+DTO::EventDTO DTO::DTOCreatorVisitor::visit_leave_event() {
+    DTO::EventDTO event_dto;
+
+    event_dto.data.push_back(static_cast<char>(Model::EventType::LEAVE_GAME));
+
+    event_dto.size = 1;
+
+    return event_dto;
+}
 
 DTO::EventDTO DTO::DTOCreatorVisitor::visit_movement_event(Model::MovementEvent* event) {
     DTO::EventDTO event_dto;
@@ -100,7 +108,7 @@ DTO::EventDTO DTO::DTOCreatorVisitor::visit_pick_role_event(Model::PickRoleEvent
 DTO::EventDTO DTO::DTOCreatorVisitor::visit_quit_event() {
     DTO::EventDTO event_dto;
 
-    event_dto.data.push_back(static_cast<char>(Model::EventType::LEAVE_GAME));
+    event_dto.data.push_back(static_cast<char>(Model::EventType::QUIT));
 
     event_dto.size = 1;
 

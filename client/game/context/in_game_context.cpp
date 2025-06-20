@@ -9,7 +9,6 @@
 #include "common/event_type.h"
 #include "common/model/player.h"
 #include "controller/game_controller.h"
-#include "exception/closed_window.h"
 #include "handler/game_state_manager.h"
 #include "model/game_state.h"
 

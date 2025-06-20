@@ -73,6 +73,9 @@ void Game::handle_leave_game(const uint8_t& player_id) {
     players.erase(actual_player.get_id());
     auto queue_it = client_queues.find(player_id);
     client_queues.erase(queue_it);
+    auto notifier = notifiers.find(player_id);
+    notifier->second->notify();
+    notifiers.erase(notifier);
 }
 
 void Game::handle_movement(const uint8_t& player_id, const MovementEvent& event) {
@@ -213,7 +216,18 @@ void Game::broadcast_game_state() {
     for (auto& [id, queue]: client_queues) {
         try {
             queue->push(game_snapshot);
-        } catch (const ClosedQueue&) {}
+        } catch (const ClosedQueue&) {
+
+        } catch (const std::exception&) {
+            /*
+                This is caused by invalid access
+                of memory, when the sender has
+                been destroyed but not yet removed
+                from the list. In such case, we
+                only skip it, as it will be removed
+                eventually
+            */
+        }
     }
 }
 
@@ -280,7 +294,8 @@ bool Game::is_dead() {
 }
 
 // FALTA: ESTO ESTA ARRANCANDO LA RONDA CON 1 SOLO PLAYER, QUE EVENTUALMENTE GANARÍA TODO Y TERMINA
-void Game::add_player(const std::string& username, ClientQueue& client_queue, short_id_t player_id,
+void Game::add_player(const std::string& username, ClientQueue& client_queue,
+                      Notifier& notify_queue_removed, short_id_t player_id,
                       Model::TeamID team_id, Model::RoleID role_id) {
     std::lock_guard<std::mutex> lock(mutex);
 
@@ -290,6 +305,7 @@ void Game::add_player(const std::string& username, ClientQueue& client_queue, sh
 
     players.emplace(player_id, FullPlayer(player_id, username, team_id, role_id));
     client_queues[player_id] = &client_queue;
+    notifiers[player_id] = &notify_queue_removed;
 
     round.notify_player_joined(team_id);
 }

@@ -11,6 +11,7 @@
 #include "asset/asset_loader.h"
 #include "asset/asset_manager.h"
 #include "client/exception/closed_app.h"
+#include "client/exception/closed_game.h"
 #include "client/net/client_protocol.h"
 #include "common/DTO/game_state_dto.h"
 #include "context/context_manager.h"
@@ -92,7 +93,7 @@ void Controller::GameController::bind_handlers() {
 void Controller::GameController::process_event(Shared<Model::Event> event) {
     auto event_type = event->get_type();
     if (!try_handle(event)) {
-        if (event_type == Model::EventType::QUIT)
+        if (event_type == Model::EventType::QUIT || event_type == Model::EventType::LEAVE_GAME)
             receiver.reset();
         try {
             auto transfered_event = std::static_pointer_cast<Model::TransferedEvent>(event);
@@ -103,6 +104,9 @@ void Controller::GameController::process_event(Shared<Model::Event> event) {
     if (event_type == Model::EventType::QUIT) {
         std::cout << "Received a QUIT event\n";
         throw ClosedAppException("Closed app");
+    } else if (event_type == Model::EventType::LEAVE_GAME) {
+        std::cout << "Received a LEAVE_GAME event\n";
+        throw ClosedGameException("Closed game");
     }
 
     if (event_type == Model::EventType::END_OF_GAME) {
