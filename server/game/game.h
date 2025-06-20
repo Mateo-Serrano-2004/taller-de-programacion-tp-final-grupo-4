@@ -34,7 +34,7 @@ private:
 
     // Pre-initialized attributes
     const int GAME_FPS = 60;
-    const uint8_t max_rounds = 2;
+    const uint8_t max_rounds = 1;
     const uint8_t max_players = 10;
     const uint8_t min_players_to_start = 2;
     GameState state = GameState::WaitingStart;
@@ -74,6 +74,8 @@ private:
 
     void clear_game_queue();
     void start_new_round();
+
+    Physics::Vector2D get_position_for_player(Model::TeamID team, uint8_t i);
 
     void update_players_that_won();
     void process_frames(uint16_t frames_to_process = 1);
