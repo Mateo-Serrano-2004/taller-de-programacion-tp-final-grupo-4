@@ -186,6 +186,11 @@ void Game::process_frames(uint16_t frames_to_process) {
             return;
         }
 
+        /*
+            Here, if the round ended, the player
+            is never told so, because we immediately
+            start another round
+        */
         start_new_round();
     }
 }
