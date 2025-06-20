@@ -55,7 +55,7 @@ void Controller::Receiver::receive_server_info() {
                           [this](DTO::MapDTO&& d) { generate_map(std::move(d)); },
                           // TODO: Fix this
                           [](DTO::MapNameListDTO&&) {}, [](DTO::GameListDTO&&) {},
-                          [](DTO::ConfigDTO&&) {}},
+                          [](DTO::ConfigDTO&&) {}, [](DTO::ExpulsionDTO&&) {}},
                std::move(variant));
 }
 

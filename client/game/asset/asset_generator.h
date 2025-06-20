@@ -8,6 +8,7 @@
 #include <SDL2/SDL.h>
 
 #include "common/definitions.h"
+#include "common/DTO/config_dto.h"
 
 namespace SDL2pp {
 class Renderer;
@@ -26,8 +27,7 @@ namespace View {
 class AssetGenerator {
 protected:
     Shared<SDL2pp::Renderer> renderer;
-
-    SDL_Rect get_bounds();
+    DTO::ConfigDTO config;
 
     void draw_disk(int size, int radius);
     void draw_triangle(int half_size, int angle);
@@ -38,12 +38,12 @@ protected:
     Shared<SDL2pp::Texture> generate_animation(const std::vector<Shared<SDL2pp::Texture>>& frames);
 
 public:
-    explicit AssetGenerator(Shared<SDL2pp::Renderer> renderer);
+    explicit AssetGenerator(Shared<SDL2pp::Renderer> renderer, const DTO::ConfigDTO& config);
 
     // Generate assets from scratch
 
     // FOV = Field of view
-    Shared<SDL2pp::Texture> generate_fov(const DTO::ConfigDTO& config);
+    Shared<SDL2pp::Texture> generate_fov();
     Shared<SDL2pp::Texture> generate_plain_texture(const SDL2pp::Point& size,
                                                    const SDL2pp::Color& color);
     Shared<SDL2pp::Texture> generate_plain_texture(const SDL2pp::Color& color);

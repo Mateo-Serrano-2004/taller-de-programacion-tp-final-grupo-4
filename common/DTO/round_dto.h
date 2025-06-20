@@ -17,10 +17,18 @@ public:
     bool bomb_planted;
     bool bomb_defused;
     Physics::Vector2D bomb_position;
+    uint8_t defusing_progress;
 
     RoundDTO();
-    RoundDTO(RoundState state, bool ended, uint16_t time_left, Model::TeamID winner,
-             bool bomb_planted, bool bomb_defused, Physics::Vector2D bomb_position);
+    RoundDTO(
+        RoundState state, 
+        bool ended, 
+        uint16_t time_left, 
+        Model::TeamID winner,
+        bool bomb_planted,
+        bool bomb_defused,
+        Physics::Vector2D bomb_position,
+        uint8_t defusing_progress);
 };
 }  // namespace DTO
 

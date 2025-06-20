@@ -1,10 +1,15 @@
 #include "awp.h"
 
-AWP::AWP():
-        FullWeapon(Model::WeaponID::AWP, Model::SlotID::PRIMARY_WEAPON,
-                   10,  // loaded_ammo
-                   10   // total_ammo
-        ) {}
+AWP::AWP()
+    : FullWeapon(
+        Model::WeaponID::AWP,
+        Model::SlotID::PRIMARY_WEAPON,
+        10,    // loaded_ammo
+        10,     // total_ammo
+        120,
+        120
+    )
+{}
 
 std::optional<WeaponShotInfo> AWP::shoot(uint16_t ticks_to_process) {
     if (!triggered || trigger_blocked)

@@ -12,13 +12,12 @@
 #include "common/weapon_id.h"
 #include "server/game/weapon_factory.h"
 
-FullPlayer::FullPlayer(short_id_t id, const std::string& name, Model::TeamID team,
-                       Model::RoleID role):
-        Model::Player(id, name, team, role),
-        movement_direction(0, 0),
-        size(32, 32),
-        secondary_weapon(WeaponFactory::create(Model::WeaponID::GLOCK)),
-        knife(WeaponFactory::create(Model::WeaponID::KNIFE)) {
+FullPlayer::FullPlayer(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role, Physics::Vector2D position)
+: Model::Player(id, name, team, role, position),
+  movement_direction(0, 0),
+  size(32,32),
+  secondary_weapon(WeaponFactory::create(Model::WeaponID::GLOCK)),
+  knife(WeaponFactory::create(Model::WeaponID::KNIFE)) {
     current_weapon = secondary_weapon;
     money = 1500;
 }
@@ -103,6 +102,27 @@ void FullPlayer::substract_money(uint16_t amount) {
         money -= amount;
 }
 
+void FullPlayer::start_reloading_weapon() {
+    if (!current_weapon || !alive) return;
+    reloading = true;
+    std::static_pointer_cast<FullWeapon>(current_weapon)->start_reloading(); 
+}
+
+void FullPlayer::stop_reloading_weapon() {
+    if (!current_weapon) return;
+    std::static_pointer_cast<FullWeapon>(current_weapon)->stop_reloading();
+    reloading = false;
+}
+
+void FullPlayer::reload(uint16_t frames_to_process) {
+    if (!current_weapon || !alive || !reloading) {
+        reloading = false;
+        return;
+    }
+    auto weapon = std::static_pointer_cast<FullWeapon>(current_weapon);
+    reloading = weapon->reload(frames_to_process); // devuelve true si esta recargando bien, false si por algun motivo no puede
+}
+
 void FullPlayer::start_using_weapon() {
     if (!current_weapon || !alive)
         return;
@@ -122,7 +142,17 @@ void FullPlayer::start_defusing_bomb() {
     defusing_bomb = true;
 }
 
-void FullPlayer::stop_defusing_bomb() { defusing_bomb = false; }
+void FullPlayer::stop_defusing_bomb() {
+    defusing_bomb = false;
+}
+
+Physics::Vector2D FullPlayer::weapon_position() const {
+    return Physics::Vector2D(
+        position.get_x() + size.get_x() / 2,
+        position.get_y() + size.get_y() / 2
+    );
+}
+
 
 std::optional<ShotInfo> FullPlayer::shoot(uint16_t frames_to_process) {
     if (!current_weapon || !alive) {
@@ -139,29 +169,35 @@ std::optional<ShotInfo> FullPlayer::shoot(uint16_t frames_to_process) {
     }
 
     shooting = true;
-    return ShotInfo(id, position, angle, weapon->get_weapon_id(), shot_info.value());
+    return ShotInfo(
+        id,
+        weapon_position(),
+        angle,
+        weapon->get_weapon_id(),
+        shot_info.value()
+    );
 }
 
 void FullPlayer::take_damage(uint8_t damage) {
     if (!is_alive())
         return;
-
+    std::cout << "player id: " << static_cast<int>(get_id()) << "daño " << static_cast<int>(damage) << std::endl;
     if (health <= damage) {
         health = 0;
         alive = false;
     } else {
-        std::cout << "player id: " << static_cast<int>(get_id()) << "daño "
-                  << static_cast<int>(damage) << std::endl;
         health -= damage;
     }
 }
 
 void FullPlayer::add_money(uint16_t money_to_be_added) { money += money_to_be_added; }
 
-void FullPlayer::reset_for_new_round() {
+void FullPlayer::reset_for_new_round(Physics::Vector2D new_position) {
+    position = new_position;
     alive = true;
     health = 100;
     defusing_bomb = false;
+    reloading = false;
     bomb.reset();
 }
 
@@ -182,16 +218,12 @@ Shared<FullWeapon> FullPlayer::remove_bomb() {
         dropped_bomb = bomb;
         bomb.reset();
 
-        if (primary_weapon) {
-            equip_weapon_by_type(Model::SlotID::PRIMARY_WEAPON);
-        } else if (secondary_weapon) {
-            equip_weapon_by_type(Model::SlotID::SECONDARY_WEAPON);
-        } else if (knife) {
-            equip_weapon_by_type(Model::SlotID::KNIFE_SLOT);
-        }
+        equip_weapon_by_type(Model::SlotID::KNIFE_SLOT);
     }
 
     return dropped_bomb;
 }
 
-void FullPlayer::give_bomb(Shared<FullWeapon> new_bomb) { bomb = new_bomb; }
+void FullPlayer::give_bomb(Shared<FullWeapon> new_bomb) {
+    bomb = new_bomb;
+}

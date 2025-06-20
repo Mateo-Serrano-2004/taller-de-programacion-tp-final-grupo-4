@@ -8,6 +8,7 @@
 #include "animation/animation_details.h"
 #include "asset/texture_id.h"
 #include "common/asset_addresser.h"
+#include "common/DTO/config_dto.h"
 
 #include "animation_id.h"
 #include "asset_generator.h"
@@ -30,6 +31,7 @@ class AssetManager {
 private:
     AssetAddresser asset_addresser;
     Shared<SDL2pp::Renderer> renderer;
+    DTO::ConfigDTO config;
     View::AssetGenerator asset_generator;
     std::map<TextureID, Shared<SDL2pp::Texture>> textures;
     std::map<AnimationID, Model::AnimationDetails> animations;
@@ -38,7 +40,7 @@ private:
     Shared<SDL2pp::Texture> current_map;
 
 public:
-    explicit AssetManager(Shared<SDL2pp::Renderer> renderer);
+    AssetManager(Shared<SDL2pp::Renderer> renderer, const DTO::ConfigDTO& config);
 
     void load_texture(TextureID id, const std::string& path);
     void load_texture(TextureID id, Shared<SDL2pp::Texture> texture);

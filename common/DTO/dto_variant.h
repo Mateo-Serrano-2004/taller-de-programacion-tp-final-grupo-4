@@ -4,6 +4,7 @@
 #include <variant>
 
 #include "config_dto.h"
+#include "expulsion_dto.h"
 #include "game_list_dto.h"
 #include "game_state_dto.h"
 #include "map_dto.h"
@@ -13,7 +14,7 @@
 
 namespace DTO {
 using DTOVariant = std::variant<GameStateDTO, PlayerIDDTO, TeamIDDTO, MapDTO, MapNameListDTO,
-                                GameListDTO, ConfigDTO>;
+                                GameListDTO, ConfigDTO, ExpulsionDTO>;
 };
 
 #endif  // COMMON_DTO_DTO_VARIANT_H

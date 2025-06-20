@@ -11,7 +11,11 @@
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Renderer.hh>
 #include <SDL2pp/Texture.hh>
+#include <SDL2pp/Point.hh>
 
+#include "animation/muzzle_fire_animation.h"
+#include "animation/progress_bar_animation.h"
+#include "animation/winner_team_message_animation.h"
 #include "common/DTO/game_state_dto.h"
 #include "common/model/player.h"
 #include "controller/game_controller.h"
@@ -47,24 +51,51 @@ void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
         auto player = make_shared<View::RenderedPlayer>(controller, std::move(dto.to_player()));
         new_game_state->players.insert({player->get_id(), player});
 
-        if (player->is_shooting()) {
+        if (player->is_shooting() &&
+            player->get_current_weapon()->get_weapon_id() != Model::WeaponID::KNIFE) {
             new_game_state->fires.push_back(
                     make_shared<View::MuzzleFireAnimation>(controller, player->get_id()));
         }
     }
 
     std::lock_guard<std::mutex> lock(mutex);
-    game_state->time_left = game_state_dto.round.time_left;
     game_state->players = new_game_state->players;
+    game_state->fires.remove_if(
+            [](Shared<View::MuzzleFireAnimation>& a) { return a->has_ended(); });
+    game_state->fires.splice(game_state->fires.end(), new_game_state->fires);
+    if (game_state->winner_message && game_state->winner_message->has_ended())
+        game_state->winner_message = nullptr;
 
+    game_state->time_left = game_state_dto.round.time_left;
+    if (game_state_dto.round.bomb_planted && !game_state->bomb_position.has_value()) {
+        auto pos = game_state_dto.round.bomb_position;
+        game_state->bomb_position = SDL2pp::Point(pos.get_x(), pos.get_y());
+    }
     auto ref_player = game_state->get_reference_player();
     if (ref_player) {
         auto reference_player_position = ref_player->get_position();
         game_state->camera.set_center(reference_player_position.get_x(),
                                       reference_player_position.get_y());
+        if (!game_state->bomb_defusing && ref_player->is_defusing()) {
+            game_state->bomb_defusing = make_shared<View::ProgressBarAnimation>(controller);
+        } else if (!ref_player->is_defusing()) {
+            game_state->bomb_defusing = nullptr;
+        }
     }
+    game_state->defusing_progress = game_state_dto.round.defusing_progress;
+    if (!(game_state->bomb_position.has_value()) && game_state_dto.round.bomb_planted) {
+        game_state->bomb_position = SDL2pp::Point();
+        game_state->bomb_position.value().SetX(game_state_dto.round.bomb_position.get_x());
+        game_state->bomb_position.value().SetX(game_state_dto.round.bomb_position.get_y());
+    }
+    game_state->first_team_victories = game_state_dto.ct_rounds_won;
+    game_state->second_team_victories = game_state_dto.tt_rounds_won;
+    game_state->round_winner = game_state_dto.round.winner;
+    game_state->game_winner = game_state_dto.winner;
 
-    game_state->fires.remove_if(
-            [](Shared<View::MuzzleFireAnimation>& a) { return a->has_ended(); });
-    game_state->fires.splice(game_state->fires.end(), new_game_state->fires);
+    if (game_state_dto.round.ended) {
+        game_state->winner_message = make_shared<View::WinnerTeamMessageAnimation>(
+            controller, game_state->round_winner
+        );
+    }
 }

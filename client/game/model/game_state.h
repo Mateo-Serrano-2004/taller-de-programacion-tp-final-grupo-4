@@ -5,12 +5,13 @@
 #include <list>
 #include <map>
 
-#include "animation/muzzle_fire_animation.h"
 #include "common/definitions.h"
+#include "common/team.h"
 #include "render/camera.h"
 
 namespace SDL2pp {
 class Texture;
+class Point;
 }
 
 namespace Controller {
@@ -20,6 +21,8 @@ class GameStateManager;
 namespace View {
 class RenderedPlayer;
 class MuzzleFireAnimation;
+class WinnerTeamMessageAnimation;
+class ProgressBarAnimation;
 };  // namespace View
 
 namespace Model {
@@ -27,10 +30,18 @@ struct GameState {
 public:
     std::map<short_id_t, Shared<View::RenderedPlayer>> players;
     std::list<Shared<View::MuzzleFireAnimation>> fires;
+    Shared<View::WinnerTeamMessageAnimation> winner_message;
+    Shared<View::ProgressBarAnimation> bomb_defusing;
     View::Camera camera;
     Shared<SDL2pp::Texture> map;
     Maybe<short_id_t> reference_player_id;
+    Maybe<SDL2pp::Point> bomb_position;
     uint16_t time_left;
+    uint8_t defusing_progress;
+    uint8_t first_team_victories;
+    uint8_t second_team_victories;
+    Model::TeamID round_winner;
+    Model::TeamID game_winner;
 
     GameState();
     GameState(const GameState& other);

@@ -1,6 +1,15 @@
 #include "knife.h"
 
-Knife::Knife(): FullWeapon(Model::WeaponID::KNIFE, Model::SlotID::KNIFE_SLOT, 1, 1) {}
+Knife::Knife()
+    : FullWeapon(
+        Model::WeaponID::KNIFE,
+        Model::SlotID::KNIFE_SLOT,
+        1,
+        1,
+        1,
+        1
+    )
+{}
 
 std::optional<WeaponShotInfo> Knife::shoot(uint16_t ticks_to_process) {
     if (!triggered || trigger_blocked) {
@@ -20,4 +29,8 @@ std::optional<WeaponShotInfo> Knife::shoot(uint16_t ticks_to_process) {
             /* falloff_factor */ 0.0f,
             /* close_range_threshold */ 0.0f,
             /* close_range_multiplier */ 1.0f);
+}
+
+bool Knife::reload(uint16_t ticks_to_process) {
+    return false;
 }

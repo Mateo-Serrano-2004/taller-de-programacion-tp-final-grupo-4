@@ -6,6 +6,7 @@
 
 #include "common/asset_addresser.h"
 #include "common/definitions.h"
+#include "common/DTO/config_dto.h"
 
 #include "asset_generator.h"
 #include "texture_id.h"
@@ -18,10 +19,6 @@ namespace Controller {
 class GameController;
 };
 
-namespace DTO {
-struct ConfigDTO;
-}
-
 namespace Model {
 class AssetManager;
 
@@ -33,19 +30,25 @@ private:
     std::vector<std::string> hud_textures;
     Shared<AssetManager> manager;
     Shared<SDL2pp::Renderer> renderer;
+    DTO::ConfigDTO config;
     View::AssetGenerator generator;
 
     void load_weapon_sprites();
     void load_player_sprites();
     void load_hud_texture(Model::TextureID id, int index);
     void load_hud_textures();
-    void load_fov(const DTO::ConfigDTO& config);
+    void load_fov();
     void load_animations();
+    void load_white_background();
 
 public:
-    AssetLoader(Shared<AssetManager> manager, Shared<SDL2pp::Renderer> renderer);
+    AssetLoader(
+        Shared<AssetManager> manager,
+        Shared<SDL2pp::Renderer> renderer,
+        const DTO::ConfigDTO& config
+    );
 
-    void load_all_textures(const DTO::ConfigDTO& config);
+    void load_all_textures();
 
     ~AssetLoader() = default;
 };

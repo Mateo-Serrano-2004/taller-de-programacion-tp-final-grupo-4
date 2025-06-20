@@ -17,6 +17,8 @@
 #include <SDL2pp/Window.hh>
 
 #include "animation/muzzle_fire_animation.h"
+#include "animation/progress_bar_animation.h"
+#include "animation/winner_team_message_animation.h"
 #include "asset/asset_manager.h"
 #include "asset/font_id.h"
 #include "asset/texture_id.h"
@@ -26,6 +28,18 @@
 #include "model/rendered_player.h"
 
 #include "camera.h"
+
+void View::PlayerRenderer::render_winner_message(const Model::GameState& game_state, uint8_t frames) {
+    if (game_state.winner_message) {
+        game_state.winner_message->step(frames);
+    }
+}
+
+void View::PlayerRenderer::render_defusing_progress(const Model::GameState& game_state) {
+    if (game_state.bomb_defusing) {
+        game_state.bomb_defusing->progress(game_state.defusing_progress);
+    }
+}
 
 void View::PlayerRenderer::render_fov(const Model::GameState& game_state) {
     auto viewport = game_state.camera.get_viewport();
@@ -59,10 +73,19 @@ void View::PlayerRenderer::render_muzzle_fires(const Model::GameState& game_stat
             animation->end();
             continue;
         }
-        animation->set_frames_to_process(frames);
-        animation->set_camera(camera);
         animation->set_player(player);
-        animation->render();
+        animation->step(frames);
+    }
+}
+
+void View::PlayerRenderer::render_bomb(const Model::GameState& game_state) {
+    if (game_state.bomb_position.has_value()) {
+        auto point = game_state.camera.get_camera_view(game_state.bomb_position.value());
+        renderer->Copy(
+            *bomb_texture,
+            SDL2pp::NullOpt,
+            point
+        );
     }
 }
 
@@ -73,13 +96,13 @@ bool View::PlayerRenderer::render_players(const Model::GameState& game_state) {
 
     for (auto& [id, p]: game_state.players) {
         if (!render_ref_player || id != reference_player->get_id()) {
-            p->set_camera(camera);
+            p->fix(camera);
             p->render();
         }
     }
 
     if (render_ref_player) {
-        reference_player->set_camera(camera);
+        reference_player->fix(camera);
         reference_player->render();
     }
 
@@ -140,12 +163,16 @@ View::PlayerRenderer::PlayerRenderer(Weak<Controller::GameController> controller
     auto controller_locked = controller.lock();
     game_state_manager = controller_locked->get_game_state_manager();
     font = asset_manager->generate_font("liberationsans", 16);
+    bomb_texture = asset_manager->get_texture(Model::TextureID::SPRITE_BOMB);
 }
 
 void View::PlayerRenderer::render(const Model::GameState& game_state, uint8_t frames) {
     render_map(game_state);
     auto render_ref_player = render_players(game_state);
+    render_bomb(game_state);
     render_muzzle_fires(game_state, frames);
     if (render_ref_player)
         render_fov(game_state);
+    render_defusing_progress(game_state);
+    render_winner_message(game_state, frames);
 }

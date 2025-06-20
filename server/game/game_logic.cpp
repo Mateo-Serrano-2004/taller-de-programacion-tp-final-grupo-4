@@ -32,6 +32,16 @@ void GameLogic::start_using_weapon(FullPlayer& player, const Round& round) const
     player.start_using_weapon();
 }
 
+void GameLogic::start_reloading_weapon(FullPlayer& player, const Round& round) const {
+    if (!round.is_active()) return;
+    if (!player.is_alive()) return;
+    player.start_reloading_weapon();
+}
+
+void GameLogic::stop_reloading_weapon(FullPlayer& player) const {
+    player.stop_reloading_weapon();
+}
+
 void GameLogic::start_defusing_bomb(FullPlayer& player, const Round& round) const {
     if (!round.is_active())
         return;
@@ -52,6 +62,17 @@ void GameLogic::start_defusing_bomb(FullPlayer& player, const Round& round) cons
 void GameLogic::stop_defusing_bomb(FullPlayer& player) const { player.stop_defusing_bomb(); }
 
 void GameLogic::stop_using_weapon(FullPlayer& player) const { player.stop_using_weapon(); }
+
+void GameLogic::process_reloading(std::map<uint8_t, FullPlayer>& players, Round& round, uint16_t frames_to_process) const {
+    if (!round.is_active()) return;
+    for (auto& [id, player] : players) {
+        if (!player.is_alive()){
+            player.stop_reloading_weapon(); // el player cuando muere debe hacer esto
+            continue;
+        } 
+        player.reload(frames_to_process);
+    }
+}
 
 void GameLogic::process_defusing(std::map<uint8_t, FullPlayer>& players, Round& round) {
     if (!round.is_active())

@@ -21,6 +21,7 @@ protected:
     bool alive;
     bool shooting;
     bool defusing_bomb;
+    bool reloading;
     short_id_t id;
     Model::RoleID role_id;
     angle_t angle;
@@ -32,11 +33,22 @@ protected:
     Model::TeamID team;
 
 public:
-    Player(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role_id);
+    Player(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role_id, Physics::Vector2D position);
 
-    Player(bool shooting, bool defusing_bomb, short_id_t id, Model::RoleID role_id, angle_t angle,
-           uint16_t money, const std::string& name, const Physics::Vector2D& position,
-           Shared<Weapon> weapon, uint8_t health, Model::TeamID team);
+    Player(
+        bool shooting,
+        bool defusing_bomb,
+        bool reloading,
+        short_id_t id,
+        Model::RoleID role_id,
+        angle_t angle,
+        uint16_t money,
+        const std::string& name,
+        const Physics::Vector2D& position,
+        Shared<Weapon> weapon,
+        uint8_t health,
+        Model::TeamID team
+    );
 
     Player(const Player&) = delete;
     Player& operator=(const Player&) = delete;
@@ -46,6 +58,7 @@ public:
     bool is_alive() const;
     bool is_shooting() const;
     bool is_defusing() const;
+    bool is_reloading() const;
     short_id_t get_id() const;
     Model::RoleID get_role_id() const;
     angle_t get_angle() const;

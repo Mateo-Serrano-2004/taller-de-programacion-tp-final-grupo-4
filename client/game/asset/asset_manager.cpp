@@ -11,8 +11,9 @@
 
 #include "common/DTO/map_dto.h"
 
-Model::AssetManager::AssetManager(Shared<SDL2pp::Renderer> renderer):
-        renderer(renderer), asset_generator(renderer), current_map(nullptr) {}
+Model::AssetManager::AssetManager(Shared<SDL2pp::Renderer> renderer, const DTO::ConfigDTO& config):
+        renderer(renderer), config(config),
+        asset_generator(renderer, config), current_map(nullptr) {}
 
 void Model::AssetManager::load_texture(Model::TextureID id, const std::string& path) {
     textures.insert({id, make_shared<SDL2pp::Texture>(*renderer, path)});

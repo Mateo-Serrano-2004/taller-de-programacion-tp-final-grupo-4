@@ -1,10 +1,15 @@
 #include "bomb.h"
 
-Bomb::Bomb():
-        FullWeapon(Model::WeaponID::BOMB, Model::SlotID::BOMB_SLOT,
-                   1,  // loaded_ammo
-                   1   // total_ammo (no se recarga)
-        ) {}
+Bomb::Bomb()
+    : FullWeapon(
+        Model::WeaponID::BOMB,
+        Model::SlotID::BOMB_SLOT,
+        1, // loaded_ammo
+        1, // total_ammo (no se recarga)
+        0,
+        0  
+    )
+{}
 
 void Bomb::press_trigger() {
     if (!planted)
@@ -33,4 +38,10 @@ std::optional<WeaponShotInfo> Bomb::shoot(uint16_t ticks_to_process) {
     return std::nullopt;
 }
 
-bool Bomb::is_planted() const { return planted; }
+bool Bomb::is_planted() const {
+    return planted;
+}
+
+bool Bomb::reload(uint16_t ticks_to_process) {
+    return false;
+}

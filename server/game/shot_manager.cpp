@@ -5,8 +5,11 @@
 #include <limits>
 #include <random>
 
-bool does_bullet_hit_player(const Physics::Vector2D& origin, const Physics::Vector2D& direction,
-                            float max_range, const FullPlayer& player) {
+bool does_bullet_hit_player(
+    const Physics::Vector2D& origin,
+    const Physics::Vector2D& end,
+    const FullPlayer& player
+) {
     Physics::Vector2D pos = player.get_position();
     Physics::Vector2D size = player.get_size();
     float min_x = pos.get_x();
@@ -14,16 +17,10 @@ bool does_bullet_hit_player(const Physics::Vector2D& origin, const Physics::Vect
     float max_x = pos.get_x() + size.get_x();
     float max_y = pos.get_y() + size.get_y();
 
-    Physics::Vector2D end = origin + direction.normalized() * max_range;
-
-    if (end.get_x() < min_x && origin.get_x() < min_x)
-        return false;
-    if (end.get_x() > max_x && origin.get_x() > max_x)
-        return false;
-    if (end.get_y() < min_y && origin.get_y() < min_y)
-        return false;
-    if (end.get_y() > max_y && origin.get_y() > max_y)
-        return false;
+    if (end.get_x() < min_x && origin.get_x() < min_x) return false;
+    if (end.get_x() > max_x && origin.get_x() > max_x) return false;
+    if (end.get_y() < min_y && origin.get_y() < min_y) return false;
+    if (end.get_y() > max_y && origin.get_y() > max_y) return false;
 
     Physics::Vector2D rect_edges[4][2] = {
             {Physics::Vector2D(min_x, min_y), Physics::Vector2D(max_x, min_y)},
@@ -58,14 +55,28 @@ float calculate_damage(const WeaponShotInfo& info, float distance) {
     return info.base_damage;
 }
 
-Physics::Vector2D direction_with_dispersion(float base_angle, float dispersion) {
+Physics::Vector2D calculate_bullet_endpoint(
+    const Physics::Vector2D& origin,
+    float base_angle_degrees,
+    float dispersion_degrees,
+    float max_range
+) {
     static std::default_random_engine generator(std::random_device{}());
     std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
 
-    float random_factor = distribution(generator);
-    float actual_angle = base_angle + random_factor * dispersion;
+    constexpr float DEG_TO_RAD = 3.14159265f / 180.0f;
 
-    return Physics::Vector2D(std::cos(actual_angle), std::sin(actual_angle));
+    float random_factor = distribution(generator);
+    float final_angle = base_angle_degrees + random_factor * dispersion_degrees;
+
+    // 🔄 Ajuste para que 0° sea arriba (Y+) y crezca horario (tipo reloj)
+    float fixed_angle = 90.0f - final_angle;
+    float angle_radians = fixed_angle * DEG_TO_RAD;
+
+    float dx = std::cos(angle_radians) * max_range;
+    float dy = std::sin(angle_radians) * max_range;
+
+    return Physics::Vector2D(origin.get_x() + dx, origin.get_y() + dy);
 }
 
 std::vector<Impact> ShotManager::calculate_shot_impacts(
@@ -74,21 +85,25 @@ std::vector<Impact> ShotManager::calculate_shot_impacts(
 
     const WeaponShotInfo& winfo = shot_info.weapon_info;
     const Physics::Vector2D& origin = shot_info.origin;
-    float base_angle = shot_info.angle;
+    float base_angle = shot_info.angle - 2 * (shot_info.angle - 270);
 
     for (int i = 0; i < winfo.bullets_fired; ++i) {
-        Physics::Vector2D direction = direction_with_dispersion(base_angle, winfo.dispersion);
-
+        Physics::Vector2D end = calculate_bullet_endpoint(origin, base_angle, winfo.dispersion, winfo.max_range);
+    
+        std::cout << "\n--- DISPARO " << (i + 1) << " ---\n";
+        std::cout << "  Disparo sale desde: (" << origin.get_x() << ", " << origin.get_y() << ")\n";
+        std::cout << "  y puede llegar hasta: (" << end.get_x() << ", " << end.get_y() << ")\n";
+    
         float closest_dist = std::numeric_limits<float>::max();
         int8_t target_id = 0;
         bool found_target = false;
-
-        for (const auto& [id, player]: players) {
-            if (id == shot_info.shooter_id || !player.is_alive())
+    
+        for (const auto& [id, player] : players) {
+            if (id == shot_info.shooter_id || !player.is_alive()) continue;
+            if (!does_bullet_hit_player(origin, end, player)){
+                std::cout << "DISPARO " << (i + 1) << " NO IMPACTÓ\n";
                 continue;
-            if (!does_bullet_hit_player(origin, direction, winfo.max_range, player))
-                continue;
-            // solo chequea con players
+            }
             float dist = origin.distance_to(player.get_position());
             if (dist < closest_dist) {
                 closest_dist = dist;
@@ -96,15 +111,14 @@ std::vector<Impact> ShotManager::calculate_shot_impacts(
                 found_target = true;
             }
         }
-
+    
         if (found_target) {
+            std::cout << "DISPARO " << (i + 1) << " agregado para daño\n";
             float damage = calculate_damage(winfo, closest_dist);
-            std::cout << "SHOOTER ID :" << static_cast<int>(shot_info.shooter_id)
-                      << "TARGET ID: " << static_cast<int>(target_id)
-                      << "DAMAGE: " << static_cast<int>(damage) << std::endl;
             impacts.emplace_back(shot_info.shooter_id, target_id, damage);
         }
     }
+    
 
     return impacts;
 }

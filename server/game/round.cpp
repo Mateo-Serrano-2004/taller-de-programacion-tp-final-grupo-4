@@ -159,9 +159,23 @@ int Round::player_id_defusing_bomb() const {
 }
 
 DTO::RoundDTO Round::to_dto(int fps) const {
-    return DTO::RoundDTO(state, this->ended(), this->get_ticks_remaining() / fps,
-                         this->get_winner_team(), this->bomb_planted, this->bomb_defused,
-                         this->bomb_position);
+    
+    uint8_t defuse_progress = 0;
+
+    if (bomb_being_defused && bomb_planted && !bomb_defused && is_active()) {
+        defuse_progress = static_cast<uint8_t>((defusing_ticks - defusing_ticks_remaining) * 100 / defusing_ticks);
+    }
+
+    return DTO::RoundDTO(
+        state,
+        this->ended(),
+        this->get_ticks_remaining() / fps,
+        this->get_winner_team(),
+        this->bomb_planted,
+        this->bomb_defused,
+        this->bomb_position,
+        defuse_progress
+    );
 }
 
 int Round::get_ticks_remaining() const { return active_ticks_remaining; }

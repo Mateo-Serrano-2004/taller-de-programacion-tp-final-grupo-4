@@ -9,6 +9,7 @@ public:
     Knife();
 
     std::optional<WeaponShotInfo> shoot(uint16_t ticks_to_process) override;
+    bool reload(uint16_t ticks_to_process) override;
 };
 
 #endif  // SERVER_GAME_MODEL_WEAPONS_KNIFE_H

@@ -1,32 +1,25 @@
 #ifndef CLIENT_GAME_ANIMATION_ANIMATION_H
 #define CLIENT_GAME_ANIMATION_ANIMATION_H
 
-#include <cstdint>
-
-#include "asset/animation_id.h"
-#include "common/definitions.h"
 #include "interface/rendered.h"
 
-#include "animation_iterator.h"
-
 namespace Controller {
-class GameController;
-class GameStateManager;
-};  // namespace Controller
+class BaseController;
+};
 
 namespace View {
-class Animation: public Rendered, public Controller::AnimationIterator {
+class Animation: public Rendered {
 protected:
-    uint8_t frames_to_process;
-    Shared<Controller::GameStateManager> game_state_manager;
+    bool ended;
 
 public:
-    Animation(Weak<Controller::GameController> controller, Model::AnimationID id);
+    Animation(Weak<Controller::BaseController> controller);
 
-    void set_frames_to_process(uint8_t frames);
+    virtual bool has_ended() const;
+    void end();
 
-    virtual ~Animation() = default;
+    virtual ~Animation() override = default;
 };
-};  // namespace View
+};
 
-#endif  // CLIENT_GAME_ANIMATION_ANIMATION_H
+#endif // CLIENT_GAME_ANIMATION_ANIMATION_H
