@@ -44,22 +44,6 @@ void Game::handle_stop_reloading(const uint8_t& player_id) {
     gamelogic.stop_reloading_weapon(player->get());
 }
 
-void Game::handle_reload(const uint8_t& player_id) {
-    if (this->state != GameState::Playing)
-        return;
-    auto player = find_player_by_id(player_id);
-    if (!player.has_value())
-        return;
-    gamelogic.start_reloading_weapon(player->get(), round);
-}
-
-void Game::handle_stop_reloading(const uint8_t& player_id) {
-    auto player = find_player_by_id(player_id);
-    if (!player.has_value())
-        return;
-    gamelogic.stop_reloading_weapon(player->get());
-}
-
 void Game::handle_start_defusing_bomb(const uint8_t& player_id) {
     if (this->state != GameState::Playing)
         return;
@@ -150,35 +134,6 @@ void Game::handle_pick_role(const uint8_t player_id, const PickRoleEvent& event)
 
 void Game::handle(uint8_t player_id, const GameEventVariant& event) {
     std::visit(
-            overloaded{
-                    [player_id, this](const MovementEvent& e) { handle_movement(player_id, e); },
-                    [player_id, this](const StopMovementEvent& e) {
-                        handle_stop_movement(player_id, e);
-                    },
-                    [player_id, this](const LeaveGameEvent&) { handle_leave_game(player_id); },
-                    [player_id, this](const QuitEvent&) { handle_leave_game(player_id); },
-                    [player_id, this](const RotationEvent& e) { handle_rotation(player_id, e); },
-                    [player_id, this](const PickRoleEvent& e) { handle_pick_role(player_id, e); },
-                    [player_id, this](const SwitchWeaponEvent& e) {
-                        handle_switch_weapon(player_id, e);
-                    },
-                    [player_id, this](const BuyEvent& e) { handle_buy_weapon(player_id, e); },
-                    [this](const DropWeaponEvent&) {},
-                    [player_id, this](const UseWeaponEvent&) { handle_use_weapon(player_id); },
-                    [player_id, this](const StopUsingWeaponEvent&) {
-                        handle_stop_using_weapon(player_id);
-                    },
-                    [player_id, this](const DefuseBombEvent&) {
-                        handle_start_defusing_bomb(player_id);
-                    },
-                    [player_id, this](const StopDefusingBombEvent&) {
-                        handle_stop_defusing_bomb(player_id);
-                    },
-                    [player_id, this](const ReloadWeaponEvent&) { handle_reload(player_id); },
-                    [player_id, this](const StopReloadingEvent&) {
-                        handle_stop_reloading(player_id);
-                    },
-                    [this](const BuyAmmoEvent&) {}},
             overloaded{
                     [player_id, this](const MovementEvent& e) { handle_movement(player_id, e); },
                     [player_id, this](const StopMovementEvent& e) {
