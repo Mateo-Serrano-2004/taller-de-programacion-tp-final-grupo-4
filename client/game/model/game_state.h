@@ -5,7 +5,6 @@
 #include <list>
 #include <map>
 
-#include "animation/muzzle_fire_animation.h"
 #include "common/definitions.h"
 #include "common/team.h"
 #include "render/camera.h"
@@ -22,6 +21,7 @@ class GameStateManager;
 namespace View {
 class RenderedPlayer;
 class MuzzleFireAnimation;
+class WinnerTeamMessageAnimation;
 };  // namespace View
 
 namespace Model {
@@ -29,6 +29,7 @@ struct GameState {
 public:
     std::map<short_id_t, Shared<View::RenderedPlayer>> players;
     std::list<Shared<View::MuzzleFireAnimation>> fires;
+    Shared<View::WinnerTeamMessageAnimation> winner_message;
     View::Camera camera;
     Shared<SDL2pp::Texture> map;
     Maybe<short_id_t> reference_player_id;

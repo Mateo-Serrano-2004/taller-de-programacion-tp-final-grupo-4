@@ -31,6 +31,7 @@ protected:
     Shared<Controller::GameStateManager> game_state_manager;
     Shared<SDL2pp::Font> font;
 
+    void render_winner_message(const Model::GameState& game_state, uint8_t frames);
     void render_fov(const Model::GameState& game_state);
     void render_muzzle_fires(const Model::GameState& game_state, uint8_t frames);
     bool render_players(const Model::GameState& game_state);

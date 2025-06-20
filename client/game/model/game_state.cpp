@@ -7,6 +7,7 @@
 #include <SDL2pp/Point.hh>
 
 #include "animation/muzzle_fire_animation.h"
+#include "animation/winner_team_message_animation.h"
 #include "model/rendered_player.h"
 
 Model::GameState::GameState():
@@ -21,6 +22,7 @@ Model::GameState::GameState():
 Model::GameState::GameState(const GameState& other):
         players(other.players),
         fires(other.fires),
+        winner_message(other.winner_message),
         camera(other.camera),
         map(other.map),
         reference_player_id(other.reference_player_id),

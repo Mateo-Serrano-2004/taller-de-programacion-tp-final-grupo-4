@@ -13,6 +13,8 @@
 #include <SDL2pp/Texture.hh>
 #include <SDL2pp/Point.hh>
 
+#include "animation/muzzle_fire_animation.h"
+#include "animation/winner_team_message_animation.h"
 #include "common/DTO/game_state_dto.h"
 #include "common/model/player.h"
 #include "controller/game_controller.h"
@@ -59,6 +61,8 @@ void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
     game_state->fires.remove_if(
             [](Shared<View::MuzzleFireAnimation>& a) { return a->has_ended(); });
     game_state->fires.splice(game_state->fires.end(), new_game_state->fires);
+    if (game_state->winner_message && game_state->winner_message->has_ended())
+        game_state->winner_message = nullptr;
 
     game_state->time_left = game_state_dto.round.time_left;
     if (game_state_dto.round.bomb_planted && !game_state->bomb_position.has_value()) {
@@ -75,4 +79,11 @@ void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
     game_state->second_team_victories = game_state_dto.tt_rounds_won;
     game_state->round_winner = game_state_dto.round.winner;
     game_state->game_winner = game_state_dto.winner;
+
+    if (game_state_dto.round.ended) {
+        std::cout << "END OF ROUND\n";
+        game_state->winner_message = make_shared<View::WinnerTeamMessageAnimation>(
+            controller, game_state->round_winner
+        );
+    }
 }

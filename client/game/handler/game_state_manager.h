@@ -5,7 +5,6 @@
 #include <map>
 #include <mutex>
 
-#include "animation/muzzle_fire_animation.h"
 #include "asset/texture_id.h"
 #include "common/definitions.h"
 #include "render/camera.h"

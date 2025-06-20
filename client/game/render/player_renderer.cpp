@@ -17,6 +17,7 @@
 #include <SDL2pp/Window.hh>
 
 #include "animation/muzzle_fire_animation.h"
+#include "animation/winner_team_message_animation.h"
 #include "asset/asset_manager.h"
 #include "asset/font_id.h"
 #include "asset/texture_id.h"
@@ -26,6 +27,13 @@
 #include "model/rendered_player.h"
 
 #include "camera.h"
+
+void View::PlayerRenderer::render_winner_message(const Model::GameState& game_state, uint8_t frames) {
+    if (game_state.winner_message) {
+        std::cout << "WINNER MESSAGE\n";
+        game_state.winner_message->step(frames);
+    }
+}
 
 void View::PlayerRenderer::render_fov(const Model::GameState& game_state) {
     auto viewport = game_state.camera.get_viewport();
@@ -146,4 +154,5 @@ void View::PlayerRenderer::render(const Model::GameState& game_state, uint8_t fr
     render_muzzle_fires(game_state, frames);
     if (render_ref_player)
         render_fov(game_state);
+    render_winner_message(game_state, frames);
 }
