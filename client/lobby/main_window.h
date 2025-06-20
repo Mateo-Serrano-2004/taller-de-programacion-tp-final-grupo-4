@@ -2,6 +2,10 @@
 #define MAIN_WINDOW_H
 
 #include <QMainWindow>
+#include <QMediaPlayer>
+#include <QMediaPlaylist>
+#include <QAudioOutput>
+#include <QDir>
 
 #include "client/net/client_protocol.h"
 #include "common/definitions.h"
@@ -40,8 +44,17 @@ private:
     GameCreationScene* gameCreationScene = nullptr;
     JoinGameScene* joinGameScene = nullptr;
     Shared<Net::ClientProtocol> protocol = nullptr;
+
+    std::string host;
+    std::string port;
+    std::string username;
+
+    QMediaPlayer* musicPlayer = nullptr;
+    QAudioOutput* audioOutput = nullptr;
+
     void setUpWindow();
 
+    void connectToServer();
     void clearCurrentScene();
     void showLobbyScene();
     void showWelcomeScene();

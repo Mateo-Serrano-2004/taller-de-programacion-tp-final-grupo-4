@@ -21,10 +21,25 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWin
     setUpWindow();
 }
 
-MainWindow::~MainWindow() { delete ui; }
+MainWindow::~MainWindow() {
+    delete ui;
+    delete musicPlayer;
+    delete audioOutput;
+}
+
+void MainWindow::connectToServer() {
+    protocol = make_shared<Net::ClientProtocol>(host, port);
+    auto usernameEvent = make_shared<Model::UsernameEvent>(username);
+    protocol->send_event(usernameEvent->as_dto());
+}
 
 void MainWindow::runGame() {
     this->hide();
+    
+    if (musicPlayer) {
+        musicPlayer->pause();
+    }
+    
     try {
         App::CS2DApp game(protocol);
         game.launch();
@@ -33,6 +48,7 @@ void MainWindow::runGame() {
         QApplication::quit();
         return;
     }
+    connectToServer();
     this->show();
     showLobbyScene();
 }
@@ -67,10 +83,10 @@ void MainWindow::showWelcomeScene() {
             // [this](QString username, QString ip, QString port) {
             [this]() {
                 // protocol = new Net::ClientProtocol(ip.toStdString(), port.toStdString());
-                std::string username = "user";
-                protocol = make_shared<Net::ClientProtocol>("localhost", "9000");
-                auto usernameEvent = make_shared<Model::UsernameEvent>(username);
-                protocol->send_event(usernameEvent->as_dto());
+                host = "localhost";
+                port = "9000";
+                username = "user";
+                connectToServer();
 
                 showLobbyScene();
             },
@@ -85,6 +101,10 @@ void MainWindow::showLobbyScene() {
             Qt::QueuedConnection);
     connect(lobbyScene, &LobbyScene::joinClicked, this, &MainWindow::showJoinGameScene,
             Qt::QueuedConnection);
+    
+    if (musicPlayer) {
+        musicPlayer->play();
+    }
 }
 
 void MainWindow::showGameCreationScene() {
@@ -156,6 +176,19 @@ void MainWindow::setUpWindow() {
     ui->mainView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->mainView->setRenderHint(QPainter::SmoothPixmapTransform);
     ui->mainView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+
+    musicPlayer = new QMediaPlayer(this);
+    audioOutput = new QAudioOutput(QAudioFormat(), this);
+
+    QString musicPath = QDir::currentPath() + "/assets/sfx/menu.wav";
+    QUrl musicUrl = QUrl::fromLocalFile(musicPath);
+
+    musicPlayer->setMedia(musicUrl);
+    musicPlayer->setVolume(40);
+    musicPlayer->setPlaylist(new QMediaPlaylist());
+    musicPlayer->playlist()->addMedia(musicUrl);
+    musicPlayer->playlist()->setPlaybackMode(QMediaPlaylist::Loop);
+    musicPlayer->play();
 
     showWelcomeScene();
 
