@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Desinstalar Counter Strike 2D
+Comment=Desinstalador de Counter Strike 2D
+Exec=bash -c "cd \"$(dirname \"%f\")\" && ./installers/uninstall.sh"
+Icon=utilities-terminal
+Terminal=true
+Categories=System;Settings;
+StartupNotify=true 

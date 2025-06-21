@@ -30,6 +30,33 @@ Counter Strike 2D es un juego multijugador en 2D inspirado en Counter-Strike. Pe
 
 ## Guía de Instalación
 
+El proyecto incluye un instalador automático que configura todo el entorno del sistema:
+
+### Opción 1: Doble Click (Recomendado)
+- **Doble click en**: "Instalar Counter Strike 2D.desktop"
+- **O doble click en**: "Desinstalar Counter Strike 2D.desktop" (para desinstalar)
+
+### Opción 2: Desde Terminal
+```bash
+# Instalar (requiere permisos de administrador)
+sudo ./installers/install.sh
+
+# Desinstalar (requiere permisos de administrador)
+sudo ./installers/uninstall.sh
+```
+
+**El instalador automático:**
+- Descarga e instala todas las dependencias (SDL2, Qt5, yaml-cpp, etc.)
+- Compila el proyecto completo
+- Ejecuta tests unitarios
+- Instala binarios en `/usr/bin/`
+- Instala assets en `/var/cs2d/`
+- Instala configuración en `/etc/cs2d/`
+- Genera accesos directos en el escritorio
+- Configura permisos de ejecución automáticamente
+
+**Nota:** El instalador requiere permisos de administrador para instalar en el sistema.
+
 ## Guía de Uso
 
 ### Servidor
@@ -37,7 +64,7 @@ Counter Strike 2D es un juego multijugador en 2D inspirado en Counter-Strike. Pe
 Para ejecutar el servidor:
 
 ```bash
-./cs2d_server <puerto>
+cs2d_server <puerto>
 ```
 
 **Comandos del servidor:**
@@ -46,7 +73,7 @@ Para ejecutar el servidor:
 
 **Ejemplo:**
 ```bash
-./cs2d_server 8080
+cs2d_server 8080
 ```
 
 ### Cliente
@@ -123,8 +150,13 @@ Counter-Strike-2D/
 ├── common/          # Código compartido entre cliente y servidor
 ├── docs/            # Documentación del proyecto
 ├── editor/          # Editor de mapas Qt
+├── installers/      # Scripts de instalación
+│   ├── install.sh   # Instalador automático
+│   └── uninstall.sh # Desinstalador
 ├── server/          # Código del servidor
-└── tests/           # Tests unitarios
+├── tests/           # Tests unitarios
+├── Instalar Counter Strike 2D.desktop      # Acceso directo instalador
+└── Desinstalar Counter Strike 2D.desktop   # Acceso directo desinstalador
 ```
 
 ## Documentación
