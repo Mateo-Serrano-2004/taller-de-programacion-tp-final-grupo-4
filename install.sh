@@ -37,6 +37,8 @@ command_exists() {
 install_sdl2_from_source() {
     print_status "Descargando e instalando SDL2 desde fuente..."
     
+    local original_dir=$(pwd)
+    
     mkdir -p /tmp/sdl2_build
     cd /tmp/sdl2_build
     
@@ -88,8 +90,8 @@ install_sdl2_from_source() {
     sudo make install
     sudo ldconfig
     
-    cd /
     rm -rf /tmp/sdl2_build
+    cd "$original_dir"
     
     print_success "SDL2 instalado desde fuente"
 }
