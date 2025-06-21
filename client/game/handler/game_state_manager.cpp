@@ -68,6 +68,9 @@ void Controller::GameStateManager::update(DTO::GameStateDTO& game_state_dto) {
         auto pos = game_state_dto.round.bomb_position;
         game_state->bomb_position = SDL2pp::Point(pos.get_x(), pos.get_y());
     }
+    if (game_state_dto.round.bomb_defused || game_state_dto.round.state != RoundState::Active) {
+        game_state->bomb_position = std::nullopt;
+    }
     auto ref_player = game_state->get_reference_player();
     if (ref_player) {
         auto reference_player_position = ref_player->get_position();
