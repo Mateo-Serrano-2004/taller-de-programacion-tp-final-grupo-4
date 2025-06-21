@@ -80,15 +80,15 @@ void MainWindow::showWelcomeScene() {
     ui->mainView->setScene(welcomeScene);
     connect(
             welcomeScene, &WelcomeScene::startClicked, this,
-            // [this](QString username, QString ip, QString port) {
-            [this]() {
-                //host = ip.toStdString();
-                //port = port.toStdString();
-                //username = username.toStdString();
+            [this](QString username, QString ip, QString port) {
+            // [this]() {
+                this->host = ip.toStdString();
+                this->port = port.toStdString();
+                this->username = username.toStdString();
 
-                host = "localhost";
-                port = "9000";
-                username = "user";
+                // host = "localhost";
+                // port = "9000";
+                // username = "user";
                 connectToServer();
 
                 showLobbyScene();

@@ -8,9 +8,9 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <QMessageBox>
 
 #include "../widgets/styled_button.h"
+#include "../widgets/error_dialog.h"
 
 GameCreationScene::GameCreationScene(QObject* parent):
         BackgroundScene(parent), mapListWidget(new QListWidget), gameNameInput(new QLineEdit) {
@@ -109,13 +109,13 @@ void GameCreationScene::setUpGameCreation() {
         QListWidgetItem* selectedItem = mapListWidget->currentItem();
         
         if (!isValidGameName(gameName)) {
-            QMessageBox::warning(nullptr, "Error", "Por favor, ingresa un nombre válido para la partida.");
+            ErrorDialog::showError("Por favor, ingresa un nombre válido para la partida.", this);
             gameNameInput->setFocus();
             return;
         }
         
         if (!selectedItem) {
-            QMessageBox::warning(nullptr, "Error", "Por favor, selecciona un mapa.");
+            ErrorDialog::showError("Por favor, selecciona un mapa.", this);
             return;
         }
         
