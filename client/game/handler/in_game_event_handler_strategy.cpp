@@ -4,6 +4,7 @@
 #include <memory>
 #include <utility>
 #include <iostream>
+#include <string>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/Point.hh>
@@ -60,7 +61,8 @@ void Controller::InGameEventHandlerStrategy::handle_current_game_state() {
     mouse_movement_handler.notify_current_rotation();
 }
 
-void Controller::InGameEventHandlerStrategy::update_on_switch_context() {
-    movement_handler.stop();
+void Controller::InGameEventHandlerStrategy::update_on_switch_context(const std::string& new_context_name) {
+    if (new_context_name != "stats")
+        movement_handler.stop();
     weapon_handler.stop();
 }

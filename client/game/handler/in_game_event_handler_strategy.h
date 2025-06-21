@@ -1,6 +1,7 @@
 #ifndef CLIENT_GAME_HANDLER_IN_GAME_EVENT_HANDLER_STRATEGY_H
 #define CLIENT_GAME_HANDLER_IN_GAME_EVENT_HANDLER_STRATEGY_H
 
+#include <string>
 #include <SDL2/SDL.h>
 
 #include "common/definitions.h"
@@ -27,7 +28,7 @@ public:
     void handle() override;
     void handle_current_game_state();
 
-    void update_on_switch_context();
+    void update_on_switch_context(const std::string& new_context_name);
 
     ~InGameEventHandlerStrategy() override = default;
 };

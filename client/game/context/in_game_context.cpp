@@ -8,6 +8,7 @@
 #include "common/model/player.h"
 #include "controller/game_controller.h"
 #include "handler/game_state_manager.h"
+#include "event/switch_context_event.h"
 #include "model/game_state.h"
 
 void Context::InGameContext::render(uint8_t frames) {
@@ -30,6 +31,7 @@ Context::InGameContext::InGameContext(Weak<Controller::GameController> controlle
 
 void Context::InGameContext::notify_event(Shared<Model::Event> event) {
     if (event->get_type() == Model::EventType::SWITCH_CONTEXT) {
-        strategy.update_on_switch_context();
+        auto switch_context_event = std::static_pointer_cast<Model::SwitchContextEvent>(event);
+        strategy.update_on_switch_context(switch_context_event->get_new_context_name());
     }
 }

@@ -23,7 +23,7 @@ void Controller::MovementHandler::on_vertical_stop() {
     controller_locked->push_event(
         make_shared<Model::StopMovementEvent>(false)
     );
-    moving_vertically = false;
+    Controller::MovementHandler::moving_vertically = false;
 }
 
 void Controller::MovementHandler::on_horizontal_stop() {
@@ -31,7 +31,7 @@ void Controller::MovementHandler::on_horizontal_stop() {
     controller_locked->push_event(
         make_shared<Model::StopMovementEvent>(true)
     );
-    moving_horizontally = false;
+    Controller::MovementHandler::moving_horizontally = false;
 }
 
 void Controller::MovementHandler::on_vertical_movement(SDL_Event& event) {
@@ -40,7 +40,7 @@ void Controller::MovementHandler::on_vertical_movement(SDL_Event& event) {
     controller_locked->push_event(
         make_shared<Model::MovementEvent>(0, key == SDLK_w ? -1 : 1)
     );
-    moving_vertically = true;
+    Controller::MovementHandler::moving_vertically = true;
 }
 
 void Controller::MovementHandler::on_horizontal_movement(SDL_Event& event) {
@@ -49,32 +49,30 @@ void Controller::MovementHandler::on_horizontal_movement(SDL_Event& event) {
     controller_locked->push_event(
         make_shared<Model::MovementEvent>(key == SDLK_a ? -1 : 1, 0)
     );
-    moving_horizontally = true;
+    Controller::MovementHandler::moving_horizontally = true;
 }
 
 void Controller::MovementHandler::update_movement_state(SDL_Event& event) {
     auto key = event.key.keysym.sym;
     if (event.type == SDL_KEYDOWN) {
-        if (!moving_vertically && (key == SDLK_w || key == SDLK_s)) {
+        if (!Controller::MovementHandler::moving_vertically && (key == SDLK_w || key == SDLK_s)) {
             on_vertical_movement(event); 
         }
-        if (!moving_horizontally && (key == SDLK_a || key == SDLK_d)) {
+        if (!Controller::MovementHandler::moving_horizontally && (key == SDLK_a || key == SDLK_d)) {
             on_horizontal_movement(event);
         }
     } else {
-        if (moving_vertically && (key == SDLK_w || key == SDLK_s)) {
+        if (Controller::MovementHandler::moving_vertically && (key == SDLK_w || key == SDLK_s)) {
             on_vertical_stop(); 
         }
-        if (moving_horizontally && (key == SDLK_a || key == SDLK_d)) {
+        if (Controller::MovementHandler::moving_horizontally && (key == SDLK_a || key == SDLK_d)) {
             on_horizontal_stop();
         }
     }
 }
 
 Controller::MovementHandler::MovementHandler(Weak<GameController> controller)
-: Controller::GameHandler(controller),
-  moving_horizontally(false),
-  moving_vertically(false) {
+: Controller::GameHandler(controller) {
     set_up_handled_types();
 }
 
@@ -90,8 +88,8 @@ bool Controller::MovementHandler::can_handle(SDL_Event& event) {
 }
 
 void Controller::MovementHandler::stop() {
-    if (moving_horizontally)
+    if (Controller::MovementHandler::moving_horizontally)
         on_horizontal_stop();
-    if (moving_vertically)
+    if (Controller::MovementHandler::moving_vertically)
         on_vertical_stop();
 }

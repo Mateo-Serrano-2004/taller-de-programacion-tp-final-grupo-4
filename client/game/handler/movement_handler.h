@@ -12,10 +12,10 @@ class GameController;
 
 class MovementHandler: public GameHandler {
 private:
+    inline static bool moving_horizontally = false;
+    inline static bool moving_vertically = false;
     std::unordered_set<Uint32> handled_types;
     std::unordered_set<SDL_Keycode> handled_codes;
-    bool moving_horizontally;
-    bool moving_vertically;
 
     void set_up_handled_types();
 
