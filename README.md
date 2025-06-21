@@ -1,16 +1,55 @@
 # Counter Strike 2D
 
-## Guía rápida para levantar el servidor
+<div align="center">
+  <img src="assets/gfx/logo.png" alt="Logo" width="600">
+</div>
 
-Para poder ejecutar el servidor se debe de hacer:
+## Descripción
+
+Counter Strike 2D es un juego multijugador en 2D inspirado en Counter-Strike. Permite a los jugadores crear y unirse a partidas, jugar en diferentes mapas, y utilizar un editor de mapas integrado para crear nuevos niveles.
+
+## Características
+
+- **Juego multijugador**: Soporte para múltiples jugadores simultáneos
+- **Editor de mapas**: Herramienta integrada para crear mapas personalizados
+- **Múltiples mapas**: Variedad de mapas predefinidos
+- **Sistema de armas**: Diferentes armas con características únicas
+- **Modo CT vs TT**: Equipos Counter-Terrorist vs Terrorist
+- **Interfaz gráfica**: Cliente con interfaz Qt
+
+## Requisitos del Sistema
+
+### Dependencias
+- **CMake** (versión 3.10 o superior)
+- **Qt5** (para el cliente y editor)
+- **yaml-cpp** (para parsing de configuración)
+- **Compilador C++** compatible con C++17
+
+### Sistema Operativo
+- Linux (desarrollado y probado en Ubuntu/WSL2)
+
+## Guía de Instalación
+
+## Guía de Uso
+
+### Servidor
+
+Para ejecutar el servidor:
 
 ```bash
-cs2d_server <port>
+./cs2d_server <puerto>
 ```
 
-Y en caso de querer cerrarlo solo se debe de ingresar la tecla "q".
+**Comandos del servidor:**
+- Presionar `q` para cerrar el servidor
+- El servidor cargará automáticamente los mapas disponibles
 
-## Guía rápida para el cliente
+**Ejemplo:**
+```bash
+./cs2d_server 8080
+```
+
+### Cliente
 
 Para ejecutar el cliente:
 
@@ -18,23 +57,34 @@ Para ejecutar el cliente:
 cs2d_client
 ```
 
-La pantalla de bienvenida te va a pedir que ingreses el username, la ip y el puerto.
+#### Pantalla de Conexión
+La pantalla de bienvenida solicita:
+- **Username**: Nombre del jugador
+- **IP**: Dirección del servidor
+- **Puerto**: Puerto del servidor
 
-<img src="docs/pics/cliente1.png" alt="Pantalla del editor" width="700">
+<img src="docs/pics/cliente1.png" alt="Pantalla de conexión" width="700">
 
-Una vez dentro vas a poder elegir entre crear y unirte a una partida.
+#### Lobby Principal
+Una vez conectado, puedes elegir entre crear una nueva partida o unirte a una existente.
 
-<img src="docs/pics/cliente2.png" alt="Pantalla del editor" width="700">
+<img src="docs/pics/cliente2.png" alt="Lobby principal" width="700">
 
-Cuando quieras crear una partida vas a poder ver todos los mapas disponibles, para seleccionar y luego ponerle nombre a la partida.
+#### Crear Partida
+Al crear una partida puedes:
+- Seleccionar entre todos los mapas disponibles
+- Asignar un nombre personalizado a la partida
 
-<img src="docs/pics/cliente3.png" alt="Pantalla del editor" width="700">
+<img src="docs/pics/cliente3.png" alt="Crear partida" width="700">
 
-En caso de que quieras unirte a una partida existente, tocas el otro botón y seleccionas la partida a la que te quieras unir.
+#### Unirse a Partida
+Para unirte a una partida existente:
+- Selecciona la partida de la lista disponible
+- El sistema te asignará automáticamente un equipo (CT/TT)
 
-<img src="docs/pics/cliente4.png" alt="Pantalla del editor" width="700">
+<img src="docs/pics/cliente4.png" alt="Unirse a partida" width="700">
 
-## Guía rápida del Editor de Mapas
+### Editor de Mapas
 
 Para ejecutar el editor:
 
@@ -42,32 +92,53 @@ Para ejecutar el editor:
 cs2d_editor
 ```
 
-Apenas se inicia el editor se podrá ver una ventana como esta:
+#### Pantalla Principal
+Al iniciar el editor verás la ventana principal:
 
 <img src="docs/pics/editor1.png" alt="Pantalla principal del editor" width="700">
 
-Una vez se ingresa, pasaremos a ver esta otra:
+#### Interfaz del Editor
+La interfaz del editor incluye una grilla de edición y panel de assets:
 
-<img src="docs/pics/editor2.png" alt="Pantalla del editor" width="700">
+<img src="docs/pics/editor2.png" alt="Interfaz del editor" width="700">
 
-Y que cuenta con estas funcionalidades:
+#### Funcionalidades del Editor
 
-- **Click izquierdo sobre la grilla:** Coloca el asset seleccionado en la celda.
-- **Arrastrar asset desde la lista a la grilla:** Coloca el asset en la celda donde lo sueltes.
-- **Click derecho sobre la grilla:** Elimina el asset de la celda.
-- **Click y arrastrar (manteniendo click izquierdo) sobre la grilla:** Pinta varias celdas seguidas con el asset seleccionado.
-- **Click y arrastrar (manteniendo click derecho) sobre la grilla:** Borra varias celdas seguidas.
-- **Click con la ruedita del mouse sobre la grilla:** Selecciona automáticamente el asset que está en esa celda (lo marca en la lista de la derecha).
-- **Mantener Ctrl y girar la ruedita del mouse sobre la grilla:** Hace zoom in/out en la grilla.
+| Acción | Descripción |
+|--------|-------------|
+| **Click izquierdo** | Coloca el asset seleccionado en la celda |
+| **Arrastrar asset** | Coloca el asset en la celda donde lo sueltes |
+| **Click derecho** | Elimina el asset de la celda |
+| **Click y arrastrar (izquierdo)** | Pinta varias celdas seguidas |
+| **Click y arrastrar (derecho)** | Borra varias celdas seguidas |
+| **Click con ruedita** | Selecciona automáticamente el asset de la celda |
+| **Ctrl + ruedita** | Zoom in/out en la grilla |
+
+## Estructura del Proyecto
+
+```
+Counter-Strike-2D/
+├── assets/          # Recursos gráficos y de sonido
+├── client/          # Código del cliente Qt y SDL
+├── common/          # Código compartido entre cliente y servidor
+├── docs/            # Documentación del proyecto
+├── editor/          # Editor de mapas Qt
+├── server/          # Código del servidor
+└── tests/           # Tests unitarios
+```
+
+## Documentación
+
+- **[Documentación Técnica](docs/Documentación%20Técnica.md)**: Arquitectura y estructura técnica del servidor
+- **[Manual del Proyecto](docs/Manual%20del%20Proyecto.md)**: Documentación de organización del proyecto
 
 ## Créditos
 
-[Librería de sockets](https://github.com/eldipa/sockets-en-cpp) (GPL v2) - Autor: **@eldipa**
-
-[Thread](https://github.com/eldipa/hands-on-threads/blob/master/libs/thread.h) (GPL v2) - Autor: **@eldipa**
-
-[Queue](https://github.com/eldipa/hands-on-threads/blob/master/libs/queue.h) (GPL v2) - Autor: **@eldipa**
+### Librerías Utilizadas
+- **[Librería de sockets](https://github.com/eldipa/sockets-en-cpp)** (GPL v2) - Autor: **@eldipa**
+- **[Thread](https://github.com/eldipa/hands-on-threads/blob/master/libs/thread.h)** (GPL v2) - Autor: **@eldipa**
+- **[Queue](https://github.com/eldipa/hands-on-threads/blob/master/libs/queue.h)** (GPL v2) - Autor: **@eldipa**
 
 ## Licencia
 
-GPL v2
+Este proyecto está licenciado bajo **GPL v2**.

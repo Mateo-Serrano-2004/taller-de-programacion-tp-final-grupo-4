@@ -154,7 +154,7 @@ Refactor al protocolo y a la queue del sender del cliente, para poder mandar cua
 
 **Mateo Serrano**:
 
-- *COMPLETAR*
+Se incluyen algunas animaciones, eventos y manejo de disparos, entre otros features.
 
 ---
 
@@ -162,7 +162,7 @@ Refactor al protocolo y a la queue del sender del cliente, para poder mandar cua
 
 **Camila Mantilla**:
 
-- *COMPLETAR*
+Armado de la documentación del proyecto.
 
 **Jonathan Dominguez**:
 
@@ -174,4 +174,8 @@ Implementación completa de los test y arreglo de errores. Y ayuda en el armado 
 
 **Mateo Serrano**:
 
-- *COMPLETAR*
+Se añade el mapa, nuevas animaciones, tablero de estadísticas, configuración, sonidos.
+
+## Features sin completar
+
+- El editor no puede crear mapas con armas.
