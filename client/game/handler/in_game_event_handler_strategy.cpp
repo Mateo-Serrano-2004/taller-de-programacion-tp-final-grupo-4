@@ -3,6 +3,7 @@
 #include <cmath>
 #include <memory>
 #include <utility>
+#include <iostream>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/Point.hh>
@@ -25,36 +26,6 @@
 
 #include "game_state_manager.h"
 
-void Controller::InGameEventHandlerStrategy::handle_switch_weapon_event() {
-    if (handler_state.switching_weapon)
-        return;
-
-    Shared<Model::SwitchWeaponEvent> switch_weapon_event;
-    auto key_symbol = current_event.key.keysym.sym;
-
-    Model::SlotID slot_id;
-
-    switch (key_symbol) {
-        case SDLK_1:
-            slot_id = Model::SlotID::PRIMARY_WEAPON;
-            break;
-        case SDLK_2:
-            slot_id = Model::SlotID::SECONDARY_WEAPON;
-            break;
-        case SDLK_3:
-            slot_id = Model::SlotID::KNIFE_SLOT;
-            break;
-        case SDLK_4:
-            slot_id = Model::SlotID::BOMB_SLOT;
-            break;
-    }
-
-    handler_state.switching_weapon = true;
-    switch_weapon_event = make_shared<Model::SwitchWeaponEvent>(slot_id);
-
-    controller.lock()->push_event(std::move(switch_weapon_event));
-}
-
 void Controller::InGameEventHandlerStrategy::handle_switch_context_event() {
     auto key_symbol = current_event.key.keysym.sym;
     if (key_symbol == SDLK_ESCAPE) {
@@ -66,59 +37,10 @@ void Controller::InGameEventHandlerStrategy::handle_switch_context_event() {
     }
 }
 
-void Controller::InGameEventHandlerStrategy::handle_stop_switching_weapon_event() {
-    handler_state.switching_weapon = false;
-}
-
-void Controller::InGameEventHandlerStrategy::handle_defuse_bomb() {
-    if (handler_state.is_defusing)
-        return;
-    controller.lock()->push_event(make_shared<Model::DefuseBombEvent>());
-    handler_state.is_defusing = true;
-}
-
-void Controller::InGameEventHandlerStrategy::handle_stop_defusing_bomb() {
-    if (!handler_state.is_defusing)
-        return;
-    controller.lock()->push_event(make_shared<Model::StopDefusingBombEvent>());
-    handler_state.is_defusing = false;
-}
-
-void Controller::InGameEventHandlerStrategy::handle_click() {
-    if (handler_state.is_shooting)
-        return;
-    auto use_weapon_event = make_shared<Model::UseWeaponEvent>();
-    handler_state.is_shooting = true;
-    controller.lock()->push_event(std::move(use_weapon_event));
-}
-
-void Controller::InGameEventHandlerStrategy::handle_click_release() {
-    if (!handler_state.is_shooting)
-        return;
-    auto stop_using_weapon_event = make_shared<Model::StopUsingWeaponEvent>();
-    handler_state.is_shooting = false;
-    controller.lock()->push_event(std::move(stop_using_weapon_event));
-}
-
 void Controller::InGameEventHandlerStrategy::handle_keydown_event() {
     auto key_symbol = current_event.key.keysym.sym;
-    if (key_symbol == SDLK_e) {
-        handle_defuse_bomb();
-    } else if (key_symbol == SDLK_ESCAPE || key_symbol == SDLK_b) {
+    if (key_symbol == SDLK_ESCAPE || key_symbol == SDLK_b) {
         handle_switch_context_event();
-    } else if (key_symbol == SDLK_1 || key_symbol == SDLK_2 || key_symbol == SDLK_3 ||
-               key_symbol == SDLK_4) {
-        handle_switch_weapon_event();
-    }
-}
-
-void Controller::InGameEventHandlerStrategy::handle_keyup_event() {
-    auto key_symbol = current_event.key.keysym.sym;
-    if (key_symbol == SDLK_e) {
-        handle_stop_defusing_bomb();
-    } else if (key_symbol == SDLK_1 || key_symbol == SDLK_2 || key_symbol == SDLK_3 ||
-               key_symbol == SDLK_4) {
-        handle_stop_switching_weapon_event();
     }
 }
 
@@ -126,24 +48,22 @@ Controller::InGameEventHandlerStrategy::InGameEventHandlerStrategy(
         Weak<Controller::GameController> controller):
         Controller::EventHandlerStrategy(controller),
         game_state_manager(controller.lock()->get_game_state_manager()),
-        movement_handler(controller) {}
+        movement_handler(controller),
+        weapon_handler(controller) {}
 
 void Controller::InGameEventHandlerStrategy::handle() {
     Controller::EventHandlerStrategy::handle();
 
     if (movement_handler.can_handle(current_event))
         movement_handler.handle(current_event);
+    else if (weapon_handler.can_handle(current_event)) {
+        weapon_handler.handle(current_event);
+    }
     else {
         auto event_type = current_event.type;
 
         if (event_type == SDL_KEYDOWN) {
             handle_keydown_event();
-        } else if (event_type == SDL_KEYUP) {
-            handle_keyup_event();
-        } else if (event_type == SDL_MOUSEBUTTONDOWN) {
-            handle_click();
-        } else if (event_type == SDL_MOUSEBUTTONUP) {
-            handle_click_release();
         }
     }
 }
@@ -175,15 +95,6 @@ void Controller::InGameEventHandlerStrategy::handle_current_game_state() {
 }
 
 void Controller::InGameEventHandlerStrategy::update_on_switch_context() {
-    auto locked_controller = controller.lock();
     movement_handler.stop();
-    if (handler_state.is_shooting) {
-        locked_controller->push_event(std::move(make_shared<Model::StopUsingWeaponEvent>()));
-        handler_state.is_shooting = false;
-    }
-    if (handler_state.is_defusing) {
-        locked_controller->push_event(std::move(make_shared<Model::StopDefusingBombEvent>()));
-        handler_state.is_defusing = false;
-    }
-    handler_state.switching_weapon = false;
+    weapon_handler.stop();
 }

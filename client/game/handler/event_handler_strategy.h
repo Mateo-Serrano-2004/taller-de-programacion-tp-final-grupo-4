@@ -22,7 +22,7 @@ public:
     explicit EventHandlerStrategy(Weak<BaseController> controller);
 
     virtual void handle();
-    void dispatch();
+    virtual void dispatch();
 
     virtual ~EventHandlerStrategy() = default;
 };
