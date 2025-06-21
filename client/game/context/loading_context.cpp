@@ -1,7 +1,5 @@
 #include "loading_context.h"
 
-#include <SDL2/SDL.h>
-
 #include "controller/game_controller.h"
 
 void Context::LoadingContext::render(uint8_t) {
@@ -9,9 +7,7 @@ void Context::LoadingContext::render(uint8_t) {
 }
 
 void Context::LoadingContext::dispatch_events() {
-    while (SDL_PollEvent(&placeholder)) {
-        strategy.handle(make_shared<SDL_Event>(placeholder));
-    }
+    strategy.dispatch();
 }
 
 Context::LoadingContext::LoadingContext(Weak<Controller::GameController> controller)

@@ -3,7 +3,6 @@
 #include <cstdint>
 #include <memory>
 
-#include <SDL2/SDL.h>
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Renderer.hh>
 
@@ -27,9 +26,7 @@ void Context::MenuContext::render(uint8_t frames) {
 }
 
 void Context::MenuContext::dispatch_events() {
-    while (SDL_PollEvent(&placeholder)) {
-        strategy.handle(make_shared<SDL_Event>(placeholder));
-    }
+    strategy.dispatch();
 }
 
 void Context::MenuContext::build_button(View::Button& button) {

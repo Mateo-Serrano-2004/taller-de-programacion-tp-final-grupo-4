@@ -9,8 +9,8 @@
 #include "controller/game_controller.h"
 #include "event/switch_context_event.h"
 
-void Controller::ShopEventHandlerStrategy::handle_switch_context_event(Shared<SDL_Event> event) {
-    auto key_symbol = event->key.keysym.sym;
+void Controller::ShopEventHandlerStrategy::handle_switch_context_event() {
+    auto key_symbol = current_event.key.keysym.sym;
 
     if (key_symbol == SDLK_ESCAPE) {
         auto switch_to_menu = make_shared<Model::SwitchContextEvent>("menu");
@@ -21,21 +21,21 @@ void Controller::ShopEventHandlerStrategy::handle_switch_context_event(Shared<SD
     }
 }
 
-void Controller::ShopEventHandlerStrategy::handle_click(Shared<SDL_Event> event) {
-    context->trigger_buttons(event);
+void Controller::ShopEventHandlerStrategy::handle_click() {
+    context->trigger_buttons(make_shared<SDL_Event>(current_event));
 }
 
 Controller::ShopEventHandlerStrategy::ShopEventHandlerStrategy(Weak<GameController> controller,
                                                                Context::ShopContext* context):
         Controller::EventHandlerStrategy(controller), context(context) {}
 
-void Controller::ShopEventHandlerStrategy::handle(Shared<SDL_Event> event) {
-    Controller::EventHandlerStrategy::handle(event);
-    auto event_type = event->type;
+void Controller::ShopEventHandlerStrategy::handle() {
+    Controller::EventHandlerStrategy::handle();
+    auto event_type = current_event.type;
 
     if (event_type == SDL_KEYDOWN) {
-        handle_switch_context_event(event);
+        handle_switch_context_event();
     } else if (event_type == SDL_MOUSEBUTTONDOWN) {
-        handle_click(event);
+        handle_click();
     }
 }

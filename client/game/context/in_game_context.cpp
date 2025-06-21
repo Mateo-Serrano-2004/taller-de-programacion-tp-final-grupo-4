@@ -4,8 +4,6 @@
 #include <functional>
 #include <memory>
 
-#include <SDL2/SDL.h>
-
 #include "common/event_type.h"
 #include "common/model/player.h"
 #include "controller/game_controller.h"
@@ -19,22 +17,19 @@ void Context::InGameContext::render(uint8_t frames) {
 }
 
 void Context::InGameContext::dispatch_events() {
-    while (SDL_PollEvent(&placeholder)) {
-        event_handler_strategy.handle(make_shared<SDL_Event>(placeholder));
-    }
-
-    event_handler_strategy.handle_current_game_state();
+    strategy.dispatch();
+    strategy.handle_current_game_state();
 }
 
 Context::InGameContext::InGameContext(Weak<Controller::GameController> controller):
         Context::BaseContext("in-game", controller),
         player_renderer(controller),
         hud_renderer(controller),
-        event_handler_strategy(controller),
+        strategy(controller),
         game_state_manager(controller.lock()->get_game_state_manager()) {}
 
 void Context::InGameContext::notify_event(Shared<Model::Event> event) {
     if (event->get_type() == Model::EventType::SWITCH_CONTEXT) {
-        event_handler_strategy.update_on_switch_context();
+        strategy.update_on_switch_context();
     }
 }

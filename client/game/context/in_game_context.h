@@ -3,8 +3,6 @@
 
 #include <cstdint>
 
-#include <SDL2/SDL.h>
-
 #include "common/definitions.h"
 #include "entity/pane.h"
 #include "event/event.h"
@@ -22,10 +20,9 @@ class GameStateManager;
 namespace Context {
 class InGameContext: public BaseContext {
 protected:
-    SDL_Event placeholder;
     View::PlayerRenderer player_renderer;
     View::HUDRenderer hud_renderer;
-    Controller::InGameEventHandlerStrategy event_handler_strategy;
+    Controller::InGameEventHandlerStrategy strategy;
     Shared<Controller::GameStateManager> game_state_manager;
 
     void render(uint8_t frames) override;

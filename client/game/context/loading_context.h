@@ -1,8 +1,6 @@
 #ifndef CLIENT_GAME_CONTEXT_LOADING_CONTEXT_H
 #define CLIENT_GAME_CONTEXT_LOADING_CONTEXT_H
 
-#include <SDL2/SDL.h>
-
 #include "common/definitions.h"
 #include "entity/vertical_pane.h"
 #include "entity/label.h"
@@ -17,7 +15,6 @@ class GameController;
 namespace Context {
 class LoadingContext: public BaseContext {
 protected:
-    SDL_Event placeholder;
     Controller::EventHandlerStrategy strategy;
     View::VerticalPane viewport;
     View::Label label;

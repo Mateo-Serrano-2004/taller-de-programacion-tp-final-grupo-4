@@ -3,8 +3,6 @@
 
 #include <cstdint>
 
-#include <SDL2/SDL.h>
-
 #include "asset/texture_id.h"
 #include "common/definitions.h"
 #include "common/team.h"
@@ -29,7 +27,6 @@ private:
     void trigger_buttons(Shared<SDL_Event> event);
 
 protected:
-    SDL_Event placeholder;
     Model::TeamID current_team;
     Controller::PickRoleEventHandlerStrategy strategy;
     View::VerticalPane vertical_pane;

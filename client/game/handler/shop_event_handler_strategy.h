@@ -16,13 +16,13 @@ class ShopEventHandlerStrategy: public EventHandlerStrategy {
 private:
     Context::ShopContext* context;
 
-    void handle_switch_context_event(Shared<SDL_Event> event) override;
-    void handle_click(Shared<SDL_Event> event);
+    void handle_switch_context_event() override;
+    void handle_click();
 
 public:
     ShopEventHandlerStrategy(Weak<GameController> controller, Context::ShopContext* context);
 
-    void handle(Shared<SDL_Event> event) override;
+    void handle() override;
 
     ~ShopEventHandlerStrategy() override = default;
 };

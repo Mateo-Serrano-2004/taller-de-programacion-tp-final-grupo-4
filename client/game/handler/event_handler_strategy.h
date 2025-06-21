@@ -10,18 +10,19 @@ class BaseController;
 
 class EventHandlerStrategy {
 protected:
-    SDL_Event placeholder;
+    SDL_Event current_event;
     Weak<BaseController> controller;
 
     void handle_quit_event();
 
     // Empty implementation for dummy handlers
-    virtual void handle_switch_context_event(Shared<SDL_Event> event);
+    virtual void handle_switch_context_event();
 
 public:
     explicit EventHandlerStrategy(Weak<BaseController> controller);
 
-    virtual void handle(Shared<SDL_Event> event);
+    virtual void handle();
+    void dispatch();
 
     virtual ~EventHandlerStrategy() = default;
 };

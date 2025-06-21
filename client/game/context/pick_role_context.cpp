@@ -4,7 +4,6 @@
 #include <memory>
 #include <utility>
 
-#include <SDL2/SDL.h>
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Rect.hh>
 #include <SDL2pp/Renderer.hh>
@@ -70,9 +69,7 @@ void Context::PickRoleContext::render(uint8_t) {
 }
 
 void Context::PickRoleContext::dispatch_events() {
-    while (SDL_PollEvent(&placeholder)) {
-        strategy.handle(make_shared<SDL_Event>(placeholder));
-    }
+    strategy.dispatch();
 }
 
 Context::PickRoleContext::PickRoleContext(Weak<Controller::GameController> controller):

@@ -23,15 +23,15 @@ protected:
     SDL_Event placeholder;
     Context::MenuContext* context;
 
-    void handle_switch_context_event(Shared<SDL_Event> event) override;
+    void handle_switch_context_event() override;
 
-    void handle_click(Shared<SDL_Event> event);
-    void handle_keydown_event(Shared<SDL_Event> event);
+    void handle_click();
+    void handle_keydown_event();
 
 public:
     MenuEventHandlerStrategy(Weak<GameController> controller, Context::MenuContext* context);
 
-    void handle(Shared<SDL_Event> event) override;
+    void handle() override;
 
     ~MenuEventHandlerStrategy() override = default;
 };

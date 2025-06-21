@@ -18,11 +18,11 @@ protected:
 
     Model::HandlerState handler_state;
 
-    void handle_movement_event(Shared<SDL_Event> event);
-    void handle_switch_weapon_event(Shared<SDL_Event> event);
-    void handle_switch_context_event(Shared<SDL_Event> event) override;
+    void handle_movement_event();
+    void handle_switch_weapon_event();
+    void handle_switch_context_event() override;
 
-    void handle_stop_movement_event(Shared<SDL_Event> event);
+    void handle_stop_movement_event();
     void handle_stop_switching_weapon_event();
 
     void handle_defuse_bomb();
@@ -31,13 +31,13 @@ protected:
     void handle_click();
     void handle_click_release();
 
-    void handle_keydown_event(Shared<SDL_Event> event);
-    void handle_keyup_event(Shared<SDL_Event> event);
+    void handle_keydown_event();
+    void handle_keyup_event();
 
 public:
     explicit InGameEventHandlerStrategy(Weak<GameController> controller);
 
-    void handle(Shared<SDL_Event> event) override;
+    void handle() override;
     void handle_current_game_state();
 
     void update_on_switch_context();

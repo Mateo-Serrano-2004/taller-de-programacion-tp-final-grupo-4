@@ -4,8 +4,6 @@
 #include <cstdint>
 #include <string>
 
-#include <SDL2/SDL.h>
-
 #include "common/definitions.h"
 #include "common/weapon_id.h"
 #include "entity/button.h"
@@ -29,7 +27,6 @@ private:
     void trigger_buttons(Shared<SDL_Event> event);
 
 protected:
-    SDL_Event placeholder;
     Controller::ShopEventHandlerStrategy strategy;
     View::VerticalPane background;
     View::Label label;
