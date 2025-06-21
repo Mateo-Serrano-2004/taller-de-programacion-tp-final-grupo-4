@@ -13,7 +13,7 @@ void Model::EnumTranslator::build_roles_to_textures() {
                          {Model::RoleID::T2, Model::TextureID::SPRITE_T2},
                          {Model::RoleID::T3, Model::TextureID::SPRITE_T3},
                          {Model::RoleID::T4, Model::TextureID::SPRITE_T4},
-                         {Model::RoleID::NO_ROLE, Model::TextureID::SPRITE_CT1}};
+                         {Model::RoleID::NO_ROLE, Model::TextureID::NO_TEXTURE}};
 }
 
 void Model::EnumTranslator::build_textures_to_roles() {
