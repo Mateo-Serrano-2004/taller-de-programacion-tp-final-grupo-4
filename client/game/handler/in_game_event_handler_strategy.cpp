@@ -25,42 +25,6 @@
 
 #include "game_state_manager.h"
 
-void Controller::InGameEventHandlerStrategy::handle_movement_event() {
-    Shared<Model::MovementEvent> movement_event;
-    auto key_symbol = current_event.key.keysym.sym;
-    coord_t x_direction = 0;
-    coord_t y_direction = 0;
-
-    switch (key_symbol) {
-        case SDLK_a:
-            x_direction = -1;
-            break;
-        case SDLK_d:
-            x_direction = 1;
-            break;
-        case SDLK_w:
-            y_direction = -1;
-            break;
-        case SDLK_s:
-            y_direction = 1;
-            break;
-    }
-
-    if (x_direction && !handler_state.moving_horizontally) {
-        handler_state.moving_horizontally = true;
-        movement_event = make_shared<Model::MovementEvent>(x_direction, 0);
-    } else if (y_direction && !handler_state.moving_vertically) {
-        handler_state.moving_vertically = true;
-        movement_event = make_shared<Model::MovementEvent>(0, y_direction);
-    }
-
-    if (!movement_event) {
-        return;
-    }
-
-    controller.lock()->push_event(std::move(movement_event));
-}
-
 void Controller::InGameEventHandlerStrategy::handle_switch_weapon_event() {
     if (handler_state.switching_weapon)
         return;
@@ -100,32 +64,6 @@ void Controller::InGameEventHandlerStrategy::handle_switch_context_event() {
         auto switch_to_shop = make_shared<Model::SwitchContextEvent>("shop");
         controller.lock()->push_event(std::move(switch_to_shop));
     }
-}
-
-void Controller::InGameEventHandlerStrategy::handle_stop_movement_event() {
-    Shared<Model::StopMovementEvent> stop_movement_event;
-    auto key_symbol = current_event.key.keysym.sym;
-    bool is_horizontal = false;
-
-    if (key_symbol == SDLK_a || key_symbol == SDLK_d) {
-        is_horizontal = true;
-    } else if (key_symbol == SDLK_w || key_symbol == SDLK_s) {
-        is_horizontal = false;
-    } else {
-        return;
-    }
-
-    if (is_horizontal && handler_state.moving_horizontally) {
-        handler_state.moving_horizontally = false;
-    } else if (!is_horizontal && handler_state.moving_vertically) {
-        handler_state.moving_vertically = false;
-    } else {
-        return;
-    }
-
-    stop_movement_event = make_shared<Model::StopMovementEvent>(is_horizontal);
-
-    controller.lock()->push_event(std::move(stop_movement_event));
 }
 
 void Controller::InGameEventHandlerStrategy::handle_stop_switching_weapon_event() {
@@ -168,9 +106,6 @@ void Controller::InGameEventHandlerStrategy::handle_keydown_event() {
         handle_defuse_bomb();
     } else if (key_symbol == SDLK_ESCAPE || key_symbol == SDLK_b) {
         handle_switch_context_event();
-    } else if (key_symbol == SDLK_w || key_symbol == SDLK_a || key_symbol == SDLK_s ||
-               key_symbol == SDLK_d) {
-        handle_movement_event();
     } else if (key_symbol == SDLK_1 || key_symbol == SDLK_2 || key_symbol == SDLK_3 ||
                key_symbol == SDLK_4) {
         handle_switch_weapon_event();
@@ -181,9 +116,6 @@ void Controller::InGameEventHandlerStrategy::handle_keyup_event() {
     auto key_symbol = current_event.key.keysym.sym;
     if (key_symbol == SDLK_e) {
         handle_stop_defusing_bomb();
-    } else if (key_symbol == SDLK_w || key_symbol == SDLK_a || key_symbol == SDLK_s ||
-               key_symbol == SDLK_d) {
-        handle_stop_movement_event();
     } else if (key_symbol == SDLK_1 || key_symbol == SDLK_2 || key_symbol == SDLK_3 ||
                key_symbol == SDLK_4) {
         handle_stop_switching_weapon_event();
@@ -193,20 +125,26 @@ void Controller::InGameEventHandlerStrategy::handle_keyup_event() {
 Controller::InGameEventHandlerStrategy::InGameEventHandlerStrategy(
         Weak<Controller::GameController> controller):
         Controller::EventHandlerStrategy(controller),
-        game_state_manager(controller.lock()->get_game_state_manager()) {}
+        game_state_manager(controller.lock()->get_game_state_manager()),
+        movement_handler(controller) {}
 
 void Controller::InGameEventHandlerStrategy::handle() {
     Controller::EventHandlerStrategy::handle();
-    auto event_type = current_event.type;
 
-    if (event_type == SDL_KEYDOWN) {
-        handle_keydown_event();
-    } else if (event_type == SDL_KEYUP) {
-        handle_keyup_event();
-    } else if (event_type == SDL_MOUSEBUTTONDOWN) {
-        handle_click();
-    } else if (event_type == SDL_MOUSEBUTTONUP) {
-        handle_click_release();
+    if (movement_handler.can_handle(current_event))
+        movement_handler.handle(current_event);
+    else {
+        auto event_type = current_event.type;
+
+        if (event_type == SDL_KEYDOWN) {
+            handle_keydown_event();
+        } else if (event_type == SDL_KEYUP) {
+            handle_keyup_event();
+        } else if (event_type == SDL_MOUSEBUTTONDOWN) {
+            handle_click();
+        } else if (event_type == SDL_MOUSEBUTTONUP) {
+            handle_click_release();
+        }
     }
 }
 
@@ -238,14 +176,7 @@ void Controller::InGameEventHandlerStrategy::handle_current_game_state() {
 
 void Controller::InGameEventHandlerStrategy::update_on_switch_context() {
     auto locked_controller = controller.lock();
-    if (handler_state.moving_horizontally) {
-        locked_controller->push_event(std::move(make_shared<Model::StopMovementEvent>(true)));
-        handler_state.moving_horizontally = false;
-    }
-    if (handler_state.moving_vertically) {
-        locked_controller->push_event(std::move(make_shared<Model::StopMovementEvent>(false)));
-        handler_state.moving_vertically = false;
-    }
+    movement_handler.stop();
     if (handler_state.is_shooting) {
         locked_controller->push_event(std::move(make_shared<Model::StopUsingWeaponEvent>()));
         handler_state.is_shooting = false;

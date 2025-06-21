@@ -1,0 +1,25 @@
+#ifndef CLIENT_GAME_HANDLER_GAME_HANDLER_H
+#define CLIENT_GAME_HANDLER_GAME_HANDLER_H
+
+#include <SDL2/SDL.h>
+
+#include "common/definitions.h"
+
+namespace Controller {
+class GameController;
+
+class GameHandler {
+protected:
+    Weak<GameController> controller;
+
+public:
+    GameHandler(Weak<GameController> controller);
+
+    virtual void handle(SDL_Event& event) = 0;
+    virtual bool can_handle(SDL_Event& event) = 0;
+
+    virtual ~GameHandler() = default;
+};
+};
+
+#endif // CLIENT_GAME_HANDLER_GAME_HANDLER_H
