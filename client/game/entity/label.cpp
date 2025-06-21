@@ -19,7 +19,10 @@ View::Label::Label(Weak<Controller::BaseController> controller):
         text(""),
         font_size(12),
         color(255, 255, 255, 255),
-        text_texture(nullptr) {}
+        font(nullptr),
+        text_texture(nullptr) {
+    font = asset_manager->generate_font("liberationsans", font_size);
+}
 
 std::string View::Label::get_text() const { return text; }
 
@@ -32,7 +35,7 @@ bool View::Label::empty() const { return text_texture == nullptr; }
 void View::Label::set_text(const std::string& new_text) {
     text = new_text;
     if (!text.empty()) {
-        text_texture = asset_manager->apply_font_to_text(font_size, text, color);
+        text_texture = asset_manager->apply_font_to_text(font, text, color);
         set_width(text_texture->GetWidth());
         set_height(text_texture->GetHeight());
     } else {
@@ -44,8 +47,9 @@ void View::Label::set_text(const std::string& new_text) {
 
 void View::Label::set_font_size(uint8_t new_font_size) {
     font_size = new_font_size;
+    font = asset_manager->generate_font("liberationsans", font_size);
     if (!text.empty()) {
-        text_texture = asset_manager->apply_font_to_text(font_size, text, color);
+        text_texture = asset_manager->apply_font_to_text(font, text, color);
         set_width(text_texture->GetWidth());
         set_height(text_texture->GetHeight());
     }
@@ -54,7 +58,7 @@ void View::Label::set_font_size(uint8_t new_font_size) {
 void View::Label::set_font_color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) {
     color = SDL2pp::Color(red, green, blue, alpha);
     if (!text.empty()) {
-        text_texture = asset_manager->apply_font_to_text(font_size, text, color);
+        text_texture = asset_manager->apply_font_to_text(font, text, color);
     }
 }
 

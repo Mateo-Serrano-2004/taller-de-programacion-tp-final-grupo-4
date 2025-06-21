@@ -28,7 +28,6 @@
 #include "controller/base_controller.h"
 #include "controller/game_controller.h"
 #include "utils/enum_translator.h"
-#include "utils/number_texture_generator.h"
 
 Shared<Controller::GameController> App::CS2DApp::set_up_graphics(
         Shared<Net::ClientProtocol> protocol) {
@@ -42,7 +41,6 @@ Shared<Controller::GameController> App::CS2DApp::set_up_graphics(
     auto asset_manager = make_shared<Model::AssetManager>(renderer, config);
     auto asset_loader = make_shared<Model::AssetLoader>(asset_manager, renderer, config);
     asset_loader->load_all_textures();
-    View::NumberTextureGenerator::build(asset_manager);
 
     context_manager = make_shared<Context::ContextManager>();
     auto game_controller = make_shared<Controller::GameController>(

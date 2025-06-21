@@ -49,6 +49,16 @@ Shared<SDL2pp::Texture> Model::AssetManager::generate_map(const DTO::MapDTO& map
     return current_map;
 }
 
+Shared<SDL2pp::Font> Model::AssetManager::generate_font(const std::string& name, uint8_t size) {
+    font_tuple font(name, size);
+    auto f = fonts.find(font);
+    if (f != fonts.end())
+        return f->second;
+    auto new_f = asset_generator.generate_font(asset_addresser.get_font_path(name), size);
+    fonts.insert({font, new_f});
+    return new_f;
+}
+
 Shared<SDL2pp::Texture> Model::AssetManager::get_texture(Model::TextureID id) {
     return textures.at(id);
 }
@@ -57,15 +67,9 @@ const Model::AnimationDetails& Model::AssetManager::get_animation(AnimationID id
     return animations.at(id);
 }
 
-Shared<SDL2pp::Texture> Model::AssetManager::apply_font_to_text(uint8_t size,
+Shared<SDL2pp::Texture> Model::AssetManager::apply_font_to_text(Shared<SDL2pp::Font> font,
                                                                 const std::string& text,
                                                                 const SDL2pp::Color& color) {
     SDL_Color sdl_color{color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha()};
-
-    // To solve the issue of fonts destroying incorrectly when saved
-    Shared<SDL2pp::Font> font = asset_generator.generate_font(
-        asset_addresser.get_font_path("liberationsans"),
-        size
-    );
     return make_shared<SDL2pp::Texture>(*renderer, font->RenderText_Blended(text, sdl_color));
 }

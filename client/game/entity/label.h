@@ -26,6 +26,7 @@ protected:
     std::string text;
     uint8_t font_size;
     SDL2pp::Color color;
+    Shared<SDL2pp::Font> font;
     Shared<SDL2pp::Texture> text_texture;
 
 public:

@@ -13,14 +13,16 @@
 #include "model/rendered_player.h"
 #include "utils/enum_translator.h"
 #include "utils/pane_scalator.h"
-#include "utils/number_texture_generator.h"
+#include "utils/number_texture_slicer.h"
 
 void View::EquipmentRenderer::render_number(int ammo) {
-    auto textured_number = View::NumberTextureGenerator::get_hud_number(ammo);
-    for (auto& slice: textured_number.first) {
+    auto slices = View::NumberTextureSlicer::get_hud_number(ammo);
+    auto numbers_texture = asset_manager->get_texture(Model::TextureID::HUD_NUMS);
+
+    for (auto& slice: slices) {
         numbers.emplace_back(controller);
         auto number = &numbers.front();
-        number->set_texture(textured_number.second);
+        number->set_texture(numbers_texture);
         number->set_texture_slice(slice);
         number->set_size(SDL2pp::Point(slice.GetW(), slice.GetH()));
         number->set_draw_texture(true);
@@ -29,14 +31,15 @@ void View::EquipmentRenderer::render_number(int ammo) {
 }
 
 void View::EquipmentRenderer::render_separator() {
-    auto separator = View::NumberTextureGenerator::get_separator();
+    auto slice = View::NumberTextureSlicer::get_separator();
+    auto numbers_texture = asset_manager->get_texture(Model::TextureID::HUD_NUMS);
 
     numbers.emplace_back(controller);
     auto separator_sprite = &numbers.front();
-    separator_sprite->set_texture(separator.second);
-    separator_sprite->set_texture_slice(separator.first);
+    separator_sprite->set_texture(numbers_texture);
+    separator_sprite->set_texture_slice(slice);
     separator_sprite->set_draw_texture(true);
-    separator_sprite->set_size(SDL2pp::Point(separator.first.GetW(), separator.first.GetH()));
+    separator_sprite->set_size(SDL2pp::Point(slice.GetW(), slice.GetH()));
     View::PaneScalator::scalate_width_with_aspect_ratio(separator_sprite, 15);
 }
 
