@@ -102,14 +102,15 @@ EventVariant ServerProtocol::receive_event() {
 }
 
 void ServerProtocol::send_variant(const DTO::DTOVariant& variant) {
-    std::visit(overloaded{[this](const DTO::GameStateDTO& d) { send_game_state(d); },
-                          [this](const DTO::PlayerIDDTO& d) { send_player_id(d); },
-                          [this](const DTO::TeamIDDTO& d) { send_team_id(d); },
-                          [this](const DTO::MapDTO& d) { send_map(d); },
-                          [this](const DTO::MapNameListDTO& d) { send_all_maps_names(d); },
-                          [this](const DTO::GameListDTO& d) { send_games(d); },
-                          [this](const DTO::ConfigDTO& d) { send_config(d); },
-                          [this](const DTO::ExpulsionDTO&) {}},
+    std::visit(overloaded{
+                       [this](const DTO::GameStateDTO& d) { send_game_state(d); },
+                       [this](const DTO::PlayerIDDTO& d) { send_player_id(d); },
+                       [this](const DTO::TeamIDDTO& d) { send_team_id(d); },
+                       [this](const DTO::MapDTO& d) { send_map(d); },
+                       [this](const DTO::MapNameListDTO& d) { send_all_maps_names(d); },
+                       [this](const DTO::GameListDTO& d) { send_games(d); },
+                       [this](const DTO::ConfigDTO& d) { send_config(d); },
+               },
                variant);
 }
 

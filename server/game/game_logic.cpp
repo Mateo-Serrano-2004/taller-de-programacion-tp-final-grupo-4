@@ -63,7 +63,7 @@ void GameLogic::stop_defusing_bomb(FullPlayer& player) const { player.stop_defus
 
 void GameLogic::stop_using_weapon(FullPlayer& player) const { player.stop_using_weapon(); }
 
-void GameLogic::process_reloading(std::map<uint8_t, FullPlayer>& players, Round& round,
+void GameLogic::process_reloading(std::map<uint8_t, FullPlayer>& players, const Round& round,
                                   uint16_t frames_to_process) const {
     if (!round.is_active())
         return;
