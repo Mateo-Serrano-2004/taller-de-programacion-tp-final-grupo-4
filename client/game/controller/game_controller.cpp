@@ -20,6 +20,7 @@
 #include "event/quit_event.h"
 #include "event/switch_context_event.h"
 #include "event/transfered_event.h"
+#include "event/update_game_state_event.h"
 #include "event/update_player_id_event.h"
 #include "event/update_role_event.h"
 #include "handler/game_state_manager.h"
@@ -64,6 +65,11 @@ void Controller::GameController::handle_generate_map(Shared<Model::Event> event)
     game_state_manager->update_map(new_map);
 }
 
+void Controller::GameController::handle_update_game_state(Shared<Model::Event> event) {
+    auto update_game_state_event = std::static_pointer_cast<Model::UpdateGameStateEvent>(event);
+    game_state_manager->update(update_game_state_event->get_dto());
+}
+
 bool Controller::GameController::try_handle(Shared<Model::Event> event) {
     auto handler = handlers.find(event->get_type());
     if (handler == handlers.end())
@@ -87,6 +93,9 @@ void Controller::GameController::bind_handlers() {
     };
     handlers[Model::EventType::GENERATE_MAP] = [this](Shared<Model::Event> event) {
         handle_generate_map(event);
+    };
+    handlers[Model::EventType::UPDATE_GAME_STATE] = [this](Shared<Model::Event> event) {
+        handle_update_game_state(event);
     };
 }
 

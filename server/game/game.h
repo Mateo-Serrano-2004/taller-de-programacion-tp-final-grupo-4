@@ -35,7 +35,7 @@ private:
 
     // Pre-initialized attributes
     const int GAME_FPS = 60;
-    const uint8_t max_rounds = 1;
+    const uint8_t max_rounds = 2;
     const uint8_t max_players = 10;
     const uint8_t min_players_to_start = 2;
     GameState state = GameState::WaitingStart;

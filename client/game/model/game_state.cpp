@@ -19,7 +19,8 @@ Model::GameState::GameState():
         first_team_victories(0),
         second_team_victories(0),
         round_winner(Model::TeamID::NONE),
-        game_winner(Model::TeamID::NONE) {}
+        game_winner(Model::TeamID::NONE),
+        round_state(RoundState::Warmup) {}
 
 Model::GameState::GameState(const GameState& other):
         players(other.players),
@@ -35,7 +36,8 @@ Model::GameState::GameState(const GameState& other):
         first_team_victories(other.first_team_victories),
         second_team_victories(other.second_team_victories),
         round_winner(other.round_winner),
-        game_winner(other.game_winner) {}
+        game_winner(other.game_winner),
+        round_state(other.round_state) {}
 
 Shared<View::RenderedPlayer> Model::GameState::get_reference_player() const {
     return get_player_by_id(reference_player_id);

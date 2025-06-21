@@ -10,7 +10,7 @@ View::IterativeAnimation::IterativeAnimation(Weak<Controller::BaseController> co
                                              Model::AnimationID id):
         View::FramedAnimation(controller),
         details(controller.lock()->get_asset_manager()->get_animation(id)) {
-    total_frames = details.total_frames;
+    total_frames = details.animation_duration_in_frames;
 }
 
 SDL2pp::Rect View::IterativeAnimation::get_frame() {

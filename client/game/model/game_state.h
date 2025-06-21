@@ -6,6 +6,7 @@
 #include <map>
 
 #include "common/definitions.h"
+#include "common/round_state.h"
 #include "common/team.h"
 #include "render/camera.h"
 
@@ -42,6 +43,7 @@ public:
     uint8_t second_team_victories;
     Model::TeamID round_winner;
     Model::TeamID game_winner;
+    RoundState round_state;
 
     GameState();
     GameState(const GameState& other);

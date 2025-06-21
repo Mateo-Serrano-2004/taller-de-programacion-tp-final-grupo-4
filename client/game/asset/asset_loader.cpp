@@ -82,10 +82,6 @@ void Model::AssetLoader::load_animations() {
                             Model::AnimationDetails(5, 1, 5, 5, animation));
 }
 
-void Model::AssetLoader::load_white_background() {
-    manager->generate_background(255, 255, 255, 255);
-}
-
 Model::AssetLoader::AssetLoader(Shared<AssetManager> manager, Shared<SDL2pp::Renderer> renderer,
                                 const DTO::ConfigDTO& config):
         player_sprites({"ct1.bmp", "ct2.bmp", "ct3.bmp", "ct4.bmp", "t1.bmp", "t2.bmp", "t3.bmp",
@@ -103,5 +99,4 @@ void Model::AssetLoader::load_all_textures() {
     load_hud_textures();
     load_fov();
     load_animations();
-    load_white_background();
 }

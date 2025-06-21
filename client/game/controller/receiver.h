@@ -23,7 +23,6 @@ class Receiver: public Thread {
 protected:
     std::atomic<bool> keep_running;
     Weak<GameController> controller;
-    Shared<GameStateManager> game_state_manager;
     Shared<Net::ClientProtocol> protocol;
 
     Receiver(const Receiver&) = delete;

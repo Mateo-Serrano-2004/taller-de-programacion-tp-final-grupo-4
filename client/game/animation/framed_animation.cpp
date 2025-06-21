@@ -5,9 +5,7 @@
 #include "controller/base_controller.h"
 
 View::FramedAnimation::FramedAnimation(Weak<Controller::BaseController> controller):
-        View::Animation(controller), current_frame(0), ended(false), total_frames(0) {}
-
-void View::FramedAnimation::set_total_frames(int frames) { total_frames = frames; }
+        View::Animation(controller), current_frame(0), total_frames(0) {}
 
 void View::FramedAnimation::step(int frames) {
     if (has_ended())
