@@ -34,6 +34,39 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
+confirm_action() {
+    echo -n "$1 (y/N): "
+    read -r response
+    case "$response" in
+        [yY][eE][sS]|[yY])
+            return 0
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
+check_installation() {
+    if [[ -f "${BINARY_DIR}/cs2d_client" ]] && [[ -f "${BINARY_DIR}/cs2d_editor" ]] && [[ -f "${BINARY_DIR}/cs2d_server" ]]; then
+        print_warning "${PROJECT_FULL_NAME} ya está instalado en el sistema"
+        echo
+        echo "Ubicaciones de instalación:"
+        echo "  Binarios: ${BINARY_DIR}/cs2d_*"
+        echo "  Assets: ${VAR_DIR}/"
+        echo "  Config: ${ETC_DIR}/"
+        echo
+        
+        if confirm_action "¿Deseas reinstalar ${PROJECT_FULL_NAME}?"; then
+            print_status "Procediendo con reinstalación..."
+            return 0
+        else
+            print_status "Instalación cancelada"
+            exit 0
+        fi
+    fi
+}
+
 install_sdl2_from_source() {
     print_status "Descargando e instalando SDL2 desde fuente..."
     
@@ -97,6 +130,13 @@ install_sdl2_from_source() {
 }
 
 install_dependencies() {
+    print_status "Verificando dependencias..."
+    
+    if command_exists cmake && command_exists g++ && [[ -f "/usr/local/lib/libSDL2.so" ]]; then
+        print_success "Dependencias ya instaladas"
+        return 0
+    fi
+    
     print_status "Instalando dependencias..."
     
     sudo apt-get update
@@ -255,6 +295,8 @@ main() {
         exit $?
     fi
     
+    check_installation
+    
     install_dependencies
     setup_sdl2_config
     
@@ -267,6 +309,18 @@ main() {
     install_assets
     
     install_config
+    
+    print_success "¡Instalación completada!"
+    echo
+    echo "=== ${PROJECT_FULL_NAME} INSTALADO ==="
+    echo
+    echo "BINARIOS:"
+    echo "  cs2d_client"
+    echo "  cs2d_editor"
+    echo "  cs2d_server"
+    echo
+    echo "DESINSTALAR: sudo ./uninstall.sh"
+    echo
 }
 
 main "$@" 
