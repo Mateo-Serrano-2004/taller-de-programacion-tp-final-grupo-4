@@ -11,6 +11,7 @@
 #include "common/periodic_clock.h"
 #include "server/exception/invalid_game_exception.h"
 #include "server/exception/invalid_player_exception.h"
+#include "server/parser/yaml_addresser.h"
 
 Maybe<Ref<FullPlayer>> Game::find_player_by_id(short_id_t player_id) {
     auto it = players.find(player_id);
@@ -176,7 +177,7 @@ Physics::Vector2D Game::get_position_for_player(Model::TeamID team, uint8_t i) {
     // reservar uno
     // devovlerlo
     if (team == Model::TeamID::CT) {
-        return Physics::Vector2D(140, 100);
+        return Physics::Vector2D(100, 200);
     }
     return Physics::Vector2D(100, 100);
 }
@@ -223,9 +224,10 @@ void Game::update_players_that_won() {
         tt_rounds_won++;
     }
 
+    // modularizar y pasar a gamelogic
     for (auto& [player_id, player]: players) {
         if (player.get_team() == winner) {
-            player.add_money(1000);
+            player.add_money(round_won_money);
         }
     }
 }
@@ -317,8 +319,19 @@ void Game::close() {
     join();
 }
 
-Game::Game(const std::string& party_name, const std::string& map_name):
-        party_name(party_name), map_name(map_name), round(Round::create_warmup_round()) {
+Game::Game(const std::string& party_name, const std::string& map_name)
+    : party_name(party_name),
+      map_name(map_name),
+      parser(YamlAddresser().get_config_path("game_config.yaml")),
+      movement_system(parser.getTypeMatrix()),
+      round(Round::create_warmup_round()) {
+
+    const auto& config = YamlParser::getConfigData();
+
+    this->max_rounds = static_cast<uint8_t>(config.game.rounds);
+    this->rounds_per_side = static_cast<uint8_t>(config.game.roundsPerSide);
+    this->round_won_money = static_cast<uint16_t>(config.game.roundWonMoney);
+
     start();
 }
 

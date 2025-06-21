@@ -48,8 +48,10 @@ install: install-compile-tools install-sdl2 install-qt5 install-yaml install-gte
 
 test_shoot:
 	mkdir -p build
-	g++ -std=c++20 -I. \
+	g++ -std=c++20 -I. -DDEBUG_MODE \
 	    test/test.cpp \
+		server/parser/yaml_parser.cpp \
+		server/parser/yaml_addresser.cpp \
 	    common/DTO/game_state_dto.cpp \
 	    common/DTO/player_dto.cpp \
 		common/DTO/weapon_dto.cpp \
@@ -74,7 +76,9 @@ test_shoot:
 		server/game/game_logic.cpp \
 		server/game/shop.cpp \
 	    -o build/test_shoot \
-	    -lpthread
+	    -lpthread \
+		-lyaml-cpp
+
 
 test_round:
 	mkdir -p build

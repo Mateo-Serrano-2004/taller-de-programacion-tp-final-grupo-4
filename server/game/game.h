@@ -22,6 +22,8 @@
 #include "model/full_player.h"
 #include "server/events/events.h"
 
+#include "server/parser/yaml_parser.h"
+#include "server/parser/yaml_addresser.h"
 #include "game_logic.h"
 #include "movement_system.h"
 #include "round.h"
@@ -33,9 +35,13 @@ class Game: public Thread {
 private:
     std::mutex mutex;
 
+    YamlParser parser;
+
     // Pre-initialized attributes
     const int GAME_FPS = 60;
-    const uint8_t max_rounds = 1;
+    uint8_t max_rounds;
+    uint8_t rounds_per_side;
+    int round_won_money;
     const uint8_t max_players = 10;
     const uint8_t min_players_to_start = 2;
     GameState state = GameState::WaitingStart;
