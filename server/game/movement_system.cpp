@@ -80,7 +80,7 @@ void MovementSystem::process_movements(std::map<uint8_t, FullPlayer>& players, u
         for (int i = 0; i < frames_to_process; ++i) {
             Physics::Vector2D next = pos + dir;
 
-            if (/*is_colliding_with_map(next, size) ||*/
+            if (is_colliding_with_map(next, size) ||
                 is_colliding_with_other_players(next, size, id, players)) {
                 if (dir.get_x() != 0) player.stop_horizontal_movement();
                 if (dir.get_y() != 0) player.stop_vertical_movement();
