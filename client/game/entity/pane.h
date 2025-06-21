@@ -24,6 +24,9 @@ class BaseController;
 namespace View {
 class Pane: public Rendered, public Textured, public Rotated {
 protected:
+    bool position_set;
+    bool size_set;
+
     std::list<Pane*> children;
     bool draw_background;
     Shared<SDL2pp::Texture> background;

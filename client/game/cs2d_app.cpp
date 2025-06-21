@@ -24,6 +24,7 @@
 #include "context/menu_context.h"
 #include "context/pick_role_context.h"
 #include "context/shop_context.h"
+#include "context/stats_context.h"
 #include "controller/base_controller.h"
 #include "controller/game_controller.h"
 #include "utils/enum_translator.h"
@@ -57,6 +58,7 @@ void App::CS2DApp::set_up_contexts(Weak<Controller::GameController> game_control
     auto shop_context = make_shared<Context::ShopContext>(game_controller);
     auto end_of_game_context = make_shared<Context::EndOfGameContext>(game_controller);
     auto loading_context = make_shared<Context::LoadingContext>(game_controller);
+    auto stats_context = make_shared<Context::StatsContext>(game_controller);
 
     context_manager->add_context(in_game_context);
     context_manager->add_context(menu_context);
@@ -64,6 +66,7 @@ void App::CS2DApp::set_up_contexts(Weak<Controller::GameController> game_control
     context_manager->add_context(shop_context);
     context_manager->add_context(end_of_game_context);
     context_manager->add_context(loading_context);
+    context_manager->add_context(stats_context);
 
     context_manager->set_current_context("loading");
 }

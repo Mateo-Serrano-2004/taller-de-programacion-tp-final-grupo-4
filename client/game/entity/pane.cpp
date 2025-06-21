@@ -21,6 +21,8 @@ View::Pane::Pane(Weak<Controller::BaseController> controller):
         View::Rendered(controller),
         View::Textured(controller),
         View::Rotated(0),
+        position_set(false),
+        size_set(false),
         draw_background(false),
         background(asset_manager->generate_background(SDL2pp::Color(0, 0, 0, 255))),
         position(0, 0),
@@ -67,24 +69,50 @@ void View::Pane::set_background_color(uint8_t red, uint8_t green, uint8_t blue, 
     background = asset_manager->generate_background(red, green, blue, alpha);
 }
 
-void View::Pane::set_position(const SDL2pp::Point& new_position) { position = new_position; }
+void View::Pane::set_position(const SDL2pp::Point& new_position) {
+    position = new_position;
+    position_set = true;
+}
 
-void View::Pane::set_x(int new_x) { position.SetX(new_x); }
+void View::Pane::set_x(int new_x) {
+    position.SetX(new_x);
+    position_set = true;
+}
 
-void View::Pane::set_y(int new_y) { position.SetY(new_y); }
+void View::Pane::set_y(int new_y) {
+    position.SetY(new_y);
+    position_set = true;
+}
 
-void View::Pane::set_width(int new_width) { size.SetX(new_width); }
+void View::Pane::set_width(int new_width) {
+    size.SetX(new_width);
+    size_set = true;
+}
 
-void View::Pane::set_height(int new_height) { size.SetY(new_height); }
+void View::Pane::set_height(int new_height) {
+    size.SetY(new_height);
+    size_set = true;
+}
 
-void View::Pane::set_size(const SDL2pp::Point& new_size) { size = new_size; }
+void View::Pane::set_size(const SDL2pp::Point& new_size) {
+    size = new_size;
+    size_set = true;
+}
 
 void View::Pane::set_parent(View::Pane* new_parent) {
     parent = new_parent;
-    if (parent)
-        position = parent->get_position();
-    else
-        position = SDL2pp::Point(0, 0);
+    if (parent) {
+        if (!position_set)
+            position = parent->get_position();
+        if (!size_set)
+            size = parent->get_size();
+    }
+    else {
+        if (!position_set)
+            position = SDL2pp::Point(0, 0);
+        if (!size_set)
+            size = renderer->GetLogicalSize();
+    }
 }
 
 void View::Pane::add_child(Pane* new_child) {

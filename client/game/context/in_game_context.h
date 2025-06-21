@@ -4,7 +4,9 @@
 #include <cstdint>
 
 #include "common/definitions.h"
-#include "entity/pane.h"
+#include "entity/horizontal_pane.h"
+#include "entity/vertical_pane.h"
+#include "entity/label.h"
 #include "event/event.h"
 #include "handler/in_game_event_handler_strategy.h"
 #include "render/hud_renderer.h"

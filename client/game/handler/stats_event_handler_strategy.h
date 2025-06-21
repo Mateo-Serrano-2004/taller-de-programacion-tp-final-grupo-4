@@ -1,5 +1,5 @@
-#ifndef CLIENT_GAME_HANDLER_IN_GAME_EVENT_HANDLER_STRATEGY_H
-#define CLIENT_GAME_HANDLER_IN_GAME_EVENT_HANDLER_STRATEGY_H
+#ifndef CLIENT_GAME_HANDLER_STATS_EVENT_HANDLER_STRATEGY_H
+#define CLIENT_GAME_HANDLER_STATS_EVENT_HANDLER_STRATEGY_H
 
 #include <SDL2/SDL.h>
 
@@ -7,30 +7,28 @@
 
 #include "event_handler_strategy.h"
 #include "movement_handler.h"
-#include "weapon_handler.h"
 #include "mouse_movement_handler.h"
 
 namespace Controller {
 class GameController;
 
-class InGameEventHandlerStrategy: public EventHandlerStrategy {
+class StatsEventHandlerStrategy: public EventHandlerStrategy {
 protected:
     MovementHandler movement_handler;
-    WeaponHandler weapon_handler;
     MouseMovementHandler mouse_movement_handler;
 
     void handle_switch_context_event() override;
 
 public:
-    explicit InGameEventHandlerStrategy(Weak<GameController> controller);
+    explicit StatsEventHandlerStrategy(Weak<GameController> controller);
 
     void handle() override;
     void handle_current_game_state();
 
     void update_on_switch_context();
 
-    ~InGameEventHandlerStrategy() override = default;
+    ~StatsEventHandlerStrategy() override = default;
 };
 };  // namespace Controller
 
-#endif  // CLIENT_GAME_HANDLER_IN_GAME_EVENT_HANDLER_STRATEGY_H
+#endif  // CLIENT_GAME_HANDLER_STATS_EVENT_HANDLER_STRATEGY_H

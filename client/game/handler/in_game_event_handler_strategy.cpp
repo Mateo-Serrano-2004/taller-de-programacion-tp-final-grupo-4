@@ -24,8 +24,6 @@
 #include "event/use_weapon_event.h"
 #include "utils/mouse_coords_translator.h"
 
-#include "game_state_manager.h"
-
 void Controller::InGameEventHandlerStrategy::handle_switch_context_event() {
     auto key_symbol = current_event.key.keysym.sym;
     if (key_symbol == SDLK_ESCAPE) {
@@ -34,13 +32,15 @@ void Controller::InGameEventHandlerStrategy::handle_switch_context_event() {
     } else if (key_symbol == SDLK_b) {
         auto switch_to_shop = make_shared<Model::SwitchContextEvent>("shop");
         controller.lock()->push_event(std::move(switch_to_shop));
+    } else if (key_symbol == SDLK_TAB) {
+        auto switch_to_stats = make_shared<Model::SwitchContextEvent>("stats");
+        controller.lock()->push_event(std::move(switch_to_stats));
     }
 }
 
 Controller::InGameEventHandlerStrategy::InGameEventHandlerStrategy(
         Weak<Controller::GameController> controller):
         Controller::EventHandlerStrategy(controller),
-        game_state_manager(controller.lock()->get_game_state_manager()),
         movement_handler(controller),
         weapon_handler(controller),
         mouse_movement_handler(controller) {}
