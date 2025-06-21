@@ -6,9 +6,9 @@
 #include "common/definitions.h"
 
 #include "event_handler_strategy.h"
-#include "handler_state.h"
 #include "movement_handler.h"
 #include "weapon_handler.h"
+#include "mouse_movement_handler.h"
 
 namespace Controller {
 class GameController;
@@ -19,10 +19,9 @@ protected:
     Shared<GameStateManager> game_state_manager;
     MovementHandler movement_handler;
     WeaponHandler weapon_handler;
-    Model::HandlerState handler_state;
+    MouseMovementHandler mouse_movement_handler;
 
     void handle_switch_context_event() override;
-    void handle_keydown_event();
 
 public:
     explicit InGameEventHandlerStrategy(Weak<GameController> controller);

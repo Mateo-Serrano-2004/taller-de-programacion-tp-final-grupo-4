@@ -31,16 +31,9 @@ void Controller::InGameEventHandlerStrategy::handle_switch_context_event() {
     if (key_symbol == SDLK_ESCAPE) {
         auto switch_to_menu = make_shared<Model::SwitchContextEvent>("menu");
         controller.lock()->push_event(std::move(switch_to_menu));
-    } else {
+    } else if (key_symbol == SDLK_b) {
         auto switch_to_shop = make_shared<Model::SwitchContextEvent>("shop");
         controller.lock()->push_event(std::move(switch_to_shop));
-    }
-}
-
-void Controller::InGameEventHandlerStrategy::handle_keydown_event() {
-    auto key_symbol = current_event.key.keysym.sym;
-    if (key_symbol == SDLK_ESCAPE || key_symbol == SDLK_b) {
-        handle_switch_context_event();
     }
 }
 
@@ -49,49 +42,22 @@ Controller::InGameEventHandlerStrategy::InGameEventHandlerStrategy(
         Controller::EventHandlerStrategy(controller),
         game_state_manager(controller.lock()->get_game_state_manager()),
         movement_handler(controller),
-        weapon_handler(controller) {}
+        weapon_handler(controller),
+        mouse_movement_handler(controller) {}
 
 void Controller::InGameEventHandlerStrategy::handle() {
     Controller::EventHandlerStrategy::handle();
 
     if (movement_handler.can_handle(current_event))
         movement_handler.handle(current_event);
-    else if (weapon_handler.can_handle(current_event)) {
+    else if (weapon_handler.can_handle(current_event))
         weapon_handler.handle(current_event);
-    }
-    else {
-        auto event_type = current_event.type;
-
-        if (event_type == SDL_KEYDOWN) {
-            handle_keydown_event();
-        }
-    }
+    else if (current_event.type == SDL_KEYDOWN)
+        handle_switch_context_event();
 }
 
 void Controller::InGameEventHandlerStrategy::handle_current_game_state() {
-    auto renderer = controller.lock()->get_renderer();
-    auto mouse_coords = MouseCoordsTranslator::get_logical_coords(renderer);
-
-    SDL2pp::Point screen_size = controller.lock()->get_renderer()->GetLogicalSize();
-
-    coord_t dy = mouse_coords.GetY() - (screen_size.GetY() / 2);
-    coord_t dx = mouse_coords.GetX() - (screen_size.GetX() / 2);
-
-    double angle_rad = std::atan2(dy, dx);
-    double angle_deg = angle_rad * 180.0 / M_PI;
-
-    angle_deg += 90;
-
-    if (angle_deg < 0)
-        angle_deg += 360;
-    if (angle_deg >= 360)
-        angle_deg -= 360;
-
-    angle_t angle = static_cast<angle_t>(angle_deg);
-
-    auto rotation_event = make_shared<Model::RotationEvent>(angle);
-
-    controller.lock()->push_event(std::move(rotation_event));
+    mouse_movement_handler.notify_current_rotation();
 }
 
 void Controller::InGameEventHandlerStrategy::update_on_switch_context() {
