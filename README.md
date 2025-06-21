@@ -22,7 +22,6 @@ La pantalla de bienvenida te va a pedir que ingreses el username, la ip y el pue
 
 <img src="docs/pics/cliente1.png" alt="Pantalla del editor" width="700">
 
-
 Una vez dentro vas a poder elegir entre crear y unirte a una partida.
 
 <img src="docs/pics/cliente2.png" alt="Pantalla del editor" width="700">

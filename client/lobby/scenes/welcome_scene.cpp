@@ -91,6 +91,11 @@ void WelcomeScene::setUpWelcome() {
         //     return;
         // }
 
+        // if (username.length() > 10) {
+        //     showError("El nombre de usuario no puede tener más de 10 caracteres.");
+        //     return;
+        // }
+
         // bool ok;
         // int portNumber = port.toInt(&ok);
         // if (!ok || portNumber <= 0 || portNumber > 65535) {
