@@ -20,38 +20,26 @@ Counter Strike 2D es un juego multijugador en 2D inspirado en Counter-Strike. Pe
 ## Requisitos del Sistema
 
 ### Dependencias
-- **CMake** (versión 3.10 o superior)
-- **Qt5** (para el cliente y editor)
-- **yaml-cpp** (para parsing de configuración)
-- **Compilador C++** compatible con C++17
 
-### Sistema Operativo
-- Linux (desarrollado y probado en Ubuntu/WSL2)
+- **Sistema Operativo**: Ubuntu 24.04 LTS (recomendado)
+- **Compilador**: GCC 11+
+- **CMake**: 3.20+
+- **Qt5**: 5.15+
+- **SDL2**: 2.28+
+- **YAML-CPP**: 0.7+
 
-## Guía de Instalación
+## Instalación
 
-El proyecto incluye un instalador automático que configura todo el entorno del sistema para Ubuntu 24.04 LTS:
-
-### Opción 1: Doble Click (Recomendado)
-- **Doble click en**: "Instalar Counter Strike 2D.desktop"
-- **O doble click en**: "Desinstalar Counter Strike 2D.desktop" (para desinstalar)
-
-**Si los archivos .desktop no funcionan:**
-1. Click derecho en el archivo `.desktop`
-2. Seleccionar "Propiedades"
-3. En la pestaña "Permisos", marcar "Permitir ejecutar como programa"
-4. Hacer doble click nuevamente
-
-### Opción 2: Desde Terminal
 ```bash
 # Instalar (requiere permisos de administrador)
-sudo ./installers/install.sh
+sudo ./install.sh
 
 # Desinstalar (requiere permisos de administrador)
-sudo ./installers/uninstall.sh
+sudo ./uninstall.sh
 ```
 
 **El instalador automático:**
+
 - Descarga e instala todas las dependencias (SDL2, Qt5, yaml-cpp, etc.)
 - Compila el proyecto completo
 - Ejecuta tests unitarios
@@ -173,6 +161,7 @@ Counter-Strike-2D/
 ## Créditos
 
 ### Librerías Utilizadas
+
 - **[Librería de sockets](https://github.com/eldipa/sockets-en-cpp)** (GPL v2) - Autor: **@eldipa**
 - **[Thread](https://github.com/eldipa/hands-on-threads/blob/master/libs/thread.h)** (GPL v2) - Autor: **@eldipa**
 - **[Queue](https://github.com/eldipa/hands-on-threads/blob/master/libs/queue.h)** (GPL v2) - Autor: **@eldipa**

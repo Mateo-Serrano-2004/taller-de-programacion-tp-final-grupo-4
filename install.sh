@@ -3,16 +3,12 @@
 # Counter Strike 2D - Instalador del Sistema
 # Autor: Equipo de desarrollo CS2D
 # Versión: 1.0
+# Compatible con Ubuntu 24.04 LTS
 
 set -e  # Salir si hay algún error
 
 # Hacer el script ejecutable automáticamente
 chmod +x "$0"
-
-# Navegar al directorio raíz del proyecto si estamos en installers/
-if [[ "$(basename "$(pwd)")" == "installers" ]]; then
-    cd ..
-fi
 
 # Configuración del proyecto
 PROJECT_NAME="cs2d"
@@ -48,25 +44,6 @@ print_error() {
 # Función para verificar si un comando existe
 command_exists() {
     command -v "$1" >/dev/null 2>&1
-}
-
-# Función para detectar el sistema operativo
-detect_os() {
-    if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        if command_exists apt-get; then
-            echo "ubuntu"
-        elif command_exists yum; then
-            echo "centos"
-        elif command_exists pacman; then
-            echo "arch"
-        else
-            echo "linux"
-        fi
-    elif [[ "$OSTYPE" == "darwin"* ]]; then
-        echo "macos"
-    else
-        echo "unknown"
-    fi
 }
 
 # Función para descargar e instalar SDL2 desde fuente
@@ -137,9 +114,9 @@ install_sdl2_from_source() {
     print_success "SDL2 instalado desde fuente"
 }
 
-# Función para instalar dependencias en Ubuntu/Debian
+# Función para instalar dependencias en Ubuntu 24.04 LTS
 install_dependencies_ubuntu() {
-    print_status "Instalando dependencias en Ubuntu/Debian..."
+    print_status "Instalando dependencias en Ubuntu 24.04 LTS..."
     
     sudo apt-get update
     
@@ -170,49 +147,6 @@ install_dependencies_ubuntu() {
     
     # Instalar SDL2 desde fuente para mejor compatibilidad
     install_sdl2_from_source
-    
-    print_success "Dependencias instaladas correctamente"
-}
-
-# Función para instalar dependencias en CentOS/RHEL
-install_dependencies_centos() {
-    print_status "Instalando dependencias en CentOS/RHEL..."
-    
-    sudo yum update -y
-    
-    # Dependencias básicas
-    sudo yum groupinstall -y "Development Tools"
-    sudo yum install -y cmake3 pkgconfig
-    
-    # Dependencias de Qt5
-    sudo yum install -y qt5-qtbase-devel qt5-qtmultimedia-devel
-    
-    # Dependencias de YAML
-    sudo yum install -y yaml-cpp-devel
-    
-    # Dependencias de SDL2
-    sudo yum install -y SDL2-devel SDL2_image-devel SDL2_mixer-devel SDL2_ttf-devel
-    
-    print_success "Dependencias instaladas correctamente"
-}
-
-# Función para instalar dependencias en Arch Linux
-install_dependencies_arch() {
-    print_status "Instalando dependencias en Arch Linux..."
-    
-    sudo pacman -Syu --noconfirm
-    
-    # Dependencias básicas
-    sudo pacman -S --noconfirm base-devel cmake pkgconf
-    
-    # Dependencias de Qt5
-    sudo pacman -S --noconfirm qt5-base qt5-multimedia
-    
-    # Dependencias de SDL2
-    sudo pacman -S --noconfirm sdl2 sdl2_image sdl2_mixer sdl2_ttf
-    
-    # Dependencias de YAML
-    sudo pacman -S --noconfirm yaml-cpp
     
     print_success "Dependencias instaladas correctamente"
 }
@@ -468,7 +402,7 @@ show_usage_info() {
     echo "  Se han creado accesos directos en el escritorio"
     echo
     echo "DESINSTALAR:"
-    echo "  ./installers/uninstall.sh"
+    echo "  sudo ./uninstall.sh"
     echo
 }
 
@@ -476,6 +410,7 @@ show_usage_info() {
 main() {
     echo "=========================================="
     echo "    ${PROJECT_FULL_NAME} - INSTALADOR DEL SISTEMA"
+    echo "    Compatible con Ubuntu 24.04 LTS"
     echo "=========================================="
     echo
     
@@ -493,27 +428,9 @@ main() {
         exit $?
     fi
     
-    # Detectar sistema operativo
-    OS=$(detect_os)
-    print_status "Sistema operativo detectado: $OS"
-    
-    # Instalar dependencias según el sistema operativo
-    case $OS in
-        "ubuntu")
-            install_dependencies_ubuntu
-            setup_sdl2_config
-            ;;
-        "centos")
-            install_dependencies_centos
-            ;;
-        "arch")
-            install_dependencies_arch
-            ;;
-        *)
-            print_error "Sistema operativo no soportado: $OS"
-            print_warning "Por favor, instala las dependencias manualmente"
-            ;;
-    esac
+    # Instalar dependencias para Ubuntu 24.04 LTS
+    install_dependencies_ubuntu
+    setup_sdl2_config
     
     # Compilar el proyecto
     compile_project

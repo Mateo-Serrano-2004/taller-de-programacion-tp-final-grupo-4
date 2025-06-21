@@ -3,16 +3,12 @@
 # Counter Strike 2D - Desinstalador del Sistema
 # Autor: Equipo de desarrollo CS2D
 # Versión: 1.0
+# Compatible con Ubuntu 24.04 LTS
 
 set -e  # Salir si hay algún error
 
 # Hacer el script ejecutable automáticamente
 chmod +x "$0"
-
-# Navegar al directorio raíz del proyecto si estamos en installers/
-if [[ "$(basename "$(pwd)")" == "installers" ]]; then
-    cd ..
-fi
 
 # Configuración del proyecto
 PROJECT_NAME="cs2d"
@@ -140,30 +136,16 @@ uninstall_dependencies() {
     if confirm_action "¿Deseas desinstalar las dependencias del sistema? (Esto puede afectar otros proyectos)"; then
         print_warning "Desinstalando dependencias del sistema..."
         
-        # Detectar sistema operativo
-        if command -v apt-get >/dev/null 2>&1; then
-            # Ubuntu/Debian
-            sudo apt-get remove -y qtbase5-dev qtmultimedia5-dev libqt5multimedia5-plugins \
-                libyaml-cpp-dev libgtest-dev libasound2-dev libpulse-dev libaudio-dev \
-                libjack-dev libsndio-dev libx11-dev libxext-dev libxrandr-dev \
-                libxcursor-dev libxinerama-dev libxi-dev libxss-dev libxxf86vm-dev \
-                libxrender-dev libgl1-mesa-dev libglu1-mesa-dev libpng-dev \
-                libjpeg-dev libtiff-dev libwebp-dev libfreetype6-dev \
-                libharfbuzz-dev libfribidi-dev
-            print_success "Dependencias de Ubuntu/Debian eliminadas"
-        elif command -v yum >/dev/null 2>&1; then
-            # CentOS/RHEL
-            sudo yum remove -y qt5-qtbase-devel qt5-qtmultimedia-devel \
-                yaml-cpp-devel SDL2-devel SDL2_image-devel SDL2_mixer-devel SDL2_ttf-devel
-            print_success "Dependencias de CentOS/RHEL eliminadas"
-        elif command -v pacman >/dev/null 2>&1; then
-            # Arch Linux
-            sudo pacman -R --noconfirm qt5-base qt5-multimedia yaml-cpp \
-                sdl2 sdl2_image sdl2_mixer sdl2_ttf
-            print_success "Dependencias de Arch Linux eliminadas"
-        else
-            print_warning "No se pudo detectar el gestor de paquetes"
-        fi
+        # Ubuntu 24.04 LTS
+        sudo apt-get remove -y qtbase5-dev qtmultimedia5-dev libqt5multimedia5-plugins \
+            libyaml-cpp-dev libgtest-dev libasound2-dev libpulse-dev libaudio-dev \
+            libjack-dev libsndio-dev libx11-dev libxext-dev libxrandr-dev \
+            libxcursor-dev libxinerama-dev libxi-dev libxss-dev libxxf86vm-dev \
+            libxrender-dev libgl1-mesa-dev libglu1-mesa-dev libpng-dev \
+            libjpeg-dev libtiff-dev libwebp-dev libfreetype6-dev \
+            libharfbuzz-dev libfribidi-dev
+        
+        print_success "Dependencias de Ubuntu 24.04 LTS eliminadas"
     else
         print_status "Saltando desinstalación de dependencias"
     fi
@@ -181,7 +163,7 @@ show_uninstall_info() {
     echo
     echo "=== NOTAS ==="
     echo "• El código fuente del proyecto permanece intacto"
-    echo "• Puedes volver a instalar ejecutando: ./installers/install.sh"
+    echo "• Puedes volver a instalar ejecutando: sudo ./install.sh"
     echo "• Las dependencias del sistema no fueron eliminadas por seguridad"
     echo
 }
@@ -190,6 +172,7 @@ show_uninstall_info() {
 main() {
     echo "=========================================="
     echo "  ${PROJECT_FULL_NAME} - DESINSTALADOR DEL SISTEMA"
+    echo "  Compatible con Ubuntu 24.04 LTS"
     echo "=========================================="
     echo
     
