@@ -14,7 +14,9 @@ protected:
     Weak<BaseController> controller;
 
     void handle_quit_event();
-    virtual void handle_switch_context_event(Shared<SDL_Event> event) = 0;
+
+    // Empty implementation for dummy handlers
+    virtual void handle_switch_context_event(Shared<SDL_Event> event);
 
 public:
     explicit EventHandlerStrategy(Weak<BaseController> controller);

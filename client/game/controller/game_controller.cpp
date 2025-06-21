@@ -63,6 +63,7 @@ void Controller::GameController::handle_generate_map(Shared<Model::Event> event)
     auto generate_map_event = std::static_pointer_cast<Model::GenerateMapEvent>(event);
     auto new_map = asset_manager->generate_map(generate_map_event->get_map_dto());
     game_state_manager->update_map(new_map);
+    context_manager->set_current_context("pick-role");
 }
 
 void Controller::GameController::handle_update_game_state(Shared<Model::Event> event) {
