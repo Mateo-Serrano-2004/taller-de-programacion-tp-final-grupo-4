@@ -30,11 +30,17 @@ Counter Strike 2D es un juego multijugador en 2D inspirado en Counter-Strike. Pe
 
 ## Guía de Instalación
 
-El proyecto incluye un instalador automático que configura todo el entorno del sistema:
+El proyecto incluye un instalador automático que configura todo el entorno del sistema para Ubuntu 24.04 LTS:
 
 ### Opción 1: Doble Click (Recomendado)
 - **Doble click en**: "Instalar Counter Strike 2D.desktop"
 - **O doble click en**: "Desinstalar Counter Strike 2D.desktop" (para desinstalar)
+
+**Si los archivos .desktop no funcionan:**
+1. Click derecho en el archivo `.desktop`
+2. Seleccionar "Propiedades"
+3. En la pestaña "Permisos", marcar "Permitir ejecutar como programa"
+4. Hacer doble click nuevamente
 
 ### Opción 2: Desde Terminal
 ```bash
