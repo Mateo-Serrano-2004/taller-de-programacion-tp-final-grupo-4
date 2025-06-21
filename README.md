@@ -31,11 +31,18 @@ Counter Strike 2D es un juego multijugador en 2D inspirado en Counter-Strike. Pe
 ## Instalación
 
 ```bash
-# Instalar (requiere permisos de administrador)
-sudo ./install.sh
+# Es para dar los permisos de ejecución
+chmod +x install.sh uninstall.sh
+```
 
-# Desinstalar (requiere permisos de administrador)
-sudo ./uninstall.sh
+```bash
+# Para instalar
+./install.sh
+```
+
+```bash
+# Para desinstalar
+./uninstall.sh
 ```
 
 **El instalador automático:**
