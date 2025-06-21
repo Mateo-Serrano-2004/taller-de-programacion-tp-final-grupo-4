@@ -19,6 +19,7 @@
 #include "handler/game_state_manager.h"
 #include "model/game_state.h"
 #include "model/rendered_player.h"
+#include "utils/enum_translator.h"
 
 std::vector<uint8_t> View::HUDRenderer::get_units(uint16_t number) {
     uint8_t number_of_digits = number ? (uint8_t)(log10(number) + 1) : 1;
@@ -137,10 +138,10 @@ View::HUDRenderer::HUDRenderer(Weak<Controller::GameController> controller):
     stats.add_child(&money);
 
     time.set_height(37);
-    time.set_horizontal_alignment(0);
+    time.set_horizontal_alignment(0.0f);
 
-    stats.set_horizontal_alignment(0);
-    stats.set_vertical_alignment(1);
+    stats.set_horizontal_alignment(0.0f);
+    stats.set_vertical_alignment(1.0f);
     stats.set_gap_x(10);
 
     health.set_height(37);
