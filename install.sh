@@ -169,14 +169,11 @@ create_system_directories() {
     sudo mkdir -p "${VAR_DIR}"
     sudo mkdir -p "${ETC_DIR}"
     
-    sudo mkdir -p "${VAR_DIR}/assets"
     sudo mkdir -p "${VAR_DIR}/assets/gfx"
     sudo mkdir -p "${VAR_DIR}/assets/sfx"
     sudo mkdir -p "${VAR_DIR}/maps"
-    sudo mkdir -p "${VAR_DIR}/logs"
     
-    sudo mkdir -p "${ETC_DIR}/config"
-    sudo mkdir -p "${ETC_DIR}/maps"
+    sudo mkdir -p "${ETC_DIR}/cfg"
     
     print_success "Directorios del sistema creados"
 }
@@ -235,66 +232,8 @@ install_config() {
     print_status "Instalando configuración en ${ETC_DIR}..."
     
     if [[ -f "server/game_config.yaml" ]]; then
-        sudo cp server/game_config.yaml "${ETC_DIR}/config/"
+        sudo cp server/game_config.yaml "${ETC_DIR}/cfg/"
         print_success "Configuración del juego instalada"
-    fi
-    
-    sudo tee "${ETC_DIR}/config/system.conf" > /dev/null << EOF
-# Configuración del sistema ${PROJECT_FULL_NAME}
-# Generado automáticamente por el instalador
-
-# Directorios del sistema
-ASSETS_DIR=${VAR_DIR}/assets
-MAPS_DIR=${VAR_DIR}/maps
-LOGS_DIR=${VAR_DIR}/logs
-CONFIG_DIR=${ETC_DIR}/config
-
-# Configuración por defecto
-DEFAULT_PORT=8080
-MAX_PLAYERS=10
-GAME_FPS=60
-EOF
-
-    print_success "Configuración del sistema instalada"
-}
-
-create_desktop_shortcuts() {
-    if [[ -n "$XDG_DESKTOP_DIR" ]] || [[ -d "$HOME/Desktop" ]]; then
-        print_status "Creando accesos directos en el escritorio..."
-        
-        DESKTOP_DIR="$HOME/Desktop"
-        if [[ -n "$XDG_DESKTOP_DIR" ]]; then
-            DESKTOP_DIR="$XDG_DESKTOP_DIR"
-        fi
-        
-        cat > "$DESKTOP_DIR/${PROJECT_FULL_NAME} - Cliente.desktop" << EOF
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=${PROJECT_FULL_NAME} - Cliente
-Comment=Juego multijugador ${PROJECT_FULL_NAME}
-Exec=${BINARY_DIR}/cs2d_client
-Icon=${VAR_DIR}/assets/gfx/logo.png
-Terminal=false
-Categories=Game;
-EOF
-
-        cat > "$DESKTOP_DIR/${PROJECT_FULL_NAME} - Editor.desktop" << EOF
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=${PROJECT_FULL_NAME} - Editor
-Comment=Editor de mapas para ${PROJECT_FULL_NAME}
-Exec=${BINARY_DIR}/cs2d_editor
-Icon=${VAR_DIR}/assets/gfx/logo.png
-Terminal=false
-Categories=Game;Graphics;
-EOF
-
-        chmod +x "$DESKTOP_DIR/${PROJECT_FULL_NAME} - Cliente.desktop"
-        chmod +x "$DESKTOP_DIR/${PROJECT_FULL_NAME} - Editor.desktop"
-        
-        print_success "Accesos directos creados en el escritorio"
     fi
 }
 
@@ -328,8 +267,6 @@ main() {
     install_assets
     
     install_config
-    
-    create_desktop_shortcuts
 }
 
 main "$@" 

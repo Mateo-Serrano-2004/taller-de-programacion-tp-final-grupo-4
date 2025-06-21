@@ -53,7 +53,6 @@ chmod +x install.sh uninstall.sh
 - Instala binarios en `/usr/bin/`
 - Instala assets en `/var/cs2d/`
 - Instala configuración en `/etc/cs2d/`
-- Genera accesos directos en el escritorio
 - Configura permisos de ejecución automáticamente
 
 **Nota:** El instalador requiere permisos de administrador para instalar en el sistema.

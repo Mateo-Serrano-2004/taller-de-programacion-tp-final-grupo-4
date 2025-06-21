@@ -93,27 +93,6 @@ clean_build_files() {
     fi
 }
 
-remove_desktop_shortcuts() {
-    print_status "Eliminando accesos directos del escritorio..."
-    
-    DESKTOP_DIR="$HOME/Desktop"
-    if [[ -n "$XDG_DESKTOP_DIR" ]]; then
-        DESKTOP_DIR="$XDG_DESKTOP_DIR"
-    fi
-    
-    local shortcuts=(
-        "${PROJECT_FULL_NAME} - Cliente.desktop"
-        "${PROJECT_FULL_NAME} - Editor.desktop"
-    )
-    
-    for shortcut in "${shortcuts[@]}"; do
-        if [[ -f "$DESKTOP_DIR/$shortcut" ]]; then
-            rm -f "$DESKTOP_DIR/$shortcut"
-            print_success "Acceso directo $shortcut eliminado"
-        fi
-    done
-}
-
 uninstall_dependencies() {
     if confirm_action "¿Deseas desinstalar las dependencias del sistema? (Esto puede afectar otros proyectos)"; then
         print_warning "Desinstalando dependencias del sistema..."
@@ -139,7 +118,6 @@ show_uninstall_info() {
     echo "✓ Binarios del sistema (${BINARY_DIR}/cs2d_*)"
     echo "✓ Directorios del sistema (${VAR_DIR}/, ${ETC_DIR}/)"
     echo "✓ Archivos de compilación (build/)"
-    echo "✓ Accesos directos del escritorio"
     echo
     echo "=== NOTAS ==="
     echo "• El código fuente del proyecto permanece intacto"
@@ -171,8 +149,6 @@ main() {
     remove_system_directories
     
     clean_build_files
-    
-    remove_desktop_shortcuts
     
     uninstall_dependencies
     
