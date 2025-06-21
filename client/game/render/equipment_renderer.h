@@ -23,20 +23,22 @@ class RenderedPlayer;
 class EquipmentRenderer: public Renderer {
 private:
     Weak<Controller::GameController> controller;
-    VerticalPane& viewport;
+    Pane* viewport;
     VerticalPane items;
     Pane bomb_slot;
     HorizontalPane current_weapon_data;
     Pane current_weapon_slot;
-    std::list<Pane> current_ammo;
-    std::list<Pane> max_ammo;
+    HorizontalPane ammo_data;
+    std::list<Pane> numbers;
 
+    void render_number(int ammo);
+    void render_separator();
     void render_ammo(Shared<RenderedPlayer> player);
     void render_weapon(Shared<RenderedPlayer> player);
     void render_bomb(Shared<RenderedPlayer> player);
 
 public:
-    EquipmentRenderer(Weak<Controller::GameController> controller, VerticalPane& viewport);
+    EquipmentRenderer(Weak<Controller::GameController> controller, Pane* viewport);
 
     void render(const Model::GameState& game_state, uint8_t) override;
 

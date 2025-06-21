@@ -2,6 +2,7 @@
 
 #include <utility>
 #include <vector>
+#include <cmath>
 #include <SDL2pp/Texture.hh>
 #include <SDL2pp/Rect.hh>
 

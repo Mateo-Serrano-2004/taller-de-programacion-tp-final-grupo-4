@@ -128,6 +128,7 @@ View::HUDRenderer::HUDRenderer(Weak<Controller::GameController> controller):
         hud_numbers(asset_manager->get_texture(Model::TextureID::HUD_NUMS)),
         hud_symbols(asset_manager->get_texture(Model::TextureID::HUD_SYMBOLS)),
         viewport(controller),
+        equipment_renderer(controller, &viewport),
         time(controller),
         stats(controller),
         health(controller),
@@ -148,11 +149,12 @@ View::HUDRenderer::HUDRenderer(Weak<Controller::GameController> controller):
     money.set_height(37);
 }
 
-void View::HUDRenderer::render(const Model::GameState& game_state, uint8_t) {
+void View::HUDRenderer::render(const Model::GameState& game_state, uint8_t frames) {
     render_time(game_state.time_left);
     if (auto player = game_state.get_reference_player()) {
         render_money(player);
         render_life_points(player);
+        equipment_renderer.render(game_state, frames);
     }
     viewport.render();
 }

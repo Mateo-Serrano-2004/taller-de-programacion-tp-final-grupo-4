@@ -1,6 +1,7 @@
 #include "equipment_renderer.h"
 
 #include <cstdint>
+#include <iostream>
 #include <SDL2pp/Texture.hh>
 #include <SDL2pp/Rect.hh>
 
@@ -14,27 +15,44 @@
 #include "utils/pane_scalator.h"
 #include "utils/number_texture_generator.h"
 
+void View::EquipmentRenderer::render_number(int ammo) {
+    auto textured_number = View::NumberTextureGenerator::get_hud_number(ammo);
+    for (auto& slice: textured_number.first) {
+        numbers.emplace_back(controller);
+        auto number = &numbers.front();
+        number->set_texture(textured_number.second);
+        number->set_texture_slice(slice);
+        number->set_size(SDL2pp::Point(slice.GetW(), slice.GetH()));
+        number->set_draw_texture(true);
+        View::PaneScalator::scalate_width_with_aspect_ratio(number, 15);
+    }
+}
+
+void View::EquipmentRenderer::render_separator() {
+    auto separator = View::NumberTextureGenerator::get_separator();
+
+    numbers.emplace_back(controller);
+    auto separator_sprite = &numbers.front();
+    separator_sprite->set_texture(separator.second);
+    separator_sprite->set_texture_slice(separator.first);
+    separator_sprite->set_draw_texture(true);
+    separator_sprite->set_size(SDL2pp::Point(separator.first.GetW(), separator.first.GetH()));
+    View::PaneScalator::scalate_width_with_aspect_ratio(separator_sprite, 15);
+}
+
 void View::EquipmentRenderer::render_ammo(Shared<RenderedPlayer> player) {
     auto weapon = player->get_current_weapon();
     int loaded_ammo = weapon->get_loaded_ammo();
     int total_ammo = weapon->get_total_ammo();
 
-    auto loaded_numbers = View::NumberTextureGenerator::get_hud_number(loaded_ammo);
-    auto total_numbers = View::NumberTextureGenerator::get_hud_number(total_ammo);
-    auto separator = View::NumberTextureGenerator::get_separator();
+    render_number(loaded_ammo);
+    render_separator();
+    render_number(total_ammo);
 
-    for (auto& slice: loaded_numbers.first) {
-        current_ammo.emplace_back(controller);
-        current_ammo.front().set_texture(loaded_numbers.second);
-        current_ammo.front().set_texture_slice(slice);
-    }
-    current_ammo.emplace_back(controller);
-    current_ammo.front().set_texture(separator.second);
-    current_ammo.front().set_texture_slice(separator.first);
-    for (auto& slice: total_numbers.first) {
-        current_ammo.emplace_back(controller);
-        current_ammo.front().set_texture(total_numbers.second);
-        current_ammo.front().set_texture_slice(slice);
+    ammo_data.set_width(0);
+    for (auto& pane: numbers) {
+        ammo_data.add_child(&pane);
+        ammo_data.set_width(ammo_data.get_width() + pane.get_width());
     }
 }
 
@@ -47,9 +65,11 @@ void View::EquipmentRenderer::render_weapon(Shared<View::RenderedPlayer> player)
     );
     current_weapon_slot.set_texture(weapon_texture);
     current_weapon_slot.set_size(weapon_texture->GetSize());
+    current_weapon_slot.set_draw_texture(true);
     View::PaneScalator::scalate_width_with_aspect_ratio(&current_weapon_slot, 15);
 
-    current_ammo.clear();
+    ammo_data.clear_children();
+    numbers.clear();
     if (weapon_id != Model::WeaponID::KNIFE && weapon_id != Model::WeaponID::BOMB)
         render_ammo(player);
 }
@@ -68,19 +88,27 @@ void View::EquipmentRenderer::render_bomb(Shared<RenderedPlayer> player) {
 }
 
 View::EquipmentRenderer::EquipmentRenderer(Weak<Controller::GameController> controller,
-                                           View::VerticalPane& viewport):
+                                           View::Pane* viewport):
         View::Renderer(controller),
         controller(controller),
         viewport(viewport),
         items(controller),
         bomb_slot(controller),
         current_weapon_data(controller),
-        current_weapon_slot(controller) {
+        current_weapon_slot(controller),
+        ammo_data(controller) {
+    viewport->add_child(&items);
+
     items.set_vertical_alignment(1.0f);
     items.set_horizontal_alignment(0.0f);
-
     items.add_child(&bomb_slot);
     items.add_child(&current_weapon_data);
+
+    current_weapon_data.add_child(&current_weapon_slot);
+    current_weapon_data.add_child(&ammo_data);
+
+    ammo_data.set_height(15);
+    ammo_data.set_horizontal_alignment(0.0f);
 }
 
 void View::EquipmentRenderer::render(const Model::GameState& game_state, uint8_t) {

@@ -43,8 +43,7 @@ void View::RenderedPlayer::render_weapon(const SDL2pp::Point& player_center) {
 
 void View::RenderedPlayer::render_name(const SDL2pp::Point& player_center) {
     Shared<SDL2pp::Texture> text =
-            asset_manager->apply_font_to_text(asset_manager->generate_font("liberationsans", 16),
-                                              name, SDL2pp::Color(255, 255, 255, 255));
+            asset_manager->apply_font_to_text(16, name, SDL2pp::Color(255, 255, 255, 255));
     renderer->Copy(*text, SDL2pp::NullOpt,
                    SDL2pp::Rect(player_center.GetX() - (text->GetWidth()) / 2,
                                 player_center.GetY() - 17 - text->GetHeight(), text->GetWidth(),

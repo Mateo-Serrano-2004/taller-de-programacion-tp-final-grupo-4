@@ -29,7 +29,6 @@ class RenderedPlayer;
 class PlayerRenderer: public Renderer {
 protected:
     Shared<Controller::GameStateManager> game_state_manager;
-    Shared<SDL2pp::Font> font;
     Shared<SDL2pp::Texture> bomb_texture;
 
     void render_winner_message(const Model::GameState& game_state, uint8_t frames);

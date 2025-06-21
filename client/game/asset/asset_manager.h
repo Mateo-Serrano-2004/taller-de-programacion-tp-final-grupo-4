@@ -36,7 +36,6 @@ private:
     std::map<TextureID, Shared<SDL2pp::Texture>> textures;
     std::map<AnimationID, Model::AnimationDetails> animations;
     std::map<color_tuple, Shared<SDL2pp::Texture>> backgrounds;
-    std::map<font_tuple, Shared<SDL2pp::Font>> fonts;
     Shared<SDL2pp::Texture> current_map;
 
 public:
@@ -50,14 +49,12 @@ public:
                                                 uint8_t alpha);
     Shared<SDL2pp::Texture> generate_background(const SDL2pp::Color& color);
 
-    Shared<SDL2pp::Font> generate_font(const std::string& name, uint8_t size);
-
     Shared<SDL2pp::Texture> generate_map(const DTO::MapDTO& map_dto);
 
     Shared<SDL2pp::Texture> get_texture(TextureID id);
     const Model::AnimationDetails& get_animation(AnimationID id);
 
-    Shared<SDL2pp::Texture> apply_font_to_text(Shared<SDL2pp::Font> font, const std::string& text,
+    Shared<SDL2pp::Texture> apply_font_to_text(uint8_t size, const std::string& text,
                                                const SDL2pp::Color& color);
 
     ~AssetManager() = default;
