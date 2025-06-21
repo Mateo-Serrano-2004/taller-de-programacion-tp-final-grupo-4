@@ -29,6 +29,8 @@ private:
     QLineEdit* gameNameInput;
     QPushButton* createButton;
     void setUpGameCreation();
+    bool isValidGameName(const QString& name);
+    void updateCreateButtonState();
 };
 
 #endif  // GAMECREATIONSCENE_H

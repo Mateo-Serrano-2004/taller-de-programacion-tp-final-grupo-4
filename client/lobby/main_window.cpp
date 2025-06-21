@@ -82,7 +82,10 @@ void MainWindow::showWelcomeScene() {
             welcomeScene, &WelcomeScene::startClicked, this,
             // [this](QString username, QString ip, QString port) {
             [this]() {
-                // protocol = new Net::ClientProtocol(ip.toStdString(), port.toStdString());
+                //host = ip.toStdString();
+                //port = port.toStdString();
+                //username = username.toStdString();
+
                 host = "localhost";
                 port = "9000";
                 username = "user";
