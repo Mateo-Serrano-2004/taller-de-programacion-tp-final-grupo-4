@@ -72,7 +72,7 @@ bool MovementSystem::is_colliding_with_other_players(const Physics::Vector2D& po
     return false;
 }
 
-void MovementSystem::process_movements(std::map<uint8_t, FullPlayer>& players, uint16_t frames_to_process) {
+void MovementSystem::process_movements(std::map<uint8_t, FullPlayer>& players, uint16_t frames_to_process, bool players_collisions_enabled) {
     for (auto& [id, player] : players) {
         if (!player.is_alive()) continue;
 
@@ -86,7 +86,7 @@ void MovementSystem::process_movements(std::map<uint8_t, FullPlayer>& players, u
             Physics::Vector2D next = pos + dir;
 
             if (is_colliding_with_map(next, size) ||
-                is_colliding_with_other_players(next, size, id, players)) {
+                (players_collisions_enabled && is_colliding_with_other_players(next, size, id, players))) {
                 if (dir.get_x() != 0) player.stop_horizontal_movement();
                 if (dir.get_y() != 0) player.stop_vertical_movement();
                 break;

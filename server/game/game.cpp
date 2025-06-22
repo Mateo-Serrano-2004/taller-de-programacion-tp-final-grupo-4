@@ -172,11 +172,11 @@ void Game::clear_game_queue() {
     while (game_queue.try_pop(event_info)) {}
 }
 
-Physics::Vector2D Game::get_position_for_player(Model::TeamID team, uint8_t i) {
+Physics::Vector2D Game::get_position_for_new_player(Model::TeamID team) {
     if (team == Model::TeamID::CT) {
-        return Physics::Vector2D(32, 96);
+        return ct_spawn_positions[0];
     }
-    return Physics::Vector2D(32, 32);
+    return tt_spawn_positions[0];
 }
 
 // VER EL TEMA DE JUGADORES MAXIMOS ANTES
@@ -229,7 +229,7 @@ void Game::update_players_that_won() {
 }
 
 void Game::process_frames(uint16_t frames_to_process) {
-    movement_system.process_movements(players, frames_to_process);
+    movement_system.process_movements(players, frames_to_process, state != GameState::WaitingStart);
     gamelogic.process_defusing(players, round);
     round.update(frames_to_process);
     gamelogic.process_reloading(players, round, frames_to_process);
@@ -401,7 +401,7 @@ void Game::add_player(const std::string& username, ClientQueue& client_queue, sh
     }
 
     players.emplace(player_id, FullPlayer(player_id, username, team_id, role_id,
-                                          get_position_for_player(team_id, players.size())));
+                                          get_position_for_new_player(team_id)));
     client_queues[player_id] = &client_queue;
 
     round.notify_player_joined(team_id);

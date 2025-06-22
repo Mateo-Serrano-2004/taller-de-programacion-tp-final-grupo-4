@@ -28,7 +28,7 @@ public:
     MovementSystem();
     explicit MovementSystem(const std::vector<std::vector<TileType>>& type_matrix);
 
-    void process_movements(std::map<uint8_t, FullPlayer>& players, uint16_t frames_to_process);
+    void process_movements(std::map<uint8_t, FullPlayer>& players, uint16_t frames_to_process, bool players_collisions_enabled);
 };
 
 #endif  // MOVEMENT_SYSTEM_H

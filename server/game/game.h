@@ -88,7 +88,7 @@ private:
     void clear_game_queue();
     void start_new_round();
 
-    Physics::Vector2D get_position_for_player(Model::TeamID team, uint8_t i);
+    Physics::Vector2D get_position_for_new_player(Model::TeamID team);
 
     void load_map_features();
 
