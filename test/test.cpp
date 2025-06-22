@@ -6,6 +6,7 @@
 #include "../server/game/game.h"
 #include "../common/DTO/game_state_dto.h"
 #include "../common/DTO/dto_variant.h"
+#include "../common/DTO/drop_weapon_dto.h"
 #include "../common/queue.h"
 #include "../common/slot_id.h"
 #include "../common/weapon_id.h"
@@ -913,15 +914,15 @@ void test_muerte_stats() {
     game.add_player("CT", client_queue1, ct_id, Model::TeamID::CT, Model::RoleID::CT1);
     game.add_player("TT", client_queue2, tt_id, Model::TeamID::TT, Model::RoleID::T1);
 
-    std::this_thread::sleep_for(seconds(12));  // Warmup + buy
+    std::this_thread::sleep_for(seconds(22));  // Warmup + buy
 
-    game.get_queue().push({tt_id, RotationEvent(0)});
+    game.get_queue().push({ct_id, RotationEvent(0)});
     std::this_thread::sleep_for(milliseconds(32));
 
     for (int i = 0; i < 4; ++i) {
-        game.get_queue().push({tt_id, UseWeaponEvent()});
+        game.get_queue().push({ct_id, UseWeaponEvent()});
         std::this_thread::sleep_for(milliseconds(32));
-        game.get_queue().push({tt_id, StopUsingWeaponEvent()});
+        game.get_queue().push({ct_id, StopUsingWeaponEvent()});
         std::this_thread::sleep_for(milliseconds(32));
     }
 
@@ -929,7 +930,6 @@ void test_muerte_stats() {
     game.stop();
 
     DTO::DTOVariant dto;
-
     std::map<uint8_t, std::tuple<uint8_t, uint8_t, uint16_t, uint8_t>> last_stats;
     std::set<uint8_t> printed_players;
 
@@ -937,14 +937,16 @@ void test_muerte_stats() {
         if (!std::holds_alternative<DTO::GameStateDTO>(dto)) continue;
 
         const auto& state = std::get<DTO::GameStateDTO>(dto);
+
+        // Mostrar stats de jugadores (con 💀 si murió)
         for (const auto& p : state.players) {
             auto stats = std::make_tuple(p.kills, p.deaths, p.money, p.health);
-
             bool first = !printed_players.count(p.player_id);
             bool changed = !first && stats != last_stats[p.player_id];
 
             if (first || changed) {
-                std::cout << "[PLAYER " << (int)p.player_id << "] "
+                std::string death_icon = (p.health == 0) ? "💀 " : "";
+                std::cout << death_icon << "[PLAYER " << (int)p.player_id << "] "
                           << "Kills: " << (int)p.kills << ", "
                           << "Deaths: " << (int)p.deaths << ", "
                           << "Money: " << p.money << ", "
@@ -954,9 +956,19 @@ void test_muerte_stats() {
                 printed_players.insert(p.player_id);
             }
         }
+
+        // Mostrar dropped weapons (si hay) en este GameStateDTO
+        const auto& drops = state.round.dropped_weapons;
+        if (!drops.empty()) {
+            std::cout << "🟡 Drops recibidos en este GameStateDTO:\n";
+            for (const auto& drop : drops) {
+                std::cout << "  🧨 WeaponID: " << static_cast<int>(drop.weapon_id)
+                          << " en (" << drop.position_x << ", " << drop.position_y << ")\n";
+            }
+        }
     }
 
-    std::cout << "✅ Test rotacion_y_disparo terminó (sin asserts)\n";
+    std::cout << "✅ Test muerte_stats terminó (sin asserts)\n";
 }
 
 int main() {
@@ -972,7 +984,7 @@ int main() {
     //test_tt_defuse_interrumpido_dos_veces(); este
     //test_movimiento_con_colisiones();
     //test_movimiento_hacia_pared_doble();
-    //test_muerte_stats();
+    test_muerte_stats();
     std::cout << "Pasaron los test" << std::endl;
     return 0;
 }
