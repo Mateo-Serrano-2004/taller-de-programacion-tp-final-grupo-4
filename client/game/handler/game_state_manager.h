@@ -42,7 +42,7 @@ public:
 
     void update_player_id(short_id_t new_id);
     void update_map(Shared<SDL2pp::Texture> new_map);
-    void update(DTO::GameStateDTO&& game_state_dto);
+    void update(DTO::GameStateDTO& game_state_dto);
 
     ~GameStateManager() = default;
 };

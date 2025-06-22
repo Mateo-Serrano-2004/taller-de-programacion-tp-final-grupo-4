@@ -43,7 +43,7 @@ void Controller::GameStateManager::update_map(Shared<SDL2pp::Texture> new_map) {
     game_state->map = new_map;
 }
 
-void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
+void Controller::GameStateManager::update(DTO::GameStateDTO& game_state_dto) {
     auto new_game_state = make_shared<Model::GameState>();
 
     for (const auto& dto: game_state_dto.players) {
@@ -62,13 +62,14 @@ void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
     game_state->fires.remove_if(
             [](Shared<View::MuzzleFireAnimation>& a) { return a->has_ended(); });
     game_state->fires.splice(game_state->fires.end(), new_game_state->fires);
-    if (game_state->winner_message && game_state->winner_message->has_ended())
-        game_state->winner_message = nullptr;
 
     game_state->time_left = game_state_dto.round.time_left;
     if (game_state_dto.round.bomb_planted && !game_state->bomb_position.has_value()) {
         auto pos = game_state_dto.round.bomb_position;
         game_state->bomb_position = SDL2pp::Point(pos.get_x(), pos.get_y());
+    }
+    if (game_state_dto.round.bomb_defused || game_state_dto.round.state != RoundState::Active) {
+        game_state->bomb_position = std::nullopt;
     }
     auto ref_player = game_state->get_reference_player();
     if (ref_player) {
@@ -92,8 +93,14 @@ void Controller::GameStateManager::update(DTO::GameStateDTO&& game_state_dto) {
     game_state->round_winner = game_state_dto.round.winner;
     game_state->game_winner = game_state_dto.winner;
 
-    if (game_state_dto.round.ended) {
-        game_state->winner_message =
-                make_shared<View::WinnerTeamMessageAnimation>(controller, game_state->round_winner);
+    if (game_state->winner_message && game_state->winner_message->has_ended())
+        game_state->winner_message = nullptr;
+
+    if (game_state_dto.round.ended && game_state->round_state == RoundState::Active) {
+        game_state->winner_message = make_shared<View::WinnerTeamMessageAnimation>(
+            controller, game_state->round_winner
+        );
     }
+
+    game_state->round_state = game_state_dto.round.state;
 }

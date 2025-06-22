@@ -3,8 +3,6 @@
 
 #include <cstdint>
 
-#include <SDL2/SDL.h>
-
 #include "common/definitions.h"
 #include "entity/button.h"
 #include "entity/horizontal_pane.h"
@@ -29,7 +27,6 @@ private:
     void trigger_buttons(Shared<SDL_Event> event);
 
 protected:
-    SDL_Event placeholder;
     Controller::MenuEventHandlerStrategy strategy;
     View::PlayerRenderer player_renderer;
     Shared<Controller::GameStateManager> game_state_manager;

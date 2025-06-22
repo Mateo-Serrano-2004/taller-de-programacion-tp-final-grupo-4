@@ -24,6 +24,9 @@ class BaseController;
 namespace View {
 class Pane: public Rendered, public Textured, public Rotated {
 protected:
+    bool position_set;
+    bool size_set;
+
     std::list<Pane*> children;
     bool draw_background;
     Shared<SDL2pp::Texture> background;
@@ -58,8 +61,8 @@ public:
     virtual void set_size(const SDL2pp::Point& new_size);
     void set_parent(Pane* new_parent);
 
-    void add_child(Pane* new_child);
-    void clear_children();
+    virtual void add_child(Pane* new_child);
+    virtual void clear_children();
 
     virtual void render() override;
 

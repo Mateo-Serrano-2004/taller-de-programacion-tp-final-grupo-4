@@ -5,7 +5,6 @@
 #include <string>
 #include <utility>
 
-#include <SDL2/SDL.h>
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Renderer.hh>
 
@@ -39,9 +38,7 @@ void Context::ShopContext::trigger_buttons(Shared<SDL_Event> event) {
 void Context::ShopContext::render(uint8_t) { background.render(); }
 
 void Context::ShopContext::dispatch_events() {
-    while (SDL_PollEvent(&placeholder)) {
-        strategy.handle(make_shared<SDL_Event>(placeholder));
-    }
+    strategy.dispatch();
 }
 
 Context::ShopContext::ShopContext(Weak<Controller::GameController> controller):

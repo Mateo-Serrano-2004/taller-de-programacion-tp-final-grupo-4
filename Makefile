@@ -12,6 +12,13 @@ install-compile-tools:
 	@sudo apt-get update
 	@echo "Installing build dependencies"
 	@sudo apt-get install -y cmake g++
+	@echo "Installing code utilities"
+	@sudo apt-get install -y valgrind
+	@sudo apt-get install -y gdb
+	@sudo apt-get install -y pre-commit
+	@sudo apt-get install -y clang-format
+	@sudo apt-get install -y cppcheck
+	@sudo apt-get install -y cpplint
 
 install-yaml:
 	@sudo apt-get install -y libyaml-cpp-dev

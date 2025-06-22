@@ -1,7 +1,5 @@
 #include "horizontal_pane.h"
 
-#include <algorithm>
-
 #include "controller/base_controller.h"
 
 void View::HorizontalPane::position_children() {
@@ -18,6 +16,19 @@ void View::HorizontalPane::position_children() {
         previous_start += child->get_width();
         previous_start += gap_x;
     }
+}
+
+void View::HorizontalPane::fit() {
+    int width = 0;
+    int height = 0;
+    for (auto* child : children) {
+        width += child->get_width();
+        height = std::max(height, child->get_height());
+    }
+    size.SetX(width);
+    size.SetY(height);
+    if (children.size() > 1)
+        size.SetX(size.GetX() + (children.size() - 1) * gap_x);
 }
 
 View::HorizontalPane::HorizontalPane(Weak<Controller::BaseController> controller, int gap_x):

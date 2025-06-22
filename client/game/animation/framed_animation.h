@@ -15,13 +15,11 @@ namespace View {
 class FramedAnimation: public Animation {
 protected:
     int current_frame;
-    bool ended;
     int total_frames;
 
 public:
     explicit FramedAnimation(Weak<Controller::BaseController> controller);
 
-    void set_total_frames(int frames);
     virtual void step(int frames);
 
     virtual ~FramedAnimation() = default;

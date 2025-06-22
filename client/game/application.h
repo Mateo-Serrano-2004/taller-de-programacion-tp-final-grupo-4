@@ -14,8 +14,8 @@ protected:
     SDL2pp::SDL sdl;
     SDL2pp::SDLTTF ttf;
 
-    Shared<Context::ContextManager> context_manager;
     Shared<Controller::BaseController> controller;
+    Shared<Context::ContextManager> context_manager;
 
     Application(const Application&) = delete;
     Application& operator=(const Application&) = delete;

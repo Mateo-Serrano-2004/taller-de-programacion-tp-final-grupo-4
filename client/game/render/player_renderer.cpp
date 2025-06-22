@@ -159,7 +159,6 @@ View::PlayerRenderer::PlayerRenderer(Weak<Controller::GameController> controller
         View::Renderer(controller) {
     auto controller_locked = controller.lock();
     game_state_manager = controller_locked->get_game_state_manager();
-    font = asset_manager->generate_font("liberationsans", 16);
     bomb_texture = asset_manager->get_texture(Model::TextureID::SPRITE_BOMB);
 }
 

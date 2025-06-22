@@ -9,6 +9,7 @@
 #include "entity/horizontal_pane.h"
 #include "entity/pane.h"
 
+#include "equipment_renderer.h"
 #include "renderer.h"
 
 namespace SDL2pp {
@@ -30,7 +31,9 @@ protected:
     Shared<SDL2pp::Texture> hud_numbers;
     Shared<SDL2pp::Texture> hud_symbols;
 
-    Pane viewport;
+    VerticalPane viewport;
+    Pane equipment_space;
+    EquipmentRenderer equipment_renderer;
     HorizontalPane time;
     HorizontalPane stats;
     HorizontalPane health;

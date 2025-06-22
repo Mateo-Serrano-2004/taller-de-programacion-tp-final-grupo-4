@@ -65,6 +65,11 @@ void Model::AssetLoader::load_hud_texture(Model::TextureID id, int index) {
 void Model::AssetLoader::load_hud_textures() {
     load_hud_texture(Model::TextureID::HUD_NUMS, 0);
     load_hud_texture(Model::TextureID::HUD_SYMBOLS, 1);
+    load_hud_texture(Model::TextureID::HUD_AK47, 2);
+    load_hud_texture(Model::TextureID::HUD_AWP, 3);
+    load_hud_texture(Model::TextureID::HUD_GLOCK, 4);
+    load_hud_texture(Model::TextureID::HUD_KNIFE, 5);
+    load_hud_texture(Model::TextureID::HUD_M3, 6);
 }
 
 void Model::AssetLoader::load_fov() {
@@ -82,16 +87,13 @@ void Model::AssetLoader::load_animations() {
                             Model::AnimationDetails(5, 1, 5, 5, animation));
 }
 
-void Model::AssetLoader::load_white_background() {
-    manager->generate_background(255, 255, 255, 255);
-}
-
 Model::AssetLoader::AssetLoader(Shared<AssetManager> manager, Shared<SDL2pp::Renderer> renderer,
                                 const DTO::ConfigDTO& config):
         player_sprites({"ct1.bmp", "ct2.bmp", "ct3.bmp", "ct4.bmp", "t1.bmp", "t2.bmp", "t3.bmp",
                         "t4.bmp"}),
         weapon_sprites({"ak47.bmp", "awp.bmp", "bomb_d.bmp", "glock.bmp", "knife.bmp", "m3.bmp"}),
-        hud_textures({"hud_nums.bmp", "hud_symbols.bmp"}),
+        hud_textures({"hud_nums.bmp", "hud_symbols.bmp", "ak47_k.bmp", "awp_k.bmp", "glock_k.bmp",
+                      "knife_k.bmp", "m3_k.bmp"}),
         manager(manager),
         renderer(renderer),
         config(config),
@@ -103,5 +105,4 @@ void Model::AssetLoader::load_all_textures() {
     load_hud_textures();
     load_fov();
     load_animations();
-    load_white_background();
 }

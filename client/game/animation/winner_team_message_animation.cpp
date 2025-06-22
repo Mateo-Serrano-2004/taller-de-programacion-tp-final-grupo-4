@@ -19,10 +19,10 @@ View::WinnerTeamMessageAnimation::WinnerTeamMessageAnimation(
     viewport.add_child(&message);
     viewport.set_vertical_alignment(0.2f);
     message.set_text(get_message(team));
-    message.set_font_size(20);
+    message.set_font_size(15);
     auto color = get_color(team);
     message.set_font_color(color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha());
-    set_total_frames(160);
+    total_frames = 160;
 }
 
 void View::WinnerTeamMessageAnimation::render() { viewport.render(); }

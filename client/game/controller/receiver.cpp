@@ -14,7 +14,7 @@
 #include "event/generate_map_event.h"
 #include "event/update_player_id_event.h"
 #include "event/update_role_event.h"
-#include "handler/game_state_manager.h"
+#include "event/update_game_state_event.h"
 
 #include "game_controller.h"
 
@@ -24,8 +24,12 @@ void Controller::Receiver::update_game_state(DTO::GameStateDTO&& dto) {
         try {
             controller.lock()->push_event(make_shared<Model::EndOfGameEvent>());
         } catch (const std::exception&) {}
-    } else if (game_state_manager) {
-        game_state_manager->update(std::move(dto));
+    } else {
+        try {
+            controller.lock()->push_event(
+                make_shared<Model::UpdateGameStateEvent>(std::move(dto))
+            );
+        } catch (const std::exception&) {}
     }
 }
 
@@ -63,7 +67,6 @@ Controller::Receiver::Receiver(Weak<GameController> controller,
                                Shared<Net::ClientProtocol> protocol):
         keep_running(true),
         controller(controller),
-        game_state_manager(controller.lock()->get_game_state_manager()),
         protocol(protocol) {
     start();
 }

@@ -244,7 +244,7 @@ void Game::process_frames(uint16_t frames_to_process) {
             kill();
             return;
         }
-        // broadcast_game_state(); con esto le mando antes que cambie
+        broadcast_game_state();
         start_new_round();
     }
 }
