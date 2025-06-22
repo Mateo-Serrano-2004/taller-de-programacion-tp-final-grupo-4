@@ -37,23 +37,23 @@ void Model::AssetLoader::load_weapon_sprites() {
 void Model::AssetLoader::load_dropped_weapon_sprites() {
     load_from_surface(
         Model::TextureID::DROPPED_AK47,
-        addresser.get_weapon_sprite_path(weapon_sprites[0])
+        addresser.get_weapon_sprite_path(dropped_weapon_sprites[0])
     );
     load_from_surface(
         Model::TextureID::DROPPED_AWP,
-        addresser.get_weapon_sprite_path(weapon_sprites[1])
+        addresser.get_weapon_sprite_path(dropped_weapon_sprites[1])
     );
     load_from_surface(
         Model::TextureID::DROPPED_BOMB,
-        addresser.get_weapon_sprite_path(weapon_sprites[2])
+        addresser.get_weapon_sprite_path(dropped_weapon_sprites[2])
     );
     load_from_surface(
         Model::TextureID::DROPPED_GLOCK,
-        addresser.get_weapon_sprite_path(weapon_sprites[3])
+        addresser.get_weapon_sprite_path(dropped_weapon_sprites[3])
     );
     load_from_surface(
         Model::TextureID::DROPPED_M3,
-        addresser.get_weapon_sprite_path(weapon_sprites[4])
+        addresser.get_weapon_sprite_path(dropped_weapon_sprites[4])
     );
 }
 
@@ -125,7 +125,7 @@ Model::AssetLoader::AssetLoader(Shared<AssetManager> manager, Shared<SDL2pp::Ren
                         "t4.bmp"}),
         weapon_sprites({"ak47.bmp", "awp.bmp", "bomb_d.bmp", "glock.bmp", "knife.bmp", "m3.bmp"}),
         dropped_weapon_sprites({
-            "dropped_ak47.bmp", "dropped_awp.bmp", "dropped_bomb.bmp",
+            "dropped_ak47.bmp", "dropped_awp.bmp", "bomb_d.bmp",
             "dropped_glock.bmp", "dropped_m3.bmp"
         }),
         hud_textures({"hud_nums.bmp", "hud_symbols.bmp", "ak47_k.bmp", "awp_k.bmp", "glock_k.bmp",
