@@ -106,6 +106,7 @@ View::EquipmentRenderer::EquipmentRenderer(Weak<Controller::GameController> cont
     items.set_horizontal_alignment(0.0f);
     // items.add_child(&bomb_slot);
     items.add_child(&current_weapon_data);
+    items.set_position(SDL2pp::Point(0, renderer->GetLogicalHeight() - 60));
 
     current_weapon_data.set_fit_to_children(true);
     current_weapon_data.add_child(&current_weapon_slot);
