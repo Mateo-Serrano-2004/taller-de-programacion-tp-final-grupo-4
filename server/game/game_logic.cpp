@@ -5,15 +5,16 @@
 
 #include "common/weapon_id.h"
 
-void GameLogic::buy_weapon(FullPlayer& player, Model::WeaponID weapon_id,
-                           const Round& round) const {
+void GameLogic::buy_weapon(FullPlayer& player, Model::WeaponID weapon_id, Round& round) const {
     if (!round.is_buying())
         return;
     if (!player.is_alive())
         return;
-    // TODO: Check player is in shop zone
 
-    shop.process_weapon_purchase(player, weapon_id);
+    Shared<FullWeapon> dropped = shop.process_weapon_purchase(player, weapon_id);
+    if (dropped) {
+        round.add_dropped_weapon(DroppedWeapon(dropped, player.get_position()));
+    }
 }
 
 // dummy por ahora

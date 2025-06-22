@@ -914,7 +914,10 @@ void test_muerte_stats() {
     game.add_player("CT", client_queue1, ct_id, Model::TeamID::CT, Model::RoleID::CT1);
     game.add_player("TT", client_queue2, tt_id, Model::TeamID::TT, Model::RoleID::T1);
 
-    std::this_thread::sleep_for(seconds(22));  // Warmup + buy
+    std::this_thread::sleep_for(seconds(11));  // Warmup
+
+    game.get_queue().push({ct_id, BuyEvent(Model::WeaponID::GLOCK)});
+    std::this_thread::sleep_for(seconds(11));  // Buy
 
     game.get_queue().push({ct_id, RotationEvent(0)});
     std::this_thread::sleep_for(milliseconds(32));
@@ -932,6 +935,9 @@ void test_muerte_stats() {
     DTO::DTOVariant dto;
     std::map<uint8_t, std::tuple<uint8_t, uint8_t, uint16_t, uint8_t>> last_stats;
     std::set<uint8_t> printed_players;
+
+    std::vector<std::tuple<uint8_t, uint16_t, uint16_t>> last_drops;
+    bool first_drops_printed = false;
 
     while (client_queue1.try_pop(dto)) {
         if (!std::holds_alternative<DTO::GameStateDTO>(dto)) continue;
@@ -957,14 +963,32 @@ void test_muerte_stats() {
             }
         }
 
-        // Mostrar dropped weapons (si hay) en este GameStateDTO
-        const auto& drops = state.round.dropped_weapons;
-        if (!drops.empty()) {
-            std::cout << "🟡 Drops recibidos en este GameStateDTO:\n";
-            for (const auto& drop : drops) {
-                std::cout << "  🧨 WeaponID: " << static_cast<int>(drop.weapon_id)
-                          << " en (" << drop.position_x << ", " << drop.position_y << ")\n";
+        // Extraer drops actuales en forma simple
+        std::vector<std::tuple<uint8_t, uint16_t, uint16_t>> current_drops;
+        for (const auto& d : state.round.dropped_weapons) {
+            current_drops.emplace_back(d.weapon_id, d.position_x, d.position_y);
+        }
+
+        // Mostrar si es el primero no vacío o si cambió respecto al último
+        bool changed = current_drops.size() != last_drops.size();
+
+        if (!changed) {
+            for (size_t i = 0; i < current_drops.size(); ++i) {
+                if (current_drops[i] != last_drops[i]) {
+                    changed = true;
+                    break;
+                }
             }
+        }
+
+        if (!current_drops.empty() && (!first_drops_printed || changed)) {
+            std::cout << "🟡 Drops recibidos en este GameStateDTO:\n";
+            for (const auto& [weapon_id, x, y] : current_drops) {
+                std::cout << "  🧨 WeaponID: " << static_cast<int>(weapon_id)
+                          << " en (" << x << ", " << y << ")\n";
+            }
+            last_drops = current_drops;
+            first_drops_printed = true;
         }
     }
 
