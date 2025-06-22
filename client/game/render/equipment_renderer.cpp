@@ -113,8 +113,6 @@ View::EquipmentRenderer::EquipmentRenderer(Weak<Controller::GameController> cont
     current_weapon_data.add_child(&ammo_data);
 
     ammo_data.set_horizontal_alignment(0.0f);
-    ammo_data.set_background_color(0, 0, 0, 255);
-    ammo_data.set_draw_background(true);
     ammo_data.set_fit_to_children(true);
 }
 
