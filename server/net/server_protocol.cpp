@@ -95,6 +95,9 @@ EventVariant ServerProtocol::receive_event() {
         case Model::EventType::STOP_DEFUSING_BOMB: {
             return StopDefusingBombEvent();
         }
+        case Model::EventType::DROP_WEAPON: {
+            return DropWeaponEvent();
+        }
         default:
             throw std::invalid_argument("Invalid event code");
     }
@@ -125,6 +128,7 @@ void ServerProtocol::send_dropped_weapons(const std::vector<DTO::DropWeaponDTO>&
         peer.sendall(&position_y, sizeof(position_y));
     }
 }
+
 void ServerProtocol::send_weapon(const DTO::WeaponDTO& weapon_dto) {
     uint16_t total_ammo = htons(weapon_dto.total_ammo);
 
