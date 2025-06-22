@@ -34,7 +34,7 @@ Shared<Controller::GameController> App::CS2DApp::set_up_graphics(
     auto config = std::get<DTO::ConfigDTO>(protocol->receive_variant());
     auto window =
             make_shared<SDL2pp::Window>("In Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                                        config.width, config.height, 0);
+                                        config.width, config.height, SDL_WINDOW_RESIZABLE);
     auto renderer = make_shared<SDL2pp::Renderer>(*window, -1, SDL_RENDERER_ACCELERATED);
     renderer->SetLogicalSize(config.width, config.height);
 
