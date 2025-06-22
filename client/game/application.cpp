@@ -9,8 +9,6 @@
 #include "client/exception/closed_game.h"
 #include "common/periodic_clock.h"
 
-App::Application::Application(): sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO) {}
-
 void App::Application::launch() {
     bool keep_running = true;
     PeriodicClock clock(40);

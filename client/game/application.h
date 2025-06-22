@@ -7,13 +7,12 @@
 #include "common/definitions.h"
 #include "context/context_manager.h"
 #include "controller/base_controller.h"
+#include "controller/subsystem_manager.h"
 
 namespace App {
 class Application {
 protected:
-    SDL2pp::SDL sdl;
-    SDL2pp::SDLTTF ttf;
-
+    Controller::SubsystemManager subsystem_manager;
     Shared<Controller::BaseController> controller;
     Shared<Context::ContextManager> context_manager;
 
@@ -23,7 +22,7 @@ protected:
     Application& operator=(Application&&) = delete;
 
 public:
-    Application();
+    Application() = default;
 
     void launch();
 
