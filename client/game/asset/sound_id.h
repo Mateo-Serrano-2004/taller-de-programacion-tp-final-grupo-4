@@ -9,7 +9,9 @@ enum class SoundID: uint8_t {
     AK47_FIRE = 0x01,
     AWP_FIRE = 0x02,
     M3_FIRE = 0x03,
-    BOMB_EXPLOSION = 0x04
+    KNIFE_SLASH = 0x04,
+    BOMB_EXPLOSION = 0x05,
+    NO_SOUND = 0xFF
 };
 };
 

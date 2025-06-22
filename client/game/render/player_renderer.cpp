@@ -26,6 +26,7 @@
 #include "handler/game_state_manager.h"
 #include "model/game_state.h"
 #include "model/rendered_player.h"
+#include "sound/sound_effect.h"
 
 #include "camera.h"
 
@@ -76,6 +77,15 @@ void View::PlayerRenderer::render_muzzle_fires(const Model::GameState& game_stat
         }
         animation->set_player(player);
         animation->step(frames);
+    }
+    for (auto& shot: game_state.shot_sounds) {
+        auto player = game_state.get_player_by_id(shot->get_player_id());
+        if (!player) {
+            shot->end();
+            continue;
+        }
+        shot->set_player(player);
+        shot->play();
     }
 }
 

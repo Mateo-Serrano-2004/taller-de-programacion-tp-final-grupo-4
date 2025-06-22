@@ -4,6 +4,7 @@ std::map<Model::RoleID, Model::TextureID> Model::EnumTranslator::roles_to_textur
 std::map<Model::TextureID, Model::RoleID> Model::EnumTranslator::textures_to_roles;
 std::map<Model::WeaponID, Model::TextureID> Model::EnumTranslator::weapons_to_textures;
 std::map<Model::WeaponID, Model::TextureID> Model::EnumTranslator::weapons_to_hud_textures;
+std::map<Model::WeaponID, Model::SoundID> Model::EnumTranslator::weapons_to_sounds;
 
 void Model::EnumTranslator::build_roles_to_textures() {
     roles_to_textures = {{Model::RoleID::CT1, Model::TextureID::SPRITE_CT1},
@@ -49,11 +50,22 @@ void Model::EnumTranslator::build_weapons_to_hud_textures() {
                                {Model::WeaponID::EMPTY, Model::TextureID::NO_TEXTURE}};
 }
 
+void Model::EnumTranslator::build_weapons_to_sounds() {
+    weapons_to_sounds = {{Model::WeaponID::GLOCK, Model::SoundID::GLOCK_FIRE},
+                         {Model::WeaponID::AK47, Model::SoundID::AK47_FIRE},
+                         {Model::WeaponID::AWP, Model::SoundID::AWP_FIRE},
+                         {Model::WeaponID::M3, Model::SoundID::M3_FIRE},
+                         {Model::WeaponID::KNIFE, Model::SoundID::KNIFE_SLASH},
+                         {Model::WeaponID::BOMB, Model::SoundID::NO_SOUND},
+                         {Model::WeaponID::EMPTY, Model::SoundID::NO_SOUND}};
+}
+
 void Model::EnumTranslator::build() {
     build_roles_to_textures();
     build_textures_to_roles();
     build_weapons_to_textures();
     build_weapons_to_hud_textures();
+    build_weapons_to_sounds();
 }
 
 Model::RoleID Model::EnumTranslator::get_role_from_texture(Model::TextureID texture_id) {
@@ -70,4 +82,8 @@ Model::TextureID Model::EnumTranslator::get_texture_from_weapon(Model::WeaponID 
 
 Model::TextureID Model::EnumTranslator::get_hud_texture_from_weapon(Model::WeaponID weapon_id) {
     return weapons_to_hud_textures.at(weapon_id);
+}
+
+Model::SoundID Model::EnumTranslator::get_sound_from_weapon(Model::WeaponID weapon_id) {
+    return weapons_to_sounds.at(weapon_id);
 }

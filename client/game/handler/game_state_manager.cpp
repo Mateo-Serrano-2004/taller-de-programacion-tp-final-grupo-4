@@ -21,6 +21,7 @@
 #include "model/game_state.h"
 #include "model/rendered_player.h"
 #include "render/camera.h"
+#include "sound/sound_effect.h"
 
 Controller::GameStateManager::GameStateManager(Weak<Controller::GameController> controller):
         game_state(make_shared<Model::GameState>()), controller(controller) {
@@ -50,10 +51,24 @@ void Controller::GameStateManager::update(DTO::GameStateDTO& game_state_dto) {
         auto player = make_shared<View::RenderedPlayer>(controller, std::move(dto.to_player()));
         new_game_state->players.insert({player->get_id(), player});
 
-        if (player->is_shooting() &&
-            player->get_current_weapon()->get_weapon_id() != Model::WeaponID::KNIFE) {
-            new_game_state->fires.push_back(
-                    make_shared<View::MuzzleFireAnimation>(controller, player->get_id()));
+        if (player->is_shooting()) {
+            auto weapon_id = player->get_current_weapon()->get_weapon_id();
+            if (weapon_id != Model::WeaponID::KNIFE && weapon_id != Model::WeaponID::BOMB) {
+                new_game_state->fires.push_back(
+                    make_shared<View::MuzzleFireAnimation>(
+                        controller, player->get_id()
+                    )
+                );
+            }
+            if (weapon_id != Model::WeaponID::BOMB) {
+                new_game_state->shot_sounds.push_back(
+                    make_shared<View::SoundEffect>(
+                        controller,
+                        player->get_id(),
+                        player->get_current_weapon()->get_weapon_id()
+                    )
+                );
+            }
         }
     }
 
@@ -62,6 +77,10 @@ void Controller::GameStateManager::update(DTO::GameStateDTO& game_state_dto) {
     game_state->fires.remove_if(
             [](Shared<View::MuzzleFireAnimation>& a) { return a->has_ended(); });
     game_state->fires.splice(game_state->fires.end(), new_game_state->fires);
+    game_state->shot_sounds.remove_if(
+        [](Shared<View::SoundEffect>& sf) { return sf->has_ended(); }
+    );
+    game_state->shot_sounds.splice(game_state->shot_sounds.end(), new_game_state->shot_sounds);
 
     game_state->time_left = game_state_dto.round.time_left;
     if (game_state_dto.round.bomb_planted && !game_state->bomb_position.has_value()) {

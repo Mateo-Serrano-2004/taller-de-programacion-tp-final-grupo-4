@@ -28,6 +28,7 @@ private:
     std::vector<std::string> player_sprites;
     std::vector<std::string> weapon_sprites;
     std::vector<std::string> hud_textures;
+    std::vector<std::string> sounds;
     Shared<AssetManager> manager;
     Shared<SDL2pp::Renderer> renderer;
     DTO::ConfigDTO config;
@@ -39,7 +40,7 @@ private:
     void load_hud_textures();
     void load_fov();
     void load_animations();
-    void load_white_background();
+    void load_sounds();
 
 public:
     AssetLoader(Shared<AssetManager> manager, Shared<SDL2pp::Renderer> renderer,

@@ -24,6 +24,7 @@ class RenderedPlayer;
 class MuzzleFireAnimation;
 class WinnerTeamMessageAnimation;
 class ProgressBarAnimation;
+class SoundEffect;
 };  // namespace View
 
 namespace Model {
@@ -31,6 +32,7 @@ struct GameState {
 public:
     std::map<short_id_t, Shared<View::RenderedPlayer>> players;
     std::list<Shared<View::MuzzleFireAnimation>> fires;
+    std::list<Shared<View::SoundEffect>> shot_sounds;
     Shared<View::WinnerTeamMessageAnimation> winner_message;
     Shared<View::ProgressBarAnimation> bomb_defusing;
     View::Camera camera;
