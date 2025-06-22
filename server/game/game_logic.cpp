@@ -33,15 +33,60 @@ void GameLogic::start_using_weapon(FullPlayer& player, const Round& round) const
     player.start_using_weapon();
 }
 
-void GameLogic::drop_equipped_weapon(FullPlayer& player, Round& round) const {
+Physics::Vector2D GameLogic::find_nearest_free_tile_around(
+    const Physics::Vector2D& pos,
+    const Physics::Vector2D& size,
+    const std::vector<std::vector<TileType>>& type_matrix) const {
+
+    const int max_y = type_matrix.size();
+    const int max_x = (max_y > 0) ? type_matrix[0].size() : 0;
+
+    int x1 = static_cast<int>(pos.get_x()) / TILE_SIZE;
+    int y1 = static_cast<int>(pos.get_y()) / TILE_SIZE;
+    int x2 = static_cast<int>(pos.get_x() + size.get_x() - 1) / TILE_SIZE;
+    int y2 = static_cast<int>(pos.get_y() + size.get_y() - 1) / TILE_SIZE;
+
+    std::set<std::pair<int, int>> occupied_tiles;
+    for (int y = y1; y <= y2; ++y) {
+        for (int x = x1; x <= x2; ++x) {
+            occupied_tiles.emplace(x, y);
+        }
+    }
+
+    std::vector<std::pair<int, int>> directions = {
+        {0, -1}, {1, 0}, {0, 1}, {-1, 0},
+        {-1, -1}, {1, -1}, {1, 1}, {-1, 1}
+    };
+
+    for (const auto& [ox, oy] : occupied_tiles) {
+        for (const auto& [dx, dy] : directions) {
+            int nx = ox + dx;
+            int ny = oy + dy;
+
+            if (nx < 0 || ny < 0 || nx >= max_x || ny >= max_y) continue;
+            if (occupied_tiles.count({nx, ny})) continue;
+
+            if (type_matrix[ny][nx] == TileType::NOT_COLLIDABLE) {
+                return Physics::Vector2D(nx * TILE_SIZE, ny * TILE_SIZE);
+            }
+        }
+    }
+
+    // como ulrtimo recurso lo dropea en la pos del player y bueno
+    return pos;
+}
+
+void GameLogic::drop_equipped_weapon(FullPlayer& player, Round& round, const std::vector<std::vector<TileType>>& type_matrix) const {
     if (!player.is_alive())
         return;
 
     Shared<FullWeapon> dropped = player.drop_equipped_weapon();
     if (dropped) {
-        round.add_dropped_weapon(DroppedWeapon(dropped, player.get_position()));
+        Physics::Vector2D safe_pos = find_nearest_free_tile_around(player.get_position(), player.get_size(), type_matrix);
+        round.add_dropped_weapon(DroppedWeapon(dropped, safe_pos));
     }
 }
+
 
 void GameLogic::start_reloading_weapon(FullPlayer& player, const Round& round) const {
     if (!round.is_active())

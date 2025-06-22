@@ -1,7 +1,5 @@
 #include "movement_system.h"
 
-constexpr int TILE_SIZE = 32;
-
 MovementSystem::MovementSystem(const std::vector<std::vector<TileType>>& type_matrix) {
     for (int y = 0; y < static_cast<int>(type_matrix.size()); ++y) {
         for (int x = 0; x < static_cast<int>(type_matrix[y].size()); ++x) {
@@ -72,7 +70,70 @@ bool MovementSystem::is_colliding_with_other_players(const Physics::Vector2D& po
     return false;
 }
 
-void MovementSystem::process_movements(std::map<uint8_t, FullPlayer>& players, uint16_t frames_to_process, bool players_collisions_enabled) {
+void MovementSystem::try_pick_up_weapon(std::map<uint8_t, FullPlayer>& players,
+                                        uint8_t player_id,
+                                        Round& round) {
+    auto player_it = players.find(player_id);
+    if (player_it == players.end()) return;
+
+    FullPlayer& player = player_it->second;
+    if (!player.is_alive()) return;
+
+    Physics::Vector2D pos = player.get_position();
+    Physics::Vector2D size = player.get_size();
+
+    int left = static_cast<int>(pos.get_x());
+    int top = static_cast<int>(pos.get_y());
+    int right = left + static_cast<int>(size.get_x());
+    int bottom = top + static_cast<int>(size.get_y());
+
+    auto& drops = round.get_dropped_weapons();  // referencia modificable
+
+    for (auto it = drops.begin(); it != drops.end(); ++it) {
+        const auto& drop = *it;
+
+        const Physics::Vector2D& drop_pos = drop.get_position();
+        int drop_left = static_cast<int>(drop_pos.get_x());
+        int drop_top = static_cast<int>(drop_pos.get_y());
+        int drop_right = drop_left + TILE_SIZE;
+        int drop_bottom = drop_top + TILE_SIZE;
+
+        bool overlap_x = !(right <= drop_left || left >= drop_right);
+        bool overlap_y = !(bottom <= drop_top || top >= drop_bottom);
+
+        if (overlap_x && overlap_y) {
+            Shared<FullWeapon> weapon = drop.get_weapon();
+            if (!weapon) continue;
+
+            Model::SlotID slot = weapon->get_slot_id();
+
+            bool already_has = false;
+            switch (slot) {
+                case Model::SlotID::PRIMARY_WEAPON:
+                    already_has = player.has_primary_weapon();
+                    break;
+                case Model::SlotID::SECONDARY_WEAPON:
+                    already_has = player.has_secondary_weapon();
+                    break;
+                case Model::SlotID::BOMB_SLOT:
+                    already_has = player.has_bomb();
+                    break;
+                default:
+                    break;
+            }
+
+            if (!already_has) {
+                player.equip_new_weapon_and_drop_previous(weapon);
+                drops.erase(it);
+                break;
+            }
+        }
+    }
+}
+
+
+
+void MovementSystem::process_movements(std::map<uint8_t, FullPlayer>& players, Round& round, uint16_t frames_to_process, bool players_collisions_enabled) {
     for (auto& [id, player] : players) {
         if (!player.is_alive()) continue;
 
@@ -93,6 +154,8 @@ void MovementSystem::process_movements(std::map<uint8_t, FullPlayer>& players, u
             }
 
             pos = next;
+
+            try_pick_up_weapon(players, id, round);
         }
 
         player.set_position(pos);

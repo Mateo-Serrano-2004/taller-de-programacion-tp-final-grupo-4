@@ -67,7 +67,7 @@ public:
 
 
     void add_dropped_weapon(const DroppedWeapon& drop);
-    //const std::vector<DroppedWeapon>& get_dropped_weapons() const;
+    std::vector<DroppedWeapon>& get_dropped_weapons();
 
     DTO::RoundDTO to_dto(int fps) const;
 };

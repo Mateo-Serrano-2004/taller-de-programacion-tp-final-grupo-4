@@ -278,4 +278,16 @@ Shared<FullWeapon> FullPlayer::drop_equipped_weapon() {
     return dropped_weapon;
 }
 
+bool FullPlayer::has_primary_weapon() {
+    return primary_weapon != nullptr;
+}
+
+bool FullPlayer::has_secondary_weapon() {
+    return secondary_weapon != nullptr;
+}
+
+bool FullPlayer::has_bomb() {
+    return bomb != nullptr;
+}
+
 void FullPlayer::give_bomb(Shared<FullWeapon> new_bomb) { bomb = new_bomb; }

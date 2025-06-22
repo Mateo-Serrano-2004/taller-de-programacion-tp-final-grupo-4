@@ -53,6 +53,9 @@ public:
     bool can_pay(uint16_t price);
     bool has_bomb_equipped() const;
     void substract_money(uint16_t amount);
+    bool has_primary_weapon();
+    bool has_secondary_weapon();
+    bool has_bomb();
     Shared<FullWeapon> equip_new_weapon_and_drop_previous(Shared<FullWeapon> new_weapon);
 
     void reset_for_new_round(Physics::Vector2D new_position);

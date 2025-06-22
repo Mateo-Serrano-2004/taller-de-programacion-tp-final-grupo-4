@@ -1068,6 +1068,134 @@ void test_drop_weapon_event() {
     std::cout << "✅ Test drop_weapon_event terminado\n";
 }
 
+void test_dropped_weapon_position() {
+    std::cout << "[TEST] - Dropeo de arma y verificación de posición\n";
+
+    using namespace std::chrono;
+
+    ClientQueue client_queue;
+    Game game("test_party", "de_dummy");
+
+    uint8_t player_id = 1;
+
+    game.add_player("Player", client_queue, player_id, Model::TeamID::CT, Model::RoleID::CT1);
+
+    std::this_thread::sleep_for(seconds(11));  // Warmup
+
+    game.get_queue().push({player_id, DropWeaponEvent()});
+
+    std::this_thread::sleep_for(seconds(1));  // Esperar a que procese el evento
+
+    game.stop();
+
+    DTO::DTOVariant dto;
+    while (client_queue.try_pop(dto)) {
+        if (!std::holds_alternative<DTO::GameStateDTO>(dto)) continue;
+        const auto& state = std::get<DTO::GameStateDTO>(dto);
+
+        if (!state.round.dropped_weapons.empty()) {
+            std::cout << "🎯 Se detectó dropped_weapon:\n";
+            for (const auto& d : state.round.dropped_weapons) {
+                std::cout << "  🧨 WeaponID: " << static_cast<int>(d.weapon_id)
+                          << " en posición (" << d.position_x << ", " << d.position_y << ")\n";
+            }
+            break;  // Solo mostrar el primer DTO válido con drops
+        }
+    }
+
+    std::cout << "✅ Test dropped_weapon_position terminado\n";
+}
+
+void test_drop_and_move_weapon_with_weapon_tracking() {
+    std::cout << "[TEST] - Dropea arma, se mueve y se monitorea el arma equipada\n";
+
+    using namespace std::chrono;
+
+    ClientQueue client_queue;
+    Game game("test_party", "de_dummy");
+
+    uint8_t player_id = 1;
+
+    game.add_player("Player", client_queue, player_id, Model::TeamID::CT, Model::RoleID::CT1);
+
+    std::this_thread::sleep_for(seconds(11));  // Warmup
+
+    game.get_queue().push({player_id, DropWeaponEvent()});
+    std::this_thread::sleep_for(seconds(1));
+
+    game.get_queue().push({player_id, MovementEvent(0, -1)});
+    std::this_thread::sleep_for(seconds(3));
+    game.get_queue().push({player_id, StopMovementEvent(false)});
+
+    game.stop();
+
+    DTO::DTOVariant dto;
+    std::vector<std::tuple<uint8_t, uint16_t, uint16_t>> last_drops;
+    std::optional<DTO::PlayerDTO> last_player_dto;
+    bool printed_first_player_dto = false;
+
+    while (client_queue.try_pop(dto)) {
+        if (!std::holds_alternative<DTO::GameStateDTO>(dto)) continue;
+        const auto& state = std::get<DTO::GameStateDTO>(dto);
+
+        // DROPS
+        std::vector<std::tuple<uint8_t, uint16_t, uint16_t>> current_drops;
+        for (const auto& d : state.round.dropped_weapons) {
+            current_drops.emplace_back(d.weapon_id, d.position_x, d.position_y);
+        }
+
+        if (current_drops != last_drops && !current_drops.empty()) {
+            std::cout << "🟡 DTO con nuevos dropped weapons:\n";
+            for (const auto& [weapon_id, x, y] : current_drops) {
+                std::cout << "  🧨 WeaponID: " << static_cast<int>(weapon_id)
+                          << " en (" << x << ", " << y << ")\n";
+            }
+            last_drops = current_drops;
+        }
+
+        // PLAYER DTO
+        for (const auto& p : state.players) {
+            if (p.player_id != player_id) continue;
+
+            if (!printed_first_player_dto && state.round.state != RoundState::Warmup) {
+                std::cout << "🔹 Primer PlayerDTO con ronda activa:\n";
+                std::cout << "  Pos: (" << p.position_x << ", " << p.position_y << ") - ";
+                std::cout << "Health: " << static_cast<int>(p.health) << "\n";
+                std::cout << "  Weapon: ID = " << static_cast<int>(p.weapon_dto.weapon_id)
+                          << " | Ammo: [" << static_cast<int>(p.weapon_dto.loaded_ammo)
+                          << "/" << static_cast<int>(p.weapon_dto.total_ammo) << "]\n";
+                printed_first_player_dto = true;
+            }
+
+            if (!last_player_dto.has_value() ||
+                last_player_dto->weapon_dto.weapon_id != p.weapon_dto.weapon_id ||
+                last_player_dto->weapon_dto.loaded_ammo != p.weapon_dto.loaded_ammo ||
+                last_player_dto->weapon_dto.total_ammo != p.weapon_dto.total_ammo) {
+                std::cout << "🟢 Cambio en arma equipada:\n";
+                std::cout << "  Pos: (" << p.position_x << ", " << p.position_y << ") - ";
+                std::cout << "Weapon ID = " << static_cast<int>(p.weapon_dto.weapon_id)
+                          << " | Ammo: [" << static_cast<int>(p.weapon_dto.loaded_ammo)
+                          << "/" << static_cast<int>(p.weapon_dto.total_ammo) << "]\n";
+            }
+
+            last_player_dto = p;
+        }
+    }
+
+    if (last_player_dto.has_value()) {
+        const auto& p = last_player_dto.value();
+        std::cout << "🔻 Último PlayerDTO recibido:\n";
+        std::cout << "  Pos: (" << p.position_x << ", " << p.position_y << ") - ";
+        std::cout << "Health: " << static_cast<int>(p.health) << "\n";
+        std::cout << "  Weapon: ID = " << static_cast<int>(p.weapon_dto.weapon_id)
+                  << " | Ammo: [" << static_cast<int>(p.weapon_dto.loaded_ammo)
+                  << "/" << static_cast<int>(p.weapon_dto.total_ammo) << "]\n";
+    }
+
+    std::cout << "✅ Test test_drop_and_move_weapon_with_weapon_tracking terminado\n";
+}
+
+
 int main() {
     //test_cambio_ronda();
     //test_finaliza_por_muerte_ct();
@@ -1082,7 +1210,9 @@ int main() {
     //test_movimiento_con_colisiones();
     //test_movimiento_hacia_pared_doble();
     //test_muerte_stats();
-    test_drop_weapon_event();
+    //test_drop_weapon_event();
+    //test_dropped_weapon_position();
+    test_drop_and_move_weapon_with_weapon_tracking();
     std::cout << "Pasaron los test" << std::endl;
     return 0;
 }

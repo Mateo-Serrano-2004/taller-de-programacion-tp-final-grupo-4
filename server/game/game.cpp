@@ -72,7 +72,7 @@ void Game::handle_drop_weapon(const uint8_t& player_id) {
     auto player = find_player_by_id(player_id);
     if (!player.has_value())
         return;
-    gamelogic.drop_equipped_weapon(player->get(), round);
+    gamelogic.drop_equipped_weapon(player->get(), round, parser.getTypeMatrix());
 }
 
 void Game::handle_switch_weapon(const uint8_t& player_id, const SwitchWeaponEvent& event) {
@@ -238,7 +238,7 @@ void Game::update_players_that_won() {
 }
 
 void Game::process_frames(uint16_t frames_to_process) {
-    movement_system.process_movements(players, frames_to_process, state != GameState::WaitingStart);
+    movement_system.process_movements(players, round, frames_to_process, state != GameState::WaitingStart);
     gamelogic.process_defusing(players, round);
     round.update(frames_to_process);
     gamelogic.process_reloading(players, round, frames_to_process);
