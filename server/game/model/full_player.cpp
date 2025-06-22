@@ -89,6 +89,10 @@ Shared<FullWeapon> FullPlayer::equip_new_weapon_and_drop_previous(Shared<FullWea
             primary_weapon = new_weapon;
             current_weapon = primary_weapon;
             break;
+        case Model::SlotID::BOMB_SLOT:
+            bomb = new_weapon;
+            current_weapon = bomb;
+            break;
     }
     if (dropped_weapon)
         dropped_weapon->release_trigger();
@@ -263,7 +267,8 @@ Shared<FullWeapon> FullPlayer::drop_equipped_weapon() {
             break;
 
         case Model::SlotID::BOMB_SLOT:
-            dropped_weapon = remove_bomb();
+            dropped_weapon = bomb;
+            bomb = nullptr;
             break;
 
         case Model::SlotID::KNIFE_SLOT:
