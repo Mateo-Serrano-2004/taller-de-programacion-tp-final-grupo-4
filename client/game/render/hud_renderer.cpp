@@ -128,12 +128,14 @@ View::HUDRenderer::HUDRenderer(Weak<Controller::GameController> controller):
         hud_numbers(asset_manager->get_texture(Model::TextureID::HUD_NUMS)),
         hud_symbols(asset_manager->get_texture(Model::TextureID::HUD_SYMBOLS)),
         viewport(controller),
+        equipment_space(controller),
         equipment_renderer(controller, &viewport),
         time(controller),
         stats(controller),
         health(controller),
         money(controller) {
     viewport.add_child(&time);
+    viewport.add_child(&equipment_space);
     viewport.add_child(&stats);
     stats.add_child(&health);
     stats.add_child(&money);

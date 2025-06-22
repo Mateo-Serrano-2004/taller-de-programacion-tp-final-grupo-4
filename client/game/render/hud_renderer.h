@@ -31,7 +31,8 @@ protected:
     Shared<SDL2pp::Texture> hud_numbers;
     Shared<SDL2pp::Texture> hud_symbols;
 
-    Pane viewport;
+    VerticalPane viewport;
+    Pane equipment_space;
     EquipmentRenderer equipment_renderer;
     HorizontalPane time;
     HorizontalPane stats;
