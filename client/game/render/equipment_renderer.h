@@ -2,6 +2,7 @@
 #define CLIENT_GAME_RENDER_EQUIPMENT_RENDERER_H
 
 #include <cstdint>
+#include <list>
 
 #include "entity/vertical_pane.h"
 #include "entity/horizontal_pane.h"
@@ -29,9 +30,13 @@ private:
     HorizontalPane current_weapon_data;
     Pane current_weapon_slot;
     HorizontalPane ammo_data;
-    std::list<Pane> numbers;
+    HorizontalPane loaded_ammo_data;
+    std::list<Pane> loaded_ammo_numbers;
+    Pane separator;
+    HorizontalPane total_ammo_data;
+    std::list<Pane> total_ammo_numbers;
 
-    void render_number(int ammo);
+    void render_number(int ammo, std::list<Pane>& list);
     void render_separator();
     void render_ammo(Shared<RenderedPlayer> player);
     void render_weapon(Shared<RenderedPlayer> player);
