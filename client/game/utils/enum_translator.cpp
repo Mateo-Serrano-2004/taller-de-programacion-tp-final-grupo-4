@@ -4,6 +4,7 @@ std::map<Model::RoleID, Model::TextureID> Model::EnumTranslator::roles_to_textur
 std::map<Model::TextureID, Model::RoleID> Model::EnumTranslator::textures_to_roles;
 std::map<Model::WeaponID, Model::TextureID> Model::EnumTranslator::weapons_to_textures;
 std::map<Model::WeaponID, Model::TextureID> Model::EnumTranslator::weapons_to_hud_textures;
+std::map<Model::WeaponID, Model::TextureID> Model::EnumTranslator::weapons_to_dropped;
 std::map<Model::WeaponID, Model::SoundID> Model::EnumTranslator::weapons_to_sounds;
 
 void Model::EnumTranslator::build_roles_to_textures() {
@@ -50,6 +51,14 @@ void Model::EnumTranslator::build_weapons_to_hud_textures() {
                                {Model::WeaponID::EMPTY, Model::TextureID::NO_TEXTURE}};
 }
 
+void Model::EnumTranslator::build_weapons_to_dropped() {
+    weapons_to_dropped = {{Model::WeaponID::GLOCK, Model::TextureID::DROPPED_GLOCK},
+                          {Model::WeaponID::AK47, Model::TextureID::DROPPED_AK47},
+                          {Model::WeaponID::AWP, Model::TextureID::DROPPED_AWP},
+                          {Model::WeaponID::M3, Model::TextureID::DROPPED_M3},
+                          {Model::WeaponID::BOMB, Model::TextureID::DROPPED_BOMB}};
+}
+
 void Model::EnumTranslator::build_weapons_to_sounds() {
     weapons_to_sounds = {{Model::WeaponID::GLOCK, Model::SoundID::GLOCK_FIRE},
                          {Model::WeaponID::AK47, Model::SoundID::AK47_FIRE},
@@ -65,6 +74,7 @@ void Model::EnumTranslator::build() {
     build_textures_to_roles();
     build_weapons_to_textures();
     build_weapons_to_hud_textures();
+    build_weapons_to_dropped();
     build_weapons_to_sounds();
 }
 
@@ -82,6 +92,10 @@ Model::TextureID Model::EnumTranslator::get_texture_from_weapon(Model::WeaponID 
 
 Model::TextureID Model::EnumTranslator::get_hud_texture_from_weapon(Model::WeaponID weapon_id) {
     return weapons_to_hud_textures.at(weapon_id);
+}
+
+Model::TextureID Model::EnumTranslator::get_dropped_from_weapon(Model::WeaponID weapon_id) {
+    return weapons_to_dropped.at(weapon_id);
 }
 
 Model::SoundID Model::EnumTranslator::get_sound_from_weapon(Model::WeaponID weapon_id) {

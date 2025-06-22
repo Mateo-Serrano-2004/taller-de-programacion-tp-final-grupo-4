@@ -27,6 +27,7 @@ private:
     AssetAddresser addresser;
     std::vector<std::string> player_sprites;
     std::vector<std::string> weapon_sprites;
+    std::vector<std::string> dropped_weapon_sprites;
     std::vector<std::string> hud_textures;
     std::vector<std::string> sounds;
     Shared<AssetManager> manager;
@@ -35,8 +36,9 @@ private:
     View::AssetGenerator generator;
 
     void load_weapon_sprites();
+    void load_dropped_weapon_sprites();
     void load_player_sprites();
-    void load_hud_texture(Model::TextureID id, int index);
+    void load_from_surface(Model::TextureID id, const std::string& path);
     void load_hud_textures();
     void load_fov();
     void load_animations();

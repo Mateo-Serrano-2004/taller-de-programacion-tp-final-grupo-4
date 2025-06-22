@@ -34,6 +34,29 @@ void Model::AssetLoader::load_weapon_sprites() {
                           addresser.get_weapon_sprite_path(weapon_sprites[5]));
 }
 
+void Model::AssetLoader::load_dropped_weapon_sprites() {
+    load_from_surface(
+        Model::TextureID::DROPPED_AK47,
+        addresser.get_weapon_sprite_path(weapon_sprites[0])
+    );
+    load_from_surface(
+        Model::TextureID::DROPPED_AWP,
+        addresser.get_weapon_sprite_path(weapon_sprites[1])
+    );
+    load_from_surface(
+        Model::TextureID::DROPPED_BOMB,
+        addresser.get_weapon_sprite_path(weapon_sprites[2])
+    );
+    load_from_surface(
+        Model::TextureID::DROPPED_GLOCK,
+        addresser.get_weapon_sprite_path(weapon_sprites[3])
+    );
+    load_from_surface(
+        Model::TextureID::DROPPED_M3,
+        addresser.get_weapon_sprite_path(weapon_sprites[4])
+    );
+}
+
 void Model::AssetLoader::load_player_sprites() {
     manager->load_texture(Model::TextureID::SPRITE_CT1,
                           addresser.get_player_sprite_path(player_sprites[0]));
@@ -53,8 +76,8 @@ void Model::AssetLoader::load_player_sprites() {
                           addresser.get_player_sprite_path(player_sprites[7]));
 }
 
-void Model::AssetLoader::load_hud_texture(Model::TextureID id, int index) {
-    SDL2pp::Surface surface(addresser.get_hud_resource(hud_textures[index]));
+void Model::AssetLoader::load_from_surface(Model::TextureID id, const std::string& path) {
+    SDL2pp::Surface surface(path);
 
     surface.SetColorKey(true, SDL_MapRGB(surface.Get()->format, 0, 0, 0));
 
@@ -64,13 +87,13 @@ void Model::AssetLoader::load_hud_texture(Model::TextureID id, int index) {
 }
 
 void Model::AssetLoader::load_hud_textures() {
-    load_hud_texture(Model::TextureID::HUD_NUMS, 0);
-    load_hud_texture(Model::TextureID::HUD_SYMBOLS, 1);
-    load_hud_texture(Model::TextureID::HUD_AK47, 2);
-    load_hud_texture(Model::TextureID::HUD_AWP, 3);
-    load_hud_texture(Model::TextureID::HUD_GLOCK, 4);
-    load_hud_texture(Model::TextureID::HUD_KNIFE, 5);
-    load_hud_texture(Model::TextureID::HUD_M3, 6);
+    load_from_surface(Model::TextureID::HUD_NUMS, addresser.get_hud_resource(hud_textures[0]));
+    load_from_surface(Model::TextureID::HUD_SYMBOLS, addresser.get_hud_resource(hud_textures[1]));
+    load_from_surface(Model::TextureID::HUD_AK47, addresser.get_hud_resource(hud_textures[2]));
+    load_from_surface(Model::TextureID::HUD_AWP, addresser.get_hud_resource(hud_textures[3]));
+    load_from_surface(Model::TextureID::HUD_GLOCK, addresser.get_hud_resource(hud_textures[4]));
+    load_from_surface(Model::TextureID::HUD_KNIFE, addresser.get_hud_resource(hud_textures[5]));
+    load_from_surface(Model::TextureID::HUD_M3, addresser.get_hud_resource(hud_textures[6]));
 }
 
 void Model::AssetLoader::load_fov() {
@@ -101,6 +124,10 @@ Model::AssetLoader::AssetLoader(Shared<AssetManager> manager, Shared<SDL2pp::Ren
         player_sprites({"ct1.bmp", "ct2.bmp", "ct3.bmp", "ct4.bmp", "t1.bmp", "t2.bmp", "t3.bmp",
                         "t4.bmp"}),
         weapon_sprites({"ak47.bmp", "awp.bmp", "bomb_d.bmp", "glock.bmp", "knife.bmp", "m3.bmp"}),
+        dropped_weapon_sprites({
+            "dropped_ak47.bmp", "dropped_awp.bmp", "dropped_bomb.bmp",
+            "dropped_glock.bmp", "dropped_m3.bmp"
+        }),
         hud_textures({"hud_nums.bmp", "hud_symbols.bmp", "ak47_k.bmp", "awp_k.bmp", "glock_k.bmp",
                       "knife_k.bmp", "m3_k.bmp"}),
         sounds({"players/death.wav", "players/hit-player.wav", "players/setp.wav",
@@ -115,6 +142,7 @@ Model::AssetLoader::AssetLoader(Shared<AssetManager> manager, Shared<SDL2pp::Ren
         generator(renderer, config) {}
 
 void Model::AssetLoader::load_all_textures() {
+    load_dropped_weapon_sprites();
     load_weapon_sprites();
     load_player_sprites();
     load_hud_textures();

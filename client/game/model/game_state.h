@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <list>
+#include <vector>
 #include <map>
 
 #include "common/definitions.h"
@@ -27,10 +28,15 @@ class ProgressBarAnimation;
 class SoundEffect;
 };  // namespace View
 
+namespace DTO {
+struct DropWeaponDTO;
+};
+
 namespace Model {
 struct GameState {
 public:
     std::map<short_id_t, Shared<View::RenderedPlayer>> players;
+    std::vector<Shared<DTO::DropWeaponDTO>> dropped_weapons;
     std::list<Shared<View::MuzzleFireAnimation>> fires;
     std::list<Shared<View::SoundEffect>> shot_sounds;
     Shared<View::WinnerTeamMessageAnimation> winner_message;

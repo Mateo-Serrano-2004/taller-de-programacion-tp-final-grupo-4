@@ -37,9 +37,10 @@ private:
 
     void load_animation(Shared<Model::GameState>& new_game_state, const Shared<View::RenderedPlayer>& player);
     void load_sound(Shared<Model::GameState>& new_game_state, const Shared<View::RenderedPlayer>& player);
+
+    void update_dropped_weapons(DTO::GameStateDTO& dto);
     void update_animations(Shared<Model::GameState>& new_game_state);
     void update_sounds(Shared<Model::GameState>& new_game_state);
-
     void update_camera(const Shared<View::RenderedPlayer>& ref_player);
     void update_bomb_position(DTO::GameStateDTO& dto);
     void update_defusing_bar(const Shared<View::RenderedPlayer>& ref_player);

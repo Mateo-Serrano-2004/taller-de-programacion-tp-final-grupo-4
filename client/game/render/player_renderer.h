@@ -15,6 +15,7 @@
 #include "renderer.h"
 #include "animation_renderer.h"
 #include "map_renderer.h"
+#include "dropped_weapon_renderer.h"
 
 namespace SDL2pp {
 class Font;

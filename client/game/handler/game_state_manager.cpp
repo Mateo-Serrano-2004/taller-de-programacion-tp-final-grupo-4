@@ -57,6 +57,13 @@ void Controller::GameStateManager::load_animation(
     }
 }
 
+void Controller::GameStateManager::update_dropped_weapons(DTO::GameStateDTO& dto) {
+    game_state->dropped_weapons.clear();
+    for (auto& weapon: dto.round.dropped_weapons) {
+        game_state->dropped_weapons.push_back(make_shared<DTO::DropWeaponDTO>(weapon));
+    }
+}
+
 void Controller::GameStateManager::update_sounds(Shared<Model::GameState>& new_game_state) {
     game_state->shot_sounds.remove_if(
         [](Shared<View::SoundEffect>& sf) { return sf->has_ended(); }
@@ -152,11 +159,12 @@ void Controller::GameStateManager::update(DTO::GameStateDTO& game_state_dto) {
     game_state->players = new_game_state->players;
     update_animations(new_game_state);
     update_sounds(new_game_state);
-
+    
     auto ref_player = game_state->get_reference_player();
     update_camera(ref_player);
     update_defusing_bar(ref_player);
-
+    
+    update_dropped_weapons(game_state_dto);
     update_bomb_position(game_state_dto);
     update_winner_message(game_state_dto);
     update_stats(game_state_dto);

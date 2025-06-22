@@ -16,12 +16,14 @@ private:
     static std::map<Model::TextureID, Model::RoleID> textures_to_roles;
     static std::map<Model::WeaponID, Model::TextureID> weapons_to_textures;
     static std::map<Model::WeaponID, Model::TextureID> weapons_to_hud_textures;
+    static std::map<Model::WeaponID, Model::TextureID> weapons_to_dropped;
     static std::map<Model::WeaponID, Model::SoundID> weapons_to_sounds;
 
     static void build_roles_to_textures();
     static void build_textures_to_roles();
     static void build_weapons_to_textures();
     static void build_weapons_to_hud_textures();
+    static void build_weapons_to_dropped();
     static void build_weapons_to_sounds();
 
 public:
@@ -31,6 +33,7 @@ public:
     static Model::TextureID get_texture_from_role(Model::RoleID role_id);
     static Model::TextureID get_texture_from_weapon(Model::WeaponID weapon_id);
     static Model::TextureID get_hud_texture_from_weapon(Model::WeaponID weapon_id);
+    static Model::TextureID get_dropped_from_weapon(Model::WeaponID weapon_id);
     static Model::SoundID get_sound_from_weapon(Model::WeaponID weapon_id);
 };
 };  // namespace Model

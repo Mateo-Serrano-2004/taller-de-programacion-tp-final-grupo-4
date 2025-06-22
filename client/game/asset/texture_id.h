@@ -20,6 +20,11 @@ enum TextureID {
     SPRITE_M3 = 0x13,
     SPRITE_BOMB = 0x14,
     SPRITE_KNIFE = 0x15,
+    DROPPED_GLOCK = 0x16,
+    DROPPED_AWP = 0x17,
+    DROPPED_AK47 = 0x18,
+    DROPPED_M3 = 0x19,
+    DROPPED_BOMB = 0x20,
 
     // HUD textures from 0x40
     HUD_NUMS = 0x40,

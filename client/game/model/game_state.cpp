@@ -9,6 +9,7 @@
 #include "animation/muzzle_fire_animation.h"
 #include "animation/progress_bar_animation.h"
 #include "animation/winner_team_message_animation.h"
+#include "common/DTO/drop_weapon_dto.h"
 #include "sound/sound_effect.h"
 #include "model/rendered_player.h"
 
