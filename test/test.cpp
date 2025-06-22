@@ -859,7 +859,7 @@ void test_movimiento_hacia_pared_doble() {
     std::cout << "🕒 Esperando warmup y compra...\n";
     std::this_thread::sleep_for(seconds(12));
 
-    std::cout << "🚶‍♂️ Ambos jugadores se mueven hacia arriba\n";
+    std::cout << "🚶Ambos jugadores se mueven hacia arriba\n";
     game.get_queue().push({player1_id, MovementEvent(0, 1)});
     game.get_queue().push({player2_id, MovementEvent(0, 1)});
 

@@ -173,13 +173,10 @@ void Game::clear_game_queue() {
 }
 
 Physics::Vector2D Game::get_position_for_player(Model::TeamID team, uint8_t i) {
-    // preguntar lugares disponibles de spanw
-    // reservar uno
-    // devovlerlo
     if (team == Model::TeamID::CT) {
-        return Physics::Vector2D(150, 80);
+        return Physics::Vector2D(32, 96);
     }
-    return Physics::Vector2D(100, 80);
+    return Physics::Vector2D(32, 32);
 }
 
 // VER EL TEMA DE JUGADORES MAXIMOS ANTES
