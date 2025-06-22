@@ -21,5 +21,22 @@ void View::VerticalPane::position_children() {
     }
 }
 
+void View::VerticalPane::fit() {
+    int width = 0;
+    int height = 0;
+    std::for_each(
+        children.begin(),
+        children.end(),
+        [&width, &height] (View::Pane* child) {
+            width = std::max(width, child->get_width());
+            height += child->get_height();
+        }
+    );
+    size.SetX(width);
+    size.SetY(height);
+    if (children.size())
+        size.SetY(size.GetY() + (children.size() - 1) * gap_y);
+}
+
 View::VerticalPane::VerticalPane(Weak<Controller::BaseController> controller, int gap_y):
         View::SmartPane(controller), View::Gapped(gap_y, 0) {}

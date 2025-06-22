@@ -61,8 +61,8 @@ public:
     virtual void set_size(const SDL2pp::Point& new_size);
     void set_parent(Pane* new_parent);
 
-    void add_child(Pane* new_child);
-    void clear_children();
+    virtual void add_child(Pane* new_child);
+    virtual void clear_children();
 
     virtual void render() override;
 

@@ -15,6 +15,8 @@ class VerticalPane: public SmartPane, public Gapped {
 protected:
     void position_children() override;
 
+    void fit() override;
+
 public:
     explicit VerticalPane(Weak<Controller::BaseController> controller, int gap_y = 0);
 

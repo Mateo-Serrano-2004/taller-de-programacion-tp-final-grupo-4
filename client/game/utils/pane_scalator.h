@@ -5,6 +5,7 @@ namespace View {
 class Pane;
 class PaneScalator {
 public:
+    static void scalate_height_with_aspect_ratio(Pane* pane, int new_height);
     static void scalate_width_with_aspect_ratio(Pane* pane, int new_width);
 };
 };

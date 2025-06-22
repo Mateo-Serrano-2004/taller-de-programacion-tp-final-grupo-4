@@ -4,6 +4,7 @@
 #include <iostream>
 #include <SDL2pp/Texture.hh>
 #include <SDL2pp/Rect.hh>
+#include <SDL2pp/Renderer.hh>
 
 #include "asset/asset_manager.h"
 #include "common/model/weapon.h"
@@ -21,12 +22,12 @@ void View::EquipmentRenderer::render_number(int ammo) {
 
     for (auto& slice: slices) {
         numbers.emplace_back(controller);
-        auto number = &numbers.front();
+        auto number = &numbers.back();
         number->set_texture(numbers_texture);
         number->set_texture_slice(slice);
         number->set_size(SDL2pp::Point(slice.GetW(), slice.GetH()));
         number->set_draw_texture(true);
-        View::PaneScalator::scalate_width_with_aspect_ratio(number, 15);
+        View::PaneScalator::scalate_height_with_aspect_ratio(number, 15);
     }
 }
 
@@ -35,12 +36,12 @@ void View::EquipmentRenderer::render_separator() {
     auto numbers_texture = asset_manager->get_texture(Model::TextureID::HUD_NUMS);
 
     numbers.emplace_back(controller);
-    auto separator_sprite = &numbers.front();
+    auto separator_sprite = &numbers.back();
     separator_sprite->set_texture(numbers_texture);
     separator_sprite->set_texture_slice(slice);
     separator_sprite->set_draw_texture(true);
     separator_sprite->set_size(SDL2pp::Point(slice.GetW(), slice.GetH()));
-    View::PaneScalator::scalate_width_with_aspect_ratio(separator_sprite, 15);
+    View::PaneScalator::scalate_height_with_aspect_ratio(separator_sprite, 15);
 }
 
 void View::EquipmentRenderer::render_ammo(Shared<RenderedPlayer> player) {
@@ -52,10 +53,8 @@ void View::EquipmentRenderer::render_ammo(Shared<RenderedPlayer> player) {
     render_separator();
     render_number(total_ammo);
 
-    ammo_data.set_width(0);
     for (auto& pane: numbers) {
         ammo_data.add_child(&pane);
-        ammo_data.set_width(ammo_data.get_width() + pane.get_width());
     }
 }
 
@@ -69,7 +68,7 @@ void View::EquipmentRenderer::render_weapon(Shared<View::RenderedPlayer> player)
     current_weapon_slot.set_texture(weapon_texture);
     current_weapon_slot.set_size(weapon_texture->GetSize());
     current_weapon_slot.set_draw_texture(true);
-    View::PaneScalator::scalate_width_with_aspect_ratio(&current_weapon_slot, 15);
+    View::PaneScalator::scalate_height_with_aspect_ratio(&current_weapon_slot, 15);
 
     ammo_data.clear_children();
     numbers.clear();
@@ -87,7 +86,7 @@ void View::EquipmentRenderer::render_bomb(Shared<RenderedPlayer> player) {
     );
     bomb_slot.set_texture(bomb_texture);
     bomb_slot.set_size(bomb_texture->GetSize());
-    View::PaneScalator::scalate_width_with_aspect_ratio(&bomb_slot, 15);
+    View::PaneScalator::scalate_height_with_aspect_ratio(&bomb_slot, 20);
 }
 
 View::EquipmentRenderer::EquipmentRenderer(Weak<Controller::GameController> controller,
@@ -102,16 +101,20 @@ View::EquipmentRenderer::EquipmentRenderer(Weak<Controller::GameController> cont
         ammo_data(controller) {
     viewport->add_child(&items);
 
+    items.set_fit_to_children(true);
     items.set_vertical_alignment(1.0f);
     items.set_horizontal_alignment(0.0f);
-    items.add_child(&bomb_slot);
+    // items.add_child(&bomb_slot);
     items.add_child(&current_weapon_data);
 
+    current_weapon_data.set_fit_to_children(true);
     current_weapon_data.add_child(&current_weapon_slot);
     current_weapon_data.add_child(&ammo_data);
 
-    ammo_data.set_height(15);
     ammo_data.set_horizontal_alignment(0.0f);
+    ammo_data.set_background_color(0, 0, 0, 255);
+    ammo_data.set_draw_background(true);
+    ammo_data.set_fit_to_children(true);
 }
 
 void View::EquipmentRenderer::render(const Model::GameState& game_state, uint8_t) {

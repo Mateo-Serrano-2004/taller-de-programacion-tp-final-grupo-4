@@ -28,5 +28,5 @@ std::vector<SDL2pp::Rect> View::NumberTextureSlicer::get_hud_number(int number) 
 }
 
 SDL2pp::Rect View::NumberTextureSlicer::get_separator() {
-    return SDL2pp::Rect(440, 0, 12, 66);
+    return SDL2pp::Rect(452, 0, 12, 66);
 }
