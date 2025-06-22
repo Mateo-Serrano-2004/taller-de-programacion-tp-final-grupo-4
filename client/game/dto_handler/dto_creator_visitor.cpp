@@ -58,6 +58,16 @@ DTO::EventDTO DTO::DTOCreatorVisitor::visit_defuse_bomb_event() {
     return event_dto;
 }
 
+DTO::EventDTO DTO::DTOCreatorVisitor::visit_drop_weapon_event() {
+    DTO::EventDTO event_dto;
+
+    event_dto.data.push_back(static_cast<char>(Model::EventType::DROP_WEAPON));
+
+    event_dto.size = 1;
+
+    return event_dto;
+}
+
 
 DTO::EventDTO DTO::DTOCreatorVisitor::visit_join_game_event(Model::JoinGameEvent* event) {
     DTO::EventDTO event_dto;

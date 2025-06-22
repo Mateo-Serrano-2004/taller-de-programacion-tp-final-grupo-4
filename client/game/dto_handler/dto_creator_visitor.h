@@ -23,6 +23,7 @@ public:
     static EventDTO visit_buy_weapon_event(Model::BuyWeaponEvent* event);
     static EventDTO visit_create_game_event(Model::CreateGameEvent* event);
     static EventDTO visit_defuse_bomb_event();
+    static EventDTO visit_drop_weapon_event();
     static EventDTO visit_join_game_event(Model::JoinGameEvent* event);
     static EventDTO visit_leave_event();
     static EventDTO visit_movement_event(Model::MovementEvent* event);

@@ -7,6 +7,7 @@
 #include "event/stop_using_weapon_event.h"
 #include "event/switch_weapon_event.h"
 #include "event/defuse_bomb_event.h"
+#include "event/drop_weapon_event.h"
 #include "event/stop_defusing_bomb_event.h"
 
 void Controller::WeaponHandler::set_up_handled_types() {
@@ -20,6 +21,7 @@ void Controller::WeaponHandler::set_up_handled_types() {
     handled_codes.insert(SDLK_3);
     handled_codes.insert(SDLK_4);
     handled_codes.insert(SDLK_e);
+    handled_codes.insert(SDLK_g);
 
     ids.insert({SDLK_1, Model::SlotID::PRIMARY_WEAPON});
     ids.insert({SDLK_2, Model::SlotID::SECONDARY_WEAPON});
@@ -67,9 +69,22 @@ void Controller::WeaponHandler::handle_defusing(SDL_Event& event) {
     }
 }
 
+void Controller::WeaponHandler::handle_drop(SDL_Event& event) {
+    if (event.type == SDL_KEYDOWN) {
+        if (!is_dropping) {
+            controller.lock()->push_event(make_shared<Model::DropWeaponEvent>());
+            is_dropping = true;
+        }
+    } else if (event.type == SDL_KEYUP) {
+        is_dropping = false;
+    }
+}
+
 void Controller::WeaponHandler::handle_key(SDL_Event& event) {
     if (event.key.keysym.sym == SDLK_e) {
         handle_defusing(event);
+    } else if (event.key.keysym.sym == SDLK_g) {
+        handle_drop(event);
     } else {
         handle_switching(event);
     }
@@ -79,7 +94,8 @@ Controller::WeaponHandler::WeaponHandler(Weak<GameController> controller)
 : Controller::GameHandler(controller),
   is_shooting(false),
   is_switching(false),
-  is_defusing(false) {
+  is_defusing(false),
+  is_dropping(false) {
     set_up_handled_types();
 }
 

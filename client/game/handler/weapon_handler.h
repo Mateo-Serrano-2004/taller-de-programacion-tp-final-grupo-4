@@ -20,6 +20,7 @@ private:
     bool is_shooting;
     bool is_switching;
     bool is_defusing;
+    bool is_dropping;
 
     void set_up_handled_types();
 
@@ -27,6 +28,7 @@ private:
 
     void handle_switching(SDL_Event& event);
     void handle_defusing(SDL_Event& event);
+    void handle_drop(SDL_Event& event);
     void handle_key(SDL_Event& event);
 
 public:
