@@ -18,7 +18,6 @@
 #include "common/DTO/config_dto.h"
 #include "common/definitions.h"
 #include "context/context_manager.h"
-#include "context/end_of_game_context.h"
 #include "context/in_game_context.h"
 #include "context/loading_context.h"
 #include "context/menu_context.h"
@@ -56,7 +55,6 @@ void App::CS2DApp::set_up_contexts(Weak<Controller::GameController> game_control
     auto menu_context = make_shared<Context::MenuContext>(game_controller);
     auto pick_role_context = make_shared<Context::PickRoleContext>(game_controller);
     auto shop_context = make_shared<Context::ShopContext>(game_controller);
-    auto end_of_game_context = make_shared<Context::EndOfGameContext>(game_controller);
     auto loading_context = make_shared<Context::LoadingContext>(game_controller);
     auto stats_context = make_shared<Context::StatsContext>(game_controller);
 
@@ -64,7 +62,6 @@ void App::CS2DApp::set_up_contexts(Weak<Controller::GameController> game_control
     context_manager->add_context(menu_context);
     context_manager->add_context(pick_role_context);
     context_manager->add_context(shop_context);
-    context_manager->add_context(end_of_game_context);
     context_manager->add_context(loading_context);
     context_manager->add_context(stats_context);
 

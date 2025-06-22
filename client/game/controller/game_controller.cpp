@@ -44,7 +44,10 @@ void Controller::GameController::handle_switch_context(Shared<Model::Event> even
 }
 
 void Controller::GameController::handle_end_of_game(Shared<Model::Event>) {
-    context_manager->set_current_context("end-of-game");
+    sender_queue.close();
+    sender.reset();
+    receiver.reset();
+    throw ClosedGameException("Closed game");
 }
 
 void Controller::GameController::handle_update_player_id(Shared<Model::Event> event) {
