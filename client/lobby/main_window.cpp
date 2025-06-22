@@ -198,7 +198,7 @@ void MainWindow::setupGraphicsView() {
 void MainWindow::setupMusic() {
     backgroundMusic = new QSoundEffect(this);
     backgroundMusic->setSource(QUrl("qrc:/assets/sfx/menu.wav"));
-    backgroundMusic->setVolume(0.3);
+    backgroundMusic->setVolume(0.0);
 
     connect(backgroundMusic, &QSoundEffect::statusChanged, this, [this]() {
         if (backgroundMusic->status() == QSoundEffect::Ready) {
