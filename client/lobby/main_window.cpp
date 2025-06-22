@@ -42,12 +42,11 @@ void MainWindow::runGame() {
         QApplication::quit();
         return;
     }
-
+    
     connectToServer();
-
     this->show();
+    this->resize(640, 400);
     restartBackgroundMusic();
-
     showLobbyScene();
 }
 
@@ -185,7 +184,6 @@ void MainWindow::setUpWindow() {
 }
 
 void MainWindow::setupWindowProperties() {
-    this->setMinimumSize(640, 400);
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 }
 
