@@ -68,6 +68,13 @@ void Game::handle_stop_using_weapon(const uint8_t& player_id) {
     gamelogic.stop_using_weapon(player->get());
 }
 
+void Game::handle_drop_weapon(const uint8_t& player_id) {
+    auto player = find_player_by_id(player_id);
+    if (!player.has_value())
+        return;
+    gamelogic.drop_equipped_weapon(player->get(), round);
+}
+
 void Game::handle_switch_weapon(const uint8_t& player_id, const SwitchWeaponEvent& event) {
     auto player = find_player_by_id(player_id);
     if (!player.has_value())
@@ -148,7 +155,7 @@ void Game::handle(uint8_t player_id, const GameEventVariant& event) {
                         handle_switch_weapon(player_id, e);
                     },
                     [player_id, this](const BuyEvent& e) { handle_buy_weapon(player_id, e); },
-                    [this](const DropWeaponEvent&) {},
+                    [player_id, this](const DropWeaponEvent&) { handle_drop_weapon(player_id); },
                     [player_id, this](const UseWeaponEvent&) { handle_use_weapon(player_id); },
                     [player_id, this](const StopUsingWeaponEvent&) {
                         handle_stop_using_weapon(player_id);
@@ -224,6 +231,8 @@ void Game::update_players_that_won() {
     for (auto& [player_id, player]: players) {
         if (player.get_team() == winner) {
             player.add_money(round_won_money);
+        } else {
+            player.add_money(round_lost_money);
         }
     }
 }
@@ -370,7 +379,8 @@ Game::Game(const std::string& party_name, const std::string& map_name)
     const auto& config = YamlParser::getConfigData();
     this->max_rounds = static_cast<uint8_t>(config.game.rounds);
     this->rounds_per_side = static_cast<uint8_t>(config.game.roundsPerSide);
-    this->round_won_money = static_cast<uint16_t>(config.game.roundWonMoney);
+    this->round_won_money = config.game.roundWonMoney;
+    this->round_lost_money = config.game.roundLostMoney;
 
     start();
 }

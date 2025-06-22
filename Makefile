@@ -63,6 +63,7 @@ test_shoot:
 	    common/DTO/player_dto.cpp \
 		common/DTO/weapon_dto.cpp \
 		common/DTO/round_dto.cpp \
+		common/DTO/drop_weapon_dto.cpp \
 	    common/model/vector_2d.cpp \
 	    common/model/player.cpp \
 		common/model/weapon.cpp \
@@ -75,6 +76,7 @@ test_shoot:
 		server/game/model/ak47.cpp \
 		server/game/model/awp.cpp \
 		server/game/model/bomb.cpp \
+		server/game/model/dropped_weapon.cpp \
 	    server/game/game.cpp \
 	    server/game/round.cpp \
 		server/game/shot_manager.cpp \

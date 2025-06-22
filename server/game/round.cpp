@@ -158,6 +158,10 @@ int Round::player_id_defusing_bomb() const {
     return player_defusing_bomb;
 }
 
+void Round::add_dropped_weapon(const DroppedWeapon& drop) {
+    dropped_weapons.push_back(drop);
+}
+
 DTO::RoundDTO Round::to_dto(int fps) const {
 
     uint8_t defuse_progress = 0;
@@ -167,9 +171,14 @@ DTO::RoundDTO Round::to_dto(int fps) const {
                                                defusing_ticks);
     }
 
+    std::vector<DTO::DropWeaponDTO> drop_dtos;
+    for (const auto& drop : dropped_weapons) {
+        drop_dtos.push_back(drop.to_dto());
+    }
+
     return DTO::RoundDTO(state, this->ended(), this->get_ticks_remaining() / fps,
                          this->get_winner_team(), this->bomb_planted, this->bomb_defused,
-                         this->bomb_position, defuse_progress);
+                         this->bomb_position, defuse_progress, drop_dtos);
 }
 
 int Round::get_ticks_remaining() const { return active_ticks_remaining; }

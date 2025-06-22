@@ -13,7 +13,7 @@ private:
 public:
     Shop() = default;
 
-    void process_weapon_purchase(FullPlayer& player, Model::WeaponID weapon_id) const;
+    Shared<FullWeapon> process_weapon_purchase(FullPlayer& player, Model::WeaponID weapon_id) const;
 
     ~Shop() = default;
 };

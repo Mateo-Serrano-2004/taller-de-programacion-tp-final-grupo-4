@@ -11,6 +11,7 @@
 
 #include "full_weapon.h"
 #include "shot_info.h"
+#include "dropped_weapon.h"
 
 class FullPlayer: public Model::Player {
 private:
@@ -21,7 +22,6 @@ private:
     Shared<FullWeapon> secondary_weapon;
     Shared<FullWeapon> knife;
     Shared<FullWeapon> bomb;
-
     Physics::Vector2D weapon_position() const;
 
 public:
@@ -48,6 +48,7 @@ public:
     // no maneja tope de dinero
     void add_money(uint16_t money_to_be_added);
     void equip_weapon_by_type(Model::SlotID type);
+    Shared<FullWeapon> drop_equipped_weapon();
 
     bool can_pay(uint16_t price);
     bool has_bomb_equipped() const;
@@ -59,6 +60,8 @@ public:
     Shared<FullWeapon> remove_bomb();
 
     void give_bomb(Shared<FullWeapon> new_bomb);
+
+    std::vector<DroppedWeapon> drop_weapons();
 
     void start_defusing_bomb();
     void stop_defusing_bomb();

@@ -38,12 +38,8 @@ public:
 };
 
 class DropWeaponEvent {
-private:
-    uint8_t weapon_id;
-
 public:
-    explicit DropWeaponEvent(uint8_t weapon_id): weapon_id(weapon_id) {}
-    uint8_t get_weapon_id() const { return weapon_id; }
+    DropWeaponEvent() {}
 };
 
 class UseWeaponEvent {

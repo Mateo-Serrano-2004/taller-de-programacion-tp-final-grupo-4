@@ -6,6 +6,7 @@
 #include "../server/game/game.h"
 #include "../common/DTO/game_state_dto.h"
 #include "../common/DTO/dto_variant.h"
+#include "../common/DTO/drop_weapon_dto.h"
 #include "../common/queue.h"
 #include "../common/slot_id.h"
 #include "../common/weapon_id.h"
@@ -859,8 +860,8 @@ void test_movimiento_hacia_pared_doble() {
     std::cout << "🕒 Esperando warmup y compra...\n";
     std::this_thread::sleep_for(seconds(12));
 
-    std::cout << "🚶Ambos jugadores se mueven hacia arriba\n";
-    game.get_queue().push({player1_id, MovementEvent(0, 1)});
+    std::cout << "🚶JUgador 1 para abajo, 2 para arriba se tienenq ue chocar ellos\n";
+    game.get_queue().push({player1_id, MovementEvent(0, -1)});
     game.get_queue().push({player2_id, MovementEvent(0, 1)});
 
     std::this_thread::sleep_for(seconds(3));
@@ -898,6 +899,174 @@ void test_movimiento_hacia_pared_doble() {
     mostrar_cambios(client_queue2, player2_id, last_player2, first2);
 }
 
+void test_muerte_stats() {
+    std::cout << "[TEST] - PARTIDA 1 RONDA. PLAYER 2 MATA A 1. p2=(32,32) y p1=(32,96)" << std::endl;
+
+    using namespace std::chrono;
+
+    ClientQueue client_queue1;
+    ClientQueue client_queue2;
+    Game game("test_party", "de_dummy");
+
+    uint8_t ct_id = 1;
+    uint8_t tt_id = 2;
+
+    game.add_player("CT", client_queue1, ct_id, Model::TeamID::CT, Model::RoleID::CT1);
+    game.add_player("TT", client_queue2, tt_id, Model::TeamID::TT, Model::RoleID::T1);
+
+    std::this_thread::sleep_for(seconds(11));  // Warmup
+
+    game.get_queue().push({ct_id, BuyEvent(Model::WeaponID::GLOCK)});
+    std::this_thread::sleep_for(seconds(11));  // Buy
+
+    game.get_queue().push({ct_id, RotationEvent(0)});
+    std::this_thread::sleep_for(milliseconds(32));
+
+    for (int i = 0; i < 4; ++i) {
+        game.get_queue().push({ct_id, UseWeaponEvent()});
+        std::this_thread::sleep_for(milliseconds(32));
+        game.get_queue().push({ct_id, StopUsingWeaponEvent()});
+        std::this_thread::sleep_for(milliseconds(32));
+    }
+
+    std::this_thread::sleep_for(seconds(2));
+    game.stop();
+
+    DTO::DTOVariant dto;
+    std::map<uint8_t, std::tuple<uint8_t, uint8_t, uint16_t, uint8_t>> last_stats;
+    std::set<uint8_t> printed_players;
+
+    std::vector<std::tuple<uint8_t, uint16_t, uint16_t>> last_drops;
+    bool first_drops_printed = false;
+
+    while (client_queue1.try_pop(dto)) {
+        if (!std::holds_alternative<DTO::GameStateDTO>(dto)) continue;
+
+        const auto& state = std::get<DTO::GameStateDTO>(dto);
+
+        // Mostrar stats de jugadores (con 💀 si murió)
+        for (const auto& p : state.players) {
+            auto stats = std::make_tuple(p.kills, p.deaths, p.money, p.health);
+            bool first = !printed_players.count(p.player_id);
+            bool changed = !first && stats != last_stats[p.player_id];
+
+            if (first || changed) {
+                std::string death_icon = (p.health == 0) ? "💀 " : "";
+                std::cout << death_icon << "[PLAYER " << (int)p.player_id << "] "
+                          << "Kills: " << (int)p.kills << ", "
+                          << "Deaths: " << (int)p.deaths << ", "
+                          << "Money: " << p.money << ", "
+                          << "Health: " << (int)p.health << "\n";
+
+                last_stats[p.player_id] = stats;
+                printed_players.insert(p.player_id);
+            }
+        }
+
+        // Extraer drops actuales en forma simple
+        std::vector<std::tuple<uint8_t, uint16_t, uint16_t>> current_drops;
+        for (const auto& d : state.round.dropped_weapons) {
+            current_drops.emplace_back(d.weapon_id, d.position_x, d.position_y);
+        }
+
+        // Mostrar si es el primero no vacío o si cambió respecto al último
+        bool changed = current_drops.size() != last_drops.size();
+
+        if (!changed) {
+            for (size_t i = 0; i < current_drops.size(); ++i) {
+                if (current_drops[i] != last_drops[i]) {
+                    changed = true;
+                    break;
+                }
+            }
+        }
+
+        if (!current_drops.empty() && (!first_drops_printed || changed)) {
+            std::cout << "🟡 Drops recibidos en este GameStateDTO:\n";
+            for (const auto& [weapon_id, x, y] : current_drops) {
+                std::cout << "  🧨 WeaponID: " << static_cast<int>(weapon_id)
+                          << " en (" << x << ", " << y << ")\n";
+            }
+            last_drops = current_drops;
+            first_drops_printed = true;
+        }
+    }
+
+    std::cout << "✅ Test muerte_stats terminó (sin asserts)\n";
+}
+
+void test_drop_weapon_event() {
+    std::cout << "[TEST] - Ambos jugadores dropean arma luego de warmup\n";
+
+    using namespace std::chrono;
+
+    ClientQueue client_queue1;
+    ClientQueue client_queue2;
+    Game game("test_party", "de_dummy");
+
+    uint8_t ct_id = 1;
+    uint8_t tt_id = 2;
+
+    game.add_player("CT", client_queue1, ct_id, Model::TeamID::CT, Model::RoleID::CT1);
+    game.add_player("TT", client_queue2, tt_id, Model::TeamID::TT, Model::RoleID::T1);
+
+    std::this_thread::sleep_for(seconds(11));  // Warmup
+
+    game.get_queue().push({ct_id, DropWeaponEvent()});
+    std::this_thread::sleep_for(milliseconds(32));
+    game.get_queue().push({tt_id, DropWeaponEvent()});
+
+    std::this_thread::sleep_for(seconds(1)); 
+
+    game.stop();
+
+    DTO::DTOVariant dto;
+    std::vector<std::tuple<uint8_t, uint16_t, uint16_t>> last_drops;
+    bool first_dto_checked = false;
+    bool printed_drop_dto = false;
+
+    while (client_queue1.try_pop(dto)) {
+        if (!std::holds_alternative<DTO::GameStateDTO>(dto)) continue;
+        const auto& state = std::get<DTO::GameStateDTO>(dto);
+
+        std::vector<std::tuple<uint8_t, uint16_t, uint16_t>> current_drops;
+        for (const auto& d : state.round.dropped_weapons) {
+            current_drops.emplace_back(d.weapon_id, d.position_x, d.position_y);
+        }
+
+        if (!first_dto_checked) {
+            std::cout << "🔍 Primer GameStateDTO tiene drops? "
+                      << (current_drops.empty() ? "NO" : "SÍ") << "\n";
+            first_dto_checked = true;
+        }
+
+        bool changed = current_drops.size() != last_drops.size();
+        if (!changed) {
+            for (size_t i = 0; i < current_drops.size(); ++i) {
+                if (current_drops[i] != last_drops[i]) {
+                    changed = true;
+                    break;
+                }
+            }
+        }
+
+        if (!current_drops.empty() && changed) {
+            std::cout << "🟡 Nuevo GameStateDTO con Drops:\n";
+            for (const auto& [weapon_id, x, y] : current_drops) {
+                std::cout << "  🧨 WeaponID: " << static_cast<int>(weapon_id)
+                          << " en (" << x << ", " << y << ")\n";
+            }
+            last_drops = current_drops;
+            printed_drop_dto = true;
+        }
+    }
+
+    if (!printed_drop_dto) {
+        std::cout << "⚠️  No se detectaron GameStateDTO con drops distintos tras el primero\n";
+    }
+
+    std::cout << "✅ Test drop_weapon_event terminado\n";
+}
 
 int main() {
     //test_cambio_ronda();
@@ -911,7 +1080,9 @@ int main() {
     //test_tt_plants_and_ct_defuses();
     //test_tt_defuse_interrumpido_dos_veces(); este
     //test_movimiento_con_colisiones();
-    test_movimiento_hacia_pared_doble();
+    //test_movimiento_hacia_pared_doble();
+    //test_muerte_stats();
+    test_drop_weapon_event();
     std::cout << "Pasaron los test" << std::endl;
     return 0;
 }

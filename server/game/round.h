@@ -6,6 +6,7 @@
 
 #include "common/DTO/round_dto.h"
 #include "common/model/vector_2d.h"
+#include "server/game/model/dropped_weapon.h"
 
 class Round {
 private:
@@ -38,6 +39,8 @@ private:
     int get_ticks_remaining() const;
     void check_if_finished_defusing(int frames_to_process);
 
+    std::vector<DroppedWeapon> dropped_weapons;
+
 public:
     Round(int ct_alive, int tt_alive);
 
@@ -61,6 +64,10 @@ public:
     void notify_bomb_is_not_longer_being_defused();
     bool bomb_is_being_defused() const;
     int player_id_defusing_bomb() const;
+
+
+    void add_dropped_weapon(const DroppedWeapon& drop);
+    //const std::vector<DroppedWeapon>& get_dropped_weapons() const;
 
     DTO::RoundDTO to_dto(int fps) const;
 };
