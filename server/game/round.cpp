@@ -162,6 +162,10 @@ void Round::add_dropped_weapon(const DroppedWeapon& drop) {
     dropped_weapons.push_back(drop);
 }
 
+std::vector<DroppedWeapon>& Round::get_dropped_weapons() {
+    return dropped_weapons;
+}
+
 DTO::RoundDTO Round::to_dto(int fps) const {
 
     uint8_t defuse_progress = 0;

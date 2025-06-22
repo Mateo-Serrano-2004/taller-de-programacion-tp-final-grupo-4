@@ -63,4 +63,6 @@ using IList = std::initializer_list<T>;
 template <typename T>
 using Func = std::function<void(T)>;
 
+constexpr int TILE_SIZE = 32;
+
 #endif  // COMMON_DEFINITIONS_H
