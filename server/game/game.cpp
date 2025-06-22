@@ -177,12 +177,12 @@ Physics::Vector2D Game::get_position_for_player(Model::TeamID team, uint8_t i) {
     // reservar uno
     // devovlerlo
     if (team == Model::TeamID::CT) {
-        return Physics::Vector2D(100, 200);
+        return Physics::Vector2D(150, 80);
     }
-    return Physics::Vector2D(100, 100);
+    return Physics::Vector2D(100, 80);
 }
 
-// Resets players
+// VER EL TEMA DE JUGADORES MAXIMOS ANTES
 void Game::start_new_round() {
     state = GameState::Playing;
 
@@ -191,15 +191,14 @@ void Game::start_new_round() {
 
     for (auto& [id, player]: players) {
         handle_stop_using_weapon(id);
-        // DUMMY POR AHORA PARA CAMBIARLOS A UNA POSICION
+        
         Model::TeamID player_team = player.get_team();
         if (player_team == Model::TeamID::CT) {
+            player.reset_for_new_round(ct_spawn_positions[ct_count]);
             ct_count++;
-            player.reset_for_new_round(
-                    get_position_for_player(player_team, tt_count));  // ojo solo para alinearlos
         } else {
+            player.reset_for_new_round(tt_spawn_positions[tt_count]);
             tt_count++;
-            player.reset_for_new_round(get_position_for_player(player_team, tt_count));
         }
         const auto& pos = player.get_position();
         std::cout << "Jugador ID: " << static_cast<int>(id) << " - Posición: (" << pos.get_x()
@@ -319,21 +318,66 @@ void Game::close() {
     join();
 }
 
+void Game::load_map_features() {
+    const auto& type_matrix = parser.getTypeMatrix();
+
+    for (size_t y = 0; y < type_matrix.size(); ++y) {
+        for (size_t x = 0; x < type_matrix[y].size(); ++x) {
+            TileType tile = type_matrix[y][x];
+            int px = static_cast<int>(x) * 32;
+            int py = static_cast<int>(y) * 32;
+
+            switch (tile) {
+                case TileType::CT_SPAWN:
+                    ct_spawn_positions.emplace_back(px, py);
+                    break;
+                case TileType::TT_SPAWN:
+                    tt_spawn_positions.emplace_back(px, py);
+                    break;
+                case TileType::BOMB_SITE:
+                    bomb_sites.emplace_back(px, py);
+                    break;
+                /*case TileType::COLLIDABLE: {
+                    BoundingBox box;
+                    box.x = px;
+                    box.y = py;
+                    box.w = TILE_SIZE;
+                    box.h = TILE_SIZE;
+                    map_collidables.push_back(box);
+                    break;
+                }*/
+                default:
+                    break;
+            }
+        }
+    }
+
+    std::cout << "[MAP LOAD] CT spawns: " << ct_spawn_positions.size()
+              << " | TT spawns: " << tt_spawn_positions.size()
+              << " | Bomb sites: " << bomb_sites.size() << std::endl;
+}
+
+
 Game::Game(const std::string& party_name, const std::string& map_name)
     : party_name(party_name),
       map_name(map_name),
       parser(YamlAddresser().get_config_path("game_config.yaml")),
-      movement_system(parser.getTypeMatrix()),
       round(Round::create_warmup_round()) {
+    
+    parser.parseMapYaml(YamlAddresser().get_map_path(map_name));
+
+    load_map_features();
+
+    movement_system = MovementSystem(parser.getTypeMatrix());
 
     const auto& config = YamlParser::getConfigData();
-
     this->max_rounds = static_cast<uint8_t>(config.game.rounds);
     this->rounds_per_side = static_cast<uint8_t>(config.game.roundsPerSide);
     this->round_won_money = static_cast<uint16_t>(config.game.roundWonMoney);
 
     start();
 }
+
 
 uint8_t Game::get_number_of_players() {
     std::lock_guard<std::mutex> lock(mutex);

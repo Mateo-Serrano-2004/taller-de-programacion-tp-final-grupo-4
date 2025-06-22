@@ -841,6 +841,64 @@ void test_movimiento_con_colisiones() {
     assert(player2.position_y == 168 && "El jugador 2 debería tener Y = 168");
 }
 
+void test_movimiento_hacia_pared_doble() {
+    std::cout << "[TEST] - Dos jugadores se mueven hacia arriba\n";
+
+    using namespace std::chrono;
+
+    ClientQueue client_queue1;
+    ClientQueue client_queue2;
+    Game game("test_party", "de_dummy");
+
+    uint8_t player1_id = 1;
+    uint8_t player2_id = 2;
+
+    game.add_player("Jugador1", client_queue1, player1_id, Model::TeamID::CT, Model::RoleID::CT1);
+    game.add_player("Jugador2", client_queue2, player2_id, Model::TeamID::TT, Model::RoleID::T2);
+
+    std::cout << "🕒 Esperando warmup y compra...\n";
+    std::this_thread::sleep_for(seconds(12));
+
+    std::cout << "🚶‍♂️ Ambos jugadores se mueven hacia arriba\n";
+    game.get_queue().push({player1_id, MovementEvent(0, 1)});
+    game.get_queue().push({player2_id, MovementEvent(0, 1)});
+
+    std::this_thread::sleep_for(seconds(3));
+
+    std::cout << "🛑 Stop\n";
+    game.get_queue().push({player1_id, StopMovementEvent(false)});
+    game.get_queue().push({player2_id, StopMovementEvent(false)});
+
+    std::this_thread::sleep_for(seconds(1));
+    game.stop();
+
+    // Estado anterior de cada jugador
+    DTO::PlayerDTO last_player1;
+    DTO::PlayerDTO last_player2;
+    bool first1 = true, first2 = true;
+
+    auto mostrar_cambios = [&](ClientQueue& queue, uint8_t player_id, DTO::PlayerDTO& last_known, bool& first) {
+        DTO::DTOVariant dto_variant;
+        while (queue.try_pop(dto_variant)) {
+            if (!std::holds_alternative<DTO::GameStateDTO>(dto_variant)) continue;
+            const auto& dto = std::get<DTO::GameStateDTO>(dto_variant);
+            for (const auto& p : dto.players) {
+                if (p.player_id != player_id) continue;
+                if (first || p.position_x != last_known.position_x || p.position_y != last_known.position_y) {
+                    std::cout << "📍 Posición jugador " << unsigned(player_id) << ": ("
+                              << p.position_x << ", " << p.position_y << ")\n";
+                    last_known = p;
+                    first = false;
+                }
+            }
+        }
+    };
+
+    mostrar_cambios(client_queue1, player1_id, last_player1, first1);
+    mostrar_cambios(client_queue2, player2_id, last_player2, first2);
+}
+
+
 int main() {
     //test_cambio_ronda();
     //test_finaliza_por_muerte_ct();
@@ -852,7 +910,8 @@ int main() {
     //test_tt_plants_and_bomb_explodes();
     //test_tt_plants_and_ct_defuses();
     //test_tt_defuse_interrumpido_dos_veces(); este
-    test_movimiento_con_colisiones();
+    //test_movimiento_con_colisiones();
+    test_movimiento_hacia_pared_doble();
     std::cout << "Pasaron los test" << std::endl;
     return 0;
 }
