@@ -9,6 +9,7 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
+#include "../widgets/error_dialog.h"
 #include "../widgets/styled_button.h"
 
 GameCreationScene::GameCreationScene(QObject* parent):
@@ -44,14 +45,27 @@ GameCreationScene::~GameCreationScene() {
     }
 }
 
+bool GameCreationScene::isValidGameName(const QString& name) { return !name.trimmed().isEmpty(); }
+
+void GameCreationScene::updateCreateButtonState() {
+    bool hasValidName = isValidGameName(gameNameInput->text());
+    bool hasMap = mapListWidget->currentItem() != nullptr;
+    createButton->setEnabled(hasValidName && hasMap);
+}
+
 void GameCreationScene::setUpGameCreation() {
     QLabel* mapLabel = new QLabel("Seleccioná un mapa:");
     mapLabel->setStyleSheet("color: white; font-weight: bold; font-size: 14px;");
 
-    QLabel* nameLabel = new QLabel("Partida:");
+    QLabel* nameLabel = new QLabel("Nombre de la partida:");
     nameLabel->setStyleSheet("color: white; font-weight: bold; font-size: 14px;");
 
-    gameNameInput->setPlaceholderText("Inserte el nombre");
+    gameNameInput->setPlaceholderText("Inserte el nombre de la partida");
+    gameNameInput->setStyleSheet(
+            "border: 2px solid rgba(255, 255, 255, 0.4); border-radius: 5px; padding: 5px;");
+
+    mapListWidget->setStyleSheet("border: 2px solid rgba(255, 255, 255, 0.4); border-radius: 5px;");
+
     createButton = new StyledButton("Crear");
     createButton->setEnabled(false);
 
@@ -73,35 +87,39 @@ void GameCreationScene::setUpGameCreation() {
 
     mainLayout->addWidget(mapLabel);
     mainLayout->addWidget(mapListWidget);
-    mainLayout->addSpacing(10);
+    mainLayout->addSpacing(15);
     mainLayout->addWidget(nameLabel);
     mainLayout->addWidget(gameNameInput);
-    mainLayout->addSpacing(10);
+    mainLayout->addSpacing(15);
     mainLayout->addWidget(createButton);
     container->setLayout(mainLayout);
     container->setStyleSheet("background: transparent; color: white;");
-    container->setFixedWidth(400);
+    container->setFixedWidth(300);
 
     QGraphicsProxyWidget* proxy = addWidget(container);
     centerWidget(proxy);
 
-    connect(gameNameInput, &QLineEdit::textChanged, this, [this]() {
-        bool hasName = !gameNameInput->text().isEmpty();
-        bool hasMap = mapListWidget->currentItem() != nullptr;
-        createButton->setEnabled(hasName && hasMap);
-    });
+    connect(gameNameInput, &QLineEdit::textChanged, this,
+            &GameCreationScene::updateCreateButtonState);
 
-    connect(mapListWidget, &QListWidget::itemSelectionChanged, this, [this]() {
-        bool hasName = !gameNameInput->text().isEmpty();
-        bool hasMap = mapListWidget->currentItem() != nullptr;
-        createButton->setEnabled(hasName && hasMap);
-    });
+    connect(mapListWidget, &QListWidget::itemSelectionChanged, this,
+            &GameCreationScene::updateCreateButtonState);
 
     connect(createButton, &QPushButton::clicked, this, [this]() {
-        QString gameName = gameNameInput->text();
+        QString gameName = gameNameInput->text().trimmed();
         QListWidgetItem* selectedItem = mapListWidget->currentItem();
-        if (!gameName.isEmpty() && selectedItem) {
-            emit createGameRequested(gameName, selectedItem->text());
+
+        if (!isValidGameName(gameName)) {
+            ErrorDialog::showError("Por favor, ingresa un nombre válido para la partida.", this);
+            gameNameInput->setFocus();
+            return;
         }
+
+        if (!selectedItem) {
+            ErrorDialog::showError("Por favor, selecciona un mapa.", this);
+            return;
+        }
+
+        emit createGameRequested(gameName, selectedItem->text());
     });
 }

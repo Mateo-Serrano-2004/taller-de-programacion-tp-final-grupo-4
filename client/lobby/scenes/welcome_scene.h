@@ -13,7 +13,7 @@ public:
     explicit WelcomeScene(QObject* parent = nullptr);
 
 signals:
-    void startClicked(/* const QString& username, const QString& ip, const QString& port */);
+    void startClicked(const QString& username, const QString& ip, const QString& port);
 
 private:
     void setUpWelcome();

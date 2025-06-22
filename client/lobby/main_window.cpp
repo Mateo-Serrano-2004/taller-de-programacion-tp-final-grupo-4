@@ -1,10 +1,6 @@
 #include "main_window.h"
 
-#include <iostream>
 #include <memory>
-#include <string>
-#include <variant>
-#include <vector>
 
 #include "client/exception/closed_app.h"
 #include "client/exception/closed_game.h"
@@ -15,7 +11,6 @@
 #include "client/game/event/request_maps_event.h"
 #include "client/game/event/username_event.h"
 #include "common/DTO/game_info_dto.h"
-#include "common/definitions.h"
 
 MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWindow) {
     setUpWindow();
@@ -23,8 +18,7 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), ui(new Ui::MainWin
 
 MainWindow::~MainWindow() {
     delete ui;
-    // delete musicPlayer;
-    // delete audioOutput;
+    delete backgroundMusic;
 }
 
 void MainWindow::connectToServer() {
@@ -36,9 +30,9 @@ void MainWindow::connectToServer() {
 void MainWindow::runGame() {
     this->hide();
 
-    // if (musicPlayer) {
-    //     musicPlayer->pause();
-    // }
+    musicTimer->stop();
+    musicPlaying = false;
+    backgroundMusic->stop();
 
     try {
         App::CS2DApp game(protocol);
@@ -48,8 +42,11 @@ void MainWindow::runGame() {
         QApplication::quit();
         return;
     }
+    
     connectToServer();
     this->show();
+    this->resize(640, 400);
+    restartBackgroundMusic();
     showLobbyScene();
 }
 
@@ -80,17 +77,19 @@ void MainWindow::showWelcomeScene() {
     ui->mainView->setScene(welcomeScene);
     connect(
             welcomeScene, &WelcomeScene::startClicked, this,
-            // [this](QString username, QString ip, QString port) {
-            [this]() {
-                // protocol = new Net::ClientProtocol(ip.toStdString(), port.toStdString());
-                host = "localhost";
-                port = "9000";
-                username = "user";
-                connectToServer();
-
-                showLobbyScene();
+            [this](QString username, QString ip, QString port) {
+                handleWelcomeStart(username, ip, port);
             },
             Qt::QueuedConnection);
+}
+
+void MainWindow::handleWelcomeStart(const QString& username, const QString& ip,
+                                    const QString& port) {
+    this->host = ip.toStdString();
+    this->port = port.toStdString();
+    this->username = username.toStdString();
+    connectToServer();
+    showLobbyScene();
 }
 
 void MainWindow::showLobbyScene() {
@@ -101,10 +100,6 @@ void MainWindow::showLobbyScene() {
             Qt::QueuedConnection);
     connect(lobbyScene, &LobbyScene::joinClicked, this, &MainWindow::showJoinGameScene,
             Qt::QueuedConnection);
-
-    // if (musicPlayer) {
-    //     musicPlayer->play();
-    // }
 }
 
 void MainWindow::showGameCreationScene() {
@@ -116,10 +111,7 @@ void MainWindow::showGameCreationScene() {
     connect(
             gameCreationScene, &GameCreationScene::createGameRequested, this,
             [this](const QString& gameName, const QString& selectedMap) {
-                auto createGameEvent = std::make_shared<Model::CreateGameEvent>(
-                        gameName.toStdString(), selectedMap.toStdString());
-                protocol->send_event(createGameEvent->as_dto());
-                runGame();
+                handleGameCreationRequest(gameName, selectedMap);
             },
             Qt::QueuedConnection);
 
@@ -128,10 +120,16 @@ void MainWindow::showGameCreationScene() {
 
     auto map_name_list = std::get<DTO::MapNameListDTO>(protocol->receive_variant());
     QStringList qMaps;
-    for (const auto& map: map_name_list.maps_names) {
-        qMaps << QString::fromStdString(map);
-    }
+    for (const auto& map: map_name_list.maps_names) qMaps << QString::fromStdString(map);
+
     gameCreationScene->setAvailableMaps(qMaps);
+}
+
+void MainWindow::handleGameCreationRequest(const QString& gameName, const QString& selectedMap) {
+    auto createGameEvent = std::make_shared<Model::CreateGameEvent>(gameName.toStdString(),
+                                                                    selectedMap.toStdString());
+    protocol->send_event(createGameEvent->as_dto());
+    runGame();
 }
 
 void MainWindow::showJoinGameScene() {
@@ -142,20 +140,21 @@ void MainWindow::showJoinGameScene() {
             Qt::QueuedConnection);
     connect(
             joinGameScene, &JoinGameScene::joinRequestedGame, this,
-            [this](const QString&) {
-                int partida_id = joinGameScene->selectedGameId();
-                if (partida_id != -1) {
-                    auto joinGameEvent = make_shared<Model::JoinGameEvent>(partida_id);
-                    protocol->send_event(joinGameEvent->as_dto());
-                    runGame();
-                }
-            },
-            Qt::QueuedConnection);
+            [this](const QString&) { handleJoinGameRequest(); }, Qt::QueuedConnection);
     connect(
             joinGameScene, &JoinGameScene::refreshClicked, this, [this]() { loadGames(); },
             Qt::QueuedConnection);
 
     loadGames();
+}
+
+void MainWindow::handleJoinGameRequest() {
+    int partida_id = joinGameScene->selectedGameId();
+    if (partida_id != -1) {
+        auto joinGameEvent = make_shared<Model::JoinGameEvent>(partida_id);
+        protocol->send_event(joinGameEvent->as_dto());
+        runGame();
+    }
 }
 
 void MainWindow::onPushButtonClicked() { showLobbyScene(); }
@@ -166,35 +165,59 @@ void MainWindow::receiveAvailableMaps(const QStringList& maps) {
     }
 }
 
+void MainWindow::playBackgroundMusic() {
+    if (backgroundMusic) {
+        backgroundMusic->play();
+    }
+}
+
 void MainWindow::setUpWindow() {
     ui->setupUi(this);
-    this->setMinimumSize(640, 400);
-    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
-    ui->mainView->setBackgroundBrush(QBrush(Qt::black));
-    ui->mainView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->mainView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->mainView->setRenderHint(QPainter::SmoothPixmapTransform);
-    ui->mainView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-
-    // musicPlayer = new QMediaPlayer(this);
-    // audioOutput = new QAudioOutput(QAudioFormat(), this);
-
-    // QString musicPath = QDir::currentPath() + "/assets/sfx/menu.wav";
-    // QUrl musicUrl = QUrl::fromLocalFile(musicPath);
-
-    // musicPlayer->setMedia(musicUrl);
-    // musicPlayer->setVolume(40);
-    // musicPlayer->setPlaylist(new QMediaPlaylist());
-    // musicPlayer->playlist()->addMedia(musicUrl);
-    // musicPlayer->playlist()->setPlaybackMode(QMediaPlaylist::Loop);
-    // musicPlayer->play();
-
+    setupWindowProperties();
+    setupGraphicsView();
+    setupMusic();
     showWelcomeScene();
 
     if (ui->mainView->scene()) {
         ui->mainView->fitInView(ui->mainView->scene()->sceneRect(), Qt::KeepAspectRatio);
     }
+}
+
+void MainWindow::setupWindowProperties() {
+    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+}
+
+void MainWindow::setupGraphicsView() {
+    ui->mainView->setBackgroundBrush(QBrush(Qt::black));
+    ui->mainView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->mainView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->mainView->setRenderHint(QPainter::SmoothPixmapTransform);
+    ui->mainView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+}
+
+void MainWindow::setupMusic() {
+    backgroundMusic = new QSoundEffect(this);
+    backgroundMusic->setSource(QUrl("qrc:/assets/sfx/menu.wav"));
+    backgroundMusic->setVolume(0.3);
+
+    connect(backgroundMusic, &QSoundEffect::statusChanged, this, [this]() {
+        if (backgroundMusic->status() == QSoundEffect::Ready) {
+            backgroundMusic->setLoopCount(QSoundEffect::Infinite);
+            backgroundMusic->play();
+        }
+    });
+
+    musicTimer = new QTimer(this);
+    connect(musicTimer, &QTimer::timeout, this, &MainWindow::playBackgroundMusic);
+    musicTimer->setInterval(43000);
+    musicTimer->start();
+    musicPlaying = true;
+}
+
+void MainWindow::restartBackgroundMusic() {
+    musicTimer->start();
+    musicPlaying = true;
+    backgroundMusic->play();
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event) {
