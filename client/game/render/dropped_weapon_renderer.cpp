@@ -13,20 +13,23 @@
 #include "model/game_state.h"
 #include "utils/enum_translator.h"
 
+#include "camera.h"
 
 View::DroppedWeaponRenderer::DroppedWeaponRenderer(Weak<Controller::GameController> controller)
 : renderer(controller.lock()->get_renderer()),
   manager(controller.lock()->get_asset_manager()) {}
 
 void View::DroppedWeaponRenderer::render_weapons(const Model::GameState& game_state) {
+    auto camera = game_state.camera;
     for (auto& dweapon: game_state.dropped_weapons) {
         coord_t x = dweapon->position_x;
         coord_t y = dweapon->position_y;
+        auto view = camera.get_camera_view(SDL2pp::Point(x, y));
         auto texture_id = Model::EnumTranslator::get_dropped_from_weapon(dweapon->weapon_id);
         renderer->Copy(
             *(manager->get_texture(texture_id)),
             SDL2pp::NullOpt,
-            SDL2pp::Point(x, y)
+            view
         );
     }
 }
