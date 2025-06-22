@@ -84,6 +84,8 @@ Para ejecutar el cliente:
 cs2d_client
 ```
 
+O hacerle doble click al archivo.
+
 #### Pantalla de Conexión
 La pantalla de bienvenida solicita:
 - **Username**: Nombre del jugador
@@ -119,6 +121,8 @@ Para ejecutar el editor:
 cs2d_editor
 ```
 
+O hacerle doble click al archivo.
+
 #### Pantalla Principal
 Al iniciar el editor verás la ventana principal:
 
@@ -150,13 +154,10 @@ Counter-Strike-2D/
 ├── common/          # Código compartido entre cliente y servidor
 ├── docs/            # Documentación del proyecto
 ├── editor/          # Editor de mapas Qt
-├── installers/      # Scripts de instalación
-│   ├── install.sh   # Instalador automático
-│   └── uninstall.sh # Desinstalador
 ├── server/          # Código del servidor
 ├── tests/           # Tests unitarios
-├── Instalar Counter Strike 2D.desktop      # Acceso directo instalador
-└── Desinstalar Counter Strike 2D.desktop   # Acceso directo desinstalador
+├── install.sh       # Instalador del juego
+└── uninstall.sh     # Desinnstalador del juego
 ```
 
 ## Documentación
