@@ -35,6 +35,7 @@ protected:
     AnimationRenderer animation_renderer;
     SoundEffectPlayer sound_player;
     MapRenderer map_renderer;
+    DroppedWeaponRenderer weapon_renderer;
     Shared<Controller::GameStateManager> game_state_manager;
     Shared<SDL2pp::Texture> bomb_texture;
 

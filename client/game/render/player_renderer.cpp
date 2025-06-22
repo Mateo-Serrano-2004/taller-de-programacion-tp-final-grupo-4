@@ -83,7 +83,8 @@ bool View::PlayerRenderer::render_players(const Model::GameState& game_state) {
 
 View::PlayerRenderer::PlayerRenderer(Weak<Controller::GameController> controller):
         View::Renderer(controller),
-        map_renderer(controller) {
+        map_renderer(controller),
+        weapon_renderer(controller) {
     auto controller_locked = controller.lock();
     game_state_manager = controller_locked->get_game_state_manager();
     bomb_texture = asset_manager->get_texture(Model::TextureID::SPRITE_BOMB);
@@ -91,6 +92,7 @@ View::PlayerRenderer::PlayerRenderer(Weak<Controller::GameController> controller
 
 void View::PlayerRenderer::render(const Model::GameState& game_state, uint8_t frames) {
     map_renderer.render_map(game_state);
+    weapon_renderer.render_weapons(game_state);
     auto render_ref_player = render_players(game_state);
     render_bomb(game_state);
     animation_renderer.render_muzzle_fires(game_state, frames);
