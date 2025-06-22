@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <cstdint>
+#include <vector>
 #include <iostream>
 #include <list>
 #include <utility>
@@ -20,104 +21,78 @@
 #include "model/game_state.h"
 #include "model/rendered_player.h"
 #include "utils/enum_translator.h"
+#include "utils/number_texture_slicer.h"
+#include "utils/pane_scalator.h"
 
-std::vector<uint8_t> View::HUDRenderer::get_units(uint16_t number) {
-    uint8_t number_of_digits = number ? (uint8_t)(log10(number) + 1) : 1;
-    std::vector<uint8_t> digits(number_of_digits);
-    for (uint8_t i = 0; i < number_of_digits; i++) {
-        digits[number_of_digits - i - 1] = number % 10;
-        number /= 10;
-    }
-    return digits;
+std::vector<SDL2pp::Rect> View::HUDRenderer::get_time_slices(int seconds_left) {
+    int minutes = seconds_left / 60;
+    int seconds = seconds_left % 60;
+
+    auto time_textures = View::NumberTextureSlicer::get_hud_number(minutes);
+    if (time_textures.size() < 2)
+        time_textures.insert(time_textures.begin(), SDL2pp::Rect(0, 0, 44, 66));
+
+    auto colon = View::NumberTextureSlicer::get_colon();
+
+    auto seconds_textures = View::NumberTextureSlicer::get_hud_number(seconds);
+    if (seconds_textures.size() < 2)
+        seconds_textures.insert(seconds_textures.begin(), SDL2pp::Rect(0, 0, 44, 66));
+
+    time_textures.push_back(colon);
+    time_textures.insert(
+        time_textures.end(),
+        seconds_textures.begin(),
+        seconds_textures.end()
+    );
+
+    return time_textures;
 }
 
-std::vector<uint8_t> View::HUDRenderer::get_units_of_time_left(uint16_t seconds_left) {
-    std::vector<uint8_t> units_of_time_left(4);
-
-    uint8_t minutes = seconds_left / 60;
-    uint8_t seconds = seconds_left % 60;
-
-    units_of_time_left[0] = minutes / 10;
-    units_of_time_left[1] = minutes % 10;
-    units_of_time_left[2] = seconds / 10;
-    units_of_time_left[3] = seconds % 10;
-
-    return units_of_time_left;
-}
-
-void View::HUDRenderer::load_separator(std::list<View::Pane>& numbers,
-                                       View::HorizontalPane& parent) {
-    View::Pane separator(controller);
-    separator.set_draw_texture(true);
-    separator.set_texture(hud_numbers);
-    separator.set_texture_slice(SDL2pp::Rect(440, 0, 12, 66));
-    separator.set_size(SDL2pp::Point(6, 33));
-    numbers.push_back(separator);
-    parent.add_child(&numbers.back());
-    parent.set_width(parent.get_width() + 6);
-}
-
-void View::HUDRenderer::render_hud_symbol(std::list<View::Pane>& numbers,
-                                          View::HorizontalPane& parent, uint8_t symbol_number) {
-    View::Pane symbol_pane(controller);
-    symbol_pane.set_draw_texture(true);
-    symbol_pane.set_texture(hud_symbols);
-    symbol_pane.set_texture_slice(SDL2pp::Rect(symbol_number * 64, 0, 64, 64));
-    symbol_pane.set_size(SDL2pp::Point(37, 37));
-    numbers.push_back(symbol_pane);
-    parent.add_child(&numbers.back());
-    parent.set_width(parent.get_width() + 37);
-}
-
-void View::HUDRenderer::render_number(std::list<View::Pane>& numbers, View::HorizontalPane& parent,
-                                      uint8_t number) {
+void View::HUDRenderer::render_item(std::list<View::Pane>& numbers, View::HorizontalPane& parent,
+                                      const SDL2pp::Rect& slice, Shared<SDL2pp::Texture> texture) {
     View::Pane number_pane(controller);
     number_pane.set_draw_texture(true);
-    number_pane.set_texture(hud_numbers);
-    number_pane.set_texture_slice(SDL2pp::Rect(number * 44, 0, 44, 66));
-    number_pane.set_size(SDL2pp::Point(22, 33));
+    number_pane.set_texture(texture);
+    number_pane.set_texture_slice(slice);
+    number_pane.set_size(SDL2pp::Point(slice.GetW(), slice.GetH()));
+    View::PaneScalator::scalate_height_with_aspect_ratio(&number_pane, 21);
     numbers.push_back(number_pane);
     parent.add_child(&numbers.back());
-    parent.set_width(parent.get_width() + 22);
 }
 
 void View::HUDRenderer::render_time(uint16_t time_left) {
-    auto units = get_units_of_time_left(time_left);
+    auto clock_symbol = View::NumberTextureSlicer::get_symbol(2);
+    auto slices = get_time_slices(time_left);
 
     time.clear_children();
-    time.set_width(0);
 
-    render_hud_symbol(time_numbers, time, 2);
-    render_number(time_numbers, time, units[0]);
-    render_number(time_numbers, time, units[1]);
-    load_separator(time_numbers, time);
-    render_number(time_numbers, time, units[2]);
-    render_number(time_numbers, time, units[3]);
+    render_item(time_numbers, time, clock_symbol, hud_symbols);
+    for (const auto& slice: slices) {
+        render_item(time_numbers, time, slice, hud_numbers);
+    }
 }
 
 void View::HUDRenderer::render_life_points(Shared<RenderedPlayer> player) {
-    auto units = get_units(player->get_health());
+    auto cross_symbol = View::NumberTextureSlicer::get_symbol(0);
+    auto slices = View::NumberTextureSlicer::get_hud_number(player->get_health());
 
     health.clear_children();
-    health.set_width(0);
 
-    render_hud_symbol(health_numbers, health, 0);
-
-    for (size_t i = 0; i < units.size(); i++) {
-        render_number(health_numbers, health, units[i]);
+    render_item(health_numbers, health, cross_symbol, hud_symbols);
+    for (const auto& slice: slices) {
+        render_item(health_numbers, health, slice, hud_numbers);
     }
 }
 
 void View::HUDRenderer::render_money(Shared<View::RenderedPlayer> player) {
-    auto units = get_units(player->get_money());
+    auto dollar_symbol = View::NumberTextureSlicer::get_symbol(7);
+    auto slices = View::NumberTextureSlicer::get_hud_number(player->get_money());
 
     money.clear_children();
-    money.set_width(0);
-
-    render_hud_symbol(money_numbers, money, 7);
-
-    for (size_t i = 0; i < units.size(); i++) {
-        render_number(money_numbers, money, units[i]);
+    
+    render_item(money_numbers, money, dollar_symbol, hud_symbols);
+    for (const auto& slice: slices) {
+        render_item(money_numbers, money, slice, hud_numbers);
     }
 }
 
@@ -129,26 +104,29 @@ View::HUDRenderer::HUDRenderer(Weak<Controller::GameController> controller):
         hud_symbols(asset_manager->get_texture(Model::TextureID::HUD_SYMBOLS)),
         viewport(controller),
         equipment_space(controller),
-        equipment_renderer(controller, &viewport),
+        equipment_renderer(controller, &equipment_space),
         time(controller),
         stats(controller),
         health(controller),
         money(controller) {
+    viewport.set_horizontal_alignment(0.0f);
     viewport.add_child(&time);
     viewport.add_child(&equipment_space);
     viewport.add_child(&stats);
-    stats.add_child(&health);
-    stats.add_child(&money);
 
-    time.set_height(37);
-    time.set_horizontal_alignment(0.0f);
-
+    stats.set_fit_to_children(true);
     stats.set_horizontal_alignment(0.0f);
     stats.set_vertical_alignment(1.0f);
+    stats.add_child(&health);
+    stats.add_child(&money);
     stats.set_gap_x(10);
 
-    health.set_height(37);
-    money.set_height(37);
+    time.set_fit_to_children(true);
+    time.set_horizontal_alignment(0.0f);
+
+    health.set_fit_to_children(true);
+    money.set_fit_to_children(true);
+    equipment_space.set_height(renderer->GetLogicalHeight() - 42);
 }
 
 void View::HUDRenderer::render(const Model::GameState& game_state, uint8_t frames) {

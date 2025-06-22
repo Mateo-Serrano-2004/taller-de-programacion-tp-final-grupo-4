@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <list>
 #include <vector>
+#include <SDL2pp/Rect.hh>
 
 #include "common/definitions.h"
 #include "entity/horizontal_pane.h"
@@ -42,14 +43,10 @@ protected:
     std::list<Pane> health_numbers;
     std::list<Pane> money_numbers;
 
-    std::vector<uint8_t> get_units(uint16_t number);
-    std::vector<uint8_t> get_units_of_time_left(uint16_t seconds_left);
+    std::vector<SDL2pp::Rect> get_time_slices(int seconds_left);
 
-    void load_separator(std::list<View::Pane>& numbers, View::HorizontalPane& parent);
-    void render_hud_symbol(std::list<View::Pane>& numbers, View::HorizontalPane& parent,
-                           uint8_t symbol_number);
-    void render_number(std::list<View::Pane>& numbers, View::HorizontalPane& parent,
-                       uint8_t number);
+    void render_item(std::list<View::Pane>& numbers, View::HorizontalPane& parent,
+                       const SDL2pp::Rect& slice, Shared<SDL2pp::Texture> texture);
 
     void render_time(uint16_t time_left);
     void render_life_points(Shared<RenderedPlayer> player);

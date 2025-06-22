@@ -14,7 +14,9 @@ private:
 
 public:
     static std::vector<SDL2pp::Rect> get_hud_number(int number);
+    static SDL2pp::Rect get_symbol(int symbol_number);
     static SDL2pp::Rect get_separator();
+    static SDL2pp::Rect get_colon();
 };
 };
 

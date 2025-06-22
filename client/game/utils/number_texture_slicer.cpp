@@ -27,6 +27,14 @@ std::vector<SDL2pp::Rect> View::NumberTextureSlicer::get_hud_number(int number) 
     return numbers_slices;
 }
 
+SDL2pp::Rect View::NumberTextureSlicer::get_symbol(int symbol_number) {
+    return SDL2pp::Rect(symbol_number * 64, 0, 64, 64);
+}
+
 SDL2pp::Rect View::NumberTextureSlicer::get_separator() {
     return SDL2pp::Rect(452, 0, 12, 66);
+}
+
+SDL2pp::Rect View::NumberTextureSlicer::get_colon() {
+    return SDL2pp::Rect(440, 0, 12, 66);
 }
