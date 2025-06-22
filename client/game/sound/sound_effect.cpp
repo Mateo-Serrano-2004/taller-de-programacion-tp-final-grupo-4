@@ -11,14 +11,14 @@
 #include "utils/enum_translator.h"
 
 int View::SoundEffect::calculate_volume(int current_distance, int min_range, int max_range) {
-    // Volume in range [0, 128]
+    // Volume in range [0, 100]
 
-    if (current_distance <= min_range) return 128;
+    if (current_distance <= min_range) return 100;
     if (current_distance >= max_range) return 0;
 
-    int t = (current_distance - min_range) / (max_range - min_range);
+    float t = (float) ((current_distance - min_range)) / (float) ((max_range - min_range));
     float cosine = std::cos(t * M_PI);
-    float volume = 0.5f * (1 + cosine) * 128.0f;
+    float volume = 0.5f * (1 + cosine) * 100.0f;
 
     return static_cast<int>(volume);
 }
@@ -27,7 +27,7 @@ void View::SoundEffect::update_volume() {
     auto position = player->get_position();
     auto camera_view = player->get_fixation().get_center();
     int dx = std::abs(camera_view.GetX() - position.get_x());
-    int dy = std::abs(camera_view.GetX() - position.get_x());
+    int dy = std::abs(camera_view.GetY() - position.get_y());
     int distance = std::sqrt((dx * dx) + (dy * dy));
     mixer->SetVolume(channel, calculate_volume(distance, 100, 350));
 }
