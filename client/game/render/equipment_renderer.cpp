@@ -74,8 +74,12 @@ void View::EquipmentRenderer::render_weapon(Shared<View::RenderedPlayer> player)
     total_ammo_data.clear_children();
     loaded_ammo_numbers.clear();
     total_ammo_numbers.clear();
-    if (weapon_id != Model::WeaponID::KNIFE && weapon_id != Model::WeaponID::BOMB)
+    if (weapon_id != Model::WeaponID::KNIFE && weapon_id != Model::WeaponID::BOMB) {
+        separator.set_draw_texture(true);
         render_ammo(player);
+    } else {
+        separator.set_draw_texture(false);
+    }
 }
 
 void View::EquipmentRenderer::render_bomb(Shared<RenderedPlayer> player) {
