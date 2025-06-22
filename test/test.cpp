@@ -995,6 +995,79 @@ void test_muerte_stats() {
     std::cout << "✅ Test muerte_stats terminó (sin asserts)\n";
 }
 
+void test_drop_weapon_event() {
+    std::cout << "[TEST] - Ambos jugadores dropean arma luego de warmup\n";
+
+    using namespace std::chrono;
+
+    ClientQueue client_queue1;
+    ClientQueue client_queue2;
+    Game game("test_party", "de_dummy");
+
+    uint8_t ct_id = 1;
+    uint8_t tt_id = 2;
+
+    game.add_player("CT", client_queue1, ct_id, Model::TeamID::CT, Model::RoleID::CT1);
+    game.add_player("TT", client_queue2, tt_id, Model::TeamID::TT, Model::RoleID::T1);
+
+    std::this_thread::sleep_for(seconds(11));  // Warmup
+
+    game.get_queue().push({ct_id, DropWeaponEvent()});
+    std::this_thread::sleep_for(milliseconds(32));
+    game.get_queue().push({tt_id, DropWeaponEvent()});
+
+    std::this_thread::sleep_for(seconds(1)); 
+
+    game.stop();
+
+    DTO::DTOVariant dto;
+    std::vector<std::tuple<uint8_t, uint16_t, uint16_t>> last_drops;
+    bool first_dto_checked = false;
+    bool printed_drop_dto = false;
+
+    while (client_queue1.try_pop(dto)) {
+        if (!std::holds_alternative<DTO::GameStateDTO>(dto)) continue;
+        const auto& state = std::get<DTO::GameStateDTO>(dto);
+
+        std::vector<std::tuple<uint8_t, uint16_t, uint16_t>> current_drops;
+        for (const auto& d : state.round.dropped_weapons) {
+            current_drops.emplace_back(d.weapon_id, d.position_x, d.position_y);
+        }
+
+        if (!first_dto_checked) {
+            std::cout << "🔍 Primer GameStateDTO tiene drops? "
+                      << (current_drops.empty() ? "NO" : "SÍ") << "\n";
+            first_dto_checked = true;
+        }
+
+        bool changed = current_drops.size() != last_drops.size();
+        if (!changed) {
+            for (size_t i = 0; i < current_drops.size(); ++i) {
+                if (current_drops[i] != last_drops[i]) {
+                    changed = true;
+                    break;
+                }
+            }
+        }
+
+        if (!current_drops.empty() && changed) {
+            std::cout << "🟡 Nuevo GameStateDTO con Drops:\n";
+            for (const auto& [weapon_id, x, y] : current_drops) {
+                std::cout << "  🧨 WeaponID: " << static_cast<int>(weapon_id)
+                          << " en (" << x << ", " << y << ")\n";
+            }
+            last_drops = current_drops;
+            printed_drop_dto = true;
+        }
+    }
+
+    if (!printed_drop_dto) {
+        std::cout << "⚠️  No se detectaron GameStateDTO con drops distintos tras el primero\n";
+    }
+
+    std::cout << "✅ Test drop_weapon_event terminado\n";
+}
+
 int main() {
     //test_cambio_ronda();
     //test_finaliza_por_muerte_ct();
@@ -1008,7 +1081,8 @@ int main() {
     //test_tt_defuse_interrumpido_dos_veces(); este
     //test_movimiento_con_colisiones();
     //test_movimiento_hacia_pared_doble();
-    test_muerte_stats();
+    //test_muerte_stats();
+    test_drop_weapon_event();
     std::cout << "Pasaron los test" << std::endl;
     return 0;
 }

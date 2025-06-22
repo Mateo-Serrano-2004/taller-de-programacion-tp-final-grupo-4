@@ -33,6 +33,16 @@ void GameLogic::start_using_weapon(FullPlayer& player, const Round& round) const
     player.start_using_weapon();
 }
 
+void GameLogic::drop_equipped_weapon(FullPlayer& player, Round& round) const {
+    if (!player.is_alive())
+        return;
+
+    Shared<FullWeapon> dropped = player.drop_equipped_weapon();
+    if (dropped) {
+        round.add_dropped_weapon(DroppedWeapon(dropped, player.get_position()));
+    }
+}
+
 void GameLogic::start_reloading_weapon(FullPlayer& player, const Round& round) const {
     if (!round.is_active())
         return;

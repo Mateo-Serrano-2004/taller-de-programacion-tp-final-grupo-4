@@ -29,6 +29,7 @@ public:
     void buy_weapon(FullPlayer& player, Model::WeaponID weapon_id, Round& round) const;
     void start_using_weapon(FullPlayer& player, const Round& round) const;
     void stop_using_weapon(FullPlayer& player) const;
+    void drop_equipped_weapon(FullPlayer& player, Round& round) const;
     void process_shooting(std::map<uint8_t, FullPlayer>& players, Round& round,
                           uint16_t frames_to_process) const;
     void assign_bomb_to_random_tt(std::map<uint8_t, FullPlayer>& players);

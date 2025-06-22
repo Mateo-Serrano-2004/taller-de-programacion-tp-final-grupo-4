@@ -244,4 +244,38 @@ std::vector<DroppedWeapon> FullPlayer::drop_weapons() {
     return drops;
 }
 
+Shared<FullWeapon> FullPlayer::drop_equipped_weapon() {
+    if (!current_weapon)
+        return nullptr;
+
+    Shared<FullWeapon> dropped_weapon = nullptr;
+    auto full_weapon = std::dynamic_pointer_cast<FullWeapon>(current_weapon);
+
+    switch (full_weapon->get_slot_id()) {
+        case Model::SlotID::SECONDARY_WEAPON:
+            dropped_weapon = secondary_weapon;
+            secondary_weapon = nullptr;
+            break;
+
+        case Model::SlotID::PRIMARY_WEAPON:
+            dropped_weapon = primary_weapon;
+            primary_weapon = nullptr;
+            break;
+
+        case Model::SlotID::BOMB_SLOT:
+            dropped_weapon = remove_bomb();
+            break;
+
+        case Model::SlotID::KNIFE_SLOT:
+            return nullptr;
+    }
+
+    if (dropped_weapon)
+        dropped_weapon->release_trigger();
+
+    shooting = false;
+    equip_weapon_by_type(Model::SlotID::KNIFE_SLOT);
+    return dropped_weapon;
+}
+
 void FullPlayer::give_bomb(Shared<FullWeapon> new_bomb) { bomb = new_bomb; }

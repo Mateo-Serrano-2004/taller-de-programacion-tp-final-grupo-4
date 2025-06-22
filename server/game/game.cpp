@@ -68,6 +68,13 @@ void Game::handle_stop_using_weapon(const uint8_t& player_id) {
     gamelogic.stop_using_weapon(player->get());
 }
 
+void Game::handle_drop_weapon(const uint8_t& player_id) {
+    auto player = find_player_by_id(player_id);
+    if (!player.has_value())
+        return;
+    gamelogic.drop_equipped_weapon(player->get(), round);
+}
+
 void Game::handle_switch_weapon(const uint8_t& player_id, const SwitchWeaponEvent& event) {
     auto player = find_player_by_id(player_id);
     if (!player.has_value())
@@ -148,7 +155,7 @@ void Game::handle(uint8_t player_id, const GameEventVariant& event) {
                         handle_switch_weapon(player_id, e);
                     },
                     [player_id, this](const BuyEvent& e) { handle_buy_weapon(player_id, e); },
-                    [this](const DropWeaponEvent&) {},
+                    [player_id, this](const DropWeaponEvent&) { handle_drop_weapon(player_id); },
                     [player_id, this](const UseWeaponEvent&) { handle_use_weapon(player_id); },
                     [player_id, this](const StopUsingWeaponEvent&) {
                         handle_stop_using_weapon(player_id);

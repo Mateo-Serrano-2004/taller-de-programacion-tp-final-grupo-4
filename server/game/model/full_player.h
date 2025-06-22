@@ -48,6 +48,7 @@ public:
     // no maneja tope de dinero
     void add_money(uint16_t money_to_be_added);
     void equip_weapon_by_type(Model::SlotID type);
+    Shared<FullWeapon> drop_equipped_weapon();
 
     bool can_pay(uint16_t price);
     bool has_bomb_equipped() const;
