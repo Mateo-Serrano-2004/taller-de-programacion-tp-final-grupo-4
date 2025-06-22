@@ -10,8 +10,11 @@
 #include "asset/texture_id.h"
 #include "common/definitions.h"
 #include "entity/pane.h"
+#include "sound/sound_effect_player.h"
 
 #include "renderer.h"
+#include "animation_renderer.h"
+#include "map_renderer.h"
 
 namespace SDL2pp {
 class Font;
@@ -28,19 +31,15 @@ class RenderedPlayer;
 
 class PlayerRenderer: public Renderer {
 protected:
+    AnimationRenderer animation_renderer;
+    SoundEffectPlayer sound_player;
+    MapRenderer map_renderer;
     Shared<Controller::GameStateManager> game_state_manager;
     Shared<SDL2pp::Texture> bomb_texture;
 
-    void render_winner_message(const Model::GameState& game_state, uint8_t frames);
-    void render_defusing_progress(const Model::GameState& game_state);
     void render_fov(const Model::GameState& game_state);
-    void render_muzzle_fires(const Model::GameState& game_state, uint8_t frames);
     void render_bomb(const Model::GameState& game_state);
     bool render_players(const Model::GameState& game_state);
-
-    SDL2pp::Rect get_map_slice(Shared<SDL2pp::Texture> map, const Camera& camera);
-    SDL2pp::Rect get_viewport_slice(const SDL2pp::Rect& map_slice, const Camera& camera);
-    void render_map(const Model::GameState& game_state);
 
 public:
     explicit PlayerRenderer(Weak<Controller::GameController> controller);

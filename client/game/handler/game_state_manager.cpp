@@ -23,6 +23,100 @@
 #include "render/camera.h"
 #include "sound/sound_effect.h"
 
+void Controller::GameStateManager::load_sound(
+    Shared<Model::GameState>& new_game_state,
+    const Shared<View::RenderedPlayer>& player
+) {
+    if (!player->is_shooting())
+        return;
+    auto weapon_id = player->get_current_weapon()->get_weapon_id();
+    if (weapon_id != Model::WeaponID::BOMB) {
+        new_game_state->shot_sounds.push_back(
+            make_shared<View::SoundEffect>(
+                controller,
+                player->get_id(),
+                player->get_current_weapon()->get_weapon_id()
+            )
+        );
+    }
+}
+
+void Controller::GameStateManager::load_animation(
+    Shared<Model::GameState>& new_game_state,
+    const Shared<View::RenderedPlayer>& player
+) {
+    if (!player->is_shooting())
+        return;
+    auto weapon_id = player->get_current_weapon()->get_weapon_id();
+    if (weapon_id != Model::WeaponID::KNIFE && weapon_id != Model::WeaponID::BOMB) {
+        new_game_state->fires.push_back(
+            make_shared<View::MuzzleFireAnimation>(
+                controller, player->get_id()
+            )
+        );
+    }
+}
+
+void Controller::GameStateManager::update_sounds(Shared<Model::GameState>& new_game_state) {
+    game_state->shot_sounds.remove_if(
+        [](Shared<View::SoundEffect>& sf) { return sf->has_ended(); }
+    );
+    game_state->shot_sounds.splice(game_state->shot_sounds.end(), new_game_state->shot_sounds);
+}
+
+void Controller::GameStateManager::update_animations(Shared<Model::GameState>& new_game_state) {
+    game_state->fires.remove_if(
+            [](Shared<View::MuzzleFireAnimation>& a) { return a->has_ended(); });
+    game_state->fires.splice(game_state->fires.end(), new_game_state->fires);
+}
+
+void Controller::GameStateManager::update_camera(const Shared<View::RenderedPlayer>& ref_player) {
+    if (!ref_player)
+        return;
+    auto reference_player_position = ref_player->get_position();
+    game_state->camera.set_center(reference_player_position.get_x(),
+                                    reference_player_position.get_y());
+}
+
+void Controller::GameStateManager::update_bomb_position(DTO::GameStateDTO& dto) {
+    if (dto.round.bomb_planted && !game_state->bomb_position.has_value()) {
+        auto pos = dto.round.bomb_position;
+        game_state->bomb_position = SDL2pp::Point(pos.get_x(), pos.get_y());
+    }
+    if (dto.round.bomb_defused || dto.round.state != RoundState::Active) {
+        game_state->bomb_position = std::nullopt;
+    }
+}
+
+void Controller::GameStateManager::update_defusing_bar(const Shared<View::RenderedPlayer>& ref_player) {
+    if (!game_state->bomb_defusing && ref_player->is_defusing()) {
+        game_state->bomb_defusing = make_shared<View::ProgressBarAnimation>(controller);
+    } else if (!ref_player->is_defusing()) {
+        game_state->bomb_defusing = nullptr;
+    }
+}
+
+void Controller::GameStateManager::update_winner_message(DTO::GameStateDTO& dto) {
+    if (game_state->winner_message && game_state->winner_message->has_ended())
+        game_state->winner_message = nullptr;
+
+    if (dto.round.ended && game_state->round_state == RoundState::Active) {
+        game_state->winner_message = make_shared<View::WinnerTeamMessageAnimation>(
+            controller, game_state->round_winner
+        );
+    }
+}
+
+void Controller::GameStateManager::update_stats(DTO::GameStateDTO& dto) {
+    game_state->time_left = dto.round.time_left;
+    game_state->defusing_progress = dto.round.defusing_progress;
+    game_state->first_team_victories = dto.ct_rounds_won;
+    game_state->second_team_victories = dto.tt_rounds_won;
+    game_state->round_winner = dto.round.winner;
+    game_state->game_winner = dto.winner;
+    game_state->round_state = dto.round.state;
+}
+
 Controller::GameStateManager::GameStateManager(Weak<Controller::GameController> controller):
         game_state(make_shared<Model::GameState>()), controller(controller) {
     SDL2pp::Point viewport_size = controller.lock()->get_renderer()->GetLogicalSize();
@@ -50,76 +144,20 @@ void Controller::GameStateManager::update(DTO::GameStateDTO& game_state_dto) {
     for (const auto& dto: game_state_dto.players) {
         auto player = make_shared<View::RenderedPlayer>(controller, std::move(dto.to_player()));
         new_game_state->players.insert({player->get_id(), player});
-
-        if (player->is_shooting()) {
-            auto weapon_id = player->get_current_weapon()->get_weapon_id();
-            if (weapon_id != Model::WeaponID::KNIFE && weapon_id != Model::WeaponID::BOMB) {
-                new_game_state->fires.push_back(
-                    make_shared<View::MuzzleFireAnimation>(
-                        controller, player->get_id()
-                    )
-                );
-            }
-            if (weapon_id != Model::WeaponID::BOMB) {
-                new_game_state->shot_sounds.push_back(
-                    make_shared<View::SoundEffect>(
-                        controller,
-                        player->get_id(),
-                        player->get_current_weapon()->get_weapon_id()
-                    )
-                );
-            }
-        }
+        load_sound(new_game_state, player);
+        load_animation(new_game_state, player);
     }
 
     std::lock_guard<std::mutex> lock(mutex);
     game_state->players = new_game_state->players;
-    game_state->fires.remove_if(
-            [](Shared<View::MuzzleFireAnimation>& a) { return a->has_ended(); });
-    game_state->fires.splice(game_state->fires.end(), new_game_state->fires);
-    game_state->shot_sounds.remove_if(
-        [](Shared<View::SoundEffect>& sf) { return sf->has_ended(); }
-    );
-    game_state->shot_sounds.splice(game_state->shot_sounds.end(), new_game_state->shot_sounds);
+    update_animations(new_game_state);
+    update_sounds(new_game_state);
 
-    game_state->time_left = game_state_dto.round.time_left;
-    if (game_state_dto.round.bomb_planted && !game_state->bomb_position.has_value()) {
-        auto pos = game_state_dto.round.bomb_position;
-        game_state->bomb_position = SDL2pp::Point(pos.get_x(), pos.get_y());
-    }
-    if (game_state_dto.round.bomb_defused || game_state_dto.round.state != RoundState::Active) {
-        game_state->bomb_position = std::nullopt;
-    }
     auto ref_player = game_state->get_reference_player();
-    if (ref_player) {
-        auto reference_player_position = ref_player->get_position();
-        game_state->camera.set_center(reference_player_position.get_x(),
-                                      reference_player_position.get_y());
-        if (!game_state->bomb_defusing && ref_player->is_defusing()) {
-            game_state->bomb_defusing = make_shared<View::ProgressBarAnimation>(controller);
-        } else if (!ref_player->is_defusing()) {
-            game_state->bomb_defusing = nullptr;
-        }
-    }
-    game_state->defusing_progress = game_state_dto.round.defusing_progress;
-    if (!(game_state->bomb_position.has_value()) && game_state_dto.round.bomb_planted) {
-        game_state->bomb_position = SDL2pp::Point();
-        game_state->bomb_position.value().SetX(game_state_dto.round.bomb_position.get_x());
-        game_state->bomb_position.value().SetX(game_state_dto.round.bomb_position.get_y());
-    }
-    game_state->first_team_victories = game_state_dto.ct_rounds_won;
-    game_state->second_team_victories = game_state_dto.tt_rounds_won;
-    game_state->round_winner = game_state_dto.round.winner;
-    game_state->game_winner = game_state_dto.winner;
+    update_camera(ref_player);
+    update_defusing_bar(ref_player);
 
-    if (game_state->winner_message && game_state->winner_message->has_ended())
-        game_state->winner_message = nullptr;
-
-    if (game_state_dto.round.ended && game_state->round_state == RoundState::Active) {
-        game_state->winner_message = make_shared<View::WinnerTeamMessageAnimation>(
-            controller, game_state->round_winner
-        );
-    }
-
-    game_state->round_state = game_state_dto.round.state;
+    update_bomb_position(game_state_dto);
+    update_winner_message(game_state_dto);
+    update_stats(game_state_dto);
 }
