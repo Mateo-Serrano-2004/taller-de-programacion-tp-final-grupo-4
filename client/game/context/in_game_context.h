@@ -9,6 +9,7 @@
 #include "entity/label.h"
 #include "event/event.h"
 #include "handler/in_game_event_handler_strategy.h"
+#include "model/game_state.h"
 #include "render/hud_renderer.h"
 #include "render/player_renderer.h"
 
@@ -21,7 +22,10 @@ class GameStateManager;
 
 namespace Context {
 class InGameContext: public BaseContext {
+friend class Controller::InGameEventHandlerStrategy;
+
 protected:
+    Model::GameState current_game_state;
     View::PlayerRenderer player_renderer;
     View::HUDRenderer hud_renderer;
     Controller::InGameEventHandlerStrategy strategy;

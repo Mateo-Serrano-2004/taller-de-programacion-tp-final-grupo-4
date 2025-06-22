@@ -7,14 +7,13 @@
 #include "common/event_type.h"
 #include "common/model/player.h"
 #include "controller/game_controller.h"
-#include "handler/game_state_manager.h"
 #include "event/switch_context_event.h"
-#include "model/game_state.h"
+#include "handler/game_state_manager.h"
 
 void Context::InGameContext::render(uint8_t frames) {
-    Model::GameState game_state = game_state_manager->get_game_state();
-    player_renderer.render(game_state, frames);
-    hud_renderer.render(game_state, frames);
+    current_game_state = game_state_manager->get_game_state();
+    player_renderer.render(current_game_state, frames);
+    hud_renderer.render(current_game_state, frames);
 }
 
 void Context::InGameContext::dispatch_events() {
@@ -26,7 +25,7 @@ Context::InGameContext::InGameContext(Weak<Controller::GameController> controlle
         Context::BaseContext("in-game", controller),
         player_renderer(controller),
         hud_renderer(controller),
-        strategy(controller),
+        strategy(controller, this),
         game_state_manager(controller.lock()->get_game_state_manager()) {}
 
 void Context::InGameContext::notify_event(Shared<Model::Event> event) {

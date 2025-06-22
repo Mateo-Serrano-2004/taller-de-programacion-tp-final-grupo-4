@@ -46,7 +46,8 @@ public:
     RoundState round_state;
 
     GameState();
-    GameState(const GameState& other);
+    GameState(const GameState&) = default;
+    GameState& operator=(const GameState&) = default;
 
     Shared<View::RenderedPlayer> get_reference_player() const;
     Shared<View::RenderedPlayer> get_player_by_id(Maybe<short_id_t> id) const;

@@ -11,6 +11,10 @@
 #include "weapon_handler.h"
 #include "mouse_movement_handler.h"
 
+namespace Context {
+class InGameContext;
+};
+
 namespace Controller {
 class GameController;
 
@@ -19,11 +23,15 @@ protected:
     MovementHandler movement_handler;
     WeaponHandler weapon_handler;
     MouseMovementHandler mouse_movement_handler;
+    Context::InGameContext* context;
 
     void handle_switch_context_event() override;
 
 public:
-    explicit InGameEventHandlerStrategy(Weak<GameController> controller);
+    InGameEventHandlerStrategy(
+        Weak<GameController> controller,
+        Context::InGameContext* context
+    );
 
     void handle() override;
     void handle_current_game_state();

@@ -12,7 +12,9 @@
 #include <SDL2pp/Window.hh>
 
 #include "common/slot_id.h"
+#include "common/round_state.h"
 #include "controller/game_controller.h"
+#include "context/in_game_context.h"
 #include "event/defuse_bomb_event.h"
 #include "event/movement_event.h"
 #include "event/quit_event.h"
@@ -31,6 +33,8 @@ void Controller::InGameEventHandlerStrategy::handle_switch_context_event() {
         auto switch_to_menu = make_shared<Model::SwitchContextEvent>("menu");
         controller.lock()->push_event(std::move(switch_to_menu));
     } else if (key_symbol == SDLK_b) {
+        if (context->current_game_state.round_state != RoundState::Buying)
+            return;
         auto switch_to_shop = make_shared<Model::SwitchContextEvent>("shop");
         controller.lock()->push_event(std::move(switch_to_shop));
     } else if (key_symbol == SDLK_TAB) {
@@ -40,11 +44,13 @@ void Controller::InGameEventHandlerStrategy::handle_switch_context_event() {
 }
 
 Controller::InGameEventHandlerStrategy::InGameEventHandlerStrategy(
-        Weak<Controller::GameController> controller):
+        Weak<Controller::GameController> controller,
+        Context::InGameContext* context):
         Controller::EventHandlerStrategy(controller),
         movement_handler(controller),
         weapon_handler(controller),
-        mouse_movement_handler(controller) {}
+        mouse_movement_handler(controller),
+        context(context) {}
 
 void Controller::InGameEventHandlerStrategy::handle() {
     Controller::EventHandlerStrategy::handle();
