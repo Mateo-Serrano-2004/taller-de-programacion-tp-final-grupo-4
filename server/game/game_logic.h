@@ -13,6 +13,7 @@
 #include "shop.h"
 #include "shot_manager.h"
 #include "weapon_factory.h"
+#include "server/game/model/dropped_weapon.h"
 
 
 class GameLogic {

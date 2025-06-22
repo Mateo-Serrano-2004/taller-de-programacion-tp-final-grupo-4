@@ -31,6 +31,8 @@ protected:
     Shared<Weapon> current_weapon;
     uint8_t health;
     Model::TeamID team;
+    uint8_t deaths;
+    uint8_t kills;
 
 public:
     Player(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role_id,
@@ -39,7 +41,7 @@ public:
     Player(bool shooting, bool defusing_bomb, bool reloading, short_id_t id, Model::RoleID role_id,
            angle_t angle, uint16_t money, const std::string& name,
            const Physics::Vector2D& position, Shared<Weapon> weapon, uint8_t health,
-           Model::TeamID team);
+           Model::TeamID team, uint8_t deaths, uint8_t kills);
 
     Player(const Player&) = delete;
     Player& operator=(const Player&) = delete;
@@ -67,6 +69,8 @@ public:
     void set_position(Physics::Vector2D new_position);
     void set_current_weapon(Shared<Weapon> weapon);
     void set_new_team(Model::TeamID new_team);
+    void add_kill();
+    void add_death();
 
     DTO::PlayerDTO to_dto() const;
 

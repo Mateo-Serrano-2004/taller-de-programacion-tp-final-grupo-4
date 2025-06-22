@@ -184,6 +184,12 @@ void GameLogic::apply_impacts(const std::vector<Impact>& impacts, Round& round,
 
             round.notify_on_one_player_less(victim->second.get_team());
             shooter->second.add_money(800);
+            shooter->second.add_kill();
+
+            auto drops = victim->second.drop_weapons();
+            for (auto& drop : drops) {
+                round.add_dropped_weapon(drop);
+            }
         }
     }
 }

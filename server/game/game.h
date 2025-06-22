@@ -46,6 +46,7 @@ private:
     uint8_t max_rounds;
     uint8_t rounds_per_side;
     int round_won_money;
+    int round_lost_money;
     const uint8_t max_players = 10;
     const uint8_t min_players_to_start = 2;
     GameState state = GameState::WaitingStart;

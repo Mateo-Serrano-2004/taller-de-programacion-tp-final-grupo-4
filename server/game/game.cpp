@@ -224,6 +224,8 @@ void Game::update_players_that_won() {
     for (auto& [player_id, player]: players) {
         if (player.get_team() == winner) {
             player.add_money(round_won_money);
+        } else {
+            player.add_money(round_lost_money);
         }
     }
 }
@@ -370,7 +372,8 @@ Game::Game(const std::string& party_name, const std::string& map_name)
     const auto& config = YamlParser::getConfigData();
     this->max_rounds = static_cast<uint8_t>(config.game.rounds);
     this->rounds_per_side = static_cast<uint8_t>(config.game.roundsPerSide);
-    this->round_won_money = static_cast<uint16_t>(config.game.roundWonMoney);
+    this->round_won_money = config.game.roundWonMoney;
+    this->round_lost_money = config.game.roundLostMoney;
 
     start();
 }

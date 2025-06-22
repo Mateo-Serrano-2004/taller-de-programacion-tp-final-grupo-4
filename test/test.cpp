@@ -859,8 +859,8 @@ void test_movimiento_hacia_pared_doble() {
     std::cout << "🕒 Esperando warmup y compra...\n";
     std::this_thread::sleep_for(seconds(12));
 
-    std::cout << "🚶Ambos jugadores se mueven hacia arriba\n";
-    game.get_queue().push({player1_id, MovementEvent(0, 1)});
+    std::cout << "🚶JUgador 1 para abajo, 2 para arriba se tienenq ue chocar ellos\n";
+    game.get_queue().push({player1_id, MovementEvent(0, -1)});
     game.get_queue().push({player2_id, MovementEvent(0, 1)});
 
     std::this_thread::sleep_for(seconds(3));
@@ -898,6 +898,66 @@ void test_movimiento_hacia_pared_doble() {
     mostrar_cambios(client_queue2, player2_id, last_player2, first2);
 }
 
+void test_muerte_stats() {
+    std::cout << "[TEST] - PARTIDA 1 RONDA. PLAYER 2 MATA A 1. p2=(32,32) y p1=(32,96)" << std::endl;
+
+    using namespace std::chrono;
+
+    ClientQueue client_queue1;
+    ClientQueue client_queue2;
+    Game game("test_party", "de_dummy");
+
+    uint8_t ct_id = 1;
+    uint8_t tt_id = 2;
+
+    game.add_player("CT", client_queue1, ct_id, Model::TeamID::CT, Model::RoleID::CT1);
+    game.add_player("TT", client_queue2, tt_id, Model::TeamID::TT, Model::RoleID::T1);
+
+    std::this_thread::sleep_for(seconds(12));  // Warmup + buy
+
+    game.get_queue().push({tt_id, RotationEvent(0)});
+    std::this_thread::sleep_for(milliseconds(32));
+
+    for (int i = 0; i < 4; ++i) {
+        game.get_queue().push({tt_id, UseWeaponEvent()});
+        std::this_thread::sleep_for(milliseconds(32));
+        game.get_queue().push({tt_id, StopUsingWeaponEvent()});
+        std::this_thread::sleep_for(milliseconds(32));
+    }
+
+    std::this_thread::sleep_for(seconds(2));
+    game.stop();
+
+    DTO::DTOVariant dto;
+
+    std::map<uint8_t, std::tuple<uint8_t, uint8_t, uint16_t, uint8_t>> last_stats;
+    std::set<uint8_t> printed_players;
+
+    while (client_queue1.try_pop(dto)) {
+        if (!std::holds_alternative<DTO::GameStateDTO>(dto)) continue;
+
+        const auto& state = std::get<DTO::GameStateDTO>(dto);
+        for (const auto& p : state.players) {
+            auto stats = std::make_tuple(p.kills, p.deaths, p.money, p.health);
+
+            bool first = !printed_players.count(p.player_id);
+            bool changed = !first && stats != last_stats[p.player_id];
+
+            if (first || changed) {
+                std::cout << "[PLAYER " << (int)p.player_id << "] "
+                          << "Kills: " << (int)p.kills << ", "
+                          << "Deaths: " << (int)p.deaths << ", "
+                          << "Money: " << p.money << ", "
+                          << "Health: " << (int)p.health << "\n";
+
+                last_stats[p.player_id] = stats;
+                printed_players.insert(p.player_id);
+            }
+        }
+    }
+
+    std::cout << "✅ Test rotacion_y_disparo terminó (sin asserts)\n";
+}
 
 int main() {
     //test_cambio_ronda();
@@ -911,7 +971,8 @@ int main() {
     //test_tt_plants_and_ct_defuses();
     //test_tt_defuse_interrumpido_dos_veces(); este
     //test_movimiento_con_colisiones();
-    test_movimiento_hacia_pared_doble();
+    //test_movimiento_hacia_pared_doble();
+    //test_muerte_stats();
     std::cout << "Pasaron los test" << std::endl;
     return 0;
 }

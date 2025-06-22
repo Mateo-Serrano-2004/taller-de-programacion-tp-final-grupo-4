@@ -180,6 +180,7 @@ void FullPlayer::take_damage(uint8_t damage) {
     if (health <= damage) {
         health = 0;
         alive = false;
+        add_death();
     } else {
         health -= damage;
     }
@@ -217,6 +218,30 @@ Shared<FullWeapon> FullPlayer::remove_bomb() {
     }
 
     return dropped_bomb;
+}
+
+std::vector<DroppedWeapon> FullPlayer::drop_weapons() {
+    std::vector<DroppedWeapon> drops;
+    const auto pos = get_position();
+
+    if (primary_weapon) {
+        drops.emplace_back(primary_weapon, pos);
+        primary_weapon.reset();
+    }
+
+    if (secondary_weapon) {
+        drops.emplace_back(secondary_weapon, pos);
+        secondary_weapon.reset();
+    }
+
+    if (bomb) {
+        drops.emplace_back(bomb, pos);
+        bomb.reset();
+    }
+
+    equip_weapon_by_type(Model::SlotID::KNIFE_SLOT); // por las dudas
+
+    return drops;
 }
 
 void FullPlayer::give_bomb(Shared<FullWeapon> new_bomb) { bomb = new_bomb; }

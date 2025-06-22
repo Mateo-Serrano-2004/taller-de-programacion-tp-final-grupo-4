@@ -24,6 +24,8 @@ public:
     uint8_t reloading;
     uint8_t health;
     short_id_t team;
+    uint8_t deaths;
+    uint8_t kills;
 
     WeaponDTO weapon_dto;
 
@@ -32,7 +34,7 @@ public:
     PlayerDTO(short_id_t player_id, short_id_t role_id, angle_t angle, uint16_t money,
               coord_t position_x, coord_t position_y, const std::string& name,
               const DTO::WeaponDTO& weapon_dto, uint8_t shooting, uint8_t defusing_bomb,
-              uint8_t reloading, uint8_t health, short_id_t team);
+              uint8_t reloading, uint8_t health, short_id_t team, uint8_t deaths, uint8_t kills);
 
     Model::Player to_player() const;
 };

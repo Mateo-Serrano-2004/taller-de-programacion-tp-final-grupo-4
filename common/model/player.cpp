@@ -21,12 +21,14 @@ Model::Player::Player(short_id_t id, const std::string& name, Model::TeamID team
         name(name),
         position(position),
         health(100),
-        team(team) {}
+        team(team),
+        deaths(0),
+        kills(0) {}
 
 Model::Player::Player(bool shooting, bool defusing_bomb, bool reloading, short_id_t id,
                       Model::RoleID role_id, angle_t angle, uint16_t money, const std::string& name,
                       const Physics::Vector2D& position, Shared<Model::Weapon> weapon,
-                      uint8_t health, Model::TeamID team):
+                      uint8_t health, Model::TeamID team, uint8_t deaths, uint8_t kills):
         alive(true),
         shooting(shooting),
         defusing_bomb(defusing_bomb),
@@ -39,7 +41,9 @@ Model::Player::Player(bool shooting, bool defusing_bomb, bool reloading, short_i
         position(position),
         current_weapon(weapon),
         health(health),
-        team(team) {}
+        team(team),
+        deaths(deaths),
+        kills(kills) {}
 
 bool Model::Player::is_alive() const { return alive; }
 
@@ -81,10 +85,14 @@ Model::TeamID Model::Player::get_team() const { return team; }
 
 void Model::Player::set_new_team(Model::TeamID new_team) { team = new_team; }
 
+void Model::Player::add_kill() { kills++; }
+
+void Model::Player::add_death() { deaths++; }
+
 Shared<Model::Weapon> Model::Player::get_current_weapon() const { return current_weapon; }
 
 DTO::PlayerDTO Model::Player::to_dto() const {
     return DTO::PlayerDTO(id, (short_id_t)(role_id), angle, money, position.get_x(),
                           position.get_y(), name, current_weapon->to_dto(), shooting, defusing_bomb,
-                          reloading, health, (short_id_t)(team));
+                          reloading, health, (short_id_t)(team), deaths, kills);
 }
