@@ -2,10 +2,8 @@
 #define MAIN_WINDOW_H
 
 #include <QMainWindow>
-// #include <QMediaPlayer>
-// #include <QMediaPlaylist>
-// #include <QAudioOutput>
-// #include <QDir>
+#include <QSoundEffect>
+#include <QTimer>
 #include <string>
 
 #include "client/net/client_protocol.h"
@@ -37,6 +35,7 @@ protected:
 private slots:
     void onPushButtonClicked();
     void receiveAvailableMaps(const QStringList& maps);
+    void playBackgroundMusic();
 
 private:
     Ui::MainWindow* ui;
@@ -50,8 +49,9 @@ private:
     std::string port;
     std::string username;
 
-    // QMediaPlayer* musicPlayer = nullptr;
-    // QAudioOutput* audioOutput = nullptr;
+    QTimer* musicTimer = nullptr;
+    QSoundEffect* backgroundMusic = nullptr;
+    bool musicPlaying = false;
 
     void setUpWindow();
 
@@ -63,5 +63,12 @@ private:
     void showJoinGameScene();
     void loadGames();
     void runGame();
+    void restartBackgroundMusic();
+    void setupMusic();
+    void setupGraphicsView();
+    void setupWindowProperties();
+    void handleGameCreationRequest(const QString& gameName, const QString& selectedMap);
+    void handleJoinGameRequest();
+    void handleWelcomeStart(const QString& username, const QString& ip, const QString& port);
 };
 #endif  // MAIN_WINDOW_H

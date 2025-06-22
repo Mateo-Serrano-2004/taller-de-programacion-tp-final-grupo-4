@@ -9,8 +9,7 @@
 int main(int argc, const char* const argv[]) try {
 
     if (argc != NUM_ARGS) {
-        std::cerr << "Please use: " << argv[0] << " <port>"
-                  << std::endl;
+        std::cerr << "Please use: " << argv[0] << " <port>" << std::endl;
         return ERROR;
     }
 

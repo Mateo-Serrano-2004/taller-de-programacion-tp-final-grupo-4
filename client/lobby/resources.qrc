@@ -1,7 +1,9 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
     <qresource prefix="/">
-        <file>assets/logo.png</file>
-        <file>assets/welcome.jpg</file>
+        <file>assets/gfx/logo.png</file>
+        <file>assets/gfx/welcome.jpg</file>
+        <file>assets/sfx/menu.wav</file>
+        <file>assets/sfx/wpn_select.wav</file>
     </qresource>
 </RCC> 

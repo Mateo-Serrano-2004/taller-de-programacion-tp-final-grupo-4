@@ -9,7 +9,7 @@ class BackgroundScene: public QGraphicsScene {
 public:
     explicit BackgroundScene(QObject* parent = nullptr): QGraphicsScene(parent) {
         QGraphicsPixmapItem* background =
-                new QGraphicsPixmapItem(QPixmap(":/assets/welcome.jpg").scaled(640, 400));
+                new QGraphicsPixmapItem(QPixmap(":/assets/gfx/welcome.jpg").scaled(640, 400));
         addItem(background);
     }
 };

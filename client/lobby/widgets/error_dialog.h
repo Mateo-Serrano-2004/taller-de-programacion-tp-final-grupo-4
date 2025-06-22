@@ -1,8 +1,8 @@
 #ifndef ERROR_DIALOG_H
 #define ERROR_DIALOG_H
 
-#include <QMessageBox>
 #include <QGraphicsView>
+#include <QMessageBox>
 
 class ErrorDialog {
 public:
@@ -42,4 +42,4 @@ public:
     }
 };
 
-#endif  // ERROR_DIALOG_H 
+#endif  // ERROR_DIALOG_H
