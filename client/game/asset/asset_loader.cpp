@@ -90,7 +90,7 @@ void Model::AssetLoader::load_animations() {
 
 void Model::AssetLoader::load_sounds() {
     manager->load_sound(Model::SoundID::AK47_FIRE, sounds[5]);
-    manager->load_sound(Model::SoundID::AWP_FIRE, sounds[6]);
+    manager->load_sound(Model::SoundID::AWP_FIRE, sounds[9]);
     manager->load_sound(Model::SoundID::M3_FIRE, sounds[11]);
     manager->load_sound(Model::SoundID::GLOCK_FIRE, sounds[9]);
     manager->load_sound(Model::SoundID::KNIFE_SLASH, sounds[10]);

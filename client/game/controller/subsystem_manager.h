@@ -19,7 +19,7 @@ public:
         int frequency = 44100,
         Uint16 format = MIX_DEFAULT_FORMAT,
         int channels = 2,
-        int chunksize = 2048
+        int chunksize = 8192
     );
 
     SDL2pp::Mixer& get_mixer();

@@ -11,7 +11,9 @@ Controller::SubsystemManager::SubsystemManager(
     int chunksize
 ): sdl(sdl_flags),
    ttf(),
-   mixer(frequency, format, channels, chunksize) {}
+   mixer(frequency, format, channels, chunksize) {
+    mixer.AllocateChannels(32);
+}
 
 SDL2pp::Mixer& Controller::SubsystemManager::get_mixer() {
     return mixer;

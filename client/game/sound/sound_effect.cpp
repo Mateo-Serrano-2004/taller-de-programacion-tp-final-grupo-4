@@ -60,11 +60,17 @@ void View::SoundEffect::set_player(Shared<View::RenderedPlayer> new_player) {
 }
 
 void View::SoundEffect::play() {
-    if (!started && chunk) {
+    if (!ended && !started && chunk) {
         channel = mixer->PlayChannel(-1, *chunk, 0);
+        ended = (channel != -1);
     }
-    update_volume();
-    ended = (mixer->IsChannelPlaying(channel));
+    if (!ended) {
+        started = true;
+        update_volume();
+        ended = (mixer->IsChannelPlaying(channel));
+    } else {
+        channel = -1;
+    }
 }
 
 void View::SoundEffect::end() {
