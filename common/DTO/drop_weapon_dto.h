@@ -2,16 +2,18 @@
 #define DROP_WEAPON_DTO_H
 
 #include <cstdint>
-#include "weapon_dto.h"
+
+#include "common/definitions.h"
+#include "common/weapon_id.h"
 
 namespace DTO {
 struct DropWeaponDTO {
-    uint8_t weapon_id;
-    uint16_t position_x;
-    uint16_t position_y;
+    Model::WeaponID weapon_id;
+    coord_t position_x;
+    coord_t position_y;
 
     DropWeaponDTO();
-    DropWeaponDTO(uint8_t weapon_id, uint16_t pos_x, uint16_t pos_y);
+    DropWeaponDTO(Model::WeaponID weapon_id, coord_t pos_x, coord_t pos_y);
 };
 }  // namespace DTO
 

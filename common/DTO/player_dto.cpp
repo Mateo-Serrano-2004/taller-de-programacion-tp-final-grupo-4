@@ -14,13 +14,15 @@ DTO::PlayerDTO::PlayerDTO():
         money(0),
         position_x(0),
         position_y(0),
+        name(""),
         shooting(0),
         defusing_bomb(0),
         reloading(0),
         health(0),
         team(0),
         deaths(0),
-        kills(0) {}
+        kills(0),
+        weapon_dto() {}
 
 DTO::PlayerDTO::PlayerDTO(short_id_t player_id, short_id_t role_id, angle_t angle, uint16_t money,
                           coord_t position_x, coord_t position_y, const std::string& name,
@@ -33,14 +35,14 @@ DTO::PlayerDTO::PlayerDTO(short_id_t player_id, short_id_t role_id, angle_t angl
         position_x(position_x),
         position_y(position_y),
         name(name),
-        weapon_dto(weapon_dto),
         shooting(shooting),
         defusing_bomb(defusing_bomb),
         reloading(reloading),
         health(health),
         team(team),
         deaths(deaths),
-        kills(kills) {}
+        kills(kills),
+        weapon_dto(weapon_dto) {}
 
 Model::Player DTO::PlayerDTO::to_player() const {
     return Model::Player(shooting, defusing_bomb, reloading, player_id, (Model::RoleID)(role_id),

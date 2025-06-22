@@ -13,7 +13,7 @@ DTO::RoundDTO::RoundDTO():
 
 DTO::RoundDTO::RoundDTO(RoundState state, bool ended, uint16_t time_left, Model::TeamID winner,
                         bool bomb_planted, bool bomb_defused, Physics::Vector2D bomb_position,
-                        uint8_t defusing_progress, std::vector<DropWeaponDTO>& dropped_weapons):
+                        uint8_t defusing_progress, const std::vector<DTO::DropWeaponDTO>& dropped_weapons):
         state(state),
         ended(ended),
         time_left(time_left),

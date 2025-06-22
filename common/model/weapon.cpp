@@ -20,5 +20,5 @@ void Model::Weapon::set_loaded_ammo(uint8_t new_loaded_ammo) { loaded_ammo = new
 void Model::Weapon::set_total_ammo(uint16_t new_total_ammo) { total_ammo = new_total_ammo; }
 
 DTO::WeaponDTO Model::Weapon::to_dto() const {
-    return DTO::WeaponDTO(static_cast<short_id_t>(weapon_id), loaded_ammo, total_ammo);
+    return DTO::WeaponDTO(weapon_id, loaded_ammo, total_ammo);
 }

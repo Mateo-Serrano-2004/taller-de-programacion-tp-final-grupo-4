@@ -6,6 +6,7 @@
 #include <utility>
 #include <vector>
 
+#include "common/DTO/drop_weapon_dto.h"
 #include "common/DTO/dto_variant.h"
 #include "common/DTO/game_info_dto.h"
 #include "common/DTO/game_state_dto.h"
@@ -28,6 +29,7 @@ private:
     void send_all_maps_names(const DTO::MapNameListDTO& maps);
     void send_games(const DTO::GameListDTO& game_list_dto);
     void send_map(const DTO::MapDTO& map_dto);
+    void send_dropped_weapons(const std::vector<DTO::DropWeaponDTO>& dropped_weapons);
 
     ServerProtocol(const ServerProtocol&) = delete;
     ServerProtocol& operator=(const ServerProtocol&) = delete;

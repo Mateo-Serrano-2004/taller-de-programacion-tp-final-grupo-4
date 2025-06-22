@@ -4,11 +4,12 @@
 #include <cstdint>
 
 #include "common/model/weapon.h"
+#include "common/weapon_id.h"
 
 namespace DTO {
 struct WeaponDTO {
 public:
-    uint8_t weapon_id;
+    Model::WeaponID weapon_id;
     uint8_t loaded_ammo;
     uint16_t total_ammo;
 
@@ -16,7 +17,7 @@ public:
 
     WeaponDTO();
 
-    WeaponDTO(uint8_t weapon_id, uint8_t loaded_ammo, uint16_t total_ammo);
+    WeaponDTO(Model::WeaponID weapon_id, uint8_t loaded_ammo, uint16_t total_ammo);
 
     Model::Weapon to_weapon() const;
 };

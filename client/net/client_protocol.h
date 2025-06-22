@@ -21,6 +21,8 @@ private:
     void receive_player(DTO::PlayerDTO& player);
     void receive_player_list(std::vector<DTO::PlayerDTO>& players);
     void receive_round(DTO::RoundDTO& round);
+    void receive_dropped_weapon(DTO::DropWeaponDTO& dropped_weapon);
+    void receive_dropped_weapons_list(std::vector<DTO::DropWeaponDTO>& dropped_weapons);
 
     DTO::GameStateDTO receive_match_state();
     DTO::PlayerIDDTO receive_player_id();

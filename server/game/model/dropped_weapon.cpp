@@ -13,7 +13,7 @@ const Shared<FullWeapon>& DroppedWeapon::get_weapon() const {
 
 DTO::DropWeaponDTO DroppedWeapon::to_dto() const {
     return DTO::DropWeaponDTO(
-        static_cast<uint8_t>(weapon->get_weapon_id()),
+        weapon->get_weapon_id(),
         static_cast<uint16_t>(position.get_x()),
         static_cast<uint16_t>(position.get_y())
     );

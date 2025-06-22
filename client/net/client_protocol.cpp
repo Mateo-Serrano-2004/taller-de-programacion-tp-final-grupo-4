@@ -8,6 +8,26 @@
 #include "common/DTO/dto_code.h"
 #include "common/DTO/event_dto.h"
 
+void Net::ClientProtocol::receive_dropped_weapon(DTO::DropWeaponDTO& dropped_weapon) {
+    skt.recvall(&dropped_weapon.weapon_id, sizeof(dropped_weapon.weapon_id));
+    coord_t position_x, position_y;
+    skt.recvall(&position_x, sizeof(position_x));
+    skt.recvall(&position_y, sizeof(position_y));
+    dropped_weapon.position_x = ntohs(position_x);
+    dropped_weapon.position_y = ntohs(position_y);
+}
+
+void Net::ClientProtocol::receive_dropped_weapons_list(std::vector<DTO::DropWeaponDTO>& dropped_weapons) {
+    uint8_t dropped_weapons_size;
+    skt.recvall(&dropped_weapons_size, sizeof(dropped_weapons_size));
+
+    for (uint8_t i = 0; i < dropped_weapons_size; i++) {
+        DTO::DropWeaponDTO dropped_weapon;
+        receive_dropped_weapon(dropped_weapon);
+        dropped_weapons.push_back(dropped_weapon);
+    }
+}
+
 void Net::ClientProtocol::receive_weapon(DTO::WeaponDTO& weapon) {
     skt.recvall(&weapon.weapon_id, sizeof(weapon.weapon_id));
     skt.recvall(&weapon.loaded_ammo, sizeof(weapon.loaded_ammo));
@@ -43,6 +63,9 @@ void Net::ClientProtocol::receive_player(DTO::PlayerDTO& player) {
     player.name.resize(name_size);
     skt.recvall(player.name.data(), name_size);
 
+    skt.recvall(&player.kills, sizeof(player.kills));
+    skt.recvall(&player.deaths, sizeof(player.deaths));
+
     receive_weapon(player.weapon_dto);
 }
 
@@ -75,6 +98,8 @@ void Net::ClientProtocol::receive_round(DTO::RoundDTO& round) {
     round.bomb_position.set_y(ntohs(bomb_position_y));
 
     round.time_left = htons(round.time_left);
+
+    receive_dropped_weapons_list(round.dropped_weapons);
 }
 
 DTO::GameStateDTO Net::ClientProtocol::receive_match_state() {

@@ -9,7 +9,6 @@
 #include <string.h>
 
 #include "common/DTO/dto_code.h"
-#include "common/DTO/player_dto.h"
 #include "common/DTO/weapon_dto.h"
 #include "common/definitions.h"
 #include "common/event_type.h"
@@ -114,6 +113,18 @@ void ServerProtocol::send_variant(const DTO::DTOVariant& variant) {
                variant);
 }
 
+void ServerProtocol::send_dropped_weapons(const std::vector<DTO::DropWeaponDTO>& dropped_weapons) {
+    uint8_t dropped_weapons_size = dropped_weapons.size();
+    peer.sendall(&dropped_weapons_size, sizeof(dropped_weapons_size));
+
+    for (const auto& dropped_weapon: dropped_weapons) {
+        peer.sendall(&dropped_weapon.weapon_id, sizeof(dropped_weapon.weapon_id));
+        coord_t position_x = htons(dropped_weapon.position_x);
+        coord_t position_y = htons(dropped_weapon.position_y);
+        peer.sendall(&position_x, sizeof(position_x));
+        peer.sendall(&position_y, sizeof(position_y));
+    }
+}
 void ServerProtocol::send_weapon(const DTO::WeaponDTO& weapon_dto) {
     uint16_t total_ammo = htons(weapon_dto.total_ammo);
 
@@ -142,6 +153,8 @@ void ServerProtocol::send_player(const DTO::PlayerDTO& player) {
     peer.sendall(&position_y, sizeof(position_y));
     peer.sendall(&name_size, sizeof(name_size));
     peer.sendall(player.name.c_str(), name_size);
+    peer.sendall(&player.kills, sizeof(player.kills));
+    peer.sendall(&player.deaths, sizeof(player.deaths));
 
     send_weapon(player.weapon_dto);
 }
@@ -166,6 +179,8 @@ void ServerProtocol::send_round(const DTO::RoundDTO& round_dto) {
     peer.sendall(&bomb_position_x, sizeof(bomb_position_x));
     peer.sendall(&bomb_position_y, sizeof(bomb_position_y));
     peer.sendall(&round_dto.defusing_progress, sizeof(round_dto.defusing_progress));
+
+    send_dropped_weapons(round_dto.dropped_weapons);
 }
 
 void ServerProtocol::send_game_state(const DTO::GameStateDTO& game_state_dto) {
