@@ -37,6 +37,10 @@ private:
 
     YamlParser parser;
 
+    std::vector<Physics::Vector2D> ct_spawn_positions;
+    std::vector<Physics::Vector2D> tt_spawn_positions;
+    std::vector<Physics::Vector2D> bomb_sites;
+
     // Pre-initialized attributes
     const int GAME_FPS = 60;
     uint8_t max_rounds;
@@ -84,7 +88,9 @@ private:
     void clear_game_queue();
     void start_new_round();
 
-    Physics::Vector2D get_position_for_player(Model::TeamID team, uint8_t i);
+    Physics::Vector2D get_position_for_new_player(Model::TeamID team);
+
+    void load_map_features();
 
     void update_players_that_won();
     void process_frames(uint16_t frames_to_process = 1);

@@ -12,6 +12,8 @@ MovementSystem::MovementSystem(const std::vector<std::vector<TileType>>& type_ma
                 box.w = TILE_SIZE;
                 box.h = TILE_SIZE;
                 collidable_boxes.push_back(box);
+                std::cout << "[MAP COLLIDABLE] (" << x << ", " << y << ") => "
+              << "(" << box.x << ", " << box.y << ", " << box.w << ", " << box.h << ")\n";
             }
         }
     }
@@ -28,8 +30,10 @@ bool MovementSystem::is_colliding_with_map(const Physics::Vector2D& position,
         bool overlap_x = !(right <= box.x || left >= box.x + box.w);
         bool overlap_y = !(bottom <= box.y || top >= box.y + box.h);
 
-        if (overlap_x && overlap_y)
+        if (overlap_x && overlap_y){
+            std::cout << "CHOQUE DE MAPA" <<std::endl;
             return true;
+        }
     }
 
     return false;
@@ -60,6 +64,7 @@ bool MovementSystem::is_colliding_with_other_players(const Physics::Vector2D& po
         bool overlap_y = !(bottom <= o_top || top >= o_bottom);
 
         if (overlap_x && overlap_y) {
+            std::cout << "CHOQUE DE PLAYER" <<std::endl;
             return true;
         }
     }
@@ -67,7 +72,7 @@ bool MovementSystem::is_colliding_with_other_players(const Physics::Vector2D& po
     return false;
 }
 
-void MovementSystem::process_movements(std::map<uint8_t, FullPlayer>& players, uint16_t frames_to_process) {
+void MovementSystem::process_movements(std::map<uint8_t, FullPlayer>& players, uint16_t frames_to_process, bool players_collisions_enabled) {
     for (auto& [id, player] : players) {
         if (!player.is_alive()) continue;
 
@@ -81,7 +86,7 @@ void MovementSystem::process_movements(std::map<uint8_t, FullPlayer>& players, u
             Physics::Vector2D next = pos + dir;
 
             if (is_colliding_with_map(next, size) ||
-                is_colliding_with_other_players(next, size, id, players)) {
+                (players_collisions_enabled && is_colliding_with_other_players(next, size, id, players))) {
                 if (dir.get_x() != 0) player.stop_horizontal_movement();
                 if (dir.get_y() != 0) player.stop_vertical_movement();
                 break;
@@ -94,35 +99,5 @@ void MovementSystem::process_movements(std::map<uint8_t, FullPlayer>& players, u
     }
 }
 
+MovementSystem::MovementSystem() = default;
 
-/*void MovementSystem::process_movements(std::map<uint8_t, FullPlayer>& players,
-                                       uint16_t frames_to_process) {
-
-    for (auto& [id, player]: players) {
-
-        if (!player.is_alive())
-            continue;
-
-        // Esto va chequeando cada posición y moviendo de a uno.
-        // Podría tener un next = pos + dir * frames_to_process asi calculo el punto final
-        // directamente
-        //  y solo reviso si en la linea esa debio chocarse con algo y lo dejo donde chocó (medio lo
-        //  mismo)
-        for (int i = 0; i < static_cast<int>(frames_to_process); i++) {
-            Physics::Vector2D dir = player.get_direction();
-            Physics::Vector2D pos = player.get_position();
-            Physics::Vector2D next = pos + dir;
-
-            int x = static_cast<int>(next.get_x());
-            int y = static_cast<int>(next.get_y());
-
-            if (x < 0 || y < 0) {
-                player.stop_horizontal_movement();
-                player.stop_vertical_movement();
-                i = frames_to_process;  // ya chocó ya deengo el for
-            } else {
-                player.set_position(next);
-            }
-        }
-    }
-}*/
