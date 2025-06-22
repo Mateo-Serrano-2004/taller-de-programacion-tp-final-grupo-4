@@ -8,10 +8,17 @@
 #include <SDL2pp/Font.hh>
 #include <SDL2pp/Renderer.hh>
 #include <SDL2pp/Texture.hh>
+#include <SDL2pp/Chunk.hh>
+#include <SDL2pp/Mixer.hh>
 
 #include "common/DTO/map_dto.h"
+#include "controller/subsystem_manager.h"
 
-Model::AssetManager::AssetManager(Shared<SDL2pp::Renderer> renderer, const DTO::ConfigDTO& config):
+Model::AssetManager::AssetManager(
+    Controller::SubsystemManager* subsystem_manager,
+    Shared<SDL2pp::Renderer> renderer,
+    const DTO::ConfigDTO& config):
+        subsystem_manager(subsystem_manager),
         renderer(renderer),
         config(config),
         asset_generator(renderer, config),
@@ -25,8 +32,12 @@ void Model::AssetManager::load_texture(Model::TextureID id, Shared<SDL2pp::Textu
     textures.insert({id, texture});
 }
 
-void Model::AssetManager::load_animation(AnimationID id, const Model::AnimationDetails& details) {
+void Model::AssetManager::load_animation(Model::AnimationID id, const Model::AnimationDetails& details) {
     animations.insert({id, details});
+}
+
+void Model::AssetManager::load_sound(Model::SoundID id, const std::string& path) {
+    chunks.insert({id, make_shared<SDL2pp::Chunk>(asset_addresser.get_sound_path(path))});
 }
 
 Shared<SDL2pp::Texture> Model::AssetManager::generate_background(uint8_t red, uint8_t green,
@@ -65,6 +76,14 @@ Shared<SDL2pp::Texture> Model::AssetManager::get_texture(Model::TextureID id) {
 
 const Model::AnimationDetails& Model::AssetManager::get_animation(AnimationID id) {
     return animations.at(id);
+}
+
+Shared<SDL2pp::Chunk> Model::AssetManager::get_sound(SoundID id) {
+    return chunks.at(id);
+}
+
+SDL2pp::Mixer* Model::AssetManager::get_mixer() {
+    return &(subsystem_manager->get_mixer());
 }
 
 Shared<SDL2pp::Texture> Model::AssetManager::apply_font_to_text(Shared<SDL2pp::Font> font,

@@ -21,6 +21,9 @@ public:
         int channels = 2,
         int chunksize = 2048
     );
+
+    SDL2pp::Mixer& get_mixer();
+
     ~SubsystemManager() = default;
 };
 };

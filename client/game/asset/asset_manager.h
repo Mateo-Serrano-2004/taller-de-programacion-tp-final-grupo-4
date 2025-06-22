@@ -7,6 +7,7 @@
 
 #include "animation/animation_details.h"
 #include "asset/texture_id.h"
+#include "asset/sound_id.h"
 #include "common/DTO/config_dto.h"
 #include "common/asset_addresser.h"
 
@@ -20,7 +21,13 @@ class Renderer;
 class Texture;
 class Font;
 class Color;
+class Chunk;
+class Mixer;
 };  // namespace SDL2pp
+
+namespace Controller {
+class SubsystemManager;
+};
 
 namespace DTO {
 struct MapDTO;
@@ -30,6 +37,7 @@ namespace Model {
 class AssetManager {
 private:
     AssetAddresser asset_addresser;
+    Controller::SubsystemManager* subsystem_manager;
     Shared<SDL2pp::Renderer> renderer;
     DTO::ConfigDTO config;
     View::AssetGenerator asset_generator;
@@ -37,14 +45,20 @@ private:
     std::map<AnimationID, Model::AnimationDetails> animations;
     std::map<color_tuple, Shared<SDL2pp::Texture>> backgrounds;
     std::map<font_tuple, Shared<SDL2pp::Font>> fonts;
+    std::map<SoundID, Shared<SDL2pp::Chunk>> chunks;
     Shared<SDL2pp::Texture> current_map;
 
 public:
-    AssetManager(Shared<SDL2pp::Renderer> renderer, const DTO::ConfigDTO& config);
+    AssetManager(
+        Controller::SubsystemManager* subsystem_manager,
+        Shared<SDL2pp::Renderer> renderer,
+        const DTO::ConfigDTO& config
+    );
 
     void load_texture(TextureID id, const std::string& path);
     void load_texture(TextureID id, Shared<SDL2pp::Texture> texture);
     void load_animation(AnimationID id, const Model::AnimationDetails& details);
+    void load_sound(SoundID id, const std::string& path);
 
     Shared<SDL2pp::Texture> generate_background(uint8_t red, uint8_t green, uint8_t blue,
                                                 uint8_t alpha);
@@ -56,6 +70,8 @@ public:
 
     Shared<SDL2pp::Texture> get_texture(TextureID id);
     const Model::AnimationDetails& get_animation(AnimationID id);
+    Shared<SDL2pp::Chunk> get_sound(SoundID id);
+    SDL2pp::Mixer* get_mixer();
 
     Shared<SDL2pp::Texture> apply_font_to_text(Shared<SDL2pp::Font> font, const std::string& text,
                                                const SDL2pp::Color& color);

@@ -10,7 +10,7 @@ enum class SoundID: uint8_t {
     AWP_FIRE = 0x02,
     M3_FIRE = 0x03,
     BOMB_EXPLOSION = 0x04
-}
+};
 };
 
 #endif // CLIENT_GAME_ASSET_SOUND_ID_H

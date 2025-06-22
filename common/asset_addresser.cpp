@@ -36,3 +36,8 @@ std::string Model::AssetAddresser::get_tile_path(const std::string& partial_path
 std::string Model::AssetAddresser::get_animation_path(const std::string& partial_path) {
     return assets_main_path + "gfx/animations/" + partial_path;
 }
+
+std::string Model::AssetAddresser::get_sound_path(const std::string& partial_path) {
+    return assets_main_path + "sfx/" + partial_path;
+}
+

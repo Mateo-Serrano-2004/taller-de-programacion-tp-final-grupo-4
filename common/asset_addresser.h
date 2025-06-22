@@ -17,6 +17,7 @@ public:
     std::string get_font_path(const std::string& font_name);
     std::string get_tile_path(const std::string& partial_path);
     std::string get_animation_path(const std::string& partial_path);
+    std::string get_sound_path(const std::string& partial_path);
 };
 };  // namespace Model
 
