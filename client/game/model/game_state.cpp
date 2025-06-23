@@ -2,6 +2,7 @@
 
 #include <map>
 #include <utility>
+#include <algorithm>
 
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Texture.hh>
@@ -35,5 +36,31 @@ Shared<View::RenderedPlayer> Model::GameState::get_player_by_id(Maybe<short_id_t
     auto it = players.find(id.value());
     if (it == players.end())
         return nullptr;
+    return it->second;
+}
+
+Shared<View::RenderedPlayer> Model::GameState::get_other_player_by_team(Model::TeamID team) const {
+    auto it = std::find_if(
+        players.begin(),
+        players.end(),
+        [&team](const auto& player) {
+            return (
+                player.second->get_team() == team &&
+                player.second->is_alive()
+            );
+        }
+    );
+    if (it == players.end()) {
+        auto new_it = std::find_if(
+            players.begin(),
+            players.end(),
+            [](const auto& player) {
+                return player.second->is_alive();
+            }
+        );
+        if (new_it == players.end())
+            return nullptr;
+        return new_it->second;
+    }
     return it->second;
 }

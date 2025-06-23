@@ -31,6 +31,17 @@
 #include "camera.h"
 
 void View::PlayerRenderer::render_fov(const Model::GameState& game_state) {
+    angle_t angle = 0;
+    auto ref_player = game_state.get_reference_player();
+    if (!ref_player->get_health()) {
+        ref_player = game_state.get_other_player_by_team(
+            ref_player->get_team()
+        );
+    }
+    if (!ref_player)
+        return;
+    angle = ref_player->get_angle();
+
     auto viewport = game_state.camera.get_viewport();
     int viewport_width = viewport.GetX();
     int viewport_height = viewport.GetY();
@@ -51,7 +62,7 @@ void View::PlayerRenderer::render_fov(const Model::GameState& game_state) {
                    SDL2pp::Rect((viewport_width - 2 * length_to_corners) / 2,
                                 (viewport_height - 2 * length_to_corners) / 2,
                                 2 * length_to_corners, 2 * length_to_corners),
-                   game_state.get_reference_player()->get_angle());
+                   angle);
 }
 
 void View::PlayerRenderer::render_bomb(const Model::GameState& game_state) {

@@ -59,6 +59,7 @@ public:
 
     Shared<View::RenderedPlayer> get_reference_player() const;
     Shared<View::RenderedPlayer> get_player_by_id(Maybe<short_id_t> id) const;
+    Shared<View::RenderedPlayer> get_other_player_by_team(Model::TeamID team) const;
 
     ~GameState() = default;
 };

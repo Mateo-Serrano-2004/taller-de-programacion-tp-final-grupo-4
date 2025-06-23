@@ -80,7 +80,12 @@ void Controller::GameStateManager::update_animations(Shared<Model::GameState>& n
 void Controller::GameStateManager::update_camera(const Shared<View::RenderedPlayer>& ref_player) {
     if (!ref_player)
         return;
-    auto reference_player_position = ref_player->get_position();
+    auto new_ref_player = ref_player;
+    if (!new_ref_player->get_health())
+        new_ref_player = game_state->get_other_player_by_team(ref_player->get_team());
+    if (!new_ref_player)
+        return;
+    auto reference_player_position = new_ref_player->get_position();
     game_state->camera.set_center(reference_player_position.get_x(),
                                     reference_player_position.get_y());
 }
