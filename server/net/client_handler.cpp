@@ -2,7 +2,6 @@
 
 #include <condition_variable>
 #include <exception>
-#include <iostream>
 #include <utility>
 #include <variant>
 
@@ -43,8 +42,7 @@ void ClientHandler::handle_join_game(const JoinGameEvent& event) {
         auto map = game_manager.get_map(game_manager.get_game_map(event.get_game_id()));
         sender_queue.push(map);
         sender_queue.push(DTO::TeamIDDTO(player_id % 2));
-    } catch (const InvalidGameException& e) {
-        std::cout << "An exception happend: \n" << e.what() << std::endl;
+    } catch (const InvalidGameException&) {
         sender_queue.push(DTO::GameStateDTO());
         close();
     }

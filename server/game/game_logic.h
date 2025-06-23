@@ -30,6 +30,7 @@ public:
     GameLogic() = default;
 
     void buy_weapon(FullPlayer& player, Model::WeaponID weapon_id, Round& round) const;
+    void buy_ammo(FullPlayer& player, Model::SlotID slot_id, Round& round) const;
     void start_using_weapon(FullPlayer& player, const Round& round) const;
     void stop_using_weapon(FullPlayer& player) const;
     void drop_equipped_weapon(FullPlayer& player, Round& round, const std::vector<std::vector<TileType>>& type_matrix) const;
@@ -39,7 +40,6 @@ public:
     void start_defusing_bomb(FullPlayer& player, const Round& round) const;
     void stop_defusing_bomb(FullPlayer& player) const;
     void start_reloading_weapon(FullPlayer& player, const Round& round) const;
-    void stop_reloading_weapon(FullPlayer& player) const;
     void process_defusing(std::map<uint8_t, FullPlayer>& players, Round& round);
     void process_reloading(std::map<uint8_t, FullPlayer>& players, const Round& round,
                            uint16_t frames_to_process) const;
