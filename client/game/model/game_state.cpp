@@ -61,7 +61,7 @@ Shared<View::RenderedPlayer> Model::GameState::get_any_player_alive() const {
         players.begin(),
         players.end(),
         [](const auto& player) {
-            return player.second->is_alive();
+            return player.second->get_health() > 0;
         }
     );
     if (it == players.end())
