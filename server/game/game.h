@@ -86,6 +86,8 @@ private:
 
     void handle(uint8_t player_id, const GameEventVariant& event);
 
+    void swap_teams();
+
     void clear_game_queue();
     void start_new_round();
 

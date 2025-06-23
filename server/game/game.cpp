@@ -166,9 +166,38 @@ Physics::Vector2D Game::get_position_for_new_player(Model::TeamID team) {
     return tt_spawn_positions[0];
 }
 
+void Game::swap_teams() {
+    for (auto& [id, player] : players) {
+        if (player.get_team() == Model::TeamID::CT) {
+            player.set_new_team(Model::TeamID::TT);
+        } else if (player.get_team() == Model::TeamID::TT) {
+            player.set_new_team(Model::TeamID::CT);
+        }
+
+        Model::RoleID current = player.get_role_id();
+
+        switch (current) {
+            case Model::RoleID::CT1: player.set_role_id(Model::RoleID::T1); break;
+            case Model::RoleID::CT2: player.set_role_id(Model::RoleID::T2); break;
+            case Model::RoleID::CT3: player.set_role_id(Model::RoleID::T3); break;
+            case Model::RoleID::CT4: player.set_role_id(Model::RoleID::T4); break;
+            case Model::RoleID::T1: player.set_role_id(Model::RoleID::CT1); break;
+            case Model::RoleID::T2: player.set_role_id(Model::RoleID::CT2); break;
+            case Model::RoleID::T3: player.set_role_id(Model::RoleID::CT3); break;
+            case Model::RoleID::T4: player.set_role_id(Model::RoleID::CT4); break;
+            default: break;
+        }
+    }
+    std::swap(ct_rounds_won, tt_rounds_won);
+}
+
 // VER EL TEMA DE JUGADORES MAXIMOS ANTES
 void Game::start_new_round() {
     state = GameState::Playing;
+
+    if (rounds_played == rounds_per_side) {
+        swap_teams();
+    }
 
     int ct_count = 0;
     int tt_count = 0;
@@ -184,9 +213,6 @@ void Game::start_new_round() {
             player.reset_for_new_round(tt_spawn_positions[tt_count]);
             tt_count++;
         }
-        const auto& pos = player.get_position();
-        std::cout << "Jugador ID: " << static_cast<int>(id) << " - Posición: (" << pos.get_x()
-                  << ", " << pos.get_y() << ")\n";
     }
 
     gamelogic.assign_bomb_to_random_tt(players);
