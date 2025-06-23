@@ -53,6 +53,8 @@ public:
     bool is_active() const;
     bool ended() const;
     bool bomb_is_planted() const;
+    Physics::Vector2D get_bomb_position() const;
+
 
     void update(int frames_to_process);
 

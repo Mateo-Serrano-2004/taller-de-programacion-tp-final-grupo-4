@@ -188,3 +188,5 @@ DTO::RoundDTO Round::to_dto(int fps) const {
 int Round::get_ticks_remaining() const { return active_ticks_remaining; }
 
 bool Round::bomb_is_being_defused() const { return bomb_being_defused; }
+
+Physics::Vector2D Round::get_bomb_position() const { return bomb_position; }

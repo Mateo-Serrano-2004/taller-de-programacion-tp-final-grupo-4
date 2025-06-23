@@ -26,7 +26,7 @@ void Game::handle_use_weapon(const uint8_t& player_id) {
     auto player = find_player_by_id(player_id);
     if (!player.has_value())
         return;
-    gamelogic.start_using_weapon(player->get(), round);
+    gamelogic.start_using_weapon(player->get(), round, bomb_sites);
 }
 
 void Game::handle_reload(const uint8_t& player_id) {
@@ -242,7 +242,7 @@ void Game::process_frames(uint16_t frames_to_process) {
     gamelogic.process_defusing(players, round);
     round.update(frames_to_process);
     gamelogic.process_reloading(players, round, frames_to_process);
-    gamelogic.process_shooting(players, round, frames_to_process);
+    gamelogic.process_shooting(players, round, frames_to_process, bomb_sites);
 
     if (round.ended()) {
         clear_game_queue();
