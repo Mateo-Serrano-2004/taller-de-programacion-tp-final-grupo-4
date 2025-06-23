@@ -61,6 +61,8 @@ public:
     Shared<Weapon> get_current_weapon() const;
     uint8_t get_health() const;
     Model::TeamID get_team() const;
+    uint8_t get_kills() const;
+    uint8_t get_deaths() const;
 
     void set_alive(bool new_alive);
     void set_role_id(Model::RoleID new_sprite_id);

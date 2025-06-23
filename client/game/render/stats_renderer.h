@@ -6,20 +6,40 @@
 #include "entity/vertical_pane.h"
 #include "entity/horizontal_pane.h"
 #include "entity/label.h"
-#include "utils/line.h"
+#include "utils/stat_line.h"
+
+namespace Controller {
+class GameController;
+};
+
+namespace Model {
+struct GameState;
+};
 
 namespace View {
 class StatsRenderer {
 private:
+    Weak<Controller::GameController> controller;
+    Pane* viewport;
     HorizontalPane stats;
     VerticalPane first_team_stats;
+    Label first_team_victories;
+    StatLine stats_indicator;
+    VerticalPane separator;
     VerticalPane second_team_stats;
-    std::list<HorizontalPane> first_team_stats_items;
-    std::list<HorizontalPane> second_team_stats_items;
+    Label second_team_victories;
+    std::list<StatLine> first_team_stats_items;
+    std::list<StatLine> second_team_stats_items;
+
+    void clear();
+    void add_victories(const Model::GameState& game_state);
 
 public:
-    StatsRenderer();
-    ~StatsRenderer();
+    StatsRenderer(Weak<Controller::GameController> controller, Pane* viewport);
+
+    void render(const Model::GameState& game_state);
+
+    ~StatsRenderer() = default;
 };
 };
 
