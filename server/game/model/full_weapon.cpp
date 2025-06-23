@@ -22,6 +22,7 @@ void FullWeapon::start_reloading() { reloading = true; }
 
 void FullWeapon::stop_reloading() {
     reloading = false;
+    ticks_remaining_to_reload -= ticks_to_process;
 }
 
 bool FullWeapon::reload(uint16_t ticks_to_process) {
