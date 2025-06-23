@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <utility>
 #include <limits>
 #include <random>
 
@@ -82,11 +83,11 @@ bool collidable_blocking_bullet(const Physics::Vector2D& origin, const Physics::
 
     if (origin == end) return false;
                                 
-    Physics::Vector2D direction = (end - origin).normalized();
+    std::pair<float, float> direction = (end - origin).normalized();
     float step_size = TILE_SIZE / 4.0f;
 
-    float x_step = direction.get_x() * step_size;
-    float y_step = direction.get_y() * step_size;
+    float x_step = direction.first * step_size;
+    float y_step = direction.second * step_size;
 
     float x = origin.get_x();
     float y = origin.get_y();
@@ -153,7 +154,7 @@ std::vector<Impact> ShotManager::calculate_shot_impacts(
             }
         }
 
-        if (found_target /*&& !collidable_blocking_bullet(origin, end, closest_dist, map_matrix)*/) {
+        if (found_target && !collidable_blocking_bullet(origin, end, closest_dist, map_matrix)) {
             std::cout << "DISPARO " << (i + 1) << " agregado para daño\n";
             float damage = calculate_damage(winfo, closest_dist);
             impacts.emplace_back(shot_info.shooter_id, target_id, damage);

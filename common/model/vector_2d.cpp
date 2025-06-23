@@ -1,6 +1,7 @@
 #include "common/model/vector_2d.h"
 
 #include <algorithm>
+#include <utility>
 
 namespace Physics {
 
@@ -41,11 +42,11 @@ float Vector2D::distance_to(const Vector2D& other) const {
     return std::sqrt(dx * dx + dy * dy);
 }
 
-Vector2D Vector2D::normalized() const {
+std::pair<float, float> Vector2D::normalized() const {
     float length = std::sqrt(static_cast<float>(x) * x + static_cast<float>(y) * y);
     if (length == 0.0f)
-        return Vector2D(0, 0);
-    return Vector2D(x / length, y / length);
+        return std::make_pair(0.0f, 0.0f);
+    return std::make_pair<float, float>(x / length, y / length);
 }
 
 static int orientation(const Vector2D& a, const Vector2D& b, const Vector2D& c) {

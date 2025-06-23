@@ -2,6 +2,7 @@
 #define SERVER_GAME_VECTOR_2D_H
 
 #include <cmath>
+#include <utility>
 
 #include "common/definitions.h"
 
@@ -30,7 +31,7 @@ public:
 
     Vector2D operator*(float scalar) const;
     float distance_to(const Vector2D& other) const;
-    Vector2D normalized() const;
+    std::pair<float, float> normalized() const;
 
     static bool segments_intersect(const Vector2D& p1, const Vector2D& p2, const Vector2D& q1,
                                    const Vector2D& q2);
