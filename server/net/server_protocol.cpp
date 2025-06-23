@@ -98,6 +98,13 @@ EventVariant ServerProtocol::receive_event() {
         case Model::EventType::DROP_WEAPON: {
             return DropWeaponEvent();
         }
+        case Model::EventType::RELOAD_WEAPON: {
+            return ReloadWeaponEvent();
+        }
+        case Model::EventType::BUY_AMMO: {
+            Model::SlotID slot_id = Model::SlotID(data[1]);
+            return BuyAmmoEvent(slot_id);
+        }
         default:
             throw std::invalid_argument("Invalid event code");
     }

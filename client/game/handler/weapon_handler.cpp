@@ -3,12 +3,14 @@
 #include <SDL2/SDL.h>
 
 #include "controller/game_controller.h"
-#include "event/use_weapon_event.h"
-#include "event/stop_using_weapon_event.h"
-#include "event/switch_weapon_event.h"
+#include "event/buy_ammo_event.h"
 #include "event/defuse_bomb_event.h"
 #include "event/drop_weapon_event.h"
+#include "event/reload_event.h"
 #include "event/stop_defusing_bomb_event.h"
+#include "event/stop_using_weapon_event.h"
+#include "event/use_weapon_event.h"
+#include "event/switch_weapon_event.h"
 
 void Controller::WeaponHandler::set_up_handled_types() {
     handled_types.insert(SDL_KEYDOWN);
@@ -22,6 +24,9 @@ void Controller::WeaponHandler::set_up_handled_types() {
     handled_codes.insert(SDLK_4);
     handled_codes.insert(SDLK_e);
     handled_codes.insert(SDLK_g);
+    handled_codes.insert(SDLK_r);
+    handled_codes.insert(SDLK_COMMA);
+    handled_codes.insert(SDLK_PERIOD);
 
     ids.insert({SDLK_1, Model::SlotID::PRIMARY_WEAPON});
     ids.insert({SDLK_2, Model::SlotID::SECONDARY_WEAPON});
@@ -55,6 +60,29 @@ void Controller::WeaponHandler::handle_switching(SDL_Event& event) {
     }
 }
 
+void Controller::WeaponHandler::handle_buy_ammo(SDL_Event& event) {
+    auto slot = event.key.keysym.sym == SDLK_COMMA ? Model::SlotID::PRIMARY_WEAPON : Model::SlotID::SECONDARY_WEAPON;
+    if (event.type == SDL_KEYDOWN) {
+        if (!is_buying_ammo) {
+            controller.lock()->push_event(make_shared<Model::BuyAmmoEvent>(slot));
+            is_buying_ammo = true;
+        }
+    } else if (event.type == SDL_KEYUP) {
+        is_buying_ammo = false;
+    }
+}
+
+void Controller::WeaponHandler::handle_reload(SDL_Event& event) {
+    if (event.type == SDL_KEYDOWN) {
+        if (!is_reloading) {
+            controller.lock()->push_event(make_shared<Model::ReloadEvent>());
+            is_reloading = true;
+        }
+    } else if (event.type == SDL_KEYUP) {
+        is_reloading = false;
+    }
+}
+
 void Controller::WeaponHandler::handle_defusing(SDL_Event& event) {
     if (event.type == SDL_KEYDOWN) {
         if (!is_defusing) {
@@ -85,6 +113,10 @@ void Controller::WeaponHandler::handle_key(SDL_Event& event) {
         handle_defusing(event);
     } else if (event.key.keysym.sym == SDLK_g) {
         handle_drop(event);
+    } else if (event.key.keysym.sym == SDLK_COMMA || event.key.keysym.sym == SDLK_PERIOD) {
+        handle_buy_ammo(event);
+    } else if (event.key.keysym.sym == SDLK_r) {
+        handle_reload(event);
     } else {
         handle_switching(event);
     }
@@ -95,7 +127,9 @@ Controller::WeaponHandler::WeaponHandler(Weak<GameController> controller)
   is_shooting(false),
   is_switching(false),
   is_defusing(false),
-  is_dropping(false) {
+  is_dropping(false),
+  is_buying_ammo(false),
+  is_reloading(false) {
     set_up_handled_types();
 }
 
@@ -134,4 +168,6 @@ void Controller::WeaponHandler::stop() {
         controller.lock()->push_event(make_shared<Model::StopDefusingBombEvent>());
         is_defusing = false;
     }
+    is_buying_ammo = false;
+    is_reloading = false;
 }
