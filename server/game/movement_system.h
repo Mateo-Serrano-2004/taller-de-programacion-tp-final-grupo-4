@@ -12,7 +12,7 @@
 
 class MovementSystem {
 private:
-    MapMatrix& map_matrix;
+    const MapMatrix& map_matrix;
 
     bool is_colliding_with_map(const Physics::Vector2D& position,
                                const Physics::Vector2D& size) const;
@@ -25,7 +25,7 @@ private:
     void try_pick_up_weapon(std::map<uint8_t, FullPlayer>& players, uint8_t player_id, Round& round);
 
 public:
-    explicit MovementSystem(MapMatrix& map_matrix);
+    explicit MovementSystem(const MapMatrix& map_matrix);
 
     void process_movements(std::map<uint8_t, FullPlayer>& players, Round& round, uint16_t frames_to_process, bool players_collisions_enabled);
 };

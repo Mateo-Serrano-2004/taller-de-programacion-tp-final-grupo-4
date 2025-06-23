@@ -1,6 +1,6 @@
 #include "movement_system.h"
 
-MovementSystem::MovementSystem(MapMatrix& map_matrix) : map_matrix(map_matrix) {
+MovementSystem::MovementSystem(const MapMatrix& map_matrix) : map_matrix(map_matrix) {
 }
 
 bool MovementSystem::is_colliding_with_map(const Physics::Vector2D& position,
