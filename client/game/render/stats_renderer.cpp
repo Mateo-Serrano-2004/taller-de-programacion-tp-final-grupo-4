@@ -34,7 +34,8 @@ View::StatsRenderer::StatsRenderer(
    stats(controller),
    first_team_stats(controller),
    first_team_victories(controller),
-   stats_indicator(controller),
+   first_stats_indicator(controller),
+   second_stats_indicator(controller),
    separator(controller),
    second_team_stats(controller),
    second_team_victories(controller) {
@@ -42,24 +43,33 @@ View::StatsRenderer::StatsRenderer(
     stats.add_child(&first_team_stats);
     stats.add_child(&separator);
     stats.add_child(&second_team_stats);
-
     stats.set_fit_to_children(true);
+    stats.set_vertical_alignment(0.0f);
+    stats.set_horizontal_alignment(0.0f);
+
     first_team_stats.set_vertical_alignment(0.0f);
     first_team_stats.set_height(130);
     first_team_stats.set_width(200);
     first_team_stats.set_background_color(31, 45, 31, 255);
     first_team_stats.set_draw_background(true);
+
     second_team_stats.set_vertical_alignment(0.0f);
     second_team_stats.set_height(130);
     second_team_stats.set_width(200);
     second_team_stats.set_background_color(31, 45, 31, 255);
     second_team_stats.set_draw_background(true);
 
-    stats_indicator.set_all_fonts_size(8);
-    stats_indicator.set_height(10);
-    stats_indicator.set_name("Name");
-    stats_indicator.set_kills("Kills");
-    stats_indicator.set_deaths("Deaths");
+    first_stats_indicator.set_all_fonts_size(8);
+    first_stats_indicator.set_line_height(9);
+    first_stats_indicator.set_name("Name");
+    first_stats_indicator.set_kills("Kills");
+    first_stats_indicator.set_deaths("Deaths");
+
+    second_stats_indicator.set_all_fonts_size(8);
+    second_stats_indicator.set_line_height(9);
+    second_stats_indicator.set_name("Name");
+    second_stats_indicator.set_kills("Kills");
+    second_stats_indicator.set_deaths("Deaths");
 
     separator.set_width(1);
     separator.set_height(130);
@@ -71,20 +81,29 @@ void View::StatsRenderer::render(const Model::GameState& game_state) {
     clear();
     add_victories(game_state);
 
-    first_team_stats.add_child(&stats_indicator);
-    second_team_stats.add_child(&stats_indicator);
+    first_team_stats.add_child(&first_stats_indicator);
+    second_team_stats.add_child(&second_stats_indicator);
 
     for (const auto& player: game_state.players) {
-        View::StatLine line(controller);
-        line.set_name(player.second->get_name());
-        line.set_kills(std::to_string((int) player.second->get_kills()));
-        line.set_deaths(std::to_string((int) player.second->get_deaths()));
-        if (player.second->get_team() == Model::TeamID::CT) {
-            first_team_stats_items.push_back(line);
-            first_team_stats.add_child(&first_team_stats_items.back());
-        } else if (player.second->get_team() == Model::TeamID::TT) {
-            second_team_stats_items.push_back(line);
-            second_team_stats.add_child(&second_team_stats_items.back());
-        }
+        std::list<View::StatLine>* lines = nullptr;
+        if (player.second->get_team() == Model::TeamID::CT)
+            lines = &first_team_stats_items;
+        else if (player.second->get_team() == Model::TeamID::TT)
+            lines = &second_team_stats_items;
+        if (!lines)
+            continue;
+        lines->emplace_back(controller);
+        auto* last = &lines->back();
+        last->set_name(player.second->get_name());
+        last->set_kills(std::to_string(player.second->get_kills()));
+        last->set_deaths(std::to_string(player.second->get_deaths()));
+        last->set_background_color(78, 107, 60, 255);
+        last->set_draw_background(true);
+    }
+    for (auto& line: first_team_stats_items) {
+        first_team_stats.add_child(&line);
+    }
+    for (auto& line: second_team_stats_items) {
+        second_team_stats.add_child(&line);
     }
 }

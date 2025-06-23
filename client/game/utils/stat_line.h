@@ -6,8 +6,9 @@
 
 #include "common/definitions.h"
 #include "entity/horizontal_pane.h"
-#include "entity/vertical_pane.h"
 #include "entity/label.h"
+#include "entity/pane.h"
+#include "entity/vertical_pane.h"
 
 namespace Controller {
 class GameController;
@@ -17,6 +18,7 @@ namespace View {
 class StatLine: public VerticalPane {
 public:
     HorizontalPane line;
+    HorizontalPane player_name_pane;
     Label player_name;
     HorizontalPane kills_pane;
     Label kills;
@@ -32,6 +34,7 @@ public:
 
     void set_all_texts_color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
     void set_all_fonts_size(uint8_t size);
+    void set_line_height(uint8_t size);
 
     ~StatLine() override = default;
 };

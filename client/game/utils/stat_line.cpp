@@ -5,35 +5,41 @@
 View::StatLine::StatLine(Weak<Controller::GameController> controller)
 : View::VerticalPane(controller),
   line(controller),
+  player_name_pane(controller),
   player_name(controller),
   kills_pane(controller),
   kills(controller),
   deaths_pane(controller),
   deaths(controller),
   separator(controller) {
+    set_height(20);
+    set_width(200);
     add_child(&line);
-    set_fit_to_children(true);
+    add_child(&separator);
 
-    line.add_child(&player_name);
+    line.add_child(&player_name_pane);
+    line.add_child(&kills_pane);
     line.add_child(&deaths_pane);
-    line.add_child(&separator);
-    line.set_width(150);
-    line.set_height(19);
+    line.set_fit_to_children(true);
 
-    player_name.set_width(100);
+    player_name_pane.add_child(&player_name);
+    player_name_pane.set_horizontal_alignment(0.1f);
+    player_name_pane.set_width(150);
+    player_name.set_width(25);
     player_name.set_height(19);
+    player_name.set_font_size(12);
 
     kills_pane.set_width(25);
     kills_pane.set_height(19);
     kills_pane.add_child(&kills);
-    kills.set_font_size(15);
+    kills.set_font_size(12);
 
     deaths_pane.set_width(25);
     deaths_pane.set_height(19);
     deaths_pane.add_child(&deaths);
-    deaths.set_font_size(15);
+    deaths.set_font_size(12);
 
-    separator.set_width(190);
+    separator.set_width(200);
     separator.set_height(1);
     separator.set_background_color(60, 60, 60, 255);
     separator.set_draw_background(true);
@@ -63,9 +69,13 @@ void View::StatLine::set_all_fonts_size(uint8_t size) {
     deaths.set_font_size(size);
 
     player_name.set_width(100);
-    player_name.set_height(20);
+    player_name.set_height(19);
     kills.set_width(25);
-    kills.set_height(20);
+    kills.set_height(19);
     deaths.set_width(25);
-    deaths.set_height(20);
+    deaths.set_height(19);
+}
+
+void View::StatLine::set_line_height(uint8_t size) {
+    line.set_height(size);
 }

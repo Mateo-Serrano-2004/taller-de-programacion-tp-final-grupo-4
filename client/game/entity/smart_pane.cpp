@@ -14,6 +14,7 @@ View::SmartPane::SmartPane(Weak<Controller::BaseController> controller):
         fit_to_children(false) {}
 
 void View::SmartPane::set_fit_to_children(bool new_fit) {
+    size_set = true;
     fit_to_children = new_fit;
     if (fit_to_children) {
         fit();
