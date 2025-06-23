@@ -22,9 +22,9 @@ int View::MuzzleFireAnimation::get_fire_distance() {
         case Model::WeaponID::AK47:
             return 20;
         case Model::WeaponID::GLOCK:
-            return 16;
+            return 12;
         case Model::WeaponID::M3:
-            return 18;
+            return 16;
         case Model::WeaponID::AWP:
             return 25;
     }
