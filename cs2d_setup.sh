@@ -5,8 +5,6 @@ PROJECT_FULL_NAME="Counter Strike 2D"
 BINARY_DIR="/usr/bin"
 VAR_DIR="/var/${PROJECT_NAME}"
 ETC_DIR="/etc/${PROJECT_NAME}"
-DESKTOP_DIR="/usr/share/applications"
-USER_DESKTOP_DIR="/home/$SUDO_USER/Desktop"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -25,7 +23,7 @@ confirm_action() {
     case "$response" in [yY][eE][sS]|[yY]) return 0 ;; *) return 1 ;; esac
 }
 
-# Chequea si SDL2 está instalado en /usr/local/lib/cmake/SDL2 (por ejemplo)
+# Chequea si SDL2 está instalado en /usr/local/lib/cmake/SDL2
 sdl2_already_installed() {
     if [ -d "/usr/local/lib/cmake/SDL2" ] && [ -f "/usr/local/lib/cmake/SDL2/SDL2Config.cmake" ]; then
         return 0
@@ -86,7 +84,7 @@ install_sdl2_from_source() {
     cd "$original_dir" || { print_error "No se pudo volver al directorio original"; exit 1; }
     rm -rf /tmp/sdl2_build
 
-    # Asegurar que los cmake config estén en /usr/local/lib/cmake
+    # Verificación CMake config SDL2
     print_status "Verificando archivos CMake config SDL2 en /usr/local/lib/cmake"
     for mod in SDL2_image SDL2_mixer SDL2_ttf; do
         if [ ! -d "/usr/local/lib/cmake/$mod" ]; then
@@ -95,6 +93,29 @@ install_sdl2_from_source() {
     done
 
     print_success "SDL2 y módulos instalados correctamente desde fuente"
+}
+
+install_sdl2pp_from_source() {
+    if pkg-config --exists SDL2pp; then
+        print_status "SDL2pp ya está instalado, omitiendo compilación."
+        return 0
+    fi
+
+    print_status "Instalando SDL2pp desde fuente..."
+    local original_dir=$(pwd)
+    mkdir -p /tmp/sdl2pp_build && cd /tmp/sdl2pp_build || { print_error "No se pudo crear /tmp/sdl2pp_build"; exit 1; }
+
+    git clone https://github.com/libSDL2pp/libSDL2pp.git || { print_error "Falló la descarga de SDL2pp"; exit 1; }
+    cd libSDL2pp || { print_error "No se encontró el directorio libSDL2pp"; exit 1; }
+    mkdir build && cd build
+    cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local || { print_error "CMake falló para SDL2pp"; exit 1; }
+    make -j$(nproc) || { print_error "Error de compilación SDL2pp"; exit 1; }
+    sudo make install || { print_error "Error en make install SDL2pp"; exit 1; }
+    sudo ldconfig
+
+    cd "$original_dir"
+    rm -rf /tmp/sdl2pp_build
+    print_success "SDL2pp instalado correctamente desde fuente"
 }
 
 install_dependencies() {
@@ -116,6 +137,14 @@ install_dependencies() {
     fi
 
     install_sdl2_from_source
+    install_sdl2pp_from_source
+
+    # Asegurar que /usr/local/lib esté en ld.so.conf
+    if ! grep -q "/usr/local/lib" /etc/ld.so.conf.d/local.conf 2>/dev/null; then
+        echo "/usr/local/lib" | sudo tee /etc/ld.so.conf.d/local.conf
+        sudo ldconfig
+    fi
+
     print_success "Dependencias instaladas"
 }
 
@@ -125,6 +154,9 @@ compile_and_install() {
     cmake .. -DCMAKE_BUILD_TYPE=Release -DCS2D_CLIENT=ON -DCS2D_EDITOR=ON -DCS2D_SERVER=ON || { print_error "Error en cmake"; exit 1; }
     make -j$(nproc) || { print_error "Error de compilación"; exit 1; }
     cd ..
+
+    print_status "Verificando librerías dinámicas de los binarios..."
+    ldd build/cs2d_client | grep "not found" && print_warning "Faltan librerías en cs2d_client"
 
     print_status "Instalando binarios..."
     sudo cp build/cs2d_* "${BINARY_DIR}/" && sudo chmod +x "${BINARY_DIR}/cs2d_"*
@@ -136,7 +168,6 @@ compile_and_install() {
     [[ -d assets/sfx ]] && sudo cp -r assets/sfx/* "${VAR_DIR}/assets/sfx/"
     [[ -d server/maps ]] && sudo cp -r server/maps/* "${VAR_DIR}/maps/"
     [[ -f server/game_config.yaml ]] && sudo cp server/game_config.yaml "${ETC_DIR}/cfg/"
-
 
     print_success "¡Instalación completada!"
 }
@@ -168,8 +199,35 @@ run_uninstall() {
     print_success "¡Desinstalación completa!"
 }
 
+show_ascii_art() {
+    cat << 'EOF'
+
+        ------            -------           ------           ------              
+    ---------------   ---------------   -------------- -----------------    
+  ----√√√√√√√√√√∞-------√√√√√√√√√√∞-------√√√√√√√√√∞-----√√√√√√√√√√√√∞≠---- 
+ ---√√√∞∞∞∞∞∞∞∞∞∞∞∞---∞√√∞∞∞∞∞∞∞∞∞∞∞∞---√√√∞∞∞∞∞∞∞∞∞∞∞---∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞---
+---∞√√∞∞∞∞∞≠∞∞∞∞∞∞∞≠-×√√∞∞∞∞∞≠∞∞∞∞∞∞∞--∞√√∞∞∞∞--∞∞∞∞∞∞∞--∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞---
+---√√∞∞∞∞∞--∞∞∞∞∞∞∞∞-≠∞∞∞∞∞∞≈-=∞∞∞∞∞∞--∞∞∞∞∞∞≠--∞√∞∞∞∞∞--∞∞∞∞∞∞∞--∞∞∞∞∞∞∞=--
+---√√∞∞∞∞∞--∞∞∞∞∞∞∞∞-≠∞∞∞∞∞∞∞-÷∞∞∞∞∞∞--∞∞∞∞∞∞≠--√√∞∞∞∞∞--∞∞∞∞∞∞∞--∞∞∞∞∞∞∞≈--
+---∞∞∞∞∞∞∞--∞∞∞∞∞∞∞∞--∞∞∞∞∞∞∞∞∞×---------------√√∞∞∞∞∞÷--∞∞∞∞∞∞∞--∞∞∞∞∞∞∞≈--
+---∞∞∞∞∞∞∞---≈≈≠≠≈≈÷---∞∞∞∞∞∞∞∞∞∞∞---- -------√√∞∞∞∞∞∞---∞∞∞∞∞∞∞--∞∞∞∞∞∞∞≈--
+---∞∞∞∞∞∞∞--------------=∞∞∞∞∞∞∞∞∞∞∞----  ---√√∞∞∞∞∞∞----∞∞∞∞∞∞∞--∞∞∞∞∞∞∞≈--
+---∞∞∞∞∞∞∞-----------------∞∞∞∞∞∞∞∞∞∞--- ---√√∞∞∞∞∞÷-----∞∞∞∞∞∞∞--∞∞∞∞∞∞∞≈--
+---∞∞∞∞∞∞∞--∞√√√√√∞∞--√√√√√√≠-∞∞∞∞∞∞∞∞----×√√∞∞∞∞∞-------∞∞∞∞∞∞∞--∞∞∞∞∞∞∞≈--
+---∞∞∞∞∞∞∞--∞∞∞∞∞∞∞∞-×∞√√√∞∞∞--∞∞∞∞∞∞∞---=√√∞∞∞∞∞---  ---∞∞∞∞∞∞∞--∞∞∞∞∞∞∞≠--
+---∞∞∞∞∞∞∞--∞√∞∞∞∞∞∞--∞∞∞∞∞∞∞--√√∞∞∞∞∞--∞√√∞∞∞∞∞---------∞∞∞∞∞∞∞--√√∞∞∞∞∞≠--
+ --≠∞∞∞∞∞∞∞√√√∞∞∞∞∞---∞∞∞∞∞∞∞√√√√∞∞∞∞∞-√√√∞∞∞∞∞√√√√√√∞×--∞∞∞∞∞∞∞√√√√∞∞∞∞∞---
+ ---∞∞∞∞∞∞∞√∞∞∞∞∞∞-----∞∞∞∞∞∞√√∞∞∞∞∞∞--∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞×--∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞---
+  ----÷∞∞∞∞∞∞∞∞∞---- ----≈∞∞∞∞∞∞∞∞≠----∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞×--∞∞∞∞∞∞∞∞∞∞∞∞∞=---- 
+    --------------     --------------------------------------------------   
+         ----               ----             ----             ----
+
+EOF
+}
+
 show_menu() {
     clear
+    show_ascii_art
     echo "======================================"
     echo "      ${PROJECT_FULL_NAME} - INSTALADOR"
     echo "======================================"
