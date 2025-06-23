@@ -20,7 +20,8 @@ FullPlayer::FullPlayer(short_id_t id, const std::string& name, Model::TeamID tea
         movement_direction(0, 0),
         size(28, 28),
         secondary_weapon(WeaponFactory::create(Model::WeaponID::GLOCK)),
-        knife(WeaponFactory::create(Model::WeaponID::KNIFE)) {
+        knife(WeaponFactory::create(Model::WeaponID::KNIFE)),
+        was_reloading(false), trying_reload(false) {
     current_weapon = secondary_weapon;
     money = 1500;
 }
@@ -118,19 +119,26 @@ void FullPlayer::substract_money(uint16_t amount) {
 void FullPlayer::start_reloading_weapon() {
     if (!current_weapon || !alive)
         return;
-    reloading = true;
+    trying_reload = true;
     std::static_pointer_cast<FullWeapon>(current_weapon)->start_reloading();
 }
 
 void FullPlayer::reload(uint16_t frames_to_process) {
-    if (!current_weapon || !alive || !reloading) {
+    if (!current_weapon || !alive || !trying_reload) {
+        trying_reload = false;
         reloading = false;
+        was_reloading = false;
         return;
     }
+
     auto weapon = std::static_pointer_cast<FullWeapon>(current_weapon);
-    reloading = weapon->reload(frames_to_process);  // devuelve true si esta recargando bien, false
-                                                    // si no puede o terminó
+    bool result = weapon->reload(frames_to_process);  // true si recara, false error o dejo de recargar
+
+    reloading = (!was_reloading && result);
+    was_reloading = result;
+    trying_reload = result;
 }
+
 
 void FullPlayer::start_using_weapon() {
     if (!current_weapon || !alive)

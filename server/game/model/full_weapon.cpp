@@ -26,7 +26,7 @@ void FullWeapon::stop_reloading() {
 }
 
 bool FullWeapon::reload(uint16_t ticks_to_process) {
-    if (!reloading || get_total_ammo() == 0)
+    if (!reloading || get_total_ammo() == 0 || get_loaded_ammo() == max_loaded_ammo)
         return false;
 
     if (ticks_to_process >= ticks_remaining_to_reload) {
