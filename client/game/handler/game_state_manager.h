@@ -44,7 +44,7 @@ private:
     void update_sounds(Shared<Model::GameState>& new_game_state);
     void update_camera(const Shared<View::RenderedPlayer>& ref_player);
     void update_bomb_position(DTO::GameStateDTO& dto);
-    void update_defusing_bar(const Shared<View::RenderedPlayer>& ref_player);
+    void update_progress_bar(const Shared<View::RenderedPlayer>& ref_player);
     void update_winner_message(DTO::GameStateDTO& dto);
     void update_stats(DTO::GameStateDTO& dto);
 

@@ -77,8 +77,47 @@ Physics::Vector2D calculate_bullet_endpoint(const Physics::Vector2D& origin,
     return Physics::Vector2D(origin.get_x() + dx, origin.get_y() + dy);
 }
 
+bool collidable_blocking_bullet(const Physics::Vector2D& origin, const Physics::Vector2D& end,
+                                float max_distance, const MapMatrix& map_matrix) {
+
+    if (origin == end) return false;
+                                
+    Physics::Vector2D direction = (end - origin).normalized();
+    float step_size = TILE_SIZE / 4.0f;
+
+    float x_step = direction.get_x() * step_size;
+    float y_step = direction.get_y() * step_size;
+
+    float x = origin.get_x();
+    float y = origin.get_y();
+
+    float dist = 0.0f;
+
+    while (dist < max_distance) {
+        Physics::Vector2D current(x, y);
+        dist = current.distance_to(origin);
+
+        int tile_x = static_cast<int>(x) / TILE_SIZE;
+        int tile_y = static_cast<int>(y) / TILE_SIZE;
+
+        if (tile_y < 0 || tile_y >= static_cast<int>(map_matrix.size()) ||
+            tile_x < 0 || tile_x >= static_cast<int>(map_matrix[0].size())) {
+            return false;
+        }
+
+        if (map_matrix[tile_y][tile_x] == TileType::COLLIDABLE) {
+            return true;
+        }
+
+        x += x_step;
+        y += y_step;
+    }
+
+    return false;
+}
+
 std::vector<Impact> ShotManager::calculate_shot_impacts(
-        const ShotInfo& shot_info, const std::map<uint8_t, FullPlayer>& players) {
+        const ShotInfo& shot_info, const std::map<uint8_t, FullPlayer>& players, const MapMatrix& map_matrix) {
     std::vector<Impact> impacts;
 
     const WeaponShotInfo& winfo = shot_info.weapon_info;
@@ -104,21 +143,22 @@ std::vector<Impact> ShotManager::calculate_shot_impacts(
                 std::cout << "DISPARO " << (i + 1) << " NO IMPACTÓ\n";
                 continue;
             }
-            float dist = origin.distance_to(player.get_position());
-            if (dist < closest_dist) {
-                closest_dist = dist;
+
+            float dist_to_player = origin.distance_to(player.get_position());
+
+            if (dist_to_player < closest_dist) {
+                closest_dist = dist_to_player;
                 target_id = id;
                 found_target = true;
             }
         }
 
-        if (found_target) {
+        if (found_target && !collidable_blocking_bullet(origin, end, closest_dist, map_matrix)) {
             std::cout << "DISPARO " << (i + 1) << " agregado para daño\n";
             float damage = calculate_damage(winfo, closest_dist);
             impacts.emplace_back(shot_info.shooter_id, target_id, damage);
         }
     }
-
 
     return impacts;
 }

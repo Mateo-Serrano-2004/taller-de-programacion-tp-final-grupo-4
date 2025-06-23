@@ -166,6 +166,7 @@ void ServerProtocol::send_player(const DTO::PlayerDTO& player) {
     peer.sendall(player.name.c_str(), name_size);
     peer.sendall(&player.kills, sizeof(player.kills));
     peer.sendall(&player.deaths, sizeof(player.deaths));
+    peer.sendall(&player.planting_progress, sizeof(player.planting_progress));
 
     send_weapon(player.weapon_dto);
 }

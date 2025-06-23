@@ -7,6 +7,7 @@
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Texture.hh>
 
+#include "animation/bomb_explosion_animation.h"
 #include "animation/muzzle_fire_animation.h"
 #include "animation/progress_bar_animation.h"
 #include "animation/winner_team_message_animation.h"

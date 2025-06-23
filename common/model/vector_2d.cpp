@@ -17,6 +17,10 @@ Vector2D Vector2D::operator+(const Vector2D& other) const {
     return Vector2D(x + other.get_x(), y + other.get_y());
 }
 
+Vector2D Vector2D::operator-(const Vector2D& other) const {
+    return Vector2D(x - other.get_x(), y - other.get_y());
+}
+
 Vector2D& Vector2D::operator+=(const Vector2D& other) {
     x += other.get_x();
     y += other.get_y();

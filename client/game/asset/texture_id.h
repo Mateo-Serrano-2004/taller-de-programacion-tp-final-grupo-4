@@ -37,6 +37,7 @@ enum TextureID {
 
     // Special textures
     FOV = 0xC0,
+    BOMB_EXPLOSION = 0xC1,
     NO_TEXTURE = 0xFF
 };
 };

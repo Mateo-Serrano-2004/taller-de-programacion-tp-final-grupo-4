@@ -100,7 +100,18 @@ void Model::AssetLoader::load_fov() {
     manager->load_texture(Model::TextureID::FOV, generator.generate_fov());
 }
 
-void Model::AssetLoader::load_animations() {
+void Model::AssetLoader::load_bomb_animation() {
+    manager->load_texture(
+        Model::TextureID::BOMB_EXPLOSION,
+        addresser.get_animation_path("explosion.png")
+    );
+    auto bomb_animation_texture = manager->get_texture(Model::TextureID::BOMB_EXPLOSION);
+    manager->load_animation(Model::AnimationID::BOMB_EXPLOSION,
+                            Model::AnimationDetails(5, 5, 23, 120,
+                            bomb_animation_texture));
+}
+
+void Model::AssetLoader::load_shot_animation() {
     auto animation = generator.generate_animation(
             {addresser.get_animation_path("muzzle-fire/muzzle_01.png"),
              addresser.get_animation_path("muzzle-fire/muzzle_02.png"),
@@ -109,6 +120,11 @@ void Model::AssetLoader::load_animations() {
              addresser.get_animation_path("muzzle-fire/muzzle_05.png")});
     manager->load_animation(Model::AnimationID::MUZZLE_FIRE,
                             Model::AnimationDetails(5, 1, 5, 5, animation));
+}
+
+void Model::AssetLoader::load_animations() {
+    load_bomb_animation();
+    load_shot_animation();
 }
 
 void Model::AssetLoader::load_sounds() {

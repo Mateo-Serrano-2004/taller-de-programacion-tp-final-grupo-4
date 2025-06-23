@@ -15,6 +15,7 @@ private:
 public:
     Bomb();
 
+    uint8_t get_planting_progress() const;
     void press_trigger() override;
     void release_trigger() override;
     std::optional<WeaponShotInfo> shoot(uint16_t ticks_to_process) override;

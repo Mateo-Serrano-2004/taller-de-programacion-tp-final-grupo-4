@@ -15,8 +15,9 @@ View::IterativeAnimation::IterativeAnimation(Weak<Controller::BaseController> co
 
 SDL2pp::Rect View::IterativeAnimation::get_frame() {
     return SDL2pp::Rect(
-            ((current_frame / details.animation_duration_in_frames) % details.width) * 32,
-            ((current_frame / details.animation_duration_in_frames) / details.width) * 32, 32, 32);
+            ((current_frame / details.animation_duration_in_frames) % details.width) * get_frame_size(),
+            ((current_frame / details.animation_duration_in_frames) / details.width) * get_frame_size(),
+            get_frame_size(), get_frame_size());
 }
 
 void View::IterativeAnimation::render() {

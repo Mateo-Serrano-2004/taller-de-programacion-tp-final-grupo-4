@@ -13,8 +13,8 @@ TEST(GameStateTest, send_and_receive_game_state) {
 
     DTO::WeaponDTO weapon1(Model::WeaponID::M3, 30, 150);
     DTO::WeaponDTO weapon2(Model::WeaponID::AK47, 15, 70);
-    DTO::PlayerDTO player1(1, 1, 30, 1500, 2, 40, "Juan", weapon1, 0, 0, 1, 100, 1, 0, 0);
-    DTO::PlayerDTO player2(3, 2, 60, 6000, 4, 26, "Maria", weapon2, 1, 1, 0, 70, 2, 0, 0);
+    DTO::PlayerDTO player1(1, 1, 30, 1500, 2, 40, "Juan", weapon1, 0, 0, 1, 100, 1, 0, 0, 0);
+    DTO::PlayerDTO player2(3, 2, 60, 6000, 4, 26, "Maria", weapon2, 1, 1, 0, 70, 2, 0, 0, 0);
     
     std::vector<DTO::DropWeaponDTO> dropped_weapons = {DTO::DropWeaponDTO(Model::WeaponID::M3, 2, 40)};
     DTO::RoundDTO round(RoundState::Buying, false, 25, Model::TeamID::NONE, false, false,
@@ -49,6 +49,7 @@ TEST(GameStateTest, send_and_receive_game_state) {
         EXPECT_EQ(received_game_state.players[0].team, 1);
         EXPECT_EQ(received_game_state.players[0].kills, 0);
         EXPECT_EQ(received_game_state.players[0].deaths, 0);
+        EXPECT_EQ(received_game_state.players[0].planting_progress, 0);
 
         EXPECT_EQ(received_game_state.players[1].player_id, 3);
         EXPECT_EQ(received_game_state.players[1].role_id, 2);
@@ -67,6 +68,7 @@ TEST(GameStateTest, send_and_receive_game_state) {
         EXPECT_EQ(received_game_state.players[1].team, 2);
         EXPECT_EQ(received_game_state.players[1].kills, 0);
         EXPECT_EQ(received_game_state.players[1].deaths, 0);
+        EXPECT_EQ(received_game_state.players[1].planting_progress, 0);
 
         EXPECT_EQ(received_game_state.round.state, RoundState::Buying);
         EXPECT_EQ(received_game_state.round.ended, false);
