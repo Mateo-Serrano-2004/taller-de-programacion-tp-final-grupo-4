@@ -26,7 +26,6 @@ struct WeaponShotInfo {
                                    // alcance
     float close_range_multiplier;  // Factor multiplicador si se está dentro del rango corto (ej:
                                    // daño * 1.8)
-    uint8_t planting_progress;
 
     // Constructor por defecto (opcional)
     WeaponShotInfo();
@@ -34,7 +33,7 @@ struct WeaponShotInfo {
     WeaponShotInfo(uint8_t bullets_fired, float base_damage, float min_damage, float max_range,
                    float precision, float dispersion, DamageMode damage_mode,
                    float falloff_factor = 0.0f, float close_range_threshold = 0.0f,
-                   float close_range_multiplier = 1.0f, uint8_t planting_progress = 0):
+                   float close_range_multiplier = 1.0f):
             bullets_fired(bullets_fired),
             base_damage(base_damage),
             min_damage(min_damage),
@@ -44,8 +43,7 @@ struct WeaponShotInfo {
             damage_mode(damage_mode),
             falloff_factor(falloff_factor),
             close_range_threshold(close_range_threshold),
-            close_range_multiplier(close_range_multiplier),
-            planting_progress(planting_progress) {}
+            close_range_multiplier(close_range_multiplier) {}
 };
 
 #endif  // SERVER_GAME_MODEL_WEAPON_SHOT_INFO_H

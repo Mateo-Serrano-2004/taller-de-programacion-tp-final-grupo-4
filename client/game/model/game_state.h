@@ -40,7 +40,7 @@ struct GameState {
     std::list<Shared<View::MuzzleFireAnimation>> fires;
     std::list<Shared<View::SoundEffect>> sound_effects;
     Shared<View::WinnerTeamMessageAnimation> winner_message;
-    Shared<View::ProgressBarAnimation> bomb_defusing;
+    Shared<View::ProgressBarAnimation> progress_bar;
     View::Camera camera;
     Shared<SDL2pp::Texture> map;
     Maybe<short_id_t> reference_player_id;

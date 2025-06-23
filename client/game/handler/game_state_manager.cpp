@@ -115,11 +115,22 @@ void Controller::GameStateManager::update_bomb_position(DTO::GameStateDTO& dto) 
     }
 }
 
-void Controller::GameStateManager::update_defusing_bar(const Shared<View::RenderedPlayer>& ref_player) {
-    if (!game_state->bomb_defusing && ref_player->is_defusing()) {
-        game_state->bomb_defusing = make_shared<View::ProgressBarAnimation>(controller);
-    } else if (!ref_player->is_defusing()) {
-        game_state->bomb_defusing = nullptr;
+void Controller::GameStateManager::update_progress_bar(const Shared<View::RenderedPlayer>& ref_player) {
+    if (!ref_player)
+        return;
+    if (ref_player->get_team() == Model::TeamID::CT) {
+        if (!game_state->progress_bar && ref_player->is_defusing()) {
+            game_state->progress_bar = make_shared<View::ProgressBarAnimation>(controller);
+        } else if (!ref_player->is_defusing()) {
+            game_state->progress_bar = nullptr;
+        }
+    } else if (ref_player->get_team() == Model::TeamID::TT) {
+        std::cout << (int) ref_player->get_planting_progress() << std::endl;
+        if (!game_state->progress_bar && ref_player->get_planting_progress() > 0) {
+            game_state->progress_bar = make_shared<View::ProgressBarAnimation>(controller);
+        } else if (ref_player->get_planting_progress() == 0) {
+            game_state->progress_bar = nullptr;
+        }
     }
 }
 
@@ -183,7 +194,7 @@ void Controller::GameStateManager::update(DTO::GameStateDTO& game_state_dto) {
 
     auto ref_player = game_state->get_reference_player();
     update_camera(ref_player);
-    update_defusing_bar(ref_player);
+    update_progress_bar(ref_player);
     
     update_dropped_weapons(game_state_dto);
     update_bomb_position(game_state_dto);

@@ -1,11 +1,17 @@
 #include "bomb.h"
 
+#include <algorithm>
+
 Bomb::Bomb():
         FullWeapon(Model::WeaponID::BOMB, Model::SlotID::BOMB_SLOT,
                    1,  // loaded_ammo
                    1,
                    1,  // total_ammo (no se recarga)
                    0, 0) {}
+
+uint8_t Bomb::get_planting_progress() const {
+    return std::min(100, planting_ticks * 100 / required_ticks_to_plant);
+}
 
 void Bomb::press_trigger() {
     if (!planted)
@@ -28,8 +34,7 @@ std::optional<WeaponShotInfo> Bomb::shoot(uint16_t ticks_to_process) {
 
         return WeaponShotInfo(0,     // no balas
                               0.0f,  // sin daño
-                              0.0f, 0.0f, 0.0f, 0.0f, DamageMode::CONSTANT, 0.0f, 0.0f, 1.0f,
-                              (planting_ticks * 100) / required_ticks_to_plant);
+                              0.0f, 0.0f, 0.0f, 0.0f, DamageMode::CONSTANT, 0.0f, 0.0f, 1.0f);
     }
 
     return std::nullopt;

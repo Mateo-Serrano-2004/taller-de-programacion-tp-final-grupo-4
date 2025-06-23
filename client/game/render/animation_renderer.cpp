@@ -27,7 +27,12 @@ void View::AnimationRenderer::render_winner_message(const Model::GameState& game
 }
 
 void View::AnimationRenderer::render_defusing_progress(const Model::GameState& game_state) {
-    if (game_state.bomb_defusing) {
-        game_state.bomb_defusing->progress(game_state.defusing_progress);
+    if (game_state.progress_bar) {
+        if (game_state.defusing_progress)
+            game_state.progress_bar->progress(game_state.defusing_progress);
+        else {
+            auto ref_player = game_state.get_reference_player();
+            game_state.progress_bar->progress(ref_player->get_planting_progress());
+        }
     }
 }

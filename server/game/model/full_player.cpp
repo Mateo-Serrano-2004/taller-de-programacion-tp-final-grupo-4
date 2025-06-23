@@ -12,6 +12,8 @@
 #include "common/weapon_id.h"
 #include "server/game/weapon_factory.h"
 
+#include "bomb.h"
+
 FullPlayer::FullPlayer(short_id_t id, const std::string& name, Model::TeamID team,
                        Model::RoleID role, Physics::Vector2D position):
         Model::Player(id, name, team, role, position),
@@ -137,6 +139,7 @@ void FullPlayer::stop_using_weapon() {
         return;
     std::static_pointer_cast<FullWeapon>(current_weapon)->release_trigger();
     shooting = false;
+    planting_progress = 0;
 }
 
 void FullPlayer::start_defusing_bomb() {
@@ -162,13 +165,15 @@ std::optional<ShotInfo> FullPlayer::shoot(uint16_t frames_to_process) {
     auto weapon = std::static_pointer_cast<FullWeapon>(current_weapon);
     auto shot_info = weapon->shoot(frames_to_process);
 
+    if (weapon->get_weapon_id() == Model::WeaponID::BOMB)
+        planting_progress = std::static_pointer_cast<Bomb>(current_weapon)->get_planting_progress();
+
     if (!shot_info.has_value()) {
         shooting = false;
         return std::nullopt;
     }
 
     shooting = true;
-    planting_progress = shot_info->planting_progress;
     return ShotInfo(id, weapon_position(), angle, weapon->get_weapon_id(), shot_info.value());
 }
 
@@ -194,6 +199,7 @@ void FullPlayer::reset_for_new_round(Physics::Vector2D new_position) {
     health = 100;
     defusing_bomb = false;
     reloading = false;
+    planting_progress = 0;
     bomb.reset();
 }
 
@@ -208,6 +214,7 @@ Shared<FullWeapon> FullPlayer::remove_bomb() {
         return nullptr;
 
     Shared<FullWeapon> dropped_bomb = nullptr;
+    planting_progress = 0;
 
     if (current_weapon->get_weapon_id() == Model::WeaponID::BOMB) {
 
@@ -239,6 +246,7 @@ std::vector<DroppedWeapon> FullPlayer::drop_weapons() {
         bomb.reset();
     }
 
+    planting_progress = 0;
     equip_weapon_by_type(Model::SlotID::KNIFE_SLOT); // por las dudas
 
     return drops;
@@ -275,6 +283,7 @@ Shared<FullWeapon> FullPlayer::drop_equipped_weapon() {
         dropped_weapon->release_trigger();
 
     shooting = false;
+    planting_progress = 0;
     equip_weapon_by_type(Model::SlotID::KNIFE_SLOT);
     return dropped_weapon;
 }
