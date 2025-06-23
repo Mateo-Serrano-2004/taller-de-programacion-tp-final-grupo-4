@@ -57,7 +57,6 @@ private:
     std::map<short_id_t, FullPlayer> players;
     std::map<short_id_t, ClientQueue*> client_queues;
     std::vector<uint8_t> dropped_weapons;
-    MovementSystem movement_system;
     GameLogic gamelogic;
     Round round;
 
@@ -65,6 +64,7 @@ private:
     std::string party_name;
     std::string map_name;
     MapMatrix map_matrix;
+    MovementSystem movement_system;
 
     bool is_playing_state();
     void with_valid_player(short_id_t player_id, std::function<void(FullPlayer&)> action);

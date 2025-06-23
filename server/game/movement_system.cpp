@@ -1,7 +1,8 @@
 #include "movement_system.h"
 
-MovementSystem::MovementSystem(const MapMatrix& map_matrix) : map_matrix(map_matrix) {
-}
+#include "common/definitions.h"
+
+MovementSystem::MovementSystem(const MapMatrix& map_matrix) : map_matrix(map_matrix) {}
 
 bool MovementSystem::is_colliding_with_map(const Physics::Vector2D& position,
                                            const Physics::Vector2D& size) const {
@@ -10,15 +11,18 @@ bool MovementSystem::is_colliding_with_map(const Physics::Vector2D& position,
     int right = left + static_cast<int>(size.get_x());
     int bottom = top + static_cast<int>(size.get_y());
 
-    int tile_left = left / 32;
-    int tile_top = top / 32;
-    int tile_right = right / 32;
-    int tile_bottom = bottom / 32;
+    int tile_left = left / TILE_SIZE;
+    int tile_top = top / TILE_SIZE;
+    int tile_right = right / TILE_SIZE;
+    int tile_bottom = bottom / TILE_SIZE;
 
-    if (tile_top < 0 || tile_top >= static_cast<int>(map_matrix.size()) ||
-        tile_left < 0 || tile_left >= static_cast<int>(map_matrix[0].size()) ||
-        tile_bottom < 0 || tile_bottom >= static_cast<int>(map_matrix.size()) ||
-        tile_right < 0 || tile_right >= static_cast<int>(map_matrix[0].size())) {
+    int max_rows = static_cast<int>(map_matrix.size());
+    int max_cols = static_cast<int>(map_matrix[0].size());
+
+    if (tile_top < 0 || tile_top >= max_rows ||
+        tile_left < 0 || tile_left >= max_cols ||
+        tile_bottom < 0 || tile_bottom >= max_rows ||
+        tile_right < 0 || tile_right >= max_cols) {
         return true;
     }
 

@@ -9,6 +9,7 @@
 #include "common/model/vector_2d.h"
 #include "common/overloaded.h"
 #include "common/periodic_clock.h"
+#include "common/definitions.h"
 #include "server/exception/invalid_game_exception.h"
 #include "server/exception/invalid_player_exception.h"
 #include "server/parser/yaml_parser.h"
@@ -299,8 +300,8 @@ void Game::load_map_features() {
     for (size_t y = 0; y < map_matrix.size(); ++y) {
         for (size_t x = 0; x < map_matrix[y].size(); ++x) {
             TileType tile = map_matrix[y][x];
-            int px = static_cast<int>(x) * 32;
-            int py = static_cast<int>(y) * 32;
+            int px = static_cast<int>(x) * TILE_SIZE;
+            int py = static_cast<int>(y) * TILE_SIZE;
 
             switch (tile) {
                 case TileType::CT_SPAWN:
@@ -320,11 +321,11 @@ void Game::load_map_features() {
 }
 
 Game::Game(const std::string& party_name, const std::string& map_name, const MapMatrix& map_matrix)
-    : movement_system(MovementSystem(map_matrix)),
-      round(Round::create_warmup_round()),
+    : round(Round::create_warmup_round()),
       party_name(party_name),
       map_name(map_name),
-      map_matrix(map_matrix) {
+      map_matrix(map_matrix),
+      movement_system(MovementSystem(this->map_matrix)) {
     load_map_features();
 
     const auto& config = YamlParser::getConfigData();
