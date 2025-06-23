@@ -65,6 +65,8 @@ View::RenderedPlayer::RenderedPlayer(Weak<Controller::GameController> controller
 void View::RenderedPlayer::render() {
     if (team == Model::TeamID::NONE || sprite_id == Model::TextureID::NO_TEXTURE)
         return;
+    if (!health)
+        return;
     Shared<SDL2pp::Texture> texture = asset_manager->get_texture(sprite_id);
     SDL2pp::Point sprite_top_left_corner = get_sprite_top_left_corner();
 
