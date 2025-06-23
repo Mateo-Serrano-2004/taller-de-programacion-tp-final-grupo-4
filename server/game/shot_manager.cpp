@@ -67,7 +67,7 @@ Physics::Vector2D calculate_bullet_endpoint(const Physics::Vector2D& origin,
     float random_factor = distribution(generator);
     float final_angle = base_angle_degrees + random_factor * dispersion_degrees;
 
-    // 🔄 Ajuste para que 0° sea arriba (Y+) y crezca horario (tipo reloj)
+    // Ajuste para que 0° sea arriba (Y+) y crezca horario (tipo reloj)
     float fixed_angle = 90.0f - final_angle;
     float angle_radians = fixed_angle * DEG_TO_RAD;
 
@@ -153,7 +153,7 @@ std::vector<Impact> ShotManager::calculate_shot_impacts(
             }
         }
 
-        if (found_target && !collidable_blocking_bullet(origin, end, closest_dist, map_matrix)) {
+        if (found_target /*&& !collidable_blocking_bullet(origin, end, closest_dist, map_matrix)*/) {
             std::cout << "DISPARO " << (i + 1) << " agregado para daño\n";
             float damage = calculate_damage(winfo, closest_dist);
             impacts.emplace_back(shot_info.shooter_id, target_id, damage);

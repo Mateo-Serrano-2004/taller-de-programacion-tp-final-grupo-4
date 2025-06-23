@@ -14,10 +14,13 @@ View::IterativeAnimation::IterativeAnimation(Weak<Controller::BaseController> co
 }
 
 SDL2pp::Rect View::IterativeAnimation::get_frame() {
-    return SDL2pp::Rect(
-            ((current_frame / details.animation_duration_in_frames) % details.width) * get_frame_size(),
-            ((current_frame / details.animation_duration_in_frames) / details.width) * get_frame_size(),
-            get_frame_size(), get_frame_size());
+    int frame_index = current_frame % total_frames;
+    int col = frame_index % details.width;
+    int row = frame_index / details.width;
+
+    int frame_size = get_frame_size();
+
+    return SDL2pp::Rect(col * frame_size, row * frame_size, frame_size, frame_size);
 }
 
 void View::IterativeAnimation::render() {
