@@ -112,11 +112,12 @@ void Model::AssetLoader::load_animations() {
 }
 
 void Model::AssetLoader::load_sounds() {
-    manager->load_sound(Model::SoundID::AK47_FIRE, sounds[5]);
-    manager->load_sound(Model::SoundID::AWP_FIRE, sounds[9]);
-    manager->load_sound(Model::SoundID::M3_FIRE, sounds[11]);
-    manager->load_sound(Model::SoundID::GLOCK_FIRE, sounds[9]);
-    manager->load_sound(Model::SoundID::KNIFE_SLASH, sounds[10]);
+    manager->load_sound(Model::SoundID::AK47_FIRE, sounds[2]);
+    manager->load_sound(Model::SoundID::AWP_FIRE, sounds[3]);
+    manager->load_sound(Model::SoundID::GLOCK_FIRE, sounds[6]);
+    manager->load_sound(Model::SoundID::KNIFE_SLASH, sounds[7]);
+    manager->load_sound(Model::SoundID::M3_FIRE, sounds[8]);
+    manager->load_sound(Model::SoundID::RELOAD_SOUND, sounds[10]);
 }
 
 Model::AssetLoader::AssetLoader(Shared<AssetManager> manager, Shared<SDL2pp::Renderer> renderer,
@@ -130,12 +131,10 @@ Model::AssetLoader::AssetLoader(Shared<AssetManager> manager, Shared<SDL2pp::Ren
         }),
         hud_textures({"hud_nums.bmp", "hud_symbols.bmp", "ak47_k.bmp", "awp_k.bmp", "glock_k.bmp",
                       "knife_k.bmp", "m3_k.bmp"}),
-        sounds({"players/death.wav", "players/hit-player.wav", "players/setp.wav",
-                "radio/bomb-defused.ogg", "radio/bomb-planted.ogg",
+        sounds({"radio/bomb-defused.ogg", "radio/bomb-planted.ogg",
                 "weapons/ak47.wav", "weapons/awp.wav", "weapons/bomb.wav",
                 "weapons/drop.wav", "weapons/glock.wav", "weapons/knife.wav",
-                "weapons/m3.wav", "weapons/no-bullets.wav",
-                "weapons/pick-up-weapon.wav", "weapons/reload.wav"}),
+                "weapons/m3.wav", "weapons/no-bullets.wav", "weapons/reload.wav"}),
         manager(manager),
         renderer(renderer),
         config(config),

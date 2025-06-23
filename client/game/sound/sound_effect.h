@@ -34,19 +34,18 @@ protected:
 public:
     SoundEffect(
         Weak<Controller::GameController> controller,
-        short_id_t player_id,
-        Model::WeaponID weapon_id
+        short_id_t player_id
     );
 
+    short_id_t get_player_id() const;
     bool is_playing() const;
     bool has_ended() const;
-    short_id_t get_player_id() const;
 
     void set_player(Shared<RenderedPlayer> new_player);
     void play();
     void end();
 
-    ~SoundEffect() = default;
+    virtual ~SoundEffect() = default;
 };
 };
 
