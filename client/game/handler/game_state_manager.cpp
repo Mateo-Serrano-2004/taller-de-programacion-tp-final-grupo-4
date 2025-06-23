@@ -107,6 +107,20 @@ void Controller::GameStateManager::update_camera(const Shared<View::RenderedPlay
 }
 
 void Controller::GameStateManager::update_bomb_position(DTO::GameStateDTO& dto) {
+    if (game_state->bomb_explosion && game_state->bomb_explosion->has_ended())
+        game_state->bomb_explosion = nullptr;
+    if (
+        dto.round.state == RoundState::PostRound &&
+        dto.round.bomb_planted &&
+        game_state->bomb_position.has_value() &&
+        game_state->round_state == RoundState::Active
+    ) {
+        game_state->bomb_explosion = make_shared<View::BombExplosionAnimation>(
+            controller,
+            game_state->bomb_position.value()
+        );
+    }
+
     if (dto.round.bomb_planted && !game_state->bomb_position.has_value()) {
         auto pos = dto.round.bomb_position;
         game_state->bomb_position = SDL2pp::Point(pos.get_x(), pos.get_y());
@@ -114,19 +128,6 @@ void Controller::GameStateManager::update_bomb_position(DTO::GameStateDTO& dto) 
     if (dto.round.bomb_defused || dto.round.state != RoundState::Active) {
         game_state->bomb_position = std::nullopt;
     }
-    // if (game_state->bomb_explosion && game_state->bomb_explosion->has_ended())
-    //     game_state->bomb_explosion = nullptr;
-    // if (
-    //     dto.round.state == RoundState::PostRound &&
-    //     dto.round.bomb_planted &&
-    //     game_state->bomb_position.has_value() &&
-    //     game_state->round_state == RoundState::Active
-    // ) {
-    //     game_state->bomb_explosion = make_shared<View::BombExplosionAnimation>(
-    //         controller,
-    //         game_state->bomb_position.value()
-    //     );
-    // }
 }
 
 void Controller::GameStateManager::update_progress_bar(const Shared<View::RenderedPlayer>& ref_player) {

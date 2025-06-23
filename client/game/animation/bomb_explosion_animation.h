@@ -18,6 +18,7 @@ class BombExplosionAnimation: public IterativeAnimation, public Fixed {
 private:
     SDL2pp::Point bomb_position;
 
+    int get_frame_size() override;
     SDL2pp::Rect get_dsrect() override;
     angle_t get_angle() override;
     SDL2pp::Point get_rpoint() override;

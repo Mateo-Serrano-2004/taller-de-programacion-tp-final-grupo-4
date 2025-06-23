@@ -4,6 +4,8 @@
 #include "controller/game_controller.h"
 #include "render/camera.h"
 
+int View::BombExplosionAnimation::get_frame_size() { return 64; }
+
 SDL2pp::Rect View::BombExplosionAnimation::get_dsrect() {
     auto camera = get_fixation();
     auto fixed_pos = camera.get_camera_view(bomb_position);
@@ -19,7 +21,8 @@ angle_t View::BombExplosionAnimation::get_angle() {
 }
 
 SDL2pp::Point View::BombExplosionAnimation::get_rpoint() {
-    return bomb_position;
+    auto camera = get_fixation();
+    return camera.get_camera_view(bomb_position);
 }
 
 View::BombExplosionAnimation::BombExplosionAnimation(
