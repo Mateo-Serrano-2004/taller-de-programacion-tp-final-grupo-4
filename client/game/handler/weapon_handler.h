@@ -21,12 +21,16 @@ private:
     bool is_switching;
     bool is_defusing;
     bool is_dropping;
+    bool is_buying_ammo;
+    bool is_reloading;
 
     void set_up_handled_types();
 
     void handle_mouse(SDL_Event& event);
 
     void handle_switching(SDL_Event& event);
+    void handle_buy_ammo(SDL_Event& event);
+    void handle_reload(SDL_Event& event);
     void handle_defusing(SDL_Event& event);
     void handle_drop(SDL_Event& event);
     void handle_key(SDL_Event& event);
