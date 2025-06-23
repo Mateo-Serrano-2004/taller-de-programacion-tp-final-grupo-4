@@ -112,6 +112,7 @@ void Controller::GameStateManager::update_bomb_position(DTO::GameStateDTO& dto) 
     if (
         dto.round.state == RoundState::PostRound &&
         dto.round.bomb_planted &&
+        !dto.round.bomb_defused &&
         game_state->bomb_position.has_value() &&
         game_state->round_state == RoundState::Active
     ) {

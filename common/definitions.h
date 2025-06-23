@@ -64,7 +64,7 @@ template <typename T>
 using Func = std::function<void(T)>;
 
 constexpr int TILE_SIZE = 32;
-const int BOMB_ZONE_RADIUS = 32;
-const int DEFUSE_RADIUS = 32;
+const int BOMB_ZONE_RADIUS = 64;
+const int DEFUSE_RADIUS = 64;
 
 #endif  // COMMON_DEFINITIONS_H

@@ -195,6 +195,10 @@ void FullPlayer::add_money(uint16_t money_to_be_added) { money += money_to_be_ad
 
 void FullPlayer::reset_for_new_round(Physics::Vector2D new_position) {
     position = new_position;
+    if (!alive) {
+        secondary_weapon = WeaponFactory::create(Model::WeaponID::GLOCK);
+        current_weapon = secondary_weapon;
+    }
     alive = true;
     health = 100;
     defusing_bomb = false;
