@@ -68,6 +68,8 @@ void View::PlayerRenderer::render_fov(const Model::GameState& game_state) {
 void View::PlayerRenderer::render_bomb(const Model::GameState& game_state) {
     if (game_state.bomb_position.has_value()) {
         auto point = game_state.camera.get_camera_view(game_state.bomb_position.value());
+        point.SetX(point.GetX() - (bomb_texture->GetWidth() / 2));
+        point.SetY(point.GetY() - (bomb_texture->GetHeight() / 2));
         renderer->Copy(*bomb_texture, SDL2pp::NullOpt, point);
     }
 }
