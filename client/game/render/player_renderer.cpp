@@ -112,6 +112,7 @@ void View::PlayerRenderer::render(const Model::GameState& game_state, uint8_t fr
     sound_player.play(game_state);
     if (render_ref_player)
         render_fov(game_state);
-    animation_renderer.render_defusing_progress(game_state);
+    animation_renderer.render_explosion(game_state, frames);
+    animation_renderer.render_progress_bar(game_state);
     animation_renderer.render_winner_message(game_state, frames);
 }

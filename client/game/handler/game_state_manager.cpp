@@ -12,6 +12,7 @@
 #include <SDL2pp/Renderer.hh>
 #include <SDL2pp/Texture.hh>
 
+#include "animation/bomb_explosion_animation.h"
 #include "animation/muzzle_fire_animation.h"
 #include "animation/progress_bar_animation.h"
 #include "animation/winner_team_message_animation.h"
@@ -113,6 +114,19 @@ void Controller::GameStateManager::update_bomb_position(DTO::GameStateDTO& dto) 
     if (dto.round.bomb_defused || dto.round.state != RoundState::Active) {
         game_state->bomb_position = std::nullopt;
     }
+    // if (game_state->bomb_explosion && game_state->bomb_explosion->has_ended())
+    //     game_state->bomb_explosion = nullptr;
+    // if (
+    //     dto.round.state == RoundState::PostRound &&
+    //     dto.round.bomb_planted &&
+    //     game_state->bomb_position.has_value() &&
+    //     game_state->round_state == RoundState::Active
+    // ) {
+    //     game_state->bomb_explosion = make_shared<View::BombExplosionAnimation>(
+    //         controller,
+    //         game_state->bomb_position.value()
+    //     );
+    // }
 }
 
 void Controller::GameStateManager::update_progress_bar(const Shared<View::RenderedPlayer>& ref_player) {

@@ -2,6 +2,7 @@
 
 #include <cstdint>
 
+#include "animation/bomb_explosion_animation.h"
 #include "animation/muzzle_fire_animation.h"
 #include "animation/progress_bar_animation.h"
 #include "animation/winner_team_message_animation.h"
@@ -26,7 +27,7 @@ void View::AnimationRenderer::render_winner_message(const Model::GameState& game
     }
 }
 
-void View::AnimationRenderer::render_defusing_progress(const Model::GameState& game_state) {
+void View::AnimationRenderer::render_progress_bar(const Model::GameState& game_state) {
     if (game_state.progress_bar) {
         if (game_state.defusing_progress)
             game_state.progress_bar->progress(game_state.defusing_progress);
@@ -34,5 +35,12 @@ void View::AnimationRenderer::render_defusing_progress(const Model::GameState& g
             auto ref_player = game_state.get_reference_player();
             game_state.progress_bar->progress(ref_player->get_planting_progress());
         }
+    }
+}
+
+void View::AnimationRenderer::render_explosion(const Model::GameState& game_state, uint8_t frames) {
+    if (game_state.bomb_explosion) {
+        game_state.bomb_explosion->fix(game_state.camera);
+        game_state.bomb_explosion->step(frames);
     }
 }

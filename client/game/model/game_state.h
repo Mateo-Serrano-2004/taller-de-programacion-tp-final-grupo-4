@@ -25,6 +25,7 @@ class RenderedPlayer;
 class MuzzleFireAnimation;
 class WinnerTeamMessageAnimation;
 class ProgressBarAnimation;
+class BombExplosionAnimation;
 class SoundEffect;
 };  // namespace View
 
@@ -41,6 +42,7 @@ struct GameState {
     std::list<Shared<View::SoundEffect>> sound_effects;
     Shared<View::WinnerTeamMessageAnimation> winner_message;
     Shared<View::ProgressBarAnimation> progress_bar;
+    Shared<View::BombExplosionAnimation> bomb_explosion;
     View::Camera camera;
     Shared<SDL2pp::Texture> map;
     Maybe<short_id_t> reference_player_id;
