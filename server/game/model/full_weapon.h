@@ -2,6 +2,7 @@
 #define SERVER_GAME_MODEL_FULL_WEAPON_H
 #include <iostream>
 #include <optional>
+#include <algorithm>
 
 #include "common/model/weapon.h"
 #include "common/slot_id.h"
@@ -17,9 +18,11 @@ protected:
     bool reloading = false;
     uint16_t ticks_to_reload;
     uint16_t ticks_remaining_to_reload;
+    uint8_t max_loaded_ammo;
 
+    virtual void stop_reloading();
 public:
-    FullWeapon(Model::WeaponID weapon_id, Model::SlotID slot_id, uint8_t loaded_ammo,
+    FullWeapon(Model::WeaponID weapon_id, Model::SlotID slot_id, uint8_t loaded_ammo, uint8_t max_loaded_ammo,
                uint16_t total_ammo, uint16_t ticks_to_reload, uint16_t ticks_remaining_to_reload);
 
     Model::SlotID get_slot_id() const;
@@ -27,7 +30,7 @@ public:
     virtual void press_trigger();
     virtual void release_trigger();
     virtual void start_reloading();
-    virtual void stop_reloading();
+    virtual void add_ammo();
 
     virtual std::optional<WeaponShotInfo> shoot(uint16_t ticks_to_process) = 0;
     virtual bool reload(uint16_t ticks_to_process);
