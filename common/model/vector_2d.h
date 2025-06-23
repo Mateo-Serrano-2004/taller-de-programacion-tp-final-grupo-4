@@ -23,6 +23,7 @@ public:
     void set_y(coord_t new_y);
 
     Vector2D operator+(const Vector2D& other) const;
+    Vector2D operator-(const Vector2D& other) const;
     Vector2D& operator+=(const Vector2D& other);
     bool operator==(const Vector2D& other) const;
     bool operator!=(const Vector2D& other) const;

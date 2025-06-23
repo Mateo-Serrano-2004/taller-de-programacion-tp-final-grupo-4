@@ -198,7 +198,7 @@ void GameLogic::process_defusing(std::map<uint8_t, FullPlayer>& players, Round& 
 }
 
 void GameLogic::process_shooting(std::map<uint8_t, FullPlayer>& players, Round& round,
-                                 uint16_t frames_to_process, const std::vector<Physics::Vector2D>& bomb_sites) const {
+                                 uint16_t frames_to_process, const std::vector<Physics::Vector2D>& bomb_sites, const MapMatrix& map_matrix) const {
     for (auto& [id, player]: players) {
         if (!player.is_alive())
             continue;
@@ -225,7 +225,7 @@ void GameLogic::process_shooting(std::map<uint8_t, FullPlayer>& players, Round& 
         }
 
         std::vector<Impact> impacts =
-                ShotManager::calculate_shot_impacts(shot_info.value(), players);
+                ShotManager::calculate_shot_impacts(shot_info.value(), players, map_matrix);
         if (!impacts.empty()) {
             apply_impacts(impacts, round, players);
         }

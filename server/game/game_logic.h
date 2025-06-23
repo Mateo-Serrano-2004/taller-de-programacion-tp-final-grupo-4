@@ -36,7 +36,7 @@ public:
     void stop_using_weapon(FullPlayer& player) const;
     void drop_equipped_weapon(FullPlayer& player, Round& round, const std::vector<std::vector<TileType>>& type_matrix) const;
     void process_shooting(std::map<uint8_t, FullPlayer>& players, Round& round,
-                          uint16_t frames_to_process, const std::vector<Physics::Vector2D>& bomb_sites) const;
+                          uint16_t frames_to_process, const std::vector<Physics::Vector2D>& bomb_sites, const MapMatrix& map_matrix) const;
     void assign_bomb_to_random_tt(std::map<uint8_t, FullPlayer>& players);
     void start_defusing_bomb(FullPlayer& player, const Round& round) const;
     void stop_defusing_bomb(FullPlayer& player) const;
