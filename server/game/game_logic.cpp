@@ -17,6 +17,14 @@ void GameLogic::buy_weapon(FullPlayer& player, Model::WeaponID weapon_id, Round&
     }
 }
 
+void GameLogic::buy_ammo(FullPlayer& player, Model::SlotID slot_id, Round& round) const {
+    if (!round.is_buying()) return;
+    if (!player.is_alive()) return;
+    if (!player.has_type_weapon(slot_id)) return; // no te vendo si no tenes esa arma
+
+    shop.process_ammo_purchase(player, slot_id);
+}
+
 // dummy por ahora
 bool GameLogic::is_in_bomb_zone(Physics::Vector2D player_position) const { return true; }
 
@@ -87,7 +95,6 @@ void GameLogic::drop_equipped_weapon(FullPlayer& player, Round& round, const std
     }
 }
 
-
 void GameLogic::start_reloading_weapon(FullPlayer& player, const Round& round) const {
     if (!round.is_active())
         return;
@@ -95,8 +102,6 @@ void GameLogic::start_reloading_weapon(FullPlayer& player, const Round& round) c
         return;
     player.start_reloading_weapon();
 }
-
-void GameLogic::stop_reloading_weapon(FullPlayer& player) const { player.stop_reloading_weapon(); }
 
 void GameLogic::start_defusing_bomb(FullPlayer& player, const Round& round) const {
     if (!round.is_active())
@@ -125,7 +130,7 @@ void GameLogic::process_reloading(std::map<uint8_t, FullPlayer>& players, const 
         return;
     for (auto& [id, player]: players) {
         if (!player.is_alive()) {
-            player.stop_reloading_weapon();  // el player cuando muere debe hacer esto
+            //player.stop_reloading_weapon();  // el player cuando muere debe hacer esto
             continue;
         }
         player.reload(frames_to_process);

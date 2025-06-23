@@ -107,22 +107,22 @@ void MovementSystem::try_pick_up_weapon(std::map<uint8_t, FullPlayer>& players,
 
             Model::SlotID slot = weapon->get_slot_id();
 
-            bool already_has = false;
+            bool can_pick_it = false;
             switch (slot) {
                 case Model::SlotID::PRIMARY_WEAPON:
-                    already_has = player.has_primary_weapon();
+                    can_pick_it = !player.has_primary_weapon();
                     break;
                 case Model::SlotID::SECONDARY_WEAPON:
-                    already_has = player.has_secondary_weapon();
+                    can_pick_it = !player.has_secondary_weapon();
                     break;
                 case Model::SlotID::BOMB_SLOT:
-                    already_has = player.has_bomb();
+                    can_pick_it = (player.get_team() == Model::TeamID::TT && !player.has_bomb());
                     break;
                 default:
                     break;
             }
 
-            if (!already_has) {
+            if (can_pick_it) {
                 player.equip_new_weapon_and_drop_previous(weapon);
                 drops.erase(it);
                 break;

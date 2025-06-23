@@ -41,7 +41,6 @@ public:
     void start_using_weapon();
     void stop_using_weapon();
     void start_reloading_weapon();
-    void stop_reloading_weapon();
     void reload(uint16_t frames_to_process);
     std::optional<ShotInfo> shoot(uint16_t frames_to_process);
     void take_damage(uint8_t damage);
@@ -49,13 +48,15 @@ public:
     void add_money(uint16_t money_to_be_added);
     void equip_weapon_by_type(Model::SlotID type);
     Shared<FullWeapon> drop_equipped_weapon();
+    void add_ammo(Model::SlotID slot_id);
 
     bool can_pay(uint16_t price);
     bool has_bomb_equipped() const;
     void substract_money(uint16_t amount);
-    bool has_primary_weapon();
-    bool has_secondary_weapon();
-    bool has_bomb();
+    bool has_primary_weapon() const;
+    bool has_secondary_weapon() const;
+    bool has_bomb() const;
+    bool has_type_weapon(Model::SlotID slot_id) const;
     Shared<FullWeapon> equip_new_weapon_and_drop_previous(Shared<FullWeapon> new_weapon);
 
     void reset_for_new_round(Physics::Vector2D new_position);

@@ -4,6 +4,7 @@
 #include <cstdint>
 
 #include "common/weapon_id.h"
+#include "common/slot_id.h"
 #include "model/full_player.h"
 
 class Shop {
@@ -14,6 +15,7 @@ public:
     Shop() = default;
 
     Shared<FullWeapon> process_weapon_purchase(FullPlayer& player, Model::WeaponID weapon_id) const;
+    void process_ammo_purchase(FullPlayer& player, Model::SlotID slot_id) const;
 
     ~Shop() = default;
 };

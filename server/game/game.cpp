@@ -38,13 +38,6 @@ void Game::handle_reload(const uint8_t& player_id) {
     gamelogic.start_reloading_weapon(player->get(), round);
 }
 
-void Game::handle_stop_reloading(const uint8_t& player_id) {
-    auto player = find_player_by_id(player_id);
-    if (!player.has_value())
-        return;
-    gamelogic.stop_reloading_weapon(player->get());
-}
-
 void Game::handle_start_defusing_bomb(const uint8_t& player_id) {
     if (this->state != GameState::Playing)
         return;
@@ -80,6 +73,16 @@ void Game::handle_switch_weapon(const uint8_t& player_id, const SwitchWeaponEven
     if (!player.has_value())
         return;
     player->get().equip_weapon_by_type(event.get_slot_id());
+}
+
+void Game::handle_buy_ammo(const uint8_t& player_id, const BuyAmmoEvent& event) {
+    if (state != GameState::Playing)
+        return;
+
+    auto player = find_player_by_id(player_id);
+    if (!player.has_value())
+        return;
+    gamelogic.buy_ammo(player->get(), event.get_slot_id(), round);
 }
 
 void Game::handle_buy_weapon(const uint8_t& player_id, const BuyEvent& event) {
@@ -167,10 +170,7 @@ void Game::handle(uint8_t player_id, const GameEventVariant& event) {
                         handle_stop_defusing_bomb(player_id);
                     },
                     [player_id, this](const ReloadWeaponEvent&) { handle_reload(player_id); },
-                    [player_id, this](const StopReloadingEvent&) {
-                        handle_stop_reloading(player_id);
-                    },
-                    [this](const BuyAmmoEvent&) {}},
+                    [player_id, this](const BuyAmmoEvent& e) { handle_buy_ammo(player_id, e); }},
             event);
 }
 

@@ -89,6 +89,12 @@ Shared<FullWeapon> FullPlayer::equip_new_weapon_and_drop_previous(Shared<FullWea
             primary_weapon = new_weapon;
             current_weapon = primary_weapon;
             break;
+        case Model::SlotID::BOMB_SLOT:
+            bomb = new_weapon;
+            current_weapon = bomb;
+            break;
+        default:
+            return nullptr;
     }
     if (dropped_weapon)
         dropped_weapon->release_trigger();
@@ -110,13 +116,6 @@ void FullPlayer::start_reloading_weapon() {
     std::static_pointer_cast<FullWeapon>(current_weapon)->start_reloading();
 }
 
-void FullPlayer::stop_reloading_weapon() {
-    if (!current_weapon)
-        return;
-    std::static_pointer_cast<FullWeapon>(current_weapon)->stop_reloading();
-    reloading = false;
-}
-
 void FullPlayer::reload(uint16_t frames_to_process) {
     if (!current_weapon || !alive || !reloading) {
         reloading = false;
@@ -124,7 +123,7 @@ void FullPlayer::reload(uint16_t frames_to_process) {
     }
     auto weapon = std::static_pointer_cast<FullWeapon>(current_weapon);
     reloading = weapon->reload(frames_to_process);  // devuelve true si esta recargando bien, false
-                                                    // si por algun motivo no puede
+                                                    // si no puede o terminó
 }
 
 void FullPlayer::start_using_weapon() {
@@ -263,7 +262,8 @@ Shared<FullWeapon> FullPlayer::drop_equipped_weapon() {
             break;
 
         case Model::SlotID::BOMB_SLOT:
-            dropped_weapon = remove_bomb();
+            dropped_weapon = bomb;
+            bomb = nullptr;
             break;
 
         case Model::SlotID::KNIFE_SLOT:
@@ -278,16 +278,42 @@ Shared<FullWeapon> FullPlayer::drop_equipped_weapon() {
     return dropped_weapon;
 }
 
-bool FullPlayer::has_primary_weapon() {
+bool FullPlayer::has_primary_weapon() const {
     return primary_weapon != nullptr;
 }
 
-bool FullPlayer::has_secondary_weapon() {
+bool FullPlayer::has_secondary_weapon() const {
     return secondary_weapon != nullptr;
 }
 
-bool FullPlayer::has_bomb() {
+bool FullPlayer::has_bomb() const{
     return bomb != nullptr;
+}
+
+bool FullPlayer::has_type_weapon(Model::SlotID slot_id) const {
+    switch (slot_id) {
+        case Model::SlotID::PRIMARY_WEAPON:
+            return has_primary_weapon();
+        case Model::SlotID::SECONDARY_WEAPON:
+            return has_secondary_weapon();
+        case Model::SlotID::BOMB_SLOT:
+            return has_bomb();
+        default:
+            return false;
+    }
+}
+
+void FullPlayer::add_ammo(Model::SlotID slot_id) {
+    switch (slot_id) {
+        case Model::SlotID::PRIMARY_WEAPON:
+            primary_weapon->add_ammo();
+            break;
+        case Model::SlotID::SECONDARY_WEAPON:
+            secondary_weapon->add_ammo();
+            break;
+        default:
+            return;
+    }
 }
 
 void FullPlayer::give_bomb(Shared<FullWeapon> new_bomb) { bomb = new_bomb; }

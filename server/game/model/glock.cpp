@@ -3,7 +3,8 @@
 Glock::Glock():
         FullWeapon(Model::WeaponID::GLOCK, Model::SlotID::SECONDARY_WEAPON,
                    20,  // loaded_ammo
-                   20,  // total_ammo
+                   20,  // max_loaded_ammo
+                   40,  // total_ammo
                    90, 90) {}
 
 std::optional<WeaponShotInfo> Glock::shoot(uint16_t ticks_to_process) {

@@ -3,7 +3,8 @@
 AK47::AK47():
         FullWeapon(Model::WeaponID::AK47, Model::SlotID::PRIMARY_WEAPON,
                    30,  // loaded_ammo
-                   30,  // total_ammo
+                   30,
+                   60,  // total_ammo
                    90, 90) {}
 
 void AK47::press_trigger() {

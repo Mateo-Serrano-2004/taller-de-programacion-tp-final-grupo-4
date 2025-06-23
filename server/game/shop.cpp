@@ -31,3 +31,24 @@ Shared<FullWeapon> Shop::process_weapon_purchase(FullPlayer& player, Model::Weap
 
     return player.equip_new_weapon_and_drop_previous(WeaponFactory::create(weapon_id));
 }
+
+void Shop::process_ammo_purchase(FullPlayer& player, Model::SlotID slot_id) const {
+    uint16_t price;
+
+    if(slot_id == Model::SlotID::PRIMARY_WEAPON){
+        price = 100;
+    } else if(slot_id == Model::SlotID::SECONDARY_WEAPON){
+        price = 75;
+    } else{
+        return;
+    }
+
+    if (!player.can_pay(price))
+        return;
+
+    player.substract_money(price);
+
+    player.add_ammo(slot_id);
+
+    return;
+}

@@ -19,7 +19,7 @@ public:
     void release_trigger() override;
     std::optional<WeaponShotInfo> shoot(uint16_t ticks_to_process) override;
     bool reload(uint16_t ticks_to_process) override;
-
+    void add_ammo() override;
     bool is_planted() const;  // creo que no uso
 };
 

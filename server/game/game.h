@@ -76,13 +76,13 @@ private:
     void handle_start_defusing_bomb(const uint8_t& player_id);
     void handle_stop_defusing_bomb(const uint8_t& player_id);
     void handle_reload(const uint8_t& player_id);
-    void handle_stop_reloading(const uint8_t& player_id);
     void handle_movement(const uint8_t& player_id, const MovementEvent& event);
     void handle_stop_movement(const uint8_t& player_id, const StopMovementEvent& event);
     void handle_rotation(const uint8_t& player_id, const RotationEvent& event);
     void handle_pick_role(const uint8_t player_id, const PickRoleEvent& event);
     void handle_switch_weapon(const uint8_t& player_id, const SwitchWeaponEvent& event);
     void handle_buy_weapon(const uint8_t& player_id, const BuyEvent& event);
+    void handle_buy_ammo(const uint8_t& player_id, const BuyAmmoEvent& event);
     void handle_drop_weapon(const uint8_t& player_id);
 
     void handle(uint8_t player_id, const GameEventVariant& event);

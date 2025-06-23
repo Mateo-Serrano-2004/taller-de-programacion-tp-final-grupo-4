@@ -76,11 +76,6 @@ public:
     ReloadWeaponEvent() {}
 };
 
-class StopReloadingEvent {
-public:
-    StopReloadingEvent() {}
-};
-
 class PickRoleEvent {
 private:
     Model::RoleID role_id;
@@ -101,11 +96,11 @@ public:
 
 class BuyAmmoEvent {
 private:
-    uint8_t weapon_id;
+    Model::SlotID slot_id;
 
 public:
-    explicit BuyAmmoEvent(uint8_t weapon_id): weapon_id(weapon_id) {}
-    uint8_t get_weapon_id() const { return weapon_id; }
+    explicit BuyAmmoEvent(Model::SlotID slot_id): slot_id(slot_id) {}
+    Model::SlotID get_slot_id() const { return slot_id; }
 };
 
 class UsernameEvent {
@@ -161,7 +156,7 @@ public:
 using GameEventVariant =
         std::variant<LeaveGameEvent, MovementEvent, StopMovementEvent, RotationEvent,
                      DropWeaponEvent, UseWeaponEvent, DefuseBombEvent, SwitchWeaponEvent,
-                     ReloadWeaponEvent, StopReloadingEvent, BuyEvent, BuyAmmoEvent, QuitEvent,
+                     ReloadWeaponEvent, BuyEvent, BuyAmmoEvent, QuitEvent,
                      PickRoleEvent, StopUsingWeaponEvent, StopDefusingBombEvent>;
 
 using EventVariant = std::variant<GameEventVariant, UsernameEvent, CreateGameEvent, MapRequestEvent,
