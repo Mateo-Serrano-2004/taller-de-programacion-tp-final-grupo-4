@@ -16,7 +16,7 @@ FullPlayer::FullPlayer(short_id_t id, const std::string& name, Model::TeamID tea
                        Model::RoleID role, Physics::Vector2D position):
         Model::Player(id, name, team, role, position),
         movement_direction(0, 0),
-        size(32, 32),
+        size(28, 28),
         secondary_weapon(WeaponFactory::create(Model::WeaponID::GLOCK)),
         knife(WeaponFactory::create(Model::WeaponID::KNIFE)) {
     current_weapon = secondary_weapon;
