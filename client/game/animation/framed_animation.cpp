@@ -12,5 +12,5 @@ void View::FramedAnimation::step(int frames) {
         return;
     render();
     current_frame += frames;
-    ended = (current_frame > total_frames);
+    ended = (current_frame >= total_frames);
 }

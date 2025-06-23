@@ -147,7 +147,6 @@ void View::EquipmentRenderer::render(const Model::GameState& game_state, uint8_t
     if (!player) return;
         render_weapon(player);
     if (player->get_has_bomb()) {
-        std::cout << "BOMB\n";
         render_bomb(player);
     }
 }

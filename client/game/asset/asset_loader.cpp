@@ -107,7 +107,7 @@ void Model::AssetLoader::load_bomb_animation() {
     );
     auto bomb_animation_texture = manager->get_texture(Model::TextureID::BOMB_EXPLOSION);
     manager->load_animation(Model::AnimationID::BOMB_EXPLOSION,
-                            Model::AnimationDetails(5, 5, 23, 120,
+                            Model::AnimationDetails(5, 5, 23, 40,
                             bomb_animation_texture));
 }
 
