@@ -83,6 +83,10 @@ uint8_t Model::Player::get_health() const { return health; }
 
 Model::TeamID Model::Player::get_team() const { return team; }
 
+uint8_t Model::Player::get_kills() const { return kills; }
+
+uint8_t Model::Player::get_deaths() const { return deaths; }
+
 void Model::Player::set_new_team(Model::TeamID new_team) { team = new_team; }
 
 void Model::Player::add_kill() { kills++; }
