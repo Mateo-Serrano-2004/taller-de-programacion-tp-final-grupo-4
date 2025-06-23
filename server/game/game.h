@@ -66,7 +66,8 @@ private:
     std::string map_name;
     MapMatrix map_matrix;
 
-    Maybe<Ref<FullPlayer>> find_player_by_id(short_id_t player_id);
+    bool is_playing_state();
+    void with_valid_player(short_id_t player_id, std::function<void(FullPlayer&)> action);
 
     void handle_leave_game(const uint8_t& player_id);
     void handle_use_weapon(const uint8_t& player_id);

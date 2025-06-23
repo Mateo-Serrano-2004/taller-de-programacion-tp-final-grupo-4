@@ -30,8 +30,9 @@ private:
     void try_pick_up_weapon(std::map<uint8_t, FullPlayer>& players, uint8_t player_id, Round& round);
 
 public:
-    MovementSystem();
-    explicit MovementSystem(const std::vector<std::vector<TileType>>& type_matrix);
+    MovementSystem() = default;
+    
+    explicit MovementSystem(const MapMatrix& map_matrix);
 
     void process_movements(std::map<uint8_t, FullPlayer>& players, Round& round, uint16_t frames_to_process, bool players_collisions_enabled);
 };

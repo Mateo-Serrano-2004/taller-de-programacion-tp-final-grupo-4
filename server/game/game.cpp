@@ -13,134 +13,113 @@
 #include "server/exception/invalid_player_exception.h"
 #include "server/parser/yaml_parser.h"
 
-Maybe<Ref<FullPlayer>> Game::find_player_by_id(short_id_t player_id) {
+void Game::with_valid_player(short_id_t player_id, std::function<void(FullPlayer&)> action) {
     auto it = players.find(player_id);
-    if (it == players.end())
-        return std::nullopt;
-    return it->second;
+    if (it == players.end()) return;
+    action(it->second);
+}
+
+bool Game::is_playing_state() {
+    return state == GameState::Playing;
 }
 
 void Game::handle_use_weapon(const uint8_t& player_id) {
-    if (this->state != GameState::Playing)
-        return;
-    auto player = find_player_by_id(player_id);
-    if (!player.has_value())
-        return;
-    gamelogic.start_using_weapon(player->get(), round);
+    if (!is_playing_state()) return;
+    with_valid_player(player_id, [this](FullPlayer& player) {
+        gamelogic.start_using_weapon(player, round);
+    });
 }
 
 void Game::handle_reload(const uint8_t& player_id) {
-    if (this->state != GameState::Playing)
-        return;
-    auto player = find_player_by_id(player_id);
-    if (!player.has_value())
-        return;
-    gamelogic.start_reloading_weapon(player->get(), round);
+    if (!is_playing_state()) return;
+    with_valid_player(player_id, [this](FullPlayer& player) {
+        gamelogic.start_reloading_weapon(player, round);
+    });
 }
 
 void Game::handle_start_defusing_bomb(const uint8_t& player_id) {
-    if (this->state != GameState::Playing)
-        return;
-    auto player = find_player_by_id(player_id);
-    if (!player.has_value())
-        return;
-    gamelogic.start_defusing_bomb(player->get(), round);
+    if (!is_playing_state()) return;
+    with_valid_player(player_id, [this](FullPlayer& player) {
+        gamelogic.start_defusing_bomb(player, round);
+    });
 }
 
 void Game::handle_stop_defusing_bomb(const uint8_t& player_id) {
-    auto player = find_player_by_id(player_id);
-    if (!player.has_value())
-        return;
-    gamelogic.stop_defusing_bomb(player->get());
+    with_valid_player(player_id, [this](FullPlayer& player) {
+        gamelogic.stop_defusing_bomb(player);
+    });
 }
 
 void Game::handle_stop_using_weapon(const uint8_t& player_id) {
-    auto player = find_player_by_id(player_id);
-    if (!player.has_value())
-        return;
-    gamelogic.stop_using_weapon(player->get());
+    with_valid_player(player_id, [this](FullPlayer& player) {
+        gamelogic.stop_using_weapon(player);
+    });
 }
 
 void Game::handle_drop_weapon(const uint8_t& player_id) {
-    auto player = find_player_by_id(player_id);
-    if (!player.has_value())
-        return;
-    gamelogic.drop_equipped_weapon(player->get(), round, map_matrix);
+    with_valid_player(player_id, [this](FullPlayer& player) {
+        gamelogic.drop_equipped_weapon(player, round, map_matrix);
+    });
 }
 
 void Game::handle_switch_weapon(const uint8_t& player_id, const SwitchWeaponEvent& event) {
-    auto player = find_player_by_id(player_id);
-    if (!player.has_value())
-        return;
-    player->get().equip_weapon_by_type(event.get_slot_id());
+    with_valid_player(player_id, [&event](FullPlayer& player) {
+        player.equip_weapon_by_type(event.get_slot_id());
+    });
 }
 
 void Game::handle_buy_ammo(const uint8_t& player_id, const BuyAmmoEvent& event) {
-    if (state != GameState::Playing)
-        return;
+    if (!is_playing_state()) return;
 
-    auto player = find_player_by_id(player_id);
-    if (!player.has_value())
-        return;
-    gamelogic.buy_ammo(player->get(), event.get_slot_id(), round);
+    with_valid_player(player_id, [this, &event](FullPlayer& player) {
+        gamelogic.buy_ammo(player, event.get_slot_id(), round);
+    });
 }
 
 void Game::handle_buy_weapon(const uint8_t& player_id, const BuyEvent& event) {
-    if (state != GameState::Playing)
-        return;
+    if (!is_playing_state()) return;
 
-    auto player = find_player_by_id(player_id);
-    if (!player.has_value())
-        return;
-    gamelogic.buy_weapon(player->get(), event.get_weapon_id(), round);
+    with_valid_player(player_id, [this, &event](FullPlayer& player) {
+        gamelogic.buy_weapon(player, event.get_weapon_id(), round);
+    });
 }
 
 void Game::handle_leave_game(const uint8_t& player_id) {
-    // TODO: Check game/round state
-    auto player = find_player_by_id(player_id);
-    if (!player.has_value())
-        return;
-    auto& actual_player = player->get();
-    round.notify_on_one_player_less(actual_player.get_team());
-    players.erase(actual_player.get_id());
-    auto queue_it = client_queues.find(player_id);
-    client_queues.erase(queue_it);
+    with_valid_player(player_id, [&](FullPlayer& player) {
+        round.notify_on_one_player_less(player.get_team());
+        players.erase(player.get_id());
+    });
+    client_queues.erase(player_id);
 
-    if (players.empty())
-        kill();
+    if (players.empty()) kill();
 }
 
 void Game::handle_movement(const uint8_t& player_id, const MovementEvent& event) {
-    auto player = find_player_by_id(player_id);
-    if (!player.has_value())
-        return;
-    player->get().update_movement_direction_by_merge(event.get_direction());
+    with_valid_player(player_id, [&event](FullPlayer& player) {
+        player.update_movement_direction_by_merge(event.get_direction());
+    });
 }
 
 void Game::handle_stop_movement(const uint8_t& player_id, const StopMovementEvent& event) {
-    auto player = find_player_by_id(player_id);
-    if (!player.has_value())
-        return;
-    if (event.is_movement_horizontal()) {
-        player->get().stop_horizontal_movement();
-    } else {
-        player->get().stop_vertical_movement();
-    }
+    with_valid_player(player_id, [&event](FullPlayer& player) {
+        if (event.is_movement_horizontal()) {
+            player.stop_horizontal_movement();
+        } else {
+            player.stop_vertical_movement();
+        }
+    });
 }
 
 void Game::handle_rotation(const uint8_t& player_id, const RotationEvent& event) {
-    auto player = find_player_by_id(player_id);
-    if (!player.has_value())
-        return;
-    player->get().set_angle(event.get_angle_in_degrees());
+    with_valid_player(player_id, [&event](FullPlayer& player) {
+        player.set_angle(event.get_angle_in_degrees());
+    });
 }
 
 void Game::handle_pick_role(const uint8_t player_id, const PickRoleEvent& event) {
-    auto player = find_player_by_id(player_id);
-    if (!player.has_value()) {
-        return;
-    }
-    player->get().set_role_id(event.get_role_id());
+    with_valid_player(player_id, [&event](FullPlayer& player) {
+        player.set_role_id(event.get_role_id());
+    });
 }
 
 void Game::handle(uint8_t player_id, const GameEventVariant& event) {
@@ -282,17 +261,9 @@ void Game::broadcast_game_state() {
         try {
             queue->push(game_snapshot);
         } catch (const ClosedQueue&) {
-
-        } catch (const std::exception&) {
-            /*
-                This is caused by invalid access
-                of memory, when the sender has
-                been destroyed but not yet removed
-                from the list. In such case, we
-                only skip it, as it will be removed
-                eventually
-            */
-        }
+            client_queues.erase(id);
+        } 
+        catch (const std::exception&) {}
     }
 }
 
@@ -341,32 +312,19 @@ void Game::load_map_features() {
                 case TileType::BOMB_SITE:
                     bomb_sites.emplace_back(px, py);
                     break;
-                /*case TileType::COLLIDABLE: {
-                    BoundingBox box;
-                    box.x = px;
-                    box.y = py;
-                    box.w = TILE_SIZE;
-                    box.h = TILE_SIZE;
-                    map_collidables.push_back(box);
-                    break;
-                }*/
                 default:
                     break;
             }
         }
     }
-
-    std::cout << "[MAP LOAD] CT spawns: " << ct_spawn_positions.size()
-              << " | TT spawns: " << tt_spawn_positions.size()
-              << " | Bomb sites: " << bomb_sites.size() << std::endl;
 }
 
 Game::Game(const std::string& party_name, const std::string& map_name, const MapMatrix& map_matrix)
-    : party_name(party_name),
-      map_name(map_name),
-      map_matrix(map_matrix),
+    : movement_system(MovementSystem(map_matrix)),
       round(Round::create_warmup_round()),
-      movement_system(MovementSystem(map_matrix)) {
+      party_name(party_name),
+      map_name(map_name),
+      map_matrix(map_matrix) {
     load_map_features();
 
     const auto& config = YamlParser::getConfigData();

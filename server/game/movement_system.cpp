@@ -1,17 +1,15 @@
 #include "movement_system.h"
 
-MovementSystem::MovementSystem(const std::vector<std::vector<TileType>>& type_matrix) {
-    for (int y = 0; y < static_cast<int>(type_matrix.size()); ++y) {
-        for (int x = 0; x < static_cast<int>(type_matrix[y].size()); ++x) {
-            if (type_matrix[y][x] == COLLIDABLE) {
+MovementSystem::MovementSystem(const MapMatrix& map_matrix) {
+    for (int y = 0; y < static_cast<int>(map_matrix.size()); ++y) {
+        for (int x = 0; x < static_cast<int>(map_matrix[y].size()); ++x) {
+            if (map_matrix[y][x] == TileType::COLLIDABLE) {
                 BoundingBox box;
                 box.x = x * TILE_SIZE;
                 box.y = y * TILE_SIZE;
                 box.w = TILE_SIZE;
                 box.h = TILE_SIZE;
                 collidable_boxes.push_back(box);
-                std::cout << "[MAP COLLIDABLE] (" << x << ", " << y << ") => "
-              << "(" << box.x << ", " << box.y << ", " << box.w << ", " << box.h << ")\n";
             }
         }
     }
@@ -28,10 +26,7 @@ bool MovementSystem::is_colliding_with_map(const Physics::Vector2D& position,
         bool overlap_x = !(right <= box.x || left >= box.x + box.w);
         bool overlap_y = !(bottom <= box.y || top >= box.y + box.h);
 
-        if (overlap_x && overlap_y){
-            std::cout << "CHOQUE DE MAPA" <<std::endl;
-            return true;
-        }
+        if (overlap_x && overlap_y) return true;
     }
 
     return false;
@@ -61,10 +56,7 @@ bool MovementSystem::is_colliding_with_other_players(const Physics::Vector2D& po
         bool overlap_x = !(right <= o_left || left >= o_right);
         bool overlap_y = !(bottom <= o_top || top >= o_bottom);
 
-        if (overlap_x && overlap_y) {
-            std::cout << "CHOQUE DE PLAYER" <<std::endl;
-            return true;
-        }
+        if (overlap_x && overlap_y) return true;
     }
 
     return false;
@@ -131,8 +123,6 @@ void MovementSystem::try_pick_up_weapon(std::map<uint8_t, FullPlayer>& players,
     }
 }
 
-
-
 void MovementSystem::process_movements(std::map<uint8_t, FullPlayer>& players, Round& round, uint16_t frames_to_process, bool players_collisions_enabled) {
     for (auto& [id, player] : players) {
         if (!player.is_alive()) continue;
@@ -161,6 +151,3 @@ void MovementSystem::process_movements(std::map<uint8_t, FullPlayer>& players, R
         player.set_position(pos);
     }
 }
-
-MovementSystem::MovementSystem() = default;
-
