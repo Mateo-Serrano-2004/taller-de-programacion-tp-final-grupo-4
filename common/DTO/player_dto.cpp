@@ -22,12 +22,14 @@ DTO::PlayerDTO::PlayerDTO():
         team(0),
         deaths(0),
         kills(0),
+        planting_progress(0),
         weapon_dto() {}
 
 DTO::PlayerDTO::PlayerDTO(short_id_t player_id, short_id_t role_id, angle_t angle, uint16_t money,
                           coord_t position_x, coord_t position_y, const std::string& name,
                           const DTO::WeaponDTO& weapon_dto, uint8_t shooting, uint8_t defusing_bomb,
-                          uint8_t reloading, uint8_t health, short_id_t team, uint8_t deaths, uint8_t kills):
+                          uint8_t reloading, uint8_t health, short_id_t team, uint8_t deaths, uint8_t kills,
+                          uint8_t planting_progress):
         player_id(player_id),
         role_id(role_id),
         angle(angle),
@@ -42,11 +44,12 @@ DTO::PlayerDTO::PlayerDTO(short_id_t player_id, short_id_t role_id, angle_t angl
         team(team),
         deaths(deaths),
         kills(kills),
+        planting_progress(planting_progress),
         weapon_dto(weapon_dto) {}
 
 Model::Player DTO::PlayerDTO::to_player() const {
     return Model::Player(shooting, defusing_bomb, reloading, player_id, (Model::RoleID)(role_id),
                          angle, money, name, Physics::Vector2D(position_x, position_y),
                          make_shared<Model::Weapon>(std::move(weapon_dto.to_weapon())), health,
-                         (Model::TeamID)(team), deaths, kills);
+                         (Model::TeamID)(team), deaths, kills, planting_progress);
 }

@@ -28,7 +28,8 @@ std::optional<WeaponShotInfo> Bomb::shoot(uint16_t ticks_to_process) {
 
         return WeaponShotInfo(0,     // no balas
                               0.0f,  // sin daño
-                              0.0f, 0.0f, 0.0f, 0.0f, DamageMode::CONSTANT, 0.0f, 0.0f, 1.0f);
+                              0.0f, 0.0f, 0.0f, 0.0f, DamageMode::CONSTANT, 0.0f, 0.0f, 1.0f,
+                              (planting_ticks * 100) / required_ticks_to_plant);
     }
 
     return std::nullopt;

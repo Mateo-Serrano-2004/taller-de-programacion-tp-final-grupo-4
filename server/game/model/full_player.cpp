@@ -168,6 +168,7 @@ std::optional<ShotInfo> FullPlayer::shoot(uint16_t frames_to_process) {
     }
 
     shooting = true;
+    planting_progress = shot_info->planting_progress;
     return ShotInfo(id, weapon_position(), angle, weapon->get_weapon_id(), shot_info.value());
 }
 

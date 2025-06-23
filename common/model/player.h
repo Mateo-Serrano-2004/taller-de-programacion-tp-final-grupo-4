@@ -33,6 +33,7 @@ protected:
     Model::TeamID team;
     uint8_t deaths;
     uint8_t kills;
+    uint8_t planting_progress;
 
 public:
     Player(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role_id,
@@ -41,7 +42,7 @@ public:
     Player(bool shooting, bool defusing_bomb, bool reloading, short_id_t id, Model::RoleID role_id,
            angle_t angle, uint16_t money, const std::string& name,
            const Physics::Vector2D& position, Shared<Weapon> weapon, uint8_t health,
-           Model::TeamID team, uint8_t deaths, uint8_t kills);
+           Model::TeamID team, uint8_t deaths, uint8_t kills, uint8_t planting_progress);
 
     Player(const Player&) = delete;
     Player& operator=(const Player&) = delete;
@@ -63,6 +64,7 @@ public:
     Model::TeamID get_team() const;
     uint8_t get_kills() const;
     uint8_t get_deaths() const;
+    uint8_t get_planting_progress() const;
 
     void set_alive(bool new_alive);
     void set_role_id(Model::RoleID new_sprite_id);
