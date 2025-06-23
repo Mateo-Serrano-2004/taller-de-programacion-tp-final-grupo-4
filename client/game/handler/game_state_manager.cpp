@@ -125,7 +125,6 @@ void Controller::GameStateManager::update_progress_bar(const Shared<View::Render
             game_state->progress_bar = nullptr;
         }
     } else if (ref_player->get_team() == Model::TeamID::TT) {
-        std::cout << (int) ref_player->get_planting_progress() << std::endl;
         if (!game_state->progress_bar && ref_player->get_planting_progress() > 0) {
             game_state->progress_bar = make_shared<View::ProgressBarAnimation>(controller);
         } else if (ref_player->get_planting_progress() == 0) {
@@ -135,10 +134,15 @@ void Controller::GameStateManager::update_progress_bar(const Shared<View::Render
 }
 
 void Controller::GameStateManager::update_winner_message(DTO::GameStateDTO& dto) {
+    game_state->round_winner = dto.round.winner;
     if (game_state->winner_message && game_state->winner_message->has_ended())
         game_state->winner_message = nullptr;
 
-    if (dto.round.ended && game_state->round_state == RoundState::Active) {
+    if (
+        !game_state->winner_message &&
+        dto.round.state == RoundState::PostRound &&
+        game_state->round_state == RoundState::Active
+    ) {
         game_state->winner_message = make_shared<View::WinnerTeamMessageAnimation>(
             controller, game_state->round_winner
         );
@@ -150,7 +154,6 @@ void Controller::GameStateManager::update_stats(DTO::GameStateDTO& dto) {
     game_state->defusing_progress = dto.round.defusing_progress;
     game_state->first_team_victories = dto.ct_rounds_won;
     game_state->second_team_victories = dto.tt_rounds_won;
-    game_state->round_winner = dto.round.winner;
     game_state->game_winner = dto.winner;
     game_state->round_state = dto.round.state;
 }

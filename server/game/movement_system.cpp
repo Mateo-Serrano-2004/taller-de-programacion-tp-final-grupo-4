@@ -134,6 +134,8 @@ void MovementSystem::try_pick_up_weapon(std::map<uint8_t, FullPlayer>& players,
 
 
 void MovementSystem::process_movements(std::map<uint8_t, FullPlayer>& players, Round& round, uint16_t frames_to_process, bool players_collisions_enabled) {
+    if (round.is_buying())
+        return;
     for (auto& [id, player] : players) {
         if (!player.is_alive()) continue;
 
