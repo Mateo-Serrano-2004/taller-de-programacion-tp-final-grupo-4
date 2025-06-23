@@ -55,7 +55,6 @@ public:
     void substract_money(uint16_t amount);
     bool has_primary_weapon() const;
     bool has_secondary_weapon() const;
-    bool has_bomb() const;
     bool has_type_weapon(Model::SlotID slot_id) const;
     Shared<FullWeapon> equip_new_weapon_and_drop_previous(Shared<FullWeapon> new_weapon);
 

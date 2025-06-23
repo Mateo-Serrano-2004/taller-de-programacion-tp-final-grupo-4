@@ -24,13 +24,14 @@ Model::Player::Player(short_id_t id, const std::string& name, Model::TeamID team
         team(team),
         deaths(0),
         kills(0),
-        planting_progress(0) {}
+        planting_progress(0),
+        has_bomb(false) {}
 
 Model::Player::Player(bool shooting, bool defusing_bomb, bool reloading, short_id_t id,
                       Model::RoleID role_id, angle_t angle, uint16_t money, const std::string& name,
                       const Physics::Vector2D& position, Shared<Model::Weapon> weapon,
                       uint8_t health, Model::TeamID team, uint8_t deaths, uint8_t kills,
-                      uint8_t planting_progress):
+                      uint8_t planting_progress, bool has_bomb):
         alive(true),
         shooting(shooting),
         defusing_bomb(defusing_bomb),
@@ -46,7 +47,8 @@ Model::Player::Player(bool shooting, bool defusing_bomb, bool reloading, short_i
         team(team),
         deaths(deaths),
         kills(kills),
-        planting_progress(planting_progress) {}
+        planting_progress(planting_progress),
+        has_bomb(has_bomb) {}
 
 bool Model::Player::is_alive() const { return alive; }
 
@@ -55,6 +57,8 @@ bool Model::Player::is_shooting() const { return shooting; }
 bool Model::Player::is_defusing() const { return defusing_bomb; }
 
 bool Model::Player::is_reloading() const { return reloading; }
+
+bool Model::Player::get_has_bomb() const { return has_bomb; }
 
 short_id_t Model::Player::get_id() const { return id; }
 
@@ -103,5 +107,6 @@ Shared<Model::Weapon> Model::Player::get_current_weapon() const { return current
 DTO::PlayerDTO Model::Player::to_dto() const {
     return DTO::PlayerDTO(id, (short_id_t)(role_id), angle, money, position.get_x(),
                           position.get_y(), name, current_weapon->to_dto(), shooting, defusing_bomb,
-                          reloading, health, (short_id_t)(team), deaths, kills, planting_progress);
+                          reloading, health, (short_id_t)(team), deaths, kills, planting_progress,
+                          has_bomb ? 1 : 0);
 }

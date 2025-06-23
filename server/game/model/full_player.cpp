@@ -94,6 +94,10 @@ Shared<FullWeapon> FullPlayer::equip_new_weapon_and_drop_previous(Shared<FullWea
         case Model::SlotID::BOMB_SLOT:
             bomb = new_weapon;
             current_weapon = bomb;
+            if (bomb)
+                has_bomb = true;
+            else
+                has_bomb = false;
             break;
         default:
             return nullptr;
@@ -205,6 +209,7 @@ void FullPlayer::reset_for_new_round(Physics::Vector2D new_position) {
     reloading = false;
     planting_progress = 0;
     bomb.reset();
+    has_bomb = false;
 }
 
 bool FullPlayer::has_bomb_equipped() const {
@@ -228,6 +233,7 @@ Shared<FullWeapon> FullPlayer::remove_bomb() {
         equip_weapon_by_type(Model::SlotID::KNIFE_SLOT);
     }
 
+    has_bomb = false;
     return dropped_bomb;
 }
 
@@ -250,6 +256,7 @@ std::vector<DroppedWeapon> FullPlayer::drop_weapons() {
         bomb.reset();
     }
 
+    has_bomb = false;
     planting_progress = 0;
     equip_weapon_by_type(Model::SlotID::KNIFE_SLOT); // por las dudas
 
@@ -277,6 +284,7 @@ Shared<FullWeapon> FullPlayer::drop_equipped_weapon() {
         case Model::SlotID::BOMB_SLOT:
             dropped_weapon = bomb;
             bomb = nullptr;
+            has_bomb = false;
             break;
 
         case Model::SlotID::KNIFE_SLOT:
@@ -300,10 +308,6 @@ bool FullPlayer::has_secondary_weapon() const {
     return secondary_weapon != nullptr;
 }
 
-bool FullPlayer::has_bomb() const{
-    return bomb != nullptr;
-}
-
 bool FullPlayer::has_type_weapon(Model::SlotID slot_id) const {
     switch (slot_id) {
         case Model::SlotID::PRIMARY_WEAPON:
@@ -311,7 +315,7 @@ bool FullPlayer::has_type_weapon(Model::SlotID slot_id) const {
         case Model::SlotID::SECONDARY_WEAPON:
             return has_secondary_weapon();
         case Model::SlotID::BOMB_SLOT:
-            return has_bomb();
+            return has_bomb;
         default:
             return false;
     }
@@ -330,4 +334,8 @@ void FullPlayer::add_ammo(Model::SlotID slot_id) {
     }
 }
 
-void FullPlayer::give_bomb(Shared<FullWeapon> new_bomb) { bomb = new_bomb; }
+void FullPlayer::give_bomb(Shared<FullWeapon> new_bomb) {
+    bomb = new_bomb;
+    if (bomb)
+        has_bomb = true;
+}

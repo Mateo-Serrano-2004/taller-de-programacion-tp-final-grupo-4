@@ -110,7 +110,7 @@ void MovementSystem::try_pick_up_weapon(std::map<uint8_t, FullPlayer>& players,
                     can_pick_it = !player.has_secondary_weapon();
                     break;
                 case Model::SlotID::BOMB_SLOT:
-                    can_pick_it = (player.get_team() == Model::TeamID::TT && !player.has_bomb());
+                    can_pick_it = (player.get_team() == Model::TeamID::TT && !player.get_has_bomb());
                     break;
                 default:
                     break;

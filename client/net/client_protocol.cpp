@@ -66,6 +66,7 @@ void Net::ClientProtocol::receive_player(DTO::PlayerDTO& player) {
     skt.recvall(&player.kills, sizeof(player.kills));
     skt.recvall(&player.deaths, sizeof(player.deaths));
     skt.recvall(&player.planting_progress, sizeof(player.planting_progress));
+    skt.recvall(&player.has_bomb, sizeof(player.has_bomb));
 
     receive_weapon(player.weapon_dto);
 }
