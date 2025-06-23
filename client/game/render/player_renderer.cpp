@@ -34,7 +34,7 @@ void View::PlayerRenderer::render_fov(const Model::GameState& game_state) {
     angle_t angle = 0;
     auto ref_player = game_state.get_reference_player();
     if (!ref_player->get_health()) {
-        ref_player = game_state.get_other_player_by_team(
+        ref_player = game_state.get_any_player_alive_by_team(
             ref_player->get_team()
         );
     }

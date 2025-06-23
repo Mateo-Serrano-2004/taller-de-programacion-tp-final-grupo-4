@@ -82,7 +82,7 @@ void Controller::GameStateManager::update_camera(const Shared<View::RenderedPlay
         return;
     auto new_ref_player = ref_player;
     if (!new_ref_player->get_health())
-        new_ref_player = game_state->get_other_player_by_team(ref_player->get_team());
+        new_ref_player = game_state->get_any_player_alive_by_team(ref_player->get_team());
     if (!new_ref_player)
         return;
     auto reference_player_position = new_ref_player->get_position();
@@ -164,7 +164,7 @@ void Controller::GameStateManager::update(DTO::GameStateDTO& game_state_dto) {
     game_state->players = new_game_state->players;
     update_animations(new_game_state);
     update_sounds(new_game_state);
-    
+
     auto ref_player = game_state->get_reference_player();
     update_camera(ref_player);
     update_defusing_bar(ref_player);

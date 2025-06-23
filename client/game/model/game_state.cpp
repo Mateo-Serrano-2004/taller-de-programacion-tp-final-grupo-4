@@ -39,28 +39,39 @@ Shared<View::RenderedPlayer> Model::GameState::get_player_by_id(Maybe<short_id_t
     return it->second;
 }
 
-Shared<View::RenderedPlayer> Model::GameState::get_other_player_by_team(Model::TeamID team) const {
+Shared<View::RenderedPlayer> Model::GameState::get_any_player_by_team(Model::TeamID team) const {
     auto it = std::find_if(
         players.begin(),
         players.end(),
         [&team](const auto& player) {
             return (
                 player.second->get_team() == team &&
-                player.second->is_alive()
+                player.second->get_health() > 0
             );
         }
     );
-    if (it == players.end()) {
-        auto new_it = std::find_if(
-            players.begin(),
-            players.end(),
-            [](const auto& player) {
-                return player.second->is_alive();
-            }
-        );
-        if (new_it == players.end())
-            return nullptr;
-        return new_it->second;
-    }
+    if (it == players.end())
+        return nullptr;
     return it->second;
+}
+
+Shared<View::RenderedPlayer> Model::GameState::get_any_player_alive() const {
+    auto it = std::find_if(
+        players.begin(),
+        players.end(),
+        [](const auto& player) {
+            return player.second->is_alive();
+        }
+    );
+    if (it == players.end())
+        return nullptr;
+    return it->second;
+}
+
+Shared<View::RenderedPlayer> Model::GameState::get_any_player_alive_by_team(Model::TeamID team) const {
+    auto player = get_any_player_by_team(team);
+    if (player)
+        return player;
+
+    return get_any_player_alive();
 }
