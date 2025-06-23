@@ -25,6 +25,7 @@ protected:
 
     int get_fire_distance();
 
+    int get_frame_size() override;
     SDL2pp::Rect get_dsrect() override;
     angle_t get_angle() override;
     SDL2pp::Point get_rpoint() override;

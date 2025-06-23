@@ -31,6 +31,17 @@
 #include "camera.h"
 
 void View::PlayerRenderer::render_fov(const Model::GameState& game_state) {
+    angle_t angle = 0;
+    auto ref_player = game_state.get_reference_player();
+    if (!ref_player->get_health()) {
+        ref_player = game_state.get_any_player_alive_by_team(
+            ref_player->get_team()
+        );
+    }
+    if (!ref_player)
+        return;
+    angle = ref_player->get_angle();
+
     auto viewport = game_state.camera.get_viewport();
     int viewport_width = viewport.GetX();
     int viewport_height = viewport.GetY();
@@ -51,12 +62,14 @@ void View::PlayerRenderer::render_fov(const Model::GameState& game_state) {
                    SDL2pp::Rect((viewport_width - 2 * length_to_corners) / 2,
                                 (viewport_height - 2 * length_to_corners) / 2,
                                 2 * length_to_corners, 2 * length_to_corners),
-                   game_state.get_reference_player()->get_angle());
+                   angle);
 }
 
 void View::PlayerRenderer::render_bomb(const Model::GameState& game_state) {
     if (game_state.bomb_position.has_value()) {
         auto point = game_state.camera.get_camera_view(game_state.bomb_position.value());
+        point.SetX(point.GetX() - (bomb_texture->GetWidth() / 2));
+        point.SetY(point.GetY() - (bomb_texture->GetHeight() / 2));
         renderer->Copy(*bomb_texture, SDL2pp::NullOpt, point);
     }
 }
@@ -99,6 +112,7 @@ void View::PlayerRenderer::render(const Model::GameState& game_state, uint8_t fr
     sound_player.play(game_state);
     if (render_ref_player)
         render_fov(game_state);
-    animation_renderer.render_defusing_progress(game_state);
+    animation_renderer.render_explosion(game_state, frames);
+    animation_renderer.render_progress_bar(game_state);
     animation_renderer.render_winner_message(game_state, frames);
 }

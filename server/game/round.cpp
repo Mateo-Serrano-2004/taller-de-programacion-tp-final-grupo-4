@@ -13,6 +13,7 @@ Round::Round(int ct_alive, int tt_alive):
         ticks_for_warmup_phase(0),
         ticks_for_buying_phase(600),
         ticks_for_playing_phase(3600),
+        ticks_for_post_round_phase(300),
         bomb_total_ticks(600),
         active_ticks_remaining(600),
         defusing_ticks(300),
@@ -46,7 +47,13 @@ void Round::update_if_finished_playing() {
     } else {
         winner_team = Model::TeamID::CT;
     }
+    state = RoundState::PostRound;
+    active_ticks_remaining = ticks_for_post_round_phase;
+}
+
+void Round::update_if_finished_post_round() {
     state = RoundState::Ended;
+    active_ticks_remaining = 0;
 }
 
 void Round::check_if_finished_defusing(int frames_to_process) {
@@ -58,7 +65,9 @@ void Round::check_if_finished_defusing(int frames_to_process) {
 
             if (defusing_ticks_remaining <= 0) {
                 bomb_defused = true;
-                active_ticks_remaining = 0;
+                winner_team = Model::TeamID::CT;
+                state = RoundState::PostRound;
+                active_ticks_remaining = ticks_for_post_round_phase;
             }
         }
     }
@@ -83,6 +92,8 @@ void Round::update(int frames_to_process) {
         update_if_finished_buying();
     } else if (state == RoundState::Active) {
         update_if_finished_playing();
+    } else if (state == RoundState::PostRound) {
+        update_if_finished_post_round();
     }
 }
 
@@ -96,6 +107,8 @@ bool Round::is_buying() const { return state == RoundState::Buying; }
 
 bool Round::is_active() const { return state == RoundState::Active; }
 
+bool Round::is_post_round() const { return state == RoundState::PostRound; }
+
 bool Round::ended() const { return state == RoundState::Ended; }
 
 bool Round::bomb_is_planted() const { return bomb_planted; }
@@ -108,15 +121,15 @@ void Round::notify_on_one_player_less(Model::TeamID team) {
         number_of_ct_alive--;
         if (number_of_ct_alive == 0) {
             winner_team = Model::TeamID::TT;
-            active_ticks_remaining = 0;
-            state = RoundState::Ended;
+            state = RoundState::PostRound;
+            active_ticks_remaining = ticks_for_post_round_phase;
         }
     } else if (team == Model::TeamID::TT) {
         number_of_tt_alive--;
         if (number_of_tt_alive == 0 && !bomb_planted) {
             winner_team = Model::TeamID::CT;
-            active_ticks_remaining = 0;
-            state = RoundState::Ended;
+            state = RoundState::PostRound;
+            active_ticks_remaining = ticks_for_post_round_phase;
         }
     }
 }

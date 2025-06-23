@@ -23,12 +23,14 @@ Model::Player::Player(short_id_t id, const std::string& name, Model::TeamID team
         health(100),
         team(team),
         deaths(0),
-        kills(0) {}
+        kills(0),
+        planting_progress(0) {}
 
 Model::Player::Player(bool shooting, bool defusing_bomb, bool reloading, short_id_t id,
                       Model::RoleID role_id, angle_t angle, uint16_t money, const std::string& name,
                       const Physics::Vector2D& position, Shared<Model::Weapon> weapon,
-                      uint8_t health, Model::TeamID team, uint8_t deaths, uint8_t kills):
+                      uint8_t health, Model::TeamID team, uint8_t deaths, uint8_t kills,
+                      uint8_t planting_progress):
         alive(true),
         shooting(shooting),
         defusing_bomb(defusing_bomb),
@@ -43,7 +45,8 @@ Model::Player::Player(bool shooting, bool defusing_bomb, bool reloading, short_i
         health(health),
         team(team),
         deaths(deaths),
-        kills(kills) {}
+        kills(kills),
+        planting_progress(planting_progress) {}
 
 bool Model::Player::is_alive() const { return alive; }
 
@@ -83,6 +86,12 @@ uint8_t Model::Player::get_health() const { return health; }
 
 Model::TeamID Model::Player::get_team() const { return team; }
 
+uint8_t Model::Player::get_kills() const { return kills; }
+
+uint8_t Model::Player::get_deaths() const { return deaths; }
+
+uint8_t Model::Player::get_planting_progress() const { return planting_progress; }
+
 void Model::Player::set_new_team(Model::TeamID new_team) { team = new_team; }
 
 void Model::Player::add_kill() { kills++; }
@@ -94,5 +103,5 @@ Shared<Model::Weapon> Model::Player::get_current_weapon() const { return current
 DTO::PlayerDTO Model::Player::to_dto() const {
     return DTO::PlayerDTO(id, (short_id_t)(role_id), angle, money, position.get_x(),
                           position.get_y(), name, current_weapon->to_dto(), shooting, defusing_bomb,
-                          reloading, health, (short_id_t)(team), deaths, kills);
+                          reloading, health, (short_id_t)(team), deaths, kills, planting_progress);
 }

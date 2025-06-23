@@ -2,10 +2,12 @@
 
 #include <map>
 #include <utility>
+#include <algorithm>
 
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Texture.hh>
 
+#include "animation/bomb_explosion_animation.h"
 #include "animation/muzzle_fire_animation.h"
 #include "animation/progress_bar_animation.h"
 #include "animation/winner_team_message_animation.h"
@@ -36,4 +38,41 @@ Shared<View::RenderedPlayer> Model::GameState::get_player_by_id(Maybe<short_id_t
     if (it == players.end())
         return nullptr;
     return it->second;
+}
+
+Shared<View::RenderedPlayer> Model::GameState::get_any_player_by_team(Model::TeamID team) const {
+    auto it = std::find_if(
+        players.begin(),
+        players.end(),
+        [&team](const auto& player) {
+            return (
+                player.second->get_team() == team &&
+                player.second->get_health() > 0
+            );
+        }
+    );
+    if (it == players.end())
+        return nullptr;
+    return it->second;
+}
+
+Shared<View::RenderedPlayer> Model::GameState::get_any_player_alive() const {
+    auto it = std::find_if(
+        players.begin(),
+        players.end(),
+        [](const auto& player) {
+            return player.second->is_alive();
+        }
+    );
+    if (it == players.end())
+        return nullptr;
+    return it->second;
+}
+
+Shared<View::RenderedPlayer> Model::GameState::get_any_player_alive_by_team(Model::TeamID team) const {
+    auto player = get_any_player_by_team(team);
+    if (player)
+        return player;
+
+    return get_any_player_alive();
 }

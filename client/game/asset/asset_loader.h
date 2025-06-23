@@ -41,6 +41,8 @@ private:
     void load_from_surface(Model::TextureID id, const std::string& path);
     void load_hud_textures();
     void load_fov();
+    void load_bomb_animation();
+    void load_shot_animation();
     void load_animations();
     void load_sounds();
 

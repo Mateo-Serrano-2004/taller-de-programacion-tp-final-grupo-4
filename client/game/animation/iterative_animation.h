@@ -25,6 +25,7 @@ class IterativeAnimation: public FramedAnimation {
 protected:
     Model::AnimationDetails details;
 
+    virtual int get_frame_size() = 0;
     virtual SDL2pp::Rect get_frame();
 
     virtual SDL2pp::Rect get_dsrect() = 0;

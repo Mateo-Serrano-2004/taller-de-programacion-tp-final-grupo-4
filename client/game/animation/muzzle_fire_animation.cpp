@@ -22,14 +22,16 @@ int View::MuzzleFireAnimation::get_fire_distance() {
         case Model::WeaponID::AK47:
             return 20;
         case Model::WeaponID::GLOCK:
-            return 16;
+            return 12;
         case Model::WeaponID::M3:
-            return 18;
+            return 16;
         case Model::WeaponID::AWP:
             return 25;
     }
     return 0;
 }
+
+int View::MuzzleFireAnimation::get_frame_size() { return 32; }
 
 SDL2pp::Rect View::MuzzleFireAnimation::get_dsrect() {
     SDL2pp::Point camera_view = player->get_fixation().get_camera_view(player->get_position());

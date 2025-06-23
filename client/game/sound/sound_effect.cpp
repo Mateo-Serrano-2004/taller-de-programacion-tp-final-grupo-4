@@ -34,13 +34,15 @@ void View::SoundEffect::update_volume() {
 
 View::SoundEffect::SoundEffect(
     Weak<Controller::GameController> controller,
-    short_id_t player_id,
-    Model::WeaponID weapon_id
-): started(false), ended(false), channel(-1), mixer(nullptr),
+    short_id_t player_id
+): started(false), ended(false), channel(-1), mixer(nullptr), chunk(nullptr),
    controller(controller), player_id(player_id) {
     auto asset_manager = controller.lock()->get_asset_manager();
     mixer = asset_manager->get_mixer();
-    chunk = asset_manager->get_sound(Model::EnumTranslator::get_sound_from_weapon(weapon_id));
+}
+
+short_id_t View::SoundEffect::get_player_id() const {
+    return player_id;
 }
 
 bool View::SoundEffect::is_playing() const {
@@ -49,10 +51,6 @@ bool View::SoundEffect::is_playing() const {
 
 bool View::SoundEffect::has_ended() const {
     return ended;
-}
-
-short_id_t View::SoundEffect::get_player_id() const {
-    return player_id;
 }
 
 void View::SoundEffect::set_player(Shared<View::RenderedPlayer> new_player) {

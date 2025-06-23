@@ -100,7 +100,18 @@ void Model::AssetLoader::load_fov() {
     manager->load_texture(Model::TextureID::FOV, generator.generate_fov());
 }
 
-void Model::AssetLoader::load_animations() {
+void Model::AssetLoader::load_bomb_animation() {
+    manager->load_texture(
+        Model::TextureID::BOMB_EXPLOSION,
+        addresser.get_animation_path("explosion.png")
+    );
+    auto bomb_animation_texture = manager->get_texture(Model::TextureID::BOMB_EXPLOSION);
+    manager->load_animation(Model::AnimationID::BOMB_EXPLOSION,
+                            Model::AnimationDetails(5, 5, 23, 120,
+                            bomb_animation_texture));
+}
+
+void Model::AssetLoader::load_shot_animation() {
     auto animation = generator.generate_animation(
             {addresser.get_animation_path("muzzle-fire/muzzle_01.png"),
              addresser.get_animation_path("muzzle-fire/muzzle_02.png"),
@@ -111,12 +122,18 @@ void Model::AssetLoader::load_animations() {
                             Model::AnimationDetails(5, 1, 5, 5, animation));
 }
 
+void Model::AssetLoader::load_animations() {
+    load_bomb_animation();
+    load_shot_animation();
+}
+
 void Model::AssetLoader::load_sounds() {
-    manager->load_sound(Model::SoundID::AK47_FIRE, sounds[5]);
-    manager->load_sound(Model::SoundID::AWP_FIRE, sounds[9]);
-    manager->load_sound(Model::SoundID::M3_FIRE, sounds[11]);
-    manager->load_sound(Model::SoundID::GLOCK_FIRE, sounds[9]);
-    manager->load_sound(Model::SoundID::KNIFE_SLASH, sounds[10]);
+    manager->load_sound(Model::SoundID::AK47_FIRE, sounds[2]);
+    manager->load_sound(Model::SoundID::AWP_FIRE, sounds[3]);
+    manager->load_sound(Model::SoundID::GLOCK_FIRE, sounds[6]);
+    manager->load_sound(Model::SoundID::KNIFE_SLASH, sounds[7]);
+    manager->load_sound(Model::SoundID::M3_FIRE, sounds[8]);
+    manager->load_sound(Model::SoundID::RELOAD_SOUND, sounds[10]);
 }
 
 Model::AssetLoader::AssetLoader(Shared<AssetManager> manager, Shared<SDL2pp::Renderer> renderer,
@@ -130,12 +147,10 @@ Model::AssetLoader::AssetLoader(Shared<AssetManager> manager, Shared<SDL2pp::Ren
         }),
         hud_textures({"hud_nums.bmp", "hud_symbols.bmp", "ak47_k.bmp", "awp_k.bmp", "glock_k.bmp",
                       "knife_k.bmp", "m3_k.bmp"}),
-        sounds({"players/death.wav", "players/hit-player.wav", "players/setp.wav",
-                "radio/bomb-defused.ogg", "radio/bomb-planted.ogg",
+        sounds({"radio/bomb-defused.ogg", "radio/bomb-planted.ogg",
                 "weapons/ak47.wav", "weapons/awp.wav", "weapons/bomb.wav",
                 "weapons/drop.wav", "weapons/glock.wav", "weapons/knife.wav",
-                "weapons/m3.wav", "weapons/no-bullets.wav",
-                "weapons/pick-up-weapon.wav", "weapons/reload.wav"}),
+                "weapons/m3.wav", "weapons/no-bullets.wav", "weapons/reload.wav"}),
         manager(manager),
         renderer(renderer),
         config(config),

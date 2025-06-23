@@ -1,7 +1,5 @@
 #include "yaml_parser.h"
 
-#include <iostream>
-
 #include <yaml-cpp/yaml.h>
 
 ConfigData YamlParser::gameConfig;

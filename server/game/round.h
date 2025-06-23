@@ -23,6 +23,7 @@ private:
     int ticks_for_warmup_phase;
     int ticks_for_buying_phase;
     int ticks_for_playing_phase;
+    int ticks_for_post_round_phase;
     int bomb_total_ticks;
 
     int active_ticks_remaining;
@@ -36,6 +37,7 @@ private:
     void update_if_finished_warmup();
     void update_if_finished_buying();
     void update_if_finished_playing();
+    void update_if_finished_post_round();
     int get_ticks_remaining() const;
     void check_if_finished_defusing(int frames_to_process);
 
@@ -51,6 +53,7 @@ public:
     bool is_warmup() const;
     bool is_buying() const;
     bool is_active() const;
+    bool is_post_round() const;
     bool ended() const;
     bool bomb_is_planted() const;
     Physics::Vector2D get_bomb_position() const;
