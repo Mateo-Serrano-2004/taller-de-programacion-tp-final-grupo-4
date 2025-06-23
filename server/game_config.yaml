@@ -90,3 +90,4 @@ fov:
 display:
   width: 580
   height: 400
+  fps: 60
