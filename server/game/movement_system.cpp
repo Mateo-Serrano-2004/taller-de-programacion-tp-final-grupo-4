@@ -1,18 +1,6 @@
 #include "movement_system.h"
 
-MovementSystem::MovementSystem(const MapMatrix& map_matrix) {
-    for (int y = 0; y < static_cast<int>(map_matrix.size()); ++y) {
-        for (int x = 0; x < static_cast<int>(map_matrix[y].size()); ++x) {
-            if (map_matrix[y][x] == TileType::COLLIDABLE) {
-                BoundingBox box;
-                box.x = x * TILE_SIZE;
-                box.y = y * TILE_SIZE;
-                box.w = TILE_SIZE;
-                box.h = TILE_SIZE;
-                collidable_boxes.push_back(box);
-            }
-        }
-    }
+MovementSystem::MovementSystem(MapMatrix& map_matrix) : map_matrix(map_matrix) {
 }
 
 bool MovementSystem::is_colliding_with_map(const Physics::Vector2D& position,
@@ -22,12 +10,22 @@ bool MovementSystem::is_colliding_with_map(const Physics::Vector2D& position,
     int right = left + static_cast<int>(size.get_x());
     int bottom = top + static_cast<int>(size.get_y());
 
-    for (const BoundingBox& box : collidable_boxes) {
-        bool overlap_x = !(right <= box.x || left >= box.x + box.w);
-        bool overlap_y = !(bottom <= box.y || top >= box.y + box.h);
+    int tile_left = left / 32;
+    int tile_top = top / 32;
+    int tile_right = right / 32;
+    int tile_bottom = bottom / 32;
 
-        if (overlap_x && overlap_y) return true;
+    if (tile_top < 0 || tile_top >= static_cast<int>(map_matrix.size()) ||
+        tile_left < 0 || tile_left >= static_cast<int>(map_matrix[0].size()) ||
+        tile_bottom < 0 || tile_bottom >= static_cast<int>(map_matrix.size()) ||
+        tile_right < 0 || tile_right >= static_cast<int>(map_matrix[0].size())) {
+        return true;
     }
+
+    if (map_matrix[tile_top][tile_left] == TileType::COLLIDABLE) return true;
+    if (map_matrix[tile_top][tile_right] == TileType::COLLIDABLE) return true;
+    if (map_matrix[tile_bottom][tile_left] == TileType::COLLIDABLE) return true;
+    if (map_matrix[tile_bottom][tile_right] == TileType::COLLIDABLE) return true;
 
     return false;
 }
@@ -79,7 +77,7 @@ void MovementSystem::try_pick_up_weapon(std::map<uint8_t, FullPlayer>& players,
     int right = left + static_cast<int>(size.get_x());
     int bottom = top + static_cast<int>(size.get_y());
 
-    auto& drops = round.get_dropped_weapons();  // referencia modificable
+    auto& drops = round.get_dropped_weapons();
 
     for (auto it = drops.begin(); it != drops.end(); ++it) {
         const auto& drop = *it;
