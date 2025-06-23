@@ -23,6 +23,8 @@ private:
     Shared<FullWeapon> knife;
     Shared<FullWeapon> bomb;
     Physics::Vector2D weapon_position() const;
+    bool was_reloading;
+    bool trying_reload;
 
 public:
     FullPlayer(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role,
