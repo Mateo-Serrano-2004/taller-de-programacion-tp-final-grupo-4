@@ -19,14 +19,14 @@ void ClientHandler::handle_create_game(const CreateGameEvent& event) {
     const ConfigData& config = YamlParser::getConfigData();
     DTO::ConfigDTO config_dto(config.display.width, config.display.height, config.fov.angle,
                               config.fov.ratio);
+    auto map = game_manager.get_map(event.get_map_name());
     sender_queue.push(config_dto);
-    game_queue = game_manager.create_game(event.get_party_name(), event.get_map_name(), username,
+    game_queue = game_manager.create_game(event.get_party_name(), event.get_map_name(), map.second, username,
                                           sender_queue);
     player_id = 0;
     sender_queue.push(DTO::PlayerIDDTO(player_id));
     sender_queue.push(DTO::TeamIDDTO((short_id_t)Model::TeamID::CT));
-    auto map = game_manager.get_map(event.get_map_name());
-    sender_queue.push(map);
+    sender_queue.push(map.first);
 }
 
 void ClientHandler::handle_join_game(const JoinGameEvent& event) {
@@ -40,7 +40,7 @@ void ClientHandler::handle_join_game(const JoinGameEvent& event) {
         game_queue = pair.second;
         sender_queue.push(DTO::PlayerIDDTO(player_id));
         auto map = game_manager.get_map(game_manager.get_game_map(event.get_game_id()));
-        sender_queue.push(map);
+        sender_queue.push(map.first);
         sender_queue.push(DTO::TeamIDDTO(player_id % 2));
     } catch (const InvalidGameException&) {
         sender_queue.push(DTO::GameStateDTO());

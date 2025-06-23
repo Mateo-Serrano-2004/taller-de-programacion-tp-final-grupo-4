@@ -33,12 +33,12 @@ void GameManager::reap_games() {
 }
 
 GameQueue* GameManager::create_game(const std::string& party_name, const std::string& map_name,
-                                    const std::string& username,
+                                    const MapMatrix& map_matrix, const std::string& username,
                                     Queue<DTO::DTOVariant>& client_queue) {
     std::lock_guard<std::mutex> lock(mtx);
     reap_games();
     short_id_t game_id = static_cast<short_id_t>(games.size());
-    games[game_id] = std::move(std::make_unique<Game>(party_name, map_name));
+    games[game_id] = std::move(std::make_unique<Game>(party_name, map_name, map_matrix));
     games[game_id]->add_player(username, client_queue, 0, Model::TeamID::CT,
                                Model::RoleID::NO_ROLE);
     return &games[game_id]->get_queue();
@@ -85,10 +85,10 @@ std::string GameManager::get_game_map(const uint8_t& game_id) {
     return it->second->get_map_name();
 }
 
-DTO::MapDTO GameManager::get_map(const std::string& map_name) {
+std::pair<DTO::MapDTO, MapMatrix> GameManager::get_map(const std::string& map_name) {
     std::lock_guard<std::mutex> lock(mtx);
     yamlParser.parseMapYaml(yamlAddresser.get_map_path(map_name));
-    return DTO::MapDTO(yamlParser.getTileMatrix());
+    return std::make_pair(DTO::MapDTO(yamlParser.getTileMatrix()), yamlParser.getTypeMatrix());
 }
 
 GameManager::~GameManager() { clear_games(); }

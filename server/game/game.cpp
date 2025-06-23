@@ -11,7 +11,7 @@
 #include "common/periodic_clock.h"
 #include "server/exception/invalid_game_exception.h"
 #include "server/exception/invalid_player_exception.h"
-#include "server/parser/yaml_addresser.h"
+#include "server/parser/yaml_parser.h"
 
 Maybe<Ref<FullPlayer>> Game::find_player_by_id(short_id_t player_id) {
     auto it = players.find(player_id);
@@ -26,7 +26,7 @@ void Game::handle_use_weapon(const uint8_t& player_id) {
     auto player = find_player_by_id(player_id);
     if (!player.has_value())
         return;
-    gamelogic.start_using_weapon(player->get(), round);
+    gamelogic.start_using_weapon(player->get(), round, bomb_sites);
 }
 
 void Game::handle_reload(const uint8_t& player_id) {
@@ -65,7 +65,7 @@ void Game::handle_drop_weapon(const uint8_t& player_id) {
     auto player = find_player_by_id(player_id);
     if (!player.has_value())
         return;
-    gamelogic.drop_equipped_weapon(player->get(), round, parser.getTypeMatrix());
+    gamelogic.drop_equipped_weapon(player->get(), round, map_matrix);
 }
 
 void Game::handle_switch_weapon(const uint8_t& player_id, const SwitchWeaponEvent& event) {
@@ -242,7 +242,7 @@ void Game::process_frames(uint16_t frames_to_process) {
     gamelogic.process_defusing(players, round);
     round.update(frames_to_process);
     gamelogic.process_reloading(players, round, frames_to_process);
-    gamelogic.process_shooting(players, round, frames_to_process);
+    gamelogic.process_shooting(players, round, frames_to_process, bomb_sites);
 
     if (round.ended()) {
         clear_game_queue();
@@ -325,11 +325,9 @@ void Game::close() {
 }
 
 void Game::load_map_features() {
-    const auto& type_matrix = parser.getTypeMatrix();
-
-    for (size_t y = 0; y < type_matrix.size(); ++y) {
-        for (size_t x = 0; x < type_matrix[y].size(); ++x) {
-            TileType tile = type_matrix[y][x];
+    for (size_t y = 0; y < map_matrix.size(); ++y) {
+        for (size_t x = 0; x < map_matrix[y].size(); ++x) {
+            TileType tile = map_matrix[y][x];
             int px = static_cast<int>(x) * 32;
             int py = static_cast<int>(y) * 32;
 
@@ -363,18 +361,13 @@ void Game::load_map_features() {
               << " | Bomb sites: " << bomb_sites.size() << std::endl;
 }
 
-
-Game::Game(const std::string& party_name, const std::string& map_name)
+Game::Game(const std::string& party_name, const std::string& map_name, const MapMatrix& map_matrix)
     : party_name(party_name),
       map_name(map_name),
-      parser(YamlAddresser().get_config_path("game_config.yaml")),
-      round(Round::create_warmup_round()) {
-    
-    parser.parseMapYaml(YamlAddresser().get_map_path(map_name));
-
+      map_matrix(map_matrix),
+      round(Round::create_warmup_round()),
+      movement_system(MovementSystem(map_matrix)) {
     load_map_features();
-
-    movement_system = MovementSystem(parser.getTypeMatrix());
 
     const auto& config = YamlParser::getConfigData();
     this->max_rounds = static_cast<uint8_t>(config.game.rounds);
@@ -384,7 +377,6 @@ Game::Game(const std::string& party_name, const std::string& map_name)
 
     start();
 }
-
 
 uint8_t Game::get_number_of_players() {
     std::lock_guard<std::mutex> lock(mutex);

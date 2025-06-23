@@ -21,9 +21,8 @@
 #include "common/thread.h"
 #include "model/full_player.h"
 #include "server/events/events.h"
+#include "server/parser/types.h"
 
-#include "server/parser/yaml_parser.h"
-#include "server/parser/yaml_addresser.h"
 #include "game_logic.h"
 #include "movement_system.h"
 #include "round.h"
@@ -34,8 +33,6 @@ using ClientQueue = Queue<DTO::DTOVariant>;
 class Game: public Thread {
 private:
     std::mutex mutex;
-
-    YamlParser parser;
 
     std::vector<Physics::Vector2D> ct_spawn_positions;
     std::vector<Physics::Vector2D> tt_spawn_positions;
@@ -67,6 +64,7 @@ private:
     // Non-default constructible attributes
     std::string party_name;
     std::string map_name;
+    MapMatrix map_matrix;
 
     Maybe<Ref<FullPlayer>> find_player_by_id(short_id_t player_id);
 
@@ -109,7 +107,7 @@ private:
     Game& operator=(Game&&) = delete;
 
 public:
-    Game(const std::string& party_name, const std::string& map_name);
+    Game(const std::string& party_name, const std::string& map_name, const MapMatrix& type_matrix);
 
     uint8_t get_number_of_players();
     std::string get_party_name();

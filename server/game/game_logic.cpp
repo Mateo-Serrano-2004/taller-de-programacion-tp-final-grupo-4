@@ -25,17 +25,30 @@ void GameLogic::buy_ammo(FullPlayer& player, Model::SlotID slot_id, Round& round
     shop.process_ammo_purchase(player, slot_id);
 }
 
-// dummy por ahora
-bool GameLogic::is_in_bomb_zone(Physics::Vector2D player_position) const { return true; }
+bool GameLogic::is_in_bomb_zone(Physics::Vector2D player_pos, const Physics::Vector2D& bomb_pos) const { 
+    return player_pos.distance_to(bomb_pos + Physics::Vector2D(TILE_SIZE / 2, TILE_SIZE / 2)) <= DEFUSE_RADIUS; 
+}
 
-void GameLogic::start_using_weapon(FullPlayer& player, const Round& round) const {
+bool GameLogic::is_near_bomb_site(const Physics::Vector2D& player_pos,
+                                  const std::vector<Physics::Vector2D>& bomb_sites) const {
+
+    for (const auto& site_pos : bomb_sites) {
+        Physics::Vector2D center_site = site_pos + Physics::Vector2D(TILE_SIZE / 2, TILE_SIZE / 2);
+        if (player_pos.distance_to(center_site) <= BOMB_ZONE_RADIUS) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void GameLogic::start_using_weapon(FullPlayer& player, const Round& round, const std::vector<Physics::Vector2D>& bomb_sites) const {
     if (!round.is_active())
         return;
     if (!player.is_alive())
         return;
 
     if (player.has_bomb_equipped()) {
-        if (!is_in_bomb_zone(player.get_position()))
+        if (!is_near_bomb_site(player.get_position(), bomb_sites))
             return;
     }
     player.start_using_weapon();
@@ -112,7 +125,7 @@ void GameLogic::start_defusing_bomb(FullPlayer& player, const Round& round) cons
         return;  // tiene sentido
     if (player.get_team() != Model::TeamID::CT)
         return;
-    if (!is_in_bomb_zone(player.get_position()))
+    if (!is_in_bomb_zone(player.get_position(), round.get_bomb_position()))
         return;
     if (round.bomb_is_being_defused())
         return;
@@ -153,7 +166,7 @@ void GameLogic::process_defusing(std::map<uint8_t, FullPlayer>& players, Round& 
         } else {
             auto& player = it->second;
 
-            if (!player.is_alive() || !is_in_bomb_zone(player.get_position()) ||
+            if (!player.is_alive() || !is_in_bomb_zone(player.get_position(), round.get_bomb_position()) ||
                 !player.is_defusing()) {
                 player.stop_defusing_bomb();
                 round.notify_bomb_is_not_longer_being_defused();
@@ -170,7 +183,7 @@ void GameLogic::process_defusing(std::map<uint8_t, FullPlayer>& players, Round& 
                 continue;
             if (!round.bomb_is_planted())
                 continue;
-            if (!is_in_bomb_zone(player.get_position())) {
+            if (!is_in_bomb_zone(player.get_position(), round.get_bomb_position())) {
                 player.stop_defusing_bomb();
                 continue;
             }  // ojo que deberia dejar de defusear si no esta plantada?
@@ -185,14 +198,14 @@ void GameLogic::process_defusing(std::map<uint8_t, FullPlayer>& players, Round& 
 }
 
 void GameLogic::process_shooting(std::map<uint8_t, FullPlayer>& players, Round& round,
-                                 uint16_t frames_to_process) const {
+                                 uint16_t frames_to_process, const std::vector<Physics::Vector2D>& bomb_sites) const {
     for (auto& [id, player]: players) {
         if (!player.is_alive())
             continue;
 
         // la idea es vovler a chequear que tiene que seguir en la zona de plantado.
         if (player.has_bomb_equipped()) {
-            if (!is_in_bomb_zone(player.get_position())) {
+            if (!is_near_bomb_site(player.get_position(), bomb_sites)) {
                 player.stop_using_weapon();  // si se fue para que reinicie
                 continue;
             }
