@@ -21,9 +21,10 @@
 #include "model/game_state.h"
 #include "model/rendered_player.h"
 #include "render/camera.h"
-#include "sound/sound_effect.h"
+#include "sound/shot_sound.h"
+#include "sound/reload_sound.h"
 
-void Controller::GameStateManager::load_sound(
+void Controller::GameStateManager::load_shot_sound(
     Shared<Model::GameState>& new_game_state,
     const Shared<View::RenderedPlayer>& player
 ) {
@@ -31,14 +32,28 @@ void Controller::GameStateManager::load_sound(
         return;
     auto weapon_id = player->get_current_weapon()->get_weapon_id();
     if (weapon_id != Model::WeaponID::BOMB) {
-        new_game_state->shot_sounds.push_back(
-            make_shared<View::SoundEffect>(
+        new_game_state->sound_effects.push_back(
+            make_shared<View::ShotSound>(
                 controller,
                 player->get_id(),
                 player->get_current_weapon()->get_weapon_id()
             )
         );
     }
+}
+
+void Controller::GameStateManager::load_reload_sound(
+    Shared<Model::GameState>& new_game_state,
+    const Shared<View::RenderedPlayer>& player
+) {
+    if (!player->is_reloading())
+        return;
+    new_game_state->sound_effects.push_back(
+        make_shared<View::ReloadSound>(
+            controller,
+            player->get_id()
+        )
+    );
 }
 
 void Controller::GameStateManager::load_animation(
@@ -65,10 +80,10 @@ void Controller::GameStateManager::update_dropped_weapons(DTO::GameStateDTO& dto
 }
 
 void Controller::GameStateManager::update_sounds(Shared<Model::GameState>& new_game_state) {
-    game_state->shot_sounds.remove_if(
+    game_state->sound_effects.remove_if(
         [](Shared<View::SoundEffect>& sf) { return sf->has_ended(); }
     );
-    game_state->shot_sounds.splice(game_state->shot_sounds.end(), new_game_state->shot_sounds);
+    game_state->sound_effects.splice(game_state->sound_effects.end(), new_game_state->sound_effects);
 }
 
 void Controller::GameStateManager::update_animations(Shared<Model::GameState>& new_game_state) {
@@ -156,7 +171,8 @@ void Controller::GameStateManager::update(DTO::GameStateDTO& game_state_dto) {
     for (const auto& dto: game_state_dto.players) {
         auto player = make_shared<View::RenderedPlayer>(controller, std::move(dto.to_player()));
         new_game_state->players.insert({player->get_id(), player});
-        load_sound(new_game_state, player);
+        load_shot_sound(new_game_state, player);
+        load_reload_sound(new_game_state, player);
         load_animation(new_game_state, player);
     }
 

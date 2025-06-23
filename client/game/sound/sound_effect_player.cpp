@@ -7,7 +7,7 @@
 #include "sound_effect.h"
 
 void View::SoundEffectPlayer::play(const Model::GameState& game_state) {
-    for (auto& shot: game_state.shot_sounds) {
+    for (auto& shot: game_state.sound_effects) {
         auto player = game_state.get_player_by_id(shot->get_player_id());
         if (!player) {
             shot->end();

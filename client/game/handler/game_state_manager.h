@@ -36,7 +36,8 @@ private:
     Weak<GameController> controller;
 
     void load_animation(Shared<Model::GameState>& new_game_state, const Shared<View::RenderedPlayer>& player);
-    void load_sound(Shared<Model::GameState>& new_game_state, const Shared<View::RenderedPlayer>& player);
+    void load_shot_sound(Shared<Model::GameState>& new_game_state, const Shared<View::RenderedPlayer>& player);
+    void load_reload_sound(Shared<Model::GameState>& new_game_state, const Shared<View::RenderedPlayer>& player);
 
     void update_dropped_weapons(DTO::GameStateDTO& dto);
     void update_animations(Shared<Model::GameState>& new_game_state);

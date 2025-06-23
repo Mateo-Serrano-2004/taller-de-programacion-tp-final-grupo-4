@@ -38,7 +38,7 @@ struct GameState {
     std::map<short_id_t, Shared<View::RenderedPlayer>> players;
     std::vector<Shared<DTO::DropWeaponDTO>> dropped_weapons;
     std::list<Shared<View::MuzzleFireAnimation>> fires;
-    std::list<Shared<View::SoundEffect>> shot_sounds;
+    std::list<Shared<View::SoundEffect>> sound_effects;
     Shared<View::WinnerTeamMessageAnimation> winner_message;
     Shared<View::ProgressBarAnimation> bomb_defusing;
     View::Camera camera;
