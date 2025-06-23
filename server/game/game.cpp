@@ -172,6 +172,8 @@ void Game::swap_teams() {
             player.set_new_team(Model::TeamID::TT);
         } else if (player.get_team() == Model::TeamID::TT) {
             player.set_new_team(Model::TeamID::CT);
+        } else {
+            continue; // no deberia apsar que llegue acá igual
         }
 
         Model::RoleID current = player.get_role_id();
