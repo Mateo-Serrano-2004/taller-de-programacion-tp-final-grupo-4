@@ -24,8 +24,9 @@ private:
     HorizontalPane stats;
     VerticalPane first_team_stats;
     Label first_team_victories;
-    StatLine stats_indicator;
-    VerticalPane separator;
+    StatLine first_stats_indicator;
+    StatLine second_stats_indicator;
+    Pane separator;
     VerticalPane second_team_stats;
     Label second_team_victories;
     std::list<StatLine> first_team_stats_items;
