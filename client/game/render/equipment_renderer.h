@@ -36,6 +36,8 @@ private:
     HorizontalPane total_ammo_data;
     std::list<Pane> total_ammo_numbers;
 
+    void set_up_bomb();
+
     void render_number(int ammo, std::list<Pane>& list);
     void render_separator();
     void render_ammo(Shared<RenderedPlayer> player);

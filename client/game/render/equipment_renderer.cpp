@@ -16,6 +16,15 @@
 #include "utils/pane_scalator.h"
 #include "utils/number_texture_slicer.h"
 
+void View::EquipmentRenderer::set_up_bomb() {
+    auto bomb_texture = asset_manager->get_texture(
+        Model::EnumTranslator::get_hud_texture_from_weapon(Model::WeaponID::BOMB)
+    );
+    bomb_slot.set_texture(bomb_texture);
+    bomb_slot.set_size(bomb_texture->GetSize());
+    View::PaneScalator::scalate_height_with_aspect_ratio(&bomb_slot, 25);
+}
+
 void View::EquipmentRenderer::render_number(int ammo, std::list<View::Pane>& list) {
     auto slices = View::NumberTextureSlicer::get_hud_number(ammo);
     auto numbers_texture = asset_manager->get_texture(Model::TextureID::HUD_NUMS);
@@ -61,7 +70,6 @@ void View::EquipmentRenderer::render_ammo(Shared<RenderedPlayer> player) {
 void View::EquipmentRenderer::render_weapon(Shared<View::RenderedPlayer> player) {
     auto weapon = player->get_current_weapon();
     Model::WeaponID weapon_id = weapon->get_weapon_id();
-    if (weapon_id == Model::WeaponID::BOMB) return;
     auto weapon_texture = asset_manager->get_texture(
         Model::EnumTranslator::get_hud_texture_from_weapon(weapon_id)
     );
@@ -69,6 +77,8 @@ void View::EquipmentRenderer::render_weapon(Shared<View::RenderedPlayer> player)
     current_weapon_slot.set_size(weapon_texture->GetSize());
     current_weapon_slot.set_draw_texture(true);
     View::PaneScalator::scalate_height_with_aspect_ratio(&current_weapon_slot, 15);
+    if (weapon_id == Model::WeaponID::BOMB)
+        View::PaneScalator::scalate_height_with_aspect_ratio(&current_weapon_slot, 25);
 
     loaded_ammo_data.clear_children();
     total_ammo_data.clear_children();
@@ -85,14 +95,10 @@ void View::EquipmentRenderer::render_weapon(Shared<View::RenderedPlayer> player)
 void View::EquipmentRenderer::render_bomb(Shared<RenderedPlayer> player) {
     auto weapon = player->get_current_weapon();
     Model::WeaponID weapon_id = weapon->get_weapon_id();
-    if (weapon_id == Model::WeaponID::BOMB) return;
-
-    auto bomb_texture = asset_manager->get_texture(
-        Model::EnumTranslator::get_hud_texture_from_weapon(Model::WeaponID::BOMB)
-    );
-    bomb_slot.set_texture(bomb_texture);
-    bomb_slot.set_size(bomb_texture->GetSize());
-    View::PaneScalator::scalate_height_with_aspect_ratio(&bomb_slot, 20);
+    if (weapon_id == Model::WeaponID::BOMB)
+        bomb_slot.set_draw_texture(false);
+    else
+        bomb_slot.set_draw_texture(true);
 }
 
 View::EquipmentRenderer::EquipmentRenderer(Weak<Controller::GameController> controller,
@@ -113,9 +119,8 @@ View::EquipmentRenderer::EquipmentRenderer(Weak<Controller::GameController> cont
     items.set_fit_to_children(true);
     items.set_vertical_alignment(1.0f);
     items.set_horizontal_alignment(0.0f);
-    // items.add_child(&bomb_slot);
+    items.add_child(&bomb_slot);
     items.add_child(&current_weapon_data);
-    items.set_position(SDL2pp::Point(0, renderer->GetLogicalHeight() - 60));
 
     current_weapon_data.set_fit_to_children(true);
     current_weapon_data.add_child(&current_weapon_slot);
@@ -132,10 +137,17 @@ View::EquipmentRenderer::EquipmentRenderer(Weak<Controller::GameController> cont
 
     loaded_ammo_data.set_fit_to_children(true);
     total_ammo_data.set_fit_to_children(true);
+
+    set_up_bomb();
 }
 
 void View::EquipmentRenderer::render(const Model::GameState& game_state, uint8_t) {
+    items.set_position(SDL2pp::Point(0, viewport->get_height() - 60));
     auto player = game_state.get_reference_player();
     if (!player) return;
-    render_weapon(player);
+        render_weapon(player);
+    if (player->get_has_bomb()) {
+        std::cout << "BOMB\n";
+        render_bomb(player);
+    }
 }

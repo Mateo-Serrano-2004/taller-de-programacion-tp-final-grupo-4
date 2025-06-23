@@ -47,7 +47,7 @@ void Model::EnumTranslator::build_weapons_to_hud_textures() {
                                {Model::WeaponID::AWP, Model::TextureID::HUD_AWP},
                                {Model::WeaponID::M3, Model::TextureID::HUD_M3},
                                {Model::WeaponID::KNIFE, Model::TextureID::HUD_KNIFE},
-                               {Model::WeaponID::BOMB, Model::TextureID::NO_TEXTURE},
+                               {Model::WeaponID::BOMB, Model::TextureID::SPRITE_BOMB},
                                {Model::WeaponID::EMPTY, Model::TextureID::NO_TEXTURE}};
 }
 
