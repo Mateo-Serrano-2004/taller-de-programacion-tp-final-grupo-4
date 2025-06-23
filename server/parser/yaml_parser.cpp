@@ -92,7 +92,6 @@ void YamlParser::parseGameConfigYaml(const std::string& yamlGameConfigPath) {
 
     gameConfig.display.width = config["display"]["width"].as<int>();
     gameConfig.display.height = config["display"]["height"].as<int>();
-    gameConfig.display.fps = config["display"]["fps"].as<uint8_t>();
 }
 
 std::vector<std::vector<std::string>> YamlParser::getTileMatrix() const { return tileMatrix; }

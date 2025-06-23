@@ -4,7 +4,6 @@
 #include <map>
 #include <string>
 #include <vector>
-#include <cstdint>
 
 #include <yaml-cpp/yaml.h>
 
@@ -65,7 +64,6 @@ struct FovConfig {
 struct DisplayConfig {
     int width;
     int height;
-    uint8_t fps;
 };
 
 struct ConfigData {
