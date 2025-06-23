@@ -1,0 +1,622 @@
+map:
+  minWidth: 58
+  maxWidth: 68
+  minHeight: 51
+  maxHeight: 64
+tiles:
+  - x: 58
+    y: 52
+    name: box2.png
+    type: Boxes
+  - x: 58
+    y: 53
+    name: box2.png
+    type: Boxes
+  - x: 58
+    y: 54
+    name: box2.png
+    type: Boxes
+  - x: 58
+    y: 55
+    name: box2.png
+    type: Boxes
+  - x: 58
+    y: 56
+    name: box2.png
+    type: Boxes
+  - x: 58
+    y: 57
+    name: box2.png
+    type: Boxes
+  - x: 58
+    y: 58
+    name: box2.png
+    type: Boxes
+  - x: 58
+    y: 59
+    name: box2.png
+    type: Boxes
+  - x: 58
+    y: 60
+    name: box2.png
+    type: Boxes
+  - x: 58
+    y: 61
+    name: box2.png
+    type: Boxes
+  - x: 58
+    y: 62
+    name: box2.png
+    type: Boxes
+  - x: 58
+    y: 63
+    name: box2.png
+    type: Boxes
+  - x: 58
+    y: 64
+    name: box2.png
+    type: Boxes
+  - x: 59
+    y: 64
+    name: box2.png
+    type: Boxes
+  - x: 60
+    y: 64
+    name: box2.png
+    type: Boxes
+  - x: 61
+    y: 64
+    name: box2.png
+    type: Boxes
+  - x: 62
+    y: 64
+    name: box2.png
+    type: Boxes
+  - x: 63
+    y: 64
+    name: box2.png
+    type: Boxes
+  - x: 64
+    y: 64
+    name: box2.png
+    type: Boxes
+  - x: 65
+    y: 64
+    name: box2.png
+    type: Boxes
+  - x: 66
+    y: 64
+    name: box2.png
+    type: Boxes
+  - x: 67
+    y: 64
+    name: box2.png
+    type: Boxes
+  - x: 68
+    y: 64
+    name: box2.png
+    type: Boxes
+  - x: 68
+    y: 63
+    name: box2.png
+    type: Boxes
+  - x: 68
+    y: 62
+    name: box2.png
+    type: Boxes
+  - x: 68
+    y: 61
+    name: box2.png
+    type: Boxes
+  - x: 68
+    y: 60
+    name: box2.png
+    type: Boxes
+  - x: 68
+    y: 59
+    name: box2.png
+    type: Boxes
+  - x: 68
+    y: 58
+    name: box2.png
+    type: Boxes
+  - x: 68
+    y: 57
+    name: box2.png
+    type: Boxes
+  - x: 68
+    y: 56
+    name: box2.png
+    type: Boxes
+  - x: 68
+    y: 55
+    name: box2.png
+    type: Boxes
+  - x: 68
+    y: 54
+    name: box2.png
+    type: Boxes
+  - x: 68
+    y: 53
+    name: box2.png
+    type: Boxes
+  - x: 68
+    y: 52
+    name: box2.png
+    type: Boxes
+  - x: 68
+    y: 51
+    name: box2.png
+    type: Boxes
+  - x: 67
+    y: 51
+    name: box2.png
+    type: Boxes
+  - x: 66
+    y: 51
+    name: box2.png
+    type: Boxes
+  - x: 65
+    y: 51
+    name: box2.png
+    type: Boxes
+  - x: 64
+    y: 51
+    name: box2.png
+    type: Boxes
+  - x: 63
+    y: 51
+    name: box2.png
+    type: Boxes
+  - x: 62
+    y: 51
+    name: box2.png
+    type: Boxes
+  - x: 61
+    y: 51
+    name: box2.png
+    type: Boxes
+  - x: 60
+    y: 51
+    name: box2.png
+    type: Boxes
+  - x: 59
+    y: 51
+    name: box2.png
+    type: Boxes
+  - x: 58
+    y: 51
+    name: box2.png
+    type: Boxes
+  - x: 61
+    y: 62
+    name: ct_spawn.png
+    type: Spawns
+  - x: 62
+    y: 62
+    name: ct_spawn.png
+    type: Spawns
+  - x: 63
+    y: 62
+    name: ct_spawn.png
+    type: Spawns
+  - x: 64
+    y: 62
+    name: ct_spawn.png
+    type: Spawns
+  - x: 65
+    y: 62
+    name: ct_spawn.png
+    type: Spawns
+  - x: 61
+    y: 53
+    name: tt_spawn.png
+    type: Spawns
+  - x: 62
+    y: 53
+    name: tt_spawn.png
+    type: Spawns
+  - x: 63
+    y: 53
+    name: tt_spawn.png
+    type: Spawns
+  - x: 64
+    y: 53
+    name: tt_spawn.png
+    type: Spawns
+  - x: 65
+    y: 53
+    name: tt_spawn.png
+    type: Spawns
+  - x: 65
+    y: 57
+    name: site_A.png
+    type: Sites
+  - x: 61
+    y: 58
+    name: box5.png
+    type: Boxes
+  - x: 65
+    y: 60
+    name: box5.png
+    type: Boxes
+  - x: 63
+    y: 56
+    name: box5.png
+    type: Boxes
+  - x: 60
+    y: 53
+    name: water3.png
+    type: Backgrounds
+  - x: 60
+    y: 56
+    name: water3.png
+    type: Backgrounds
+  - x: 60
+    y: 57
+    name: water3.png
+    type: Backgrounds
+  - x: 60
+    y: 58
+    name: water3.png
+    type: Backgrounds
+  - x: 60
+    y: 59
+    name: water3.png
+    type: Backgrounds
+  - x: 60
+    y: 62
+    name: water3.png
+    type: Backgrounds
+  - x: 60
+    y: 63
+    name: water3.png
+    type: Backgrounds
+  - x: 61
+    y: 63
+    name: water3.png
+    type: Backgrounds
+  - x: 62
+    y: 63
+    name: water3.png
+    type: Backgrounds
+  - x: 63
+    y: 63
+    name: water3.png
+    type: Backgrounds
+  - x: 64
+    y: 63
+    name: water3.png
+    type: Backgrounds
+  - x: 65
+    y: 63
+    name: water3.png
+    type: Backgrounds
+  - x: 66
+    y: 63
+    name: water3.png
+    type: Backgrounds
+  - x: 67
+    y: 63
+    name: water3.png
+    type: Backgrounds
+  - x: 67
+    y: 62
+    name: water3.png
+    type: Backgrounds
+  - x: 67
+    y: 61
+    name: water3.png
+    type: Backgrounds
+  - x: 67
+    y: 60
+    name: water3.png
+    type: Backgrounds
+  - x: 67
+    y: 59
+    name: water3.png
+    type: Backgrounds
+  - x: 67
+    y: 58
+    name: water3.png
+    type: Backgrounds
+  - x: 67
+    y: 57
+    name: water3.png
+    type: Backgrounds
+  - x: 67
+    y: 56
+    name: water3.png
+    type: Backgrounds
+  - x: 67
+    y: 55
+    name: water3.png
+    type: Backgrounds
+  - x: 67
+    y: 54
+    name: water3.png
+    type: Backgrounds
+  - x: 67
+    y: 53
+    name: water3.png
+    type: Backgrounds
+  - x: 67
+    y: 52
+    name: water3.png
+    type: Backgrounds
+  - x: 66
+    y: 52
+    name: water3.png
+    type: Backgrounds
+  - x: 65
+    y: 52
+    name: water3.png
+    type: Backgrounds
+  - x: 64
+    y: 52
+    name: water3.png
+    type: Backgrounds
+  - x: 63
+    y: 52
+    name: water3.png
+    type: Backgrounds
+  - x: 62
+    y: 52
+    name: water3.png
+    type: Backgrounds
+  - x: 61
+    y: 52
+    name: water3.png
+    type: Backgrounds
+  - x: 60
+    y: 52
+    name: water3.png
+    type: Backgrounds
+  - x: 59
+    y: 52
+    name: water3.png
+    type: Backgrounds
+  - x: 59
+    y: 53
+    name: water3.png
+    type: Backgrounds
+  - x: 59
+    y: 54
+    name: water3.png
+    type: Backgrounds
+  - x: 59
+    y: 55
+    name: water3.png
+    type: Backgrounds
+  - x: 59
+    y: 56
+    name: water3.png
+    type: Backgrounds
+  - x: 59
+    y: 57
+    name: water3.png
+    type: Backgrounds
+  - x: 59
+    y: 58
+    name: water3.png
+    type: Backgrounds
+  - x: 59
+    y: 59
+    name: water3.png
+    type: Backgrounds
+  - x: 59
+    y: 60
+    name: water3.png
+    type: Backgrounds
+  - x: 59
+    y: 62
+    name: water3.png
+    type: Backgrounds
+  - x: 59
+    y: 63
+    name: water3.png
+    type: Backgrounds
+  - x: 66
+    y: 62
+    name: water3.png
+    type: Backgrounds
+  - x: 66
+    y: 61
+    name: water3.png
+    type: Backgrounds
+  - x: 66
+    y: 60
+    name: water3.png
+    type: Backgrounds
+  - x: 66
+    y: 59
+    name: water3.png
+    type: Backgrounds
+  - x: 66
+    y: 58
+    name: water3.png
+    type: Backgrounds
+  - x: 66
+    y: 57
+    name: water3.png
+    type: Backgrounds
+  - x: 66
+    y: 55
+    name: water3.png
+    type: Backgrounds
+  - x: 66
+    y: 54
+    name: water3.png
+    type: Backgrounds
+  - x: 66
+    y: 53
+    name: water3.png
+    type: Backgrounds
+  - x: 64
+    y: 54
+    name: water3.png
+    type: Backgrounds
+  - x: 65
+    y: 54
+    name: water3.png
+    type: Backgrounds
+  - x: 65
+    y: 55
+    name: water3.png
+    type: Backgrounds
+  - x: 64
+    y: 55
+    name: water3.png
+    type: Backgrounds
+  - x: 63
+    y: 55
+    name: water3.png
+    type: Backgrounds
+  - x: 63
+    y: 54
+    name: water3.png
+    type: Backgrounds
+  - x: 62
+    y: 54
+    name: water3.png
+    type: Backgrounds
+  - x: 61
+    y: 54
+    name: water3.png
+    type: Backgrounds
+  - x: 60
+    y: 54
+    name: water3.png
+    type: Backgrounds
+  - x: 60
+    y: 55
+    name: water3.png
+    type: Backgrounds
+  - x: 62
+    y: 55
+    name: water3.png
+    type: Backgrounds
+  - x: 61
+    y: 55
+    name: water3.png
+    type: Backgrounds
+  - x: 61
+    y: 56
+    name: water3.png
+    type: Backgrounds
+  - x: 62
+    y: 56
+    name: water3.png
+    type: Backgrounds
+  - x: 65
+    y: 56
+    name: water3.png
+    type: Backgrounds
+  - x: 66
+    y: 56
+    name: water3.png
+    type: Backgrounds
+  - x: 64
+    y: 56
+    name: water3.png
+    type: Backgrounds
+  - x: 64
+    y: 57
+    name: water3.png
+    type: Backgrounds
+  - x: 64
+    y: 58
+    name: water3.png
+    type: Backgrounds
+  - x: 64
+    y: 59
+    name: water3.png
+    type: Backgrounds
+  - x: 64
+    y: 60
+    name: water3.png
+    type: Backgrounds
+  - x: 65
+    y: 61
+    name: water3.png
+    type: Backgrounds
+  - x: 64
+    y: 61
+    name: water3.png
+    type: Backgrounds
+  - x: 63
+    y: 61
+    name: water3.png
+    type: Backgrounds
+  - x: 62
+    y: 61
+    name: water3.png
+    type: Backgrounds
+  - x: 61
+    y: 61
+    name: water3.png
+    type: Backgrounds
+  - x: 59
+    y: 61
+    name: water3.png
+    type: Backgrounds
+  - x: 60
+    y: 61
+    name: water3.png
+    type: Backgrounds
+  - x: 60
+    y: 60
+    name: water3.png
+    type: Backgrounds
+  - x: 61
+    y: 60
+    name: water3.png
+    type: Backgrounds
+  - x: 61
+    y: 59
+    name: water3.png
+    type: Backgrounds
+  - x: 62
+    y: 59
+    name: water3.png
+    type: Backgrounds
+  - x: 62
+    y: 60
+    name: water3.png
+    type: Backgrounds
+  - x: 63
+    y: 60
+    name: water3.png
+    type: Backgrounds
+  - x: 63
+    y: 59
+    name: water3.png
+    type: Backgrounds
+  - x: 63
+    y: 58
+    name: water3.png
+    type: Backgrounds
+  - x: 63
+    y: 57
+    name: water3.png
+    type: Backgrounds
+  - x: 62
+    y: 58
+    name: water3.png
+    type: Backgrounds
+  - x: 62
+    y: 57
+    name: water3.png
+    type: Backgrounds
+  - x: 61
+    y: 57
+    name: water3.png
+    type: Backgrounds
+  - x: 65
+    y: 58
+    name: water3.png
+    type: Backgrounds
+  - x: 65
+    y: 59
+    name: water3.png
+    type: Backgrounds
