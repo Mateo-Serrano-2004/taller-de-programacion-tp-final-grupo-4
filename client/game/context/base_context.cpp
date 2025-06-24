@@ -14,7 +14,7 @@ Context::BaseContext::BaseContext(const std::string& name,
 
 const std::string& Context::BaseContext::get_name() const { return name; }
 
-void Context::BaseContext::notify_event(Shared<Model::Event> event) {}
+void Context::BaseContext::notify_event(Shared<Model::Event>) {}
 
 void Context::BaseContext::update(uint8_t frames) {
     renderer->Clear();

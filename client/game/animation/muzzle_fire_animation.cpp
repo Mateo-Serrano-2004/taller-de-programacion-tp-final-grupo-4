@@ -27,8 +27,9 @@ int View::MuzzleFireAnimation::get_fire_distance() {
             return 16;
         case Model::WeaponID::AWP:
             return 25;
+        default:
+            return 0;
     }
-    return 0;
 }
 
 int View::MuzzleFireAnimation::get_frame_size() { return 32; }
