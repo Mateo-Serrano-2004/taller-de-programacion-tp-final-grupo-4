@@ -29,13 +29,13 @@ std::vector<SDL2pp::Rect> View::HUDRenderer::get_time_slices(int seconds_left) {
 
     auto time_textures = View::NumberTextureSlicer::get_hud_number(minutes);
     if (time_textures.size() < 2)
-        time_textures = { SDL2pp::Rect(0, 0, 44, 66), time_textures.front() };
+        time_textures = {SDL2pp::Rect(0, 0, 44, 66), time_textures.front()};
 
     auto colon = View::NumberTextureSlicer::get_colon();
 
     auto seconds_textures = View::NumberTextureSlicer::get_hud_number(seconds);
     if (seconds_textures.size() < 2)
-        seconds_textures = { SDL2pp::Rect(0, 0, 44, 66), seconds_textures.front() };
+        seconds_textures = {SDL2pp::Rect(0, 0, 44, 66), seconds_textures.front()};
 
     std::vector<SDL2pp::Rect> result;
     result.reserve(time_textures.size() + 1 + seconds_textures.size());

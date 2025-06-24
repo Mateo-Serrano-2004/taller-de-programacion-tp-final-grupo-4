@@ -28,7 +28,7 @@ Shared<FullWeapon> WeaponFactory::create(Model::WeaponID id) {
 
         case Model::WeaponID::BOMB:
             return make_shared<Bomb>();
-            
+
         default:
             return nullptr;
     }
