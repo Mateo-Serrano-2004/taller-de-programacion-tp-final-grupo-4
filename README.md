@@ -63,10 +63,12 @@ cs2d_server <puerto>
 ```
 
 **Comandos del servidor:**
+
 - Presionar `q` para cerrar el servidor
 - El servidor cargará automáticamente los mapas disponibles
 
 **Ejemplo:**
+
 ```bash
 cs2d_server 8080
 ```
@@ -82,7 +84,9 @@ cs2d_client
 O hacerle doble click al archivo.
 
 #### Pantalla de Conexión
+
 La pantalla de bienvenida solicita:
+
 - **Username**: Nombre del jugador
 - **IP**: Dirección del servidor
 - **Puerto**: Puerto del servidor
@@ -90,19 +94,24 @@ La pantalla de bienvenida solicita:
 <img src="docs/pics/cliente1.png" alt="Pantalla de conexión" width="700">
 
 #### Lobby Principal
+
 Una vez conectado, puedes elegir entre crear una nueva partida o unirte a una existente.
 
 <img src="docs/pics/cliente2.png" alt="Lobby principal" width="700">
 
 #### Crear Partida
+
 Al crear una partida puedes:
+
 - Seleccionar entre todos los mapas disponibles
 - Asignar un nombre personalizado a la partida
 
 <img src="docs/pics/cliente3.png" alt="Crear partida" width="700">
 
 #### Unirse a Partida
+
 Para unirte a una partida existente:
+
 - Selecciona la partida de la lista disponible
 - El sistema te asignará automáticamente un equipo (CT/TT)
 
@@ -119,11 +128,13 @@ cs2d_editor
 O hacerle doble click al archivo.
 
 #### Pantalla Principal
+
 Al iniciar el editor verás la ventana principal:
 
 <img src="docs/pics/editor1.png" alt="Pantalla principal del editor" width="700">
 
 #### Interfaz del Editor
+
 La interfaz del editor incluye una grilla de edición y panel de assets:
 
 <img src="docs/pics/editor2.png" alt="Interfaz del editor" width="700">
@@ -142,7 +153,7 @@ La interfaz del editor incluye una grilla de edición y panel de assets:
 
 ## Estructura del Proyecto
 
-```
+```bash
 Counter-Strike-2D/
 ├── assets/          # Recursos gráficos y de sonido
 ├── client/          # Código del cliente Qt y SDL
