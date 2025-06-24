@@ -8,7 +8,7 @@ class GameState;
 namespace View {
 class SoundEffectPlayer {
 private:
-    void play_shots(const Model::GameState& game_state);
+    void play_tracked_sounds(const Model::GameState& game_state);
     void play_radio_message(const Model::GameState& game_state);
     void play_bomb_state(const Model::GameState& game_state);
     void play_explosion(const Model::GameState& game_state);

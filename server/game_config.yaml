@@ -1,9 +1,9 @@
 game:
-  rounds: 1
+  rounds: 2
   rounds_to_win: 6
   rounds_per_side: 5
 
-  buy_time: 1
+  buy_time: 5
   warmup_time: 10
   post_round_time: 5
   round_time: 120
@@ -52,7 +52,7 @@ weapons:
     initial_ammo: 30
     damage_per_bullet: 20
     precision: 0.7
-    cost: 1300
+    cost: 1000
     range: 6
     bullets_per_shot: 3
     fire_rate: 0.2
