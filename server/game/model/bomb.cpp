@@ -32,8 +32,8 @@ std::optional<WeaponShotInfo> Bomb::shoot(uint16_t ticks_to_process) {
     if (planting_ticks >= required_ticks_to_plant) {
         planted = true;
 
-        return WeaponShotInfo(0,     // no balas
-                              0.0f,  // sin daño
+        return WeaponShotInfo(0,
+                              0.0f,
                               0.0f, 0.0f, 0.0f, 0.0f, DamageMode::CONSTANT, 0.0f, 0.0f, 1.0f);
     }
 

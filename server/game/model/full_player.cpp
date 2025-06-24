@@ -1,7 +1,6 @@
 #include "full_player.h"
 
 #include <cstdint>
-#include <iostream>
 #include <memory>
 #include <string>
 #include <utility>
@@ -196,8 +195,6 @@ std::optional<ShotInfo> FullPlayer::shoot(uint16_t frames_to_process) {
 void FullPlayer::take_damage(uint8_t damage) {
     if (!is_alive())
         return;
-    std::cout << "player id: " << static_cast<int>(get_id()) << "daño " << static_cast<int>(damage)
-              << std::endl;
     if (health <= damage) {
         health = 0;
         alive = false;

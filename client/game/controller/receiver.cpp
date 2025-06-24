@@ -1,7 +1,6 @@
 #include "receiver.h"
 
 #include <exception>
-#include <iostream>
 #include <memory>
 #include <utility>
 #include <variant>
@@ -72,19 +71,15 @@ void Controller::Receiver::run() {
         try {
             receive_server_info();
         } catch (const std::exception& e) {
-            std::cerr << "Receiver error: " << e.what() << "\n";
             keep_running = false;
             try {
                 controller.lock()->push_event(make_shared<Model::EndOfGameEvent>());
             } catch (const std::exception&) {}
         }
     }
-    std::cout << "Finishing receiver\n";
 }
 
 Controller::Receiver::~Receiver() {
     keep_running = false;
     join();
-
-    std::cout << "RECEIVER DESTROYED\n";
 }

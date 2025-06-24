@@ -1,7 +1,6 @@
 #include "equipment_renderer.h"
 
 #include <cstdint>
-#include <iostream>
 
 #include <SDL2pp/Rect.hh>
 #include <SDL2pp/Renderer.hh>

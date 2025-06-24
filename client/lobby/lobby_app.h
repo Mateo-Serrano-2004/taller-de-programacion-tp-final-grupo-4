@@ -20,6 +20,6 @@ public:
 
     ~LobbyApp() override = default;
 };
-};  // namespace App
+};
 
 #endif  // CLIENT_LOBBY_LOBBY_APP_H

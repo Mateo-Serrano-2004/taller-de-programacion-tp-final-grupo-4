@@ -1,7 +1,6 @@
 #include "in_game_event_handler_strategy.h"
 
 #include <cmath>
-#include <iostream>
 #include <memory>
 #include <string>
 #include <utility>

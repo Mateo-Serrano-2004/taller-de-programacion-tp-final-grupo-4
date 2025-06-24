@@ -1,7 +1,6 @@
 #include "game_state_manager.h"
 
 #include <algorithm>
-#include <iostream>
 #include <list>
 #include <map>
 #include <memory>
@@ -52,7 +51,6 @@ void Controller::GameStateManager::load_bomb_explosion(const DTO::GameStateDTO& 
     if (dto.round.state == RoundState::PostRound && dto.round.bomb_planted &&
         !dto.round.bomb_defused && game_state->bomb_position.has_value() &&
         game_state->round_state == RoundState::Active) {
-        std::cout << "BOMB TIME\n";
         game_state->bomb_explosion = make_shared<View::BombExplosionAnimation>(
                 controller, game_state->bomb_position.value());
         game_state->bomb_explosion_sound =

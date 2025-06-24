@@ -2,7 +2,6 @@
 
 #include <exception>
 #include <functional>
-#include <iostream>
 #include <mutex>
 #include <optional>
 

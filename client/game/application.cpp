@@ -2,7 +2,6 @@
 
 #include <cstdint>
 #include <exception>
-#include <iostream>
 
 #include <SDL2/SDL.h>
 
@@ -19,7 +18,6 @@ void App::Application::launch() {
             context_manager->update_current_context(frames);
             controller->handle_events();
         } catch (const ClosedGameException& e) {
-            std::cout << "Closing game: " << e.what() << std::endl;
             keep_running = false;
         }
     }

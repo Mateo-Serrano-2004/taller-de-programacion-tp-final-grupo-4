@@ -1,7 +1,6 @@
 #include "round.h"
 
 #include <algorithm>
-#include <iostream>
 #include <vector>
 
 Round::Round(int ct_alive, int tt_alive, int fps):
@@ -164,7 +163,7 @@ bool Round::notify_bomb_is_being_defused(uint8_t player_id) {
     if (!bomb_planted || bomb_defused || !is_active())
         return false;
     bomb_being_defused = true;
-    player_defusing_bomb = player_id;  // ojo int y uint
+    player_defusing_bomb = player_id;
     return bomb_being_defused;
 }
 
@@ -173,7 +172,7 @@ void Round::notify_bomb_is_not_longer_being_defused() {
         return;
     defusing_ticks_remaining = defusing_ticks;
     bomb_being_defused = false;
-    player_defusing_bomb = -1;  // ojo int y uint
+    player_defusing_bomb = -1;
 }
 
 void Round::notify_bomb_exploded() {

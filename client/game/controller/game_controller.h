@@ -1,7 +1,6 @@
 #ifndef CLIENT_GAME_CONTROLLER_GAME_CONTROLLER_H
 #define CLIENT_GAME_CONTROLLER_GAME_CONTROLLER_H
 
-#include <iostream>
 #include <map>
 
 #include "common/definitions.h"
@@ -69,7 +68,7 @@ public:
     GameController(GameController&&) = default;
     GameController& operator=(GameController&&) = default;
 
-    ~GameController() override { std::cout << "Destroying controller\n"; }
+    ~GameController() override = default;
 };
 };  // namespace Controller
 

@@ -26,7 +26,7 @@ void GameLogic::buy_ammo(FullPlayer& player, Model::SlotID slot_id, const Round&
     if (!player.is_alive())
         return;
     if (!player.has_type_weapon(slot_id))
-        return;  // no te vendo si no tenes esa arma
+        return;
 
     shop.process_ammo_purchase(player, slot_id);
 }
@@ -101,7 +101,6 @@ Physics::Vector2D GameLogic::find_nearest_free_tile_around(
         }
     }
 
-    // como ulrtimo recurso lo dropea en la pos del player y bueno
     return pos;
 }
 
@@ -132,7 +131,7 @@ void GameLogic::start_defusing_bomb(FullPlayer& player, const Round& round) cons
     if (!player.is_alive())
         return;
     if (!round.bomb_is_planted())
-        return;  // tiene sentido
+        return;
     if (player.get_team() != Model::TeamID::CT)
         return;
     if (!is_in_bomb_zone(player.get_position(), round.get_bomb_position()))
@@ -152,10 +151,8 @@ void GameLogic::process_reloading(std::map<uint8_t, FullPlayer>& players, const 
     if (!round.is_active())
         return;
     for (auto& [id, player]: players) {
-        if (!player.is_alive()) {
-            // player.stop_reloading_weapon();  // el player cuando muere debe hacer esto
+        if (!player.is_alive())
             continue;
-        }
         player.reload(frames_to_process);
     }
 }
@@ -197,7 +194,7 @@ void GameLogic::process_defusing(std::map<uint8_t, FullPlayer>& players, Round& 
             if (!is_in_bomb_zone(player.get_position(), round.get_bomb_position())) {
                 player.stop_defusing_bomb();
                 continue;
-            }  // ojo que deberia dejar de defusear si no esta plantada?
+            }
             if (!player.is_defusing())
                 continue;
 
@@ -216,10 +213,9 @@ void GameLogic::process_shooting(std::map<uint8_t, FullPlayer>& players, Round& 
         if (!player.is_alive())
             continue;
 
-        // la idea es vovler a chequear que tiene que seguir en la zona de plantado.
         if (player.has_bomb_equipped()) {
             if (!is_near_bomb_site(player.get_position(), bomb_sites)) {
-                player.stop_using_weapon();  // si se fue para que reinicie
+                player.stop_using_weapon();
                 continue;
             }
         }

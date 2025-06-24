@@ -1,7 +1,5 @@
 #include "sound_effect_player.h"
 
-#include <iostream>
-
 #include "common/definitions.h"
 #include "model/game_state.h"
 #include "model/rendered_player.h"

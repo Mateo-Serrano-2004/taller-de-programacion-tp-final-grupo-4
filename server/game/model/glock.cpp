@@ -45,16 +45,3 @@ std::optional<WeaponShotInfo> Glock::shoot(uint16_t ticks_to_process) {
                           DamageMode::LINEAR_FALLOFF, falloff_factor, close_range_threshold,
                           close_range_multiplier);
 }
-
-
-/* viejo
-bullets_fired  1,
-base_damage  30.0f,
-min_damage  10.0f,
-max_range  200.0f,
-precision  0.9f,
-dispersion  1.0f,
-damage_mode  DamageMode::LINEAR_FALLOFF,
-falloff_factor  0.05f,
-close_range_threshold  0.0f,
-close_range_multiplier  1.0f*/

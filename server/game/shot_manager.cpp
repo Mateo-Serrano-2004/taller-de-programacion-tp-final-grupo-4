@@ -131,10 +131,6 @@ std::vector<Impact> ShotManager::calculate_shot_impacts(
         Physics::Vector2D end = calculate_bullet_endpoint(origin, base_angle, winfo.dispersion,
                                                           winfo.max_range, winfo.precision);
 
-        std::cout << "\n--- DISPARO " << (i + 1) << " ---\n";
-        std::cout << "  Disparo sale desde: (" << origin.get_x() << ", " << origin.get_y() << ")\n";
-        std::cout << "  y puede llegar hasta: (" << end.get_x() << ", " << end.get_y() << ")\n";
-
         float closest_dist = std::numeric_limits<float>::max();
         int8_t target_id = 0;
         bool found_target = false;
@@ -142,10 +138,9 @@ std::vector<Impact> ShotManager::calculate_shot_impacts(
         for (const auto& [id, player]: players) {
             if (id == shot_info.shooter_id || !player.is_alive())
                 continue;
-            if (!does_bullet_hit_player(origin, end, player)) {
-                std::cout << "DISPARO " << (i + 1) << " NO IMPACTÓ\n";
+
+            if (!does_bullet_hit_player(origin, end, player))
                 continue;
-            }
 
             float dist_to_player = origin.distance_to(player.get_position());
 
@@ -157,7 +152,6 @@ std::vector<Impact> ShotManager::calculate_shot_impacts(
         }
 
         if (found_target && !collidable_blocking_bullet(origin, end, closest_dist, map_matrix)) {
-            std::cout << "DISPARO " << (i + 1) << " agregado para daño\n";
             float damage = calculate_damage(winfo, closest_dist);
             impacts.emplace_back(shot_info.shooter_id, target_id, damage);
         }

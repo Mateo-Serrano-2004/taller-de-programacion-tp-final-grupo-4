@@ -1,6 +1,5 @@
 #include "cs2d_app.h"
 
-#include <iostream>
 #include <memory>
 #include <string>
 #include <utility>

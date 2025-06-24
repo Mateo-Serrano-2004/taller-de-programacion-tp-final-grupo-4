@@ -1,7 +1,6 @@
 #include "game_controller.h"
 
 #include <atomic>
-#include <iostream>
 #include <memory>
 #include <utility>
 
@@ -115,15 +114,9 @@ void Controller::GameController::process_event(Shared<Model::Event> event) {
     }
 
     if (event_type == Model::EventType::QUIT) {
-        std::cout << "Received a QUIT event\n";
         throw ClosedAppException("Closed app");
     } else if (event_type == Model::EventType::LEAVE_GAME) {
-        std::cout << "Received a LEAVE_GAME event\n";
         throw ClosedGameException("Closed game");
-    }
-
-    if (event_type == Model::EventType::END_OF_GAME) {
-        std::cout << "Received a END_OF_GAME event\n";
     }
 }
 

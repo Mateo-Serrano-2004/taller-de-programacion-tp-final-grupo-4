@@ -1,7 +1,6 @@
 #include "server_protocol.h"
 
 #include <exception>
-#include <iostream>
 #include <mutex>
 #include <variant>
 

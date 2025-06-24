@@ -38,7 +38,6 @@ private:
     std::vector<Physics::Vector2D> tt_spawn_positions;
     std::vector<Physics::Vector2D> bomb_sites;
 
-    // Pre-initialized attributes
     const int GAME_FPS = 60;
     uint8_t max_rounds;
     uint8_t rounds_per_side;
@@ -52,7 +51,6 @@ private:
     uint8_t tt_rounds_won = 0;
     uint8_t rounds_played = 0;
 
-    // Default constructible attributes
     GameQueue game_queue;
     std::map<short_id_t, FullPlayer> players;
     std::map<short_id_t, ClientQueue*> client_queues;
@@ -60,7 +58,6 @@ private:
     GameLogic gamelogic;
     Round round;
 
-    // Non-default constructible attributes
     std::string party_name;
     std::string map_name;
     MapMatrix map_matrix;
@@ -99,11 +96,10 @@ private:
     void process_frames(uint16_t frames_to_process = 1);
     void update_game_with_events();
     void broadcast_game_state();
-    void tick(uint16_t frames_to_process);  // TODO: Add current_tick
+    void tick(uint16_t frames_to_process);
 
     void close();
 
-    // Threads cannot be either copied or moved
     Game(const Game&) = delete;
     Game& operator=(const Game&) = delete;
     Game(Game&&) = delete;

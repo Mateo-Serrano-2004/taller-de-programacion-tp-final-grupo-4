@@ -1,7 +1,7 @@
 #ifndef SERVER_GAME_MODEL_FULL_WEAPON_H
 #define SERVER_GAME_MODEL_FULL_WEAPON_H
+
 #include <algorithm>
-#include <iostream>
 #include <optional>
 
 #include "common/model/weapon.h"

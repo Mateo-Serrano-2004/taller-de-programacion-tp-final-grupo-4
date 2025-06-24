@@ -2,7 +2,6 @@
 #define ROUND_H
 
 #include <cstdint>
-#include <iostream>
 #include <vector>
 
 #include "common/DTO/round_dto.h"

@@ -53,50 +53,5 @@ install-gtest:
 
 install: install-compile-tools install-sdl2 install-qt5 install-yaml install-gtest
 
-test_shoot:
-	mkdir -p build
-	g++ -std=c++20 -I. -DDEBUG_MODE \
-	    test/test.cpp \
-		server/parser/yaml_parser.cpp \
-		server/parser/yaml_addresser.cpp \
-	    common/DTO/game_state_dto.cpp \
-	    common/DTO/player_dto.cpp \
-		common/DTO/weapon_dto.cpp \
-		common/DTO/round_dto.cpp \
-		common/DTO/drop_weapon_dto.cpp \
-	    common/model/vector_2d.cpp \
-	    common/model/player.cpp \
-		common/model/weapon.cpp \
-	    common/periodic_clock.cpp \
-	    server/game/model/full_player.cpp \
-		server/game/model/full_weapon.cpp \
-		server/game/model/knife.cpp \
-		server/game/model/glock.cpp \
-		server/game/model/m3.cpp \
-		server/game/model/ak47.cpp \
-		server/game/model/awp.cpp \
-		server/game/model/bomb.cpp \
-		server/game/model/dropped_weapon.cpp \
-	    server/game/game.cpp \
-	    server/game/round.cpp \
-		server/game/shot_manager.cpp \
-		server/game/movement_system.cpp \
-		server/game/weapon_factory.cpp \
-		server/game/game_logic.cpp \
-		server/game/shop.cpp \
-	    -o build/test_shoot \
-	    -lpthread \
-		-lyaml-cpp
-
-
-test_round:
-	mkdir -p build
-	g++ -std=c++20 -I. \
-	    test/test_round.cpp \
-		server/game/round.cpp \
-		common/DTO/round_dto.cpp \
-	    common/model/vector_2d.cpp \
-	    -o build/test_round \
-
 clean:
 	rm -Rf ./build
