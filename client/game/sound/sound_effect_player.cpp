@@ -8,15 +8,15 @@
 
 #include "tracking_sound_effect.h"
 
-void View::SoundEffectPlayer::play_shots(const Model::GameState& game_state) {
-    for (auto& shot: game_state.sound_effects) {
-        auto player = game_state.get_player_by_id(shot->get_player_id());
+void View::SoundEffectPlayer::play_tracked_sounds(const Model::GameState& game_state) {
+    for (auto& sound: game_state.sound_effects) {
+        auto player = game_state.get_player_by_id(sound->get_player_id());
         if (!player) {
-            shot->end();
+            sound->end();
             continue;
         }
-        shot->set_player(player);
-        shot->play();
+        sound->set_player(player);
+        sound->play();
     }
 }
 
@@ -48,7 +48,7 @@ void View::SoundEffectPlayer::play_winning_sound(const Model::GameState& game_st
 }
 
 void View::SoundEffectPlayer::play(const Model::GameState& game_state) {
-    play_shots(game_state);
+    play_tracked_sounds(game_state);
     play_explosion(game_state);
     play_radio_message(game_state);
     play_bomb_state(game_state);

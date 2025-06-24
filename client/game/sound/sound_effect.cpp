@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 
 #include <SDL2pp/Chunk.hh>
 #include <SDL2pp/Mixer.hh>
@@ -44,6 +45,8 @@ void View::SoundEffect::play() {
     } else {
         channel = -1;
     }
+    if (channel != -1)
+        std::cout << "VOLUME: " << (int) mixer->GetVolume(channel) << std::endl;
 }
 
 void View::SoundEffect::end() {

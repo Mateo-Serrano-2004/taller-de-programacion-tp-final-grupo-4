@@ -201,12 +201,11 @@ void FullPlayer::take_damage(uint8_t damage) {
     if (health <= damage) {
         health = 0;
         alive = false;
-        has_hit = true;
         add_death();
     } else {
         health -= damage;
-        has_hit = true;
     }
+    has_hit = true;
 }
 
 void FullPlayer::add_money(uint16_t money_to_be_added) { money += money_to_be_added; }
