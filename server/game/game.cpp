@@ -223,6 +223,7 @@ void Game::process_frames(uint16_t frames_to_process) {
     round.update(frames_to_process);
     gamelogic.process_reloading(players, round, frames_to_process);
     gamelogic.process_shooting(players, round, frames_to_process, bomb_sites, map_matrix);
+    gamelogic.process_bomb_explosion(players, round);
 
     if (round.ended()) {
         clear_game_queue();
