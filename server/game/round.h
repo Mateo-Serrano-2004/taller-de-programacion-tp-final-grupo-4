@@ -67,6 +67,7 @@ public:
     void notify_bomb_planted(Physics::Vector2D position);
     bool notify_bomb_is_being_defused(uint8_t player_id);
     void notify_bomb_is_not_longer_being_defused();
+    void notify_bomb_exploded();
     bool bomb_is_being_defused() const;
     int player_id_defusing_bomb() const;
 

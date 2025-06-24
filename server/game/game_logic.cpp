@@ -157,9 +157,9 @@ void GameLogic::process_defusing(std::map<uint8_t, FullPlayer>& players, Round& 
     if (round.bomb_is_being_defused()) {
         if (round.player_id_defusing_bomb() == -1) {
             return;
-        }  // Solo chequeo seguridad, si esta siendo defuseada te da el int
+        } 
 
-        auto it = players.find(round.player_id_defusing_bomb());  // parseo int a uint
+        auto it = players.find(round.player_id_defusing_bomb());
         if (it == players.end()) {
             round.notify_bomb_is_not_longer_being_defused();
             return;
@@ -228,6 +228,23 @@ void GameLogic::process_shooting(std::map<uint8_t, FullPlayer>& players, Round& 
                 ShotManager::calculate_shot_impacts(shot_info.value(), players, map_matrix);
         if (!impacts.empty()) {
             apply_impacts(impacts, round, players);
+        }
+    }
+}
+
+void GameLogic::process_bomb_explosion(std::map<uint8_t, FullPlayer>& players, Round& round) const {
+    if (round.get_state() != RoundState::PostRound || round.get_winner_team() != Model::TeamID::TT)
+        return;
+
+    for (auto& [id, player]: players) {
+        if (player.is_alive()) {
+            player.take_damage(100);
+            round.notify_on_one_player_less(player.get_team());
+            
+            auto drops = player.drop_weapons();
+            for (auto& drop : drops) {
+                round.add_dropped_weapon(drop);
+            }
         }
     }
 }

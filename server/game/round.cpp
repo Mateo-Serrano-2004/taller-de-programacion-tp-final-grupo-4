@@ -86,6 +86,16 @@ void Round::update(int frames_to_process) {
 
     active_ticks_remaining = 0;
 
+    if (bomb_planted && !bomb_defused && !bomb_being_defused && is_active()) {
+        bomb_defused = false;
+        bomb_being_defused = false;
+        player_defusing_bomb = -1;
+        winner_team = Model::TeamID::TT;
+        state = RoundState::PostRound;
+        active_ticks_remaining = ticks_for_post_round_phase;
+        return;
+    }
+
     if (state == RoundState::Warmup) {
         update_if_finished_warmup();
     } else if (state == RoundState::Buying) {
@@ -163,6 +173,18 @@ void Round::notify_bomb_is_not_longer_being_defused() {
     defusing_ticks_remaining = defusing_ticks;
     bomb_being_defused = false;
     player_defusing_bomb = -1;  // ojo int y uint
+}
+
+void Round::notify_bomb_exploded() {
+    if (!bomb_planted || bomb_defused || !is_active())
+        return;
+    
+    bomb_defused = false;
+    bomb_being_defused = false;
+    player_defusing_bomb = -1;
+    winner_team = Model::TeamID::TT;
+    state = RoundState::PostRound;
+    active_ticks_remaining = ticks_for_post_round_phase;
 }
 
 int Round::player_id_defusing_bomb() const {

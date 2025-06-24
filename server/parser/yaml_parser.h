@@ -59,6 +59,7 @@ struct WeaponConfig {
 struct FovConfig {
     int angle;
     int ratio;
+    int opacity;
 };
 
 struct DisplayConfig {

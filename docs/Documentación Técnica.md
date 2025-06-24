@@ -23,53 +23,65 @@ Este documento describe la arquitectura y estructura técnica del proyecto Count
 ## Componentes Principales del Servidor
 
 ### 1. Server (Hilo Principal)
+
 **Responsabilidad**: Punto de entrada del servidor, inicialización y gestión del ciclo de vida
 
 **Funciones principales**:
+
 - Carga de mapas disponibles desde el directorio `maps/`
 - Creación del socket de escucha
 - Inicialización del `GameManager` y `Acceptor`
 - Control del ciclo de vida del servidor
 
 ### 2. Acceptor (Hilo de Aceptación)
+
 **Responsabilidad**: Aceptar nuevas conexiones de clientes
 
 **Funciones principales**:
+
 - Escucha en el socket principal para nuevas conexiones
 - Crea instancias de `ClientHandler` para cada cliente conectado
 - Gestiona la limpieza de clientes desconectados
 - Mantiene una lista de clientes activos
 
 ### 3. ClientHandler (Hilo por Cliente)
+
 **Responsabilidad**: Manejo de comunicación con un cliente específico
 
 **Funciones principales**:
+
 - Recepción y procesamiento de eventos del cliente
 - Gestión de eventos de lobby (crear/unión de juegos, listar juegos)
 - Delegación de eventos de juego al `GameManager`
 - Coordinación con `ClientHandlerSender`
 
 ### 4. ClientHandlerSender (Hilo de Envío)
+
 **Responsabilidad**: Envío de datos al cliente
 
 **Funciones principales**:
+
 - Procesamiento de cola de mensajes para envío
 - Serialización y envío de DTOs al cliente
 - Manejo de errores de comunicación
 
 ### 5. GameManager (Gestor de Juegos)
+
 **Responsabilidad**: Administración centralizada de todas las partidas
 
 **Funciones principales**:
+
 - Creación y destrucción de juegos
 - Gestión del ciclo de vida de las partidas
 - Asignación de jugadores a juegos
 - Limpieza de juegos terminados
 
 ### 6. Game (Hilo de Juego)
+
 **Responsabilidad**: Lógica de una partida específica
 
 **Funciones principales**:
+
 - Procesamiento de eventos de jugadores
 - Actualización del estado del juego
 - Broadcast del estado a todos los jugadores
@@ -85,6 +97,7 @@ Este documento describe la arquitectura y estructura técnica del proyecto Count
 ## Configuración
 
 ### Archivos de Configuración
+
 - **`game_config.yaml`**: Configuración general del juego
   - Parámetros de juego (rondas, tiempo, dinero)
   - Configuración de armas y jugadores
@@ -95,6 +108,7 @@ Este documento describe la arquitectura y estructura técnica del proyecto Count
 ## Manejo de Errores
 
 ### Excepciones Específicas
+
 | Excepción | Descripción | Cuándo se lanza |
 |-----------|-------------|-----------------|
 | **InvalidGameException** | Juego no válido o inexistente | Al intentar unirse a un juego inválido |
@@ -103,5 +117,6 @@ Este documento describe la arquitectura y estructura técnica del proyecto Count
 | **std::exception** | Errores de comunicación de red | Problemas de socket |
 
 ### Estrategias de Performance
+
 - **Reap de juegos**: Limpieza automática de juegos terminados
 - **Reap de clientes**: Eliminación de clientes desconectados

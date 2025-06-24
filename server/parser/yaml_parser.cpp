@@ -89,6 +89,7 @@ void YamlParser::parseGameConfigYaml(const std::string& yamlGameConfigPath) {
 
     gameConfig.fov.angle = config["fov"]["angle"].as<int>();
     gameConfig.fov.ratio = config["fov"]["ratio"].as<int>();
+    gameConfig.fov.opacity = config["fov"]["opacity"].as<int>();
 
     gameConfig.display.width = config["display"]["width"].as<int>();
     gameConfig.display.height = config["display"]["height"].as<int>();

@@ -150,7 +150,7 @@ Refactor al protocolo y a la queue del sender del cliente, para poder mandar cua
 
 **Marcos Navarro**:
 
-- *COMPLETAR*
+Mejora en ronda y cambio de estado. Refactor de armas, manejo de bomba  y demás features.
 
 **Mateo Serrano**:
 
@@ -166,7 +166,7 @@ Armado de la documentación del proyecto.
 
 **Jonathan Dominguez**:
 
-Implementación completa de los test y arreglo de errores. Y ayuda en el armado de los documentos.
+Implementación completa de los test y arreglo de errores. Y ayuda en el armado de los documentos. Creación del instalador de juego.
 
 **Marcos Navarro**:
 
@@ -176,6 +176,9 @@ Implementación completa de los test y arreglo de errores. Y ayuda en el armado 
 
 Se añade el mapa, nuevas animaciones, tablero de estadísticas, configuración, sonidos.
 
-## Features sin completar
+## Features no implementadas
 
 - El editor no puede crear mapas con armas.
+- No hay música de fondo en el juego.
+- No hay sonido de cargador vacio ni de pasos.
+- No se puede cambiar el keybinding.

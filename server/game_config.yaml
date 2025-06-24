@@ -86,6 +86,7 @@ weapons:
 fov:
   angle: 45
   ratio: 40
+  opacity: 153
 
 display:
   width: 580
