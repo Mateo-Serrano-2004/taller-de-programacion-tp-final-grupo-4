@@ -74,8 +74,7 @@ void ClientHandler::handle_event(const EventVariant& event) {
 
 void ClientHandler::close() {
     kill();
-    if (protocol)
-        protocol->close_socket();
+    protocol->close_socket();
     join();
     sender.reset();
     protocol.reset();

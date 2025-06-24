@@ -47,25 +47,23 @@ void YamlParser::parseGameConfigYaml(const std::string& yamlGameConfigPath) {
 
     const auto& game = config["game"];
     gameConfig.game.rounds = game["rounds"].as<int>();
-    gameConfig.game.roundsToWin = game["rounds_to_win"].as<int>();
     gameConfig.game.roundsPerSide = game["rounds_per_side"].as<int>();
     gameConfig.game.buyTime = game["buy_time"].as<int>();
     gameConfig.game.warmupTime = game["warmup_time"].as<int>();
+    gameConfig.game.postRoundTime = game["post_round_time"].as<int>();
     gameConfig.game.roundTime = game["round_time"].as<int>();
     gameConfig.game.roundWonMoney = game["round_won_money"].as<int>();
     gameConfig.game.roundLostMoney = game["round_lost_money"].as<int>();
     gameConfig.game.bombExplotionTime = game["bomb_explotion_time"].as<int>();
-    gameConfig.game.bombExplotionRadius = game["bomb_explotion_radius"].as<int>();
-    gameConfig.game.bombExplotionDamage = game["bomb_explotion_damage"].as<int>();
     gameConfig.game.bombPlantTime = game["bomb_plant_time"].as<int>();
     gameConfig.game.bombDefuseTime = game["bomb_defuse_time"].as<int>();
-    gameConfig.game.bombPlantMoney = game["bomb_plant_money"].as<int>();
-    gameConfig.game.bombDefuseMoney = game["bomb_defuse_money"].as<int>();
+    gameConfig.game.killMoney = game["kill_money"].as<int>();   
+    gameConfig.game.costPrimaryAmmo = game["cost_primary_ammo"].as<int>();
+    gameConfig.game.costSecondaryAmmo = game["cost_secondary_ammo"].as<int>();
 
     const auto& player = config["player"];
     gameConfig.player.health = player["health"].as<int>();
     gameConfig.player.initialMoney = player["initial_money"].as<int>();
-    gameConfig.player.movementSpeed = player["movement_speed"].as<float>();
 
     const auto& weapons = config["weapons"];
     for (const auto& weapon: weapons) {
@@ -81,8 +79,8 @@ void YamlParser::parseGameConfigYaml(const std::string& yamlGameConfigPath) {
         wc.range = w["range"].as<int>();
         wc.bulletsPerShot = w["bullets_per_shot"].as<int>();
         wc.fireRate = w["fire_rate"] ? w["fire_rate"].as<float>() : 0.0f;
-        wc.bountyMoney = w["bounty_money"].as<int>();
-        wc.reloadTime = w["reload_time"].as<float>();
+        wc.dispersion = w["dispersion"].as<float>();
+        wc.reloadTime = w["reload_time"].as<float>();   
 
         gameConfig.weapons[name] = wc;
     }
