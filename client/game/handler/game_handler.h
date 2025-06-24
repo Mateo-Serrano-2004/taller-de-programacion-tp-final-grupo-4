@@ -15,8 +15,8 @@ protected:
 public:
     explicit GameHandler(Weak<GameController> controller);
 
-    virtual void handle(SDL_Event& event) = 0;
-    virtual bool can_handle(SDL_Event& event) = 0;
+    virtual void handle(const SDL_Event& event) = 0;
+    virtual bool can_handle(const SDL_Event& event) = 0;
 
     virtual ~GameHandler() = default;
 };
