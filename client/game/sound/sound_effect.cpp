@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+
 #include <SDL2pp/Chunk.hh>
 #include <SDL2pp/Mixer.hh>
 
@@ -13,10 +14,12 @@
 int View::SoundEffect::calculate_volume(int current_distance, int min_range, int max_range) {
     // Volume in range [0, 100]
 
-    if (current_distance <= min_range) return 100;
-    if (current_distance >= max_range) return 0;
+    if (current_distance <= min_range)
+        return 100;
+    if (current_distance >= max_range)
+        return 0;
 
-    float t = (float) ((current_distance - min_range)) / (float) ((max_range - min_range));
+    float t = (float)((current_distance - min_range)) / (float)((max_range - min_range));
     float cosine = std::cos(t * M_PI);
     float volume = 0.5f * (1 + cosine) * 100.0f;
 
@@ -31,23 +34,22 @@ void View::SoundEffect::update_volume() {
     mixer->SetVolume(channel, calculate_volume(distance, 100, 350));
 }
 
-View::SoundEffect::SoundEffect(
-    Weak<Controller::BaseController> controller,
-    Model::SoundID sound_id
-): started(false), ended(false), channel(-1), mixer(nullptr),
-   chunk(nullptr), controller(controller) {
+View::SoundEffect::SoundEffect(Weak<Controller::BaseController> controller,
+                               Model::SoundID sound_id):
+        started(false),
+        ended(false),
+        channel(-1),
+        mixer(nullptr),
+        chunk(nullptr),
+        controller(controller) {
     auto asset_manager = controller.lock()->get_asset_manager();
     mixer = asset_manager->get_mixer();
     chunk = asset_manager->get_sound(sound_id);
 }
 
-bool View::SoundEffect::is_playing() const {
-    return started;
-}
+bool View::SoundEffect::is_playing() const { return started; }
 
-bool View::SoundEffect::has_ended() const {
-    return ended;
-}
+bool View::SoundEffect::has_ended() const { return ended; }
 
 void View::SoundEffect::set_position(const SDL2pp::Point& new_poisition) {
     position = new_poisition;
@@ -71,4 +73,3 @@ void View::SoundEffect::end() {
     ended = true;
     started = false;
 }
-

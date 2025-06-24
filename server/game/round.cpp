@@ -1,6 +1,8 @@
 #include "round.h"
 
+#include <algorithm>
 #include <iostream>
+#include <vector>
 
 Round::Round(int ct_alive, int tt_alive, int fps):
         winner_team(Model::TeamID::NONE),
@@ -15,17 +17,17 @@ Round::Round(int ct_alive, int tt_alive, int fps):
         is_warmup_round(false),
         fps(fps) {
 
-            const auto& config = YamlParser::getConfigData();
+    const auto& config = YamlParser::getConfigData();
 
-            ticks_for_warmup_phase = 0;
-            ticks_for_buying_phase = config.game.buyTime * fps;
-            ticks_for_playing_phase = config.game.roundTime * fps;
-            ticks_for_post_round_phase = 300;
-            bomb_total_ticks = config.game.bombExplotionTime * fps;
-            active_ticks_remaining = ticks_for_buying_phase;
-            defusing_ticks = config.game.bombDefuseTime * fps;
-            defusing_ticks_remaining = defusing_ticks;
-        }
+    ticks_for_warmup_phase = 0;
+    ticks_for_buying_phase = config.game.buyTime * fps;
+    ticks_for_playing_phase = config.game.roundTime * fps;
+    ticks_for_post_round_phase = 300;
+    bomb_total_ticks = config.game.bombExplotionTime * fps;
+    active_ticks_remaining = ticks_for_buying_phase;
+    defusing_ticks = config.game.bombDefuseTime * fps;
+    defusing_ticks_remaining = defusing_ticks;
+}
 
 Round Round::create_warmup_round(int fps) {
     const auto& config = YamlParser::getConfigData();
@@ -185,7 +187,7 @@ void Round::notify_bomb_is_not_longer_being_defused() {
 void Round::notify_bomb_exploded() {
     if (!bomb_planted || bomb_defused || !is_active())
         return;
-    
+
     bomb_defused = false;
     bomb_being_defused = false;
     player_defusing_bomb = -1;
@@ -200,13 +202,9 @@ int Round::player_id_defusing_bomb() const {
     return player_defusing_bomb;
 }
 
-void Round::add_dropped_weapon(const DroppedWeapon& drop) {
-    dropped_weapons.push_back(drop);
-}
+void Round::add_dropped_weapon(const DroppedWeapon& drop) { dropped_weapons.push_back(drop); }
 
-std::vector<DroppedWeapon>& Round::get_dropped_weapons() {
-    return dropped_weapons;
-}
+std::vector<DroppedWeapon>& Round::get_dropped_weapons() { return dropped_weapons; }
 
 DTO::RoundDTO Round::to_dto() const {
 
@@ -218,9 +216,8 @@ DTO::RoundDTO Round::to_dto() const {
     }
 
     std::vector<DTO::DropWeaponDTO> drop_dtos;
-    for (const auto& drop : dropped_weapons) {
-        drop_dtos.push_back(drop.to_dto());
-    }
+    std::transform(dropped_weapons.begin(), dropped_weapons.end(), std::back_inserter(drop_dtos),
+                   [](const auto& drop) { return drop.to_dto(); });
 
     return DTO::RoundDTO(state, this->ended(), this->get_ticks_remaining() / fps,
                          this->get_winner_team(), this->bomb_planted, this->bomb_defused,

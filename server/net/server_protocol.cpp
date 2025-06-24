@@ -293,6 +293,4 @@ void ServerProtocol::send_config(const DTO::ConfigDTO& config_dto) {
     peer.sendall(&config, sizeof(config));
 }
 
-void ServerProtocol::close_socket() {
-    peer.shutdown(SHUT_RDWR);
-}
+void ServerProtocol::close_socket() { peer.shutdown(SHUT_RDWR); }

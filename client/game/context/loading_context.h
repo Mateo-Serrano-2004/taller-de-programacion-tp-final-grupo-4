@@ -2,8 +2,8 @@
 #define CLIENT_GAME_CONTEXT_LOADING_CONTEXT_H
 
 #include "common/definitions.h"
-#include "entity/vertical_pane.h"
 #include "entity/label.h"
+#include "entity/vertical_pane.h"
 #include "handler/event_handler_strategy.h"
 
 #include "base_context.h"
@@ -23,9 +23,9 @@ protected:
     void dispatch_events() override;
 
 public:
-    LoadingContext(Weak<Controller::GameController> controller);
+    explicit LoadingContext(Weak<Controller::GameController> controller);
     ~LoadingContext() override = default;
 };
-};
+};  // namespace Context
 
-#endif // CLIENT_GAME_CONTEXT_LOADING_CONTEXT_H
+#endif  // CLIENT_GAME_CONTEXT_LOADING_CONTEXT_H

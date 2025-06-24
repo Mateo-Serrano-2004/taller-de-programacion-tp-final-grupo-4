@@ -68,9 +68,7 @@ void Context::PickRoleContext::render(uint8_t) {
         vertical_pane.render();
 }
 
-void Context::PickRoleContext::dispatch_events() {
-    strategy.dispatch();
-}
+void Context::PickRoleContext::dispatch_events() { strategy.dispatch(); }
 
 Context::PickRoleContext::PickRoleContext(Weak<Controller::GameController> controller):
         Context::BaseContext("pick-role", controller),

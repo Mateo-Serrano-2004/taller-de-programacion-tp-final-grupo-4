@@ -1,8 +1,8 @@
 #include "game_state.h"
 
+#include <algorithm>
 #include <map>
 #include <utility>
-#include <algorithm>
 
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Texture.hh>
@@ -12,9 +12,9 @@
 #include "animation/progress_bar_animation.h"
 #include "animation/winner_team_message_animation.h"
 #include "common/DTO/drop_weapon_dto.h"
-#include "sound/tracking_sound_effect.h"
-#include "sound/sound_effect.h"
 #include "model/rendered_player.h"
+#include "sound/sound_effect.h"
+#include "sound/tracking_sound_effect.h"
 
 Model::GameState::GameState():
         reference_player_id(std::nullopt),
@@ -42,35 +42,24 @@ Shared<View::RenderedPlayer> Model::GameState::get_player_by_id(Maybe<short_id_t
 }
 
 Shared<View::RenderedPlayer> Model::GameState::get_any_player_by_team(Model::TeamID team) const {
-    auto it = std::find_if(
-        players.begin(),
-        players.end(),
-        [&team](const auto& player) {
-            return (
-                player.second->get_team() == team &&
-                player.second->get_health() > 0
-            );
-        }
-    );
+    auto it = std::find_if(players.begin(), players.end(), [&team](const auto& player) {
+        return (player.second->get_team() == team && player.second->get_health() > 0);
+    });
     if (it == players.end())
         return nullptr;
     return it->second;
 }
 
 Shared<View::RenderedPlayer> Model::GameState::get_any_player_alive() const {
-    auto it = std::find_if(
-        players.begin(),
-        players.end(),
-        [](const auto& player) {
-            return player.second->get_health() > 0;
-        }
-    );
+    auto it = std::find_if(players.begin(), players.end(),
+                           [](const auto& player) { return player.second->get_health() > 0; });
     if (it == players.end())
         return nullptr;
     return it->second;
 }
 
-Shared<View::RenderedPlayer> Model::GameState::get_any_player_alive_by_team(Model::TeamID team) const {
+Shared<View::RenderedPlayer> Model::GameState::get_any_player_alive_by_team(
+        Model::TeamID team) const {
     auto player = get_any_player_by_team(team);
     if (player)
         return player;

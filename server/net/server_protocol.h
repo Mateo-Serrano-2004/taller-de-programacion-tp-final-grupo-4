@@ -42,7 +42,7 @@ public:
 
     ServerProtocol(ServerProtocol&&) = default;
     ServerProtocol& operator=(ServerProtocol&&) = default;
-    
+
     ~ServerProtocol() = default;
 };
 

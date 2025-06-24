@@ -21,8 +21,8 @@ void ClientHandler::handle_create_game(const CreateGameEvent& event) {
                               config.fov.ratio);
     auto map = game_manager.get_map(event.get_map_name());
     sender_queue.push(config_dto);
-    game_queue = game_manager.create_game(event.get_party_name(), event.get_map_name(), map.second, username,
-                                          sender_queue);
+    game_queue = game_manager.create_game(event.get_party_name(), event.get_map_name(), map.second,
+                                          username, sender_queue);
     player_id = 0;
     sender_queue.push(DTO::PlayerIDDTO(player_id));
     sender_queue.push(DTO::TeamIDDTO((short_id_t)Model::TeamID::CT));
@@ -103,6 +103,4 @@ void ClientHandler::run() {
     }
 }
 
-ClientHandler::~ClientHandler() {
-    close();
-}
+ClientHandler::~ClientHandler() { close(); }

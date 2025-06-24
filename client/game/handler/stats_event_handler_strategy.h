@@ -6,8 +6,8 @@
 #include "common/definitions.h"
 
 #include "event_handler_strategy.h"
-#include "movement_handler.h"
 #include "mouse_movement_handler.h"
+#include "movement_handler.h"
 
 namespace Controller {
 class GameController;

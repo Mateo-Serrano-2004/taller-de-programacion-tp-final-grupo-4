@@ -14,6 +14,6 @@ public:
 
     ~DropWeaponEvent() override = default;
 };
-};
+};  // namespace Model
 
-#endif // CLIENT_GAME_EVENT_DROP_WEAPON_EVENT_H
+#endif  // CLIENT_GAME_EVENT_DROP_WEAPON_EVENT_H

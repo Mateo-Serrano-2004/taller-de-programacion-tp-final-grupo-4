@@ -44,6 +44,4 @@ bool FullWeapon::reload(uint16_t ticks_to_process) {
     return true;
 }
 
-void FullWeapon::add_ammo() {
-    set_total_ammo(get_total_ammo() + max_loaded_ammo);
-}
+void FullWeapon::add_ammo() { set_total_ammo(get_total_ammo() + max_loaded_ammo); }

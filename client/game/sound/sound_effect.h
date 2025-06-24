@@ -10,7 +10,7 @@
 namespace SDL2pp {
 class Mixer;
 class Chunk;
-};
+};  // namespace SDL2pp
 
 namespace Controller {
 class BaseController;
@@ -31,10 +31,7 @@ protected:
     void update_volume();
 
 public:
-    SoundEffect(
-        Weak<Controller::BaseController> controller,
-        Model::SoundID sound_id
-    );
+    SoundEffect(Weak<Controller::BaseController> controller, Model::SoundID sound_id);
 
     bool is_playing() const;
     bool has_ended() const;
@@ -45,6 +42,6 @@ public:
 
     virtual ~SoundEffect() = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_SOUND_SOUND_EFFECT_H
+#endif  // CLIENT_GAME_SOUND_SOUND_EFFECT_H

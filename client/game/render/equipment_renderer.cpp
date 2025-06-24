@@ -2,9 +2,10 @@
 
 #include <cstdint>
 #include <iostream>
-#include <SDL2pp/Texture.hh>
+
 #include <SDL2pp/Rect.hh>
 #include <SDL2pp/Renderer.hh>
+#include <SDL2pp/Texture.hh>
 
 #include "asset/asset_manager.h"
 #include "common/model/weapon.h"
@@ -13,13 +14,12 @@
 #include "model/game_state.h"
 #include "model/rendered_player.h"
 #include "utils/enum_translator.h"
-#include "utils/pane_scalator.h"
 #include "utils/number_texture_slicer.h"
+#include "utils/pane_scalator.h"
 
 void View::EquipmentRenderer::set_up_bomb() {
     auto bomb_texture = asset_manager->get_texture(
-        Model::EnumTranslator::get_hud_texture_from_weapon(Model::WeaponID::BOMB)
-    );
+            Model::EnumTranslator::get_hud_texture_from_weapon(Model::WeaponID::BOMB));
     bomb_slot.set_texture(bomb_texture);
     bomb_slot.set_size(bomb_texture->GetSize());
     View::PaneScalator::scalate_height_with_aspect_ratio(&bomb_slot, 25);
@@ -71,8 +71,7 @@ void View::EquipmentRenderer::render_weapon(Shared<View::RenderedPlayer> player)
     auto weapon = player->get_current_weapon();
     Model::WeaponID weapon_id = weapon->get_weapon_id();
     auto weapon_texture = asset_manager->get_texture(
-        Model::EnumTranslator::get_hud_texture_from_weapon(weapon_id)
-    );
+            Model::EnumTranslator::get_hud_texture_from_weapon(weapon_id));
     current_weapon_slot.set_texture(weapon_texture);
     current_weapon_slot.set_size(weapon_texture->GetSize());
     current_weapon_slot.set_draw_texture(true);
@@ -144,8 +143,9 @@ View::EquipmentRenderer::EquipmentRenderer(Weak<Controller::GameController> cont
 void View::EquipmentRenderer::render(const Model::GameState& game_state, uint8_t) {
     items.set_position(SDL2pp::Point(0, viewport->get_height() - 60));
     auto player = game_state.get_reference_player();
-    if (!player) return;
-        render_weapon(player);
+    if (!player)
+        return;
+    render_weapon(player);
     if (player->get_has_bomb()) {
         render_bomb(player);
     }

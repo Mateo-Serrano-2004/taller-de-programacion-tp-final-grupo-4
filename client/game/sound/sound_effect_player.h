@@ -14,6 +14,6 @@ public:
 
     ~SoundEffectPlayer() = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_SOUND_SOUND_EFFECT_PLAYER_H
+#endif  // CLIENT_GAME_SOUND_SOUND_EFFECT_PLAYER_H

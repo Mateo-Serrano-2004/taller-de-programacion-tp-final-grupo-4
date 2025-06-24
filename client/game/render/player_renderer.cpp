@@ -34,9 +34,7 @@ void View::PlayerRenderer::render_fov(const Model::GameState& game_state) {
     angle_t angle = 0;
     auto ref_player = game_state.get_reference_player();
     if (!ref_player->get_health()) {
-        ref_player = game_state.get_any_player_alive_by_team(
-            ref_player->get_team()
-        );
+        ref_player = game_state.get_any_player_alive_by_team(ref_player->get_team());
     }
     if (!ref_player)
         return;
@@ -95,9 +93,7 @@ bool View::PlayerRenderer::render_players(const Model::GameState& game_state) {
 }
 
 View::PlayerRenderer::PlayerRenderer(Weak<Controller::GameController> controller):
-        View::Renderer(controller),
-        map_renderer(controller),
-        weapon_renderer(controller) {
+        View::Renderer(controller), map_renderer(controller), weapon_renderer(controller) {
     auto controller_locked = controller.lock();
     game_state_manager = controller_locked->get_game_state_manager();
     bomb_texture = asset_manager->get_texture(Model::TextureID::SPRITE_BOMB);

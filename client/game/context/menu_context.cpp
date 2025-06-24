@@ -25,9 +25,7 @@ void Context::MenuContext::render(uint8_t frames) {
     viewport.render();
 }
 
-void Context::MenuContext::dispatch_events() {
-    strategy.dispatch();
-}
+void Context::MenuContext::dispatch_events() { strategy.dispatch(); }
 
 void Context::MenuContext::build_button(View::Button& button) {
     button.set_background_color(78, 107, 60, 255);

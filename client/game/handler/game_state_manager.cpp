@@ -25,80 +25,53 @@
 #include "render/camera.h"
 #include "sound/shot_sound.h"
 
-void Controller::GameStateManager::load_shot_sound(
-    Shared<Model::GameState>& new_game_state,
-    const Shared<View::RenderedPlayer>& player
-) {
+void Controller::GameStateManager::load_shot_sound(const Shared<Model::GameState>& new_game_state,
+                                                   const Shared<View::RenderedPlayer>& player) {
     if (!player->is_shooting())
         return;
     auto weapon_id = player->get_current_weapon()->get_weapon_id();
     if (weapon_id != Model::WeaponID::BOMB) {
-        new_game_state->sound_effects.push_back(
-            make_shared<View::ShotSound>(
-                controller,
-                player->get_current_weapon()->get_weapon_id(),
-                player->get_id()
-            )
-        );
+        new_game_state->sound_effects.push_back(make_shared<View::ShotSound>(
+                controller, player->get_current_weapon()->get_weapon_id(), player->get_id()));
     }
 }
 
-void Controller::GameStateManager::load_reload_sound(
-    Shared<Model::GameState>& new_game_state,
-    const Shared<View::RenderedPlayer>& player
-) {
+void Controller::GameStateManager::load_reload_sound(const Shared<Model::GameState>& new_game_state,
+                                                     const Shared<View::RenderedPlayer>& player) {
     if (!player->is_reloading())
         return;
-    new_game_state->sound_effects.push_back(
-        make_shared<View::TrackingSoundEffect>(
-            controller,
-            Model::SoundID::RELOAD_SOUND,
-            player->get_id()
-        )
-    );
+    new_game_state->sound_effects.push_back(make_shared<View::TrackingSoundEffect>(
+            controller, Model::SoundID::RELOAD_SOUND, player->get_id()));
 }
 
-void Controller::GameStateManager::load_bomb_explosion(DTO::GameStateDTO& dto) {
+void Controller::GameStateManager::load_bomb_explosion(const DTO::GameStateDTO& dto) {
     if (game_state->bomb_explosion && game_state->bomb_explosion->has_ended())
         game_state->bomb_explosion = nullptr;
     if (game_state->bomb_explosion_sound && game_state->bomb_explosion_sound->has_ended())
         game_state->bomb_explosion_sound = nullptr;
-    if (
-        dto.round.state == RoundState::PostRound &&
-        dto.round.bomb_planted &&
-        !dto.round.bomb_defused &&
-        game_state->bomb_position.has_value() &&
-        game_state->round_state == RoundState::Active
-    ) {
+    if (dto.round.state == RoundState::PostRound && dto.round.bomb_planted &&
+        !dto.round.bomb_defused && game_state->bomb_position.has_value() &&
+        game_state->round_state == RoundState::Active) {
         std::cout << "BOMB TIME\n";
         game_state->bomb_explosion = make_shared<View::BombExplosionAnimation>(
-            controller,
-            game_state->bomb_position.value()
-        );
-        game_state->bomb_explosion_sound = make_shared<View::SoundEffect>(
-            controller,
-            Model::SoundID::BOMB_EXPLOSION
-        );
+                controller, game_state->bomb_position.value());
+        game_state->bomb_explosion_sound =
+                make_shared<View::SoundEffect>(controller, Model::SoundID::BOMB_EXPLOSION);
     }
 }
 
-void Controller::GameStateManager::load_animation(
-    Shared<Model::GameState>& new_game_state,
-    const Shared<View::RenderedPlayer>& player
-) {
+void Controller::GameStateManager::load_animation(const Shared<Model::GameState>& new_game_state,
+                                                  const Shared<View::RenderedPlayer>& player) {
     if (!player->is_shooting())
         return;
     auto weapon_id = player->get_current_weapon()->get_weapon_id();
     if (weapon_id != Model::WeaponID::KNIFE && weapon_id != Model::WeaponID::BOMB) {
         new_game_state->fires.push_back(
-            make_shared<View::MuzzleFireAnimation>(
-                controller, player->get_id()
-            )
-        );
+                make_shared<View::MuzzleFireAnimation>(controller, player->get_id()));
     }
 }
 
-void Controller::GameStateManager::update_dropped_weapons(DTO::GameStateDTO& dto) {
+void Controller::GameStateManager::update_dropped_weapons(const DTO::GameStateDTO& dto) {
     game_state->dropped_weapons.clear();
     for (auto& weapon: dto.round.dropped_weapons) {
         game_state->dropped_weapons.push_back(make_shared<DTO::DropWeaponDTO>(weapon));
@@ -107,9 +80,9 @@ void Controller::GameStateManager::update_dropped_weapons(DTO::GameStateDTO& dto
 
 void Controller::GameStateManager::update_sounds(Shared<Model::GameState>& new_game_state) {
     game_state->sound_effects.remove_if(
-        [](Shared<View::TrackingSoundEffect>& sf) { return sf->has_ended(); }
-    );
-    game_state->sound_effects.splice(game_state->sound_effects.end(), new_game_state->sound_effects);
+            [](Shared<View::TrackingSoundEffect>& sf) { return sf->has_ended(); });
+    game_state->sound_effects.splice(game_state->sound_effects.end(),
+                                     new_game_state->sound_effects);
 }
 
 void Controller::GameStateManager::update_animations(Shared<Model::GameState>& new_game_state) {
@@ -128,10 +101,10 @@ void Controller::GameStateManager::update_camera(const Shared<View::RenderedPlay
         return;
     auto reference_player_position = new_ref_player->get_position();
     game_state->camera.set_center(reference_player_position.get_x(),
-                                    reference_player_position.get_y());
+                                  reference_player_position.get_y());
 }
 
-void Controller::GameStateManager::update_bomb_position(DTO::GameStateDTO& dto) {
+void Controller::GameStateManager::update_bomb_position(const DTO::GameStateDTO& dto) {
     load_bomb_explosion(dto);
 
     if (dto.round.bomb_planted && !game_state->bomb_position.has_value()) {
@@ -143,7 +116,8 @@ void Controller::GameStateManager::update_bomb_position(DTO::GameStateDTO& dto) 
     }
 }
 
-void Controller::GameStateManager::update_progress_bar(const Shared<View::RenderedPlayer>& ref_player) {
+void Controller::GameStateManager::update_progress_bar(
+        const Shared<View::RenderedPlayer>& ref_player) {
     if (!ref_player)
         return;
     if (ref_player->get_team() == Model::TeamID::CT) {
@@ -161,23 +135,19 @@ void Controller::GameStateManager::update_progress_bar(const Shared<View::Render
     }
 }
 
-void Controller::GameStateManager::update_winner_message(DTO::GameStateDTO& dto) {
+void Controller::GameStateManager::update_winner_message(const DTO::GameStateDTO& dto) {
     game_state->round_winner = dto.round.winner;
     if (game_state->winner_message && game_state->winner_message->has_ended())
         game_state->winner_message = nullptr;
 
-    if (
-        !game_state->winner_message &&
-        dto.round.state == RoundState::PostRound &&
-        game_state->round_state == RoundState::Active
-    ) {
-        game_state->winner_message = make_shared<View::WinnerTeamMessageAnimation>(
-            controller, game_state->round_winner
-        );
+    if (!game_state->winner_message && dto.round.state == RoundState::PostRound &&
+        game_state->round_state == RoundState::Active) {
+        game_state->winner_message =
+                make_shared<View::WinnerTeamMessageAnimation>(controller, game_state->round_winner);
     }
 }
 
-void Controller::GameStateManager::update_stats(DTO::GameStateDTO& dto) {
+void Controller::GameStateManager::update_stats(const DTO::GameStateDTO& dto) {
     game_state->time_left = dto.round.time_left;
     game_state->defusing_progress = dto.round.defusing_progress;
     game_state->first_team_victories = dto.ct_rounds_won;
@@ -207,7 +177,7 @@ void Controller::GameStateManager::update_map(Shared<SDL2pp::Texture> new_map) {
     game_state->map = new_map;
 }
 
-void Controller::GameStateManager::update(DTO::GameStateDTO& game_state_dto) {
+void Controller::GameStateManager::update(const DTO::GameStateDTO& game_state_dto) {
     auto new_game_state = make_shared<Model::GameState>();
 
     for (const auto& dto: game_state_dto.players) {
@@ -226,7 +196,7 @@ void Controller::GameStateManager::update(DTO::GameStateDTO& game_state_dto) {
     auto ref_player = game_state->get_reference_player();
     update_camera(ref_player);
     update_progress_bar(ref_player);
-    
+
     update_dropped_weapons(game_state_dto);
     update_bomb_position(game_state_dto);
     update_winner_message(game_state_dto);

@@ -8,7 +8,7 @@
 namespace SDL2pp {
 class Texture;
 class Renderer;
-};
+};  // namespace SDL2pp
 
 namespace Controller {
 class GameController;
@@ -28,12 +28,12 @@ private:
     SDL2pp::Rect get_viewport_slice(const SDL2pp::Rect& map_slice, const Camera& camera);
 
 public:
-    MapRenderer(Weak<Controller::GameController> controller);
+    explicit MapRenderer(Weak<Controller::GameController> controller);
 
     void render_map(const Model::GameState& game_state);
 
     ~MapRenderer() = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_RENDER_MAP_RENDERER_H
+#endif  // CLIENT_GAME_RENDER_MAP_RENDERER_H

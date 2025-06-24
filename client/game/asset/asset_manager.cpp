@@ -4,22 +4,20 @@
 #include <string>
 
 #include <SDL2/SDL.h>
+#include <SDL2pp/Chunk.hh>
 #include <SDL2pp/Color.hh>
 #include <SDL2pp/Font.hh>
+#include <SDL2pp/Mixer.hh>
+#include <SDL2pp/Point.hh>
+#include <SDL2pp/Rect.hh>
 #include <SDL2pp/Renderer.hh>
 #include <SDL2pp/Texture.hh>
-#include <SDL2pp/Chunk.hh>
-#include <SDL2pp/Mixer.hh>
-#include <SDL2pp/Rect.hh>
-#include <SDL2pp/Point.hh>
 
 #include "common/DTO/map_dto.h"
 #include "controller/subsystem_manager.h"
 
-Model::AssetManager::AssetManager(
-    Controller::SubsystemManager* subsystem_manager,
-    Shared<SDL2pp::Renderer> renderer,
-    const DTO::ConfigDTO& config):
+Model::AssetManager::AssetManager(Controller::SubsystemManager* subsystem_manager,
+                                  Shared<SDL2pp::Renderer> renderer, const DTO::ConfigDTO& config):
         subsystem_manager(subsystem_manager),
         renderer(renderer),
         config(config),
@@ -35,7 +33,8 @@ void Model::AssetManager::load_texture(Model::TextureID id, Shared<SDL2pp::Textu
     textures.insert({id, texture});
 }
 
-void Model::AssetManager::load_animation(Model::AnimationID id, const Model::AnimationDetails& details) {
+void Model::AssetManager::load_animation(Model::AnimationID id,
+                                         const Model::AnimationDetails& details) {
     animations.insert({id, details});
 }
 
@@ -86,13 +85,9 @@ const Model::AnimationDetails& Model::AssetManager::get_animation(AnimationID id
     return animations.at(id);
 }
 
-Shared<SDL2pp::Chunk> Model::AssetManager::get_sound(SoundID id) {
-    return chunks.at(id);
-}
+Shared<SDL2pp::Chunk> Model::AssetManager::get_sound(SoundID id) { return chunks.at(id); }
 
-SDL2pp::Mixer* Model::AssetManager::get_mixer() {
-    return &(subsystem_manager->get_mixer());
-}
+SDL2pp::Mixer* Model::AssetManager::get_mixer() { return &(subsystem_manager->get_mixer()); }
 
 Shared<SDL2pp::Texture> Model::AssetManager::apply_font_to_text(Shared<SDL2pp::Font> font,
                                                                 const std::string& text,

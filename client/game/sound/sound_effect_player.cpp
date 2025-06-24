@@ -18,10 +18,7 @@ void View::SoundEffectPlayer::play(const Model::GameState& game_state) {
         shot->set_player(player);
         shot->play();
     }
-    if (
-        game_state.bomb_explosion_sound &&
-       !game_state.bomb_explosion_sound->has_ended()
-    ) {
+    if (game_state.bomb_explosion_sound && !game_state.bomb_explosion_sound->has_ended()) {
         game_state.bomb_explosion_sound->fix(game_state.camera);
         if (game_state.bomb_position.has_value())
             game_state.bomb_explosion_sound->set_position(game_state.bomb_position.value());

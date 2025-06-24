@@ -3,6 +3,7 @@
 
 #include <utility>
 #include <vector>
+
 #include <SDL2pp/Rect.hh>
 
 #include "common/definitions.h"
@@ -18,6 +19,6 @@ public:
     static SDL2pp::Rect get_separator();
     static SDL2pp::Rect get_colon();
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_NUMBER_TEXTURE_SLICER_H
+#endif  // CLIENT_GAME_NUMBER_TEXTURE_SLICER_H

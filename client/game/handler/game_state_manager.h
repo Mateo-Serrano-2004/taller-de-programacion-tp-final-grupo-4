@@ -35,19 +35,22 @@ private:
     Shared<Model::GameState> game_state;
     Weak<GameController> controller;
 
-    void load_animation(Shared<Model::GameState>& new_game_state, const Shared<View::RenderedPlayer>& player);
-    void load_shot_sound(Shared<Model::GameState>& new_game_state, const Shared<View::RenderedPlayer>& player);
-    void load_reload_sound(Shared<Model::GameState>& new_game_state, const Shared<View::RenderedPlayer>& player);
-    void load_bomb_explosion(DTO::GameStateDTO& dto);
+    void load_animation(const Shared<Model::GameState>& new_game_state,
+                        const Shared<View::RenderedPlayer>& player);
+    void load_shot_sound(const Shared<Model::GameState>& new_game_state,
+                         const Shared<View::RenderedPlayer>& player);
+    void load_reload_sound(const Shared<Model::GameState>& new_game_state,
+                           const Shared<View::RenderedPlayer>& player);
+    void load_bomb_explosion(const DTO::GameStateDTO& dto);
 
-    void update_dropped_weapons(DTO::GameStateDTO& dto);
+    void update_dropped_weapons(const DTO::GameStateDTO& dto);
     void update_animations(Shared<Model::GameState>& new_game_state);
     void update_sounds(Shared<Model::GameState>& new_game_state);
     void update_camera(const Shared<View::RenderedPlayer>& ref_player);
-    void update_bomb_position(DTO::GameStateDTO& dto);
+    void update_bomb_position(const DTO::GameStateDTO& dto);
     void update_progress_bar(const Shared<View::RenderedPlayer>& ref_player);
-    void update_winner_message(DTO::GameStateDTO& dto);
-    void update_stats(DTO::GameStateDTO& dto);
+    void update_winner_message(const DTO::GameStateDTO& dto);
+    void update_stats(const DTO::GameStateDTO& dto);
 
 public:
     explicit GameStateManager(Weak<GameController> controller);
@@ -56,7 +59,7 @@ public:
 
     void update_player_id(short_id_t new_id);
     void update_map(Shared<SDL2pp::Texture> new_map);
-    void update(DTO::GameStateDTO& game_state_dto);
+    void update(const DTO::GameStateDTO& game_state_dto);
 
     ~GameStateManager() = default;
 };

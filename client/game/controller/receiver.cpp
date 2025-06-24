@@ -12,9 +12,9 @@
 #include "common/team.h"
 #include "event/end_of_game_event.h"
 #include "event/generate_map_event.h"
+#include "event/update_game_state_event.h"
 #include "event/update_player_id_event.h"
 #include "event/update_role_event.h"
-#include "event/update_game_state_event.h"
 
 #include "game_controller.h"
 
@@ -26,9 +26,7 @@ void Controller::Receiver::update_game_state(DTO::GameStateDTO&& dto) {
         } catch (const std::exception&) {}
     } else {
         try {
-            controller.lock()->push_event(
-                make_shared<Model::UpdateGameStateEvent>(std::move(dto))
-            );
+            controller.lock()->push_event(make_shared<Model::UpdateGameStateEvent>(std::move(dto)));
         } catch (const std::exception&) {}
     }
 }
@@ -65,9 +63,7 @@ void Controller::Receiver::receive_server_info() {
 
 Controller::Receiver::Receiver(Weak<GameController> controller,
                                Shared<Net::ClientProtocol> protocol):
-        keep_running(true),
-        controller(controller),
-        protocol(protocol) {
+        keep_running(true), controller(controller), protocol(protocol) {
     start();
 }
 

@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "common/definitions.h"
 #include "common/model/weapon.h"
@@ -17,20 +18,14 @@
 
 FullPlayer::FullPlayer(short_id_t id, const std::string& name, Model::TeamID team,
                        Model::RoleID role, Physics::Vector2D position):
-        Model::Player(
-            id,
-            YamlParser::getConfigData().player.initialMoney,
-            name,
-            YamlParser::getConfigData().player.health,
-            team,
-            role,
-            position
-        ),
+        Model::Player(id, YamlParser::getConfigData().player.initialMoney, name,
+                      YamlParser::getConfigData().player.health, team, role, position),
         movement_direction(0, 0),
         size(28, 28),
         secondary_weapon(WeaponFactory::create(Model::WeaponID::GLOCK)),
         knife(WeaponFactory::create(Model::WeaponID::KNIFE)),
-        was_reloading(false), trying_reload(false) {
+        was_reloading(false),
+        trying_reload(false) {
     current_weapon = secondary_weapon;
 }
 
@@ -140,7 +135,8 @@ void FullPlayer::reload(uint16_t frames_to_process) {
     }
 
     auto weapon = std::static_pointer_cast<FullWeapon>(current_weapon);
-    bool result = weapon->reload(frames_to_process);  // true si recara, false error o dejo de recargar
+    bool result =
+            weapon->reload(frames_to_process);  // true si recara, false error o dejo de recargar
 
     reloading = (!was_reloading && result);
     was_reloading = result;
@@ -274,7 +270,7 @@ std::vector<DroppedWeapon> FullPlayer::drop_weapons() {
 
     has_bomb = false;
     planting_progress = 0;
-    equip_weapon_by_type(Model::SlotID::KNIFE_SLOT); // por las dudas
+    equip_weapon_by_type(Model::SlotID::KNIFE_SLOT);  // por las dudas
 
     return drops;
 }
@@ -316,13 +312,9 @@ Shared<FullWeapon> FullPlayer::drop_equipped_weapon() {
     return dropped_weapon;
 }
 
-bool FullPlayer::has_primary_weapon() const {
-    return primary_weapon != nullptr;
-}
+bool FullPlayer::has_primary_weapon() const { return primary_weapon != nullptr; }
 
-bool FullPlayer::has_secondary_weapon() const {
-    return secondary_weapon != nullptr;
-}
+bool FullPlayer::has_secondary_weapon() const { return secondary_weapon != nullptr; }
 
 bool FullPlayer::has_type_weapon(Model::SlotID slot_id) const {
     switch (slot_id) {

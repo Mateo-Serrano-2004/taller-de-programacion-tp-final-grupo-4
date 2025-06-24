@@ -2,8 +2,8 @@
 
 M3::M3():
         FullWeapon(Model::WeaponID::M3, Model::SlotID::PRIMARY_WEAPON,
-                   8,  // loaded_ammo
-                   8,  // max_loaded_ammo
+                   8,   // loaded_ammo
+                   8,   // max_loaded_ammo
                    16,  // total_ammo
                    100, 100) {}
 

@@ -6,15 +6,11 @@
 #include "controller/game_controller.h"
 #include "model/rendered_player.h"
 
-View::TrackingSoundEffect::TrackingSoundEffect(
-    Weak<Controller::GameController> controller,
-    Model::SoundID sound_id,
-    short_id_t player_id
-): View::SoundEffect(controller, sound_id), player_id(player_id) {}
+View::TrackingSoundEffect::TrackingSoundEffect(Weak<Controller::GameController> controller,
+                                               Model::SoundID sound_id, short_id_t player_id):
+        View::SoundEffect(controller, sound_id), player_id(player_id) {}
 
-short_id_t View::TrackingSoundEffect::get_player_id() const {
-    return player_id;
-}
+short_id_t View::TrackingSoundEffect::get_player_id() const { return player_id; }
 
 void View::TrackingSoundEffect::set_player(Shared<View::RenderedPlayer> new_player) {
     player = new_player;

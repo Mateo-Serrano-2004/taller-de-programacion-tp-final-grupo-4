@@ -1,10 +1,11 @@
 #include "map_renderer.h"
 
-#include <cmath>
 #include <algorithm>
+#include <cmath>
+
 #include <SDL2pp/Rect.hh>
-#include <SDL2pp/Texture.hh>
 #include <SDL2pp/Renderer.hh>
+#include <SDL2pp/Texture.hh>
 
 #include "controller/game_controller.h"
 #include "model/game_state.h"
@@ -12,7 +13,7 @@
 #include "camera.h"
 
 SDL2pp::Rect View::MapRenderer::get_map_slice(Shared<SDL2pp::Texture> map,
-                                                 const View::Camera& camera) {
+                                              const View::Camera& camera) {
     auto logical_width = renderer->GetLogicalWidth();
     auto logical_height = renderer->GetLogicalHeight();
     auto camera_x = camera.get_center().GetX() + 16;
@@ -35,7 +36,7 @@ SDL2pp::Rect View::MapRenderer::get_map_slice(Shared<SDL2pp::Texture> map,
 }
 
 SDL2pp::Rect View::MapRenderer::get_viewport_slice(const SDL2pp::Rect& map_slice,
-                                                      const View::Camera& camera) {
+                                                   const View::Camera& camera) {
     auto logical_width = renderer->GetLogicalWidth();
     auto logical_height = renderer->GetLogicalHeight();
     auto camera_x = camera.get_center().GetX() + 16;
@@ -50,8 +51,8 @@ SDL2pp::Rect View::MapRenderer::get_viewport_slice(const SDL2pp::Rect& map_slice
     return SDL2pp::Rect(x, y, w, h);
 }
 
-View::MapRenderer::MapRenderer(Weak<Controller::GameController> controller)
-: renderer(controller.lock()->get_renderer()) {}
+View::MapRenderer::MapRenderer(Weak<Controller::GameController> controller):
+        renderer(controller.lock()->get_renderer()) {}
 
 void View::MapRenderer::render_map(const Model::GameState& game_state) {
     auto map = game_state.map;

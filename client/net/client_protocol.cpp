@@ -17,7 +17,8 @@ void Net::ClientProtocol::receive_dropped_weapon(DTO::DropWeaponDTO& dropped_wea
     dropped_weapon.position_y = ntohs(position_y);
 }
 
-void Net::ClientProtocol::receive_dropped_weapons_list(std::vector<DTO::DropWeaponDTO>& dropped_weapons) {
+void Net::ClientProtocol::receive_dropped_weapons_list(
+        std::vector<DTO::DropWeaponDTO>& dropped_weapons) {
     uint8_t dropped_weapons_size;
     skt.recvall(&dropped_weapons_size, sizeof(dropped_weapons_size));
 

@@ -11,12 +11,12 @@ protected:
     DTO::GameStateDTO dto;
 
 public:
-    UpdateGameStateEvent(DTO::GameStateDTO&& dto);
+    explicit UpdateGameStateEvent(DTO::GameStateDTO&& dto);
 
     DTO::GameStateDTO& get_dto();
 
     ~UpdateGameStateEvent() override = default;
 };
-};
+};  // namespace Model
 
-#endif // CLIENT_GAME_EVENT_UPDATE_GAME_STATE_EVENT_H
+#endif  // CLIENT_GAME_EVENT_UPDATE_GAME_STATE_EVENT_H

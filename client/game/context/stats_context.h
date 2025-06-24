@@ -16,7 +16,7 @@
 namespace Controller {
 class GameController;
 class GameStateManager;
-};
+};  // namespace Controller
 
 namespace Model {
 class GameState;
@@ -37,10 +37,10 @@ protected:
     void dispatch_events() override;
 
 public:
-    StatsContext(Weak<Controller::GameController> controller);
+    explicit StatsContext(Weak<Controller::GameController> controller);
 
     ~StatsContext() override = default;
 };
-};
+};  // namespace Context
 
-#endif // CLIENT_GAME_CONTEXT_STATS_CONTEXT_H
+#endif  // CLIENT_GAME_CONTEXT_STATS_CONTEXT_H

@@ -3,9 +3,9 @@
 
 #include <list>
 
-#include "entity/vertical_pane.h"
 #include "entity/horizontal_pane.h"
 #include "entity/label.h"
+#include "entity/vertical_pane.h"
 #include "utils/stat_line.h"
 
 namespace Controller {
@@ -42,6 +42,6 @@ public:
 
     ~StatsRenderer() = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_RENDER_STATS_RENDERER_H
+#endif  // CLIENT_GAME_RENDER_STATS_RENDERER_H

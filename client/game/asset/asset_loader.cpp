@@ -15,9 +15,9 @@
 #include "controller/game_controller.h"
 
 #include "animation_id.h"
+#include "asset_manager.h"
 #include "cursor_id.h"
 #include "sound_id.h"
-#include "asset_manager.h"
 #include "texture_id.h"
 
 void Model::AssetLoader::load_weapon_sprites() {
@@ -36,26 +36,16 @@ void Model::AssetLoader::load_weapon_sprites() {
 }
 
 void Model::AssetLoader::load_dropped_weapon_sprites() {
-    load_from_surface(
-        Model::TextureID::DROPPED_AK47,
-        addresser.get_weapon_sprite_path(dropped_weapon_sprites[0])
-    );
-    load_from_surface(
-        Model::TextureID::DROPPED_AWP,
-        addresser.get_weapon_sprite_path(dropped_weapon_sprites[1])
-    );
-    load_from_surface(
-        Model::TextureID::DROPPED_BOMB,
-        addresser.get_weapon_sprite_path(dropped_weapon_sprites[2])
-    );
-    load_from_surface(
-        Model::TextureID::DROPPED_GLOCK,
-        addresser.get_weapon_sprite_path(dropped_weapon_sprites[3])
-    );
-    load_from_surface(
-        Model::TextureID::DROPPED_M3,
-        addresser.get_weapon_sprite_path(dropped_weapon_sprites[4])
-    );
+    load_from_surface(Model::TextureID::DROPPED_AK47,
+                      addresser.get_weapon_sprite_path(dropped_weapon_sprites[0]));
+    load_from_surface(Model::TextureID::DROPPED_AWP,
+                      addresser.get_weapon_sprite_path(dropped_weapon_sprites[1]));
+    load_from_surface(Model::TextureID::DROPPED_BOMB,
+                      addresser.get_weapon_sprite_path(dropped_weapon_sprites[2]));
+    load_from_surface(Model::TextureID::DROPPED_GLOCK,
+                      addresser.get_weapon_sprite_path(dropped_weapon_sprites[3]));
+    load_from_surface(Model::TextureID::DROPPED_M3,
+                      addresser.get_weapon_sprite_path(dropped_weapon_sprites[4]));
 }
 
 void Model::AssetLoader::load_player_sprites() {
@@ -102,14 +92,11 @@ void Model::AssetLoader::load_fov() {
 }
 
 void Model::AssetLoader::load_bomb_animation() {
-    manager->load_texture(
-        Model::TextureID::BOMB_EXPLOSION,
-        addresser.get_animation_path("explosion.png")
-    );
+    manager->load_texture(Model::TextureID::BOMB_EXPLOSION,
+                          addresser.get_animation_path("explosion.png"));
     auto bomb_animation_texture = manager->get_texture(Model::TextureID::BOMB_EXPLOSION);
     manager->load_animation(Model::AnimationID::BOMB_EXPLOSION,
-                            Model::AnimationDetails(5, 5, 23, 40,
-                            bomb_animation_texture));
+                            Model::AnimationDetails(5, 5, 23, 40, bomb_animation_texture));
 }
 
 void Model::AssetLoader::load_shot_animation() {
@@ -141,11 +128,8 @@ void Model::AssetLoader::load_sounds() {
 }
 
 void Model::AssetLoader::load_cursor() {
-    manager->load_cursor(
-        Model::CursorID::RED,
-        addresser.get_cursor_path("pointer.bmp"),
-        SDL2pp::Rect(48, 0, 48, 48)
-    );
+    manager->load_cursor(Model::CursorID::RED, addresser.get_cursor_path("pointer.bmp"),
+                         SDL2pp::Rect(48, 0, 48, 48));
     manager->set_cursor(Model::CursorID::RED, SDL2pp::Point(10, 10));
 }
 
@@ -154,16 +138,13 @@ Model::AssetLoader::AssetLoader(Shared<AssetManager> manager, Shared<SDL2pp::Ren
         player_sprites({"ct1.bmp", "ct2.bmp", "ct3.bmp", "ct4.bmp", "t1.bmp", "t2.bmp", "t3.bmp",
                         "t4.bmp"}),
         weapon_sprites({"ak47.bmp", "awp.bmp", "bomb_d.bmp", "glock.bmp", "knife.bmp", "m3.bmp"}),
-        dropped_weapon_sprites({
-            "dropped_ak47.bmp", "dropped_awp.bmp", "bomb_d.bmp",
-            "dropped_glock.bmp", "dropped_m3.bmp"
-        }),
+        dropped_weapon_sprites({"dropped_ak47.bmp", "dropped_awp.bmp", "bomb_d.bmp",
+                                "dropped_glock.bmp", "dropped_m3.bmp"}),
         hud_textures({"hud_nums.bmp", "hud_symbols.bmp", "ak47_k.bmp", "awp_k.bmp", "glock_k.bmp",
                       "knife_k.bmp", "m3_k.bmp"}),
-        sounds({"radio/bomb-defused.ogg", "radio/bomb-planted.ogg",
-                "weapons/ak47.wav", "weapons/awp.wav", "weapons/bomb.wav",
-                "weapons/glock.wav", "weapons/knife.wav", "weapons/m3.wav",
-                "weapons/reload.wav"}),
+        sounds({"radio/bomb-defused.ogg", "radio/bomb-planted.ogg", "weapons/ak47.wav",
+                "weapons/awp.wav", "weapons/bomb.wav", "weapons/glock.wav", "weapons/knife.wav",
+                "weapons/m3.wav", "weapons/reload.wav"}),
         manager(manager),
         renderer(renderer),
         config(config),

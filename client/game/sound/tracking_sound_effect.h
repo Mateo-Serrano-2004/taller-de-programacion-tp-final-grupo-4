@@ -1,15 +1,15 @@
 #ifndef CLIENT_GAME_SOUND_TRACKING_SOUND_EFFECT_H
 #define CLIENT_GAME_SOUND_TRACKING_SOUND_EFFECT_H
 
-#include "sound_effect.h"
-
 #include "asset/sound_id.h"
 #include "common/weapon_id.h"
+
+#include "sound_effect.h"
 
 namespace SDL2pp {
 class Mixer;
 class Chunk;
-};
+};  // namespace SDL2pp
 
 namespace Controller {
 class GameController;
@@ -24,11 +24,8 @@ protected:
     short_id_t player_id;
 
 public:
-    TrackingSoundEffect(
-        Weak<Controller::GameController> controller,
-        Model::SoundID sound_id,
-        short_id_t player_id
-    );
+    TrackingSoundEffect(Weak<Controller::GameController> controller, Model::SoundID sound_id,
+                        short_id_t player_id);
 
     short_id_t get_player_id() const;
 
@@ -38,6 +35,6 @@ public:
 
     virtual ~TrackingSoundEffect() override = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_SOUND_TRACKING_SOUND_EFFECT_H
+#endif  // CLIENT_GAME_SOUND_TRACKING_SOUND_EFFECT_H

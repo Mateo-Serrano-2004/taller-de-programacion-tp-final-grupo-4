@@ -1,5 +1,6 @@
 #include "stats_event_handler_strategy.h"
 
+#include <memory>
 #include <utility>
 
 #include <SDL2/SDL.h>
@@ -23,10 +24,10 @@ void Controller::StatsEventHandlerStrategy::handle_switch_context_event() {
     }
 }
 
-Controller::StatsEventHandlerStrategy::StatsEventHandlerStrategy(Weak<GameController> controller)
-: Controller::EventHandlerStrategy(controller),
-  movement_handler(controller),
-  mouse_movement_handler(controller) {}
+Controller::StatsEventHandlerStrategy::StatsEventHandlerStrategy(Weak<GameController> controller):
+        Controller::EventHandlerStrategy(controller),
+        movement_handler(controller),
+        mouse_movement_handler(controller) {}
 
 void Controller::StatsEventHandlerStrategy::handle() {
     Controller::EventHandlerStrategy::handle();
@@ -41,6 +42,4 @@ void Controller::StatsEventHandlerStrategy::handle_current_game_state() {
     mouse_movement_handler.notify_current_rotation();
 }
 
-void Controller::StatsEventHandlerStrategy::update_on_switch_context() {
-    movement_handler.stop();
-}
+void Controller::StatsEventHandlerStrategy::update_on_switch_context() { movement_handler.stop(); }

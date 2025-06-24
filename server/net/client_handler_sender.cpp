@@ -10,9 +10,7 @@ Queue<DTO::DTOVariant>& ClientHandlerSender::get_queue() { return sender_queue; 
 
 void ClientHandlerSender::kill() { is_alive = false; }
 
-void ClientHandlerSender::close() { 
-    sender_queue.close();
-}
+void ClientHandlerSender::close() { sender_queue.close(); }
 
 void ClientHandlerSender::run() {
     while (is_alive) {

@@ -106,8 +106,7 @@ void View::Pane::set_parent(View::Pane* new_parent) {
             position = parent->get_position();
         if (!size_set)
             size = parent->get_size();
-    }
-    else {
+    } else {
         if (!position_set)
             position = SDL2pp::Point(0, 0);
         if (!size_set)

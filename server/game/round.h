@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <iostream>
+#include <vector>
 
 #include "common/DTO/round_dto.h"
 #include "common/model/vector_2d.h"

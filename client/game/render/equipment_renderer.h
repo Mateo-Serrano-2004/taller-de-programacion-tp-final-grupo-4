@@ -4,9 +4,9 @@
 #include <cstdint>
 #include <list>
 
-#include "entity/vertical_pane.h"
 #include "entity/horizontal_pane.h"
 #include "entity/pane.h"
+#include "entity/vertical_pane.h"
 
 #include "renderer.h"
 
@@ -51,6 +51,6 @@ public:
 
     ~EquipmentRenderer() override = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_RENDER_EQUIPMENT_RENDERER_H
+#endif  // CLIENT_GAME_RENDER_EQUIPMENT_RENDERER_H

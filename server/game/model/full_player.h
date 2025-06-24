@@ -3,15 +3,16 @@
 
 #include <optional>
 #include <string>
+#include <vector>
 
 #include "common/definitions.h"
 #include "common/model/player.h"
 #include "common/model/vector_2d.h"
 #include "common/slot_id.h"
 
+#include "dropped_weapon.h"
 #include "full_weapon.h"
 #include "shot_info.h"
-#include "dropped_weapon.h"
 
 class FullPlayer: public Model::Player {
 private:

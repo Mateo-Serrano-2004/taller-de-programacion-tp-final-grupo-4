@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <utility>
+
 #include <SDL2/SDL.h>
 
 #include "controller/base_controller.h"

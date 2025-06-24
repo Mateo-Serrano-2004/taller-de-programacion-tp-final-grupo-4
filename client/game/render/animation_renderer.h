@@ -19,6 +19,6 @@ public:
 
     ~AnimationRenderer() = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_RENDER_ANIMATION_RENDERER_H
+#endif  // CLIENT_GAME_RENDER_ANIMATION_RENDERER_H

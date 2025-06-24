@@ -1,7 +1,7 @@
 #include "main_window.h"
 
-#include <memory>
 #include <QMessageBox>
+#include <memory>
 
 #include "client/exception/closed_app.h"
 #include "client/exception/closed_game.h"
@@ -34,8 +34,9 @@ void MainWindow::connectToServer() {
 }
 
 void MainWindow::handleServerConnectionError() {
-    QMessageBox::critical(this, "Error de Conexión", 
-                         "No se pudo conectar al servidor. El servidor puede estar cerrado o no disponible.");
+    QMessageBox::critical(
+            this, "Error de Conexión",
+            "No se pudo conectar al servidor. El servidor puede estar cerrado o no disponible.");
     clearCurrentScene();
     QApplication::quit();
 }
@@ -55,7 +56,7 @@ void MainWindow::runGame() {
         QApplication::quit();
         return;
     }
-    
+
     connectToServer();
     this->show();
     this->resize(640, 400);

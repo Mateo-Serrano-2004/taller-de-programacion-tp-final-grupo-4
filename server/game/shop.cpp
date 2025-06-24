@@ -21,7 +21,8 @@ uint16_t Shop::get_price(Model::WeaponID weapon_id) const {
     }
 }
 
-Shared<FullWeapon> Shop::process_weapon_purchase(FullPlayer& player, Model::WeaponID weapon_id) const {
+Shared<FullWeapon> Shop::process_weapon_purchase(FullPlayer& player,
+                                                 Model::WeaponID weapon_id) const {
     uint16_t price = get_price(weapon_id);
 
     if (!player.can_pay(price))
@@ -35,11 +36,11 @@ Shared<FullWeapon> Shop::process_weapon_purchase(FullPlayer& player, Model::Weap
 void Shop::process_ammo_purchase(FullPlayer& player, Model::SlotID slot_id) const {
     uint16_t price;
 
-    if(slot_id == Model::SlotID::PRIMARY_WEAPON){
+    if (slot_id == Model::SlotID::PRIMARY_WEAPON) {
         price = 100;
-    } else if(slot_id == Model::SlotID::SECONDARY_WEAPON){
+    } else if (slot_id == Model::SlotID::SECONDARY_WEAPON) {
         price = 75;
-    } else{
+    } else {
         return;
     }
 

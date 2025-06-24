@@ -1,20 +1,20 @@
 #include "in_game_event_handler_strategy.h"
 
 #include <cmath>
-#include <memory>
-#include <utility>
 #include <iostream>
+#include <memory>
 #include <string>
+#include <utility>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Renderer.hh>
 #include <SDL2pp/Window.hh>
 
-#include "common/slot_id.h"
 #include "common/round_state.h"
-#include "controller/game_controller.h"
+#include "common/slot_id.h"
 #include "context/in_game_context.h"
+#include "controller/game_controller.h"
 #include "event/defuse_bomb_event.h"
 #include "event/movement_event.h"
 #include "event/quit_event.h"
@@ -44,8 +44,7 @@ void Controller::InGameEventHandlerStrategy::handle_switch_context_event() {
 }
 
 Controller::InGameEventHandlerStrategy::InGameEventHandlerStrategy(
-        Weak<Controller::GameController> controller,
-        Context::InGameContext* context):
+        Weak<Controller::GameController> controller, Context::InGameContext* context):
         Controller::EventHandlerStrategy(controller),
         movement_handler(controller),
         weapon_handler(controller),
@@ -67,7 +66,8 @@ void Controller::InGameEventHandlerStrategy::handle_current_game_state() {
     mouse_movement_handler.notify_current_rotation();
 }
 
-void Controller::InGameEventHandlerStrategy::update_on_switch_context(const std::string& new_context_name) {
+void Controller::InGameEventHandlerStrategy::update_on_switch_context(
+        const std::string& new_context_name) {
     if (new_context_name != "stats")
         movement_handler.stop();
     weapon_handler.stop();

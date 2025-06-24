@@ -3,8 +3,8 @@
 
 #include <cstdint>
 
-#include "common/weapon_id.h"
 #include "common/slot_id.h"
+#include "common/weapon_id.h"
 #include "model/full_player.h"
 
 class Shop {
