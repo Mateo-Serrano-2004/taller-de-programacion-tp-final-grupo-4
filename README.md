@@ -162,8 +162,7 @@ Counter-Strike-2D/
 ├── editor/          # Editor de mapas Qt
 ├── server/          # Código del servidor
 ├── tests/           # Tests unitarios
-├── install.sh       # Instalador del juego
-└── uninstall.sh     # Desinnstalador del juego
+├── cs2d_setup.sh    # Instalador del juego
 ```
 
 ## Documentación
