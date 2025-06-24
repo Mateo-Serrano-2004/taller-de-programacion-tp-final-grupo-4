@@ -23,7 +23,6 @@ FullPlayer::FullPlayer(short_id_t id, const std::string& name, Model::TeamID tea
         knife(WeaponFactory::create(Model::WeaponID::KNIFE)),
         was_reloading(false), trying_reload(false) {
     current_weapon = secondary_weapon;
-    money = 1500;
 }
 
 void FullPlayer::update_movement_direction_by_merge(const Physics::Vector2D& direction) {

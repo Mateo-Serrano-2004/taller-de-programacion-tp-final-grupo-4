@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-Round::Round(int ct_alive, int tt_alive):
+Round::Round(int ct_alive, int tt_alive, int fps):
         winner_team(Model::TeamID::NONE),
         state(RoundState::Buying),
         number_of_ct_alive(ct_alive),
@@ -10,23 +10,30 @@ Round::Round(int ct_alive, int tt_alive):
         bomb_planted(false),
         bomb_defused(false),
         bomb_position(0, 0),
-        ticks_for_warmup_phase(0),
-        ticks_for_buying_phase(600),
-        ticks_for_playing_phase(3600),
-        ticks_for_post_round_phase(300),
-        bomb_total_ticks(600),
-        active_ticks_remaining(600),
-        defusing_ticks(300),
-        defusing_ticks_remaining(300),
         bomb_being_defused(false),
         player_defusing_bomb(-1),
-        is_warmup_round(false) {}
+        is_warmup_round(false),
+        fps(fps) {
 
-Round Round::create_warmup_round() {
-    Round r(0, 0);
+            const auto& config = YamlParser::getConfigData();
+
+            ticks_for_warmup_phase = 0;
+            ticks_for_buying_phase = config.game.buyTime * fps;
+            ticks_for_playing_phase = config.game.roundTime * fps;
+            ticks_for_post_round_phase = 300;
+            bomb_total_ticks = config.game.bombExplotionTime * fps;
+            active_ticks_remaining = ticks_for_buying_phase;
+            defusing_ticks = config.game.bombDefuseTime * fps;
+            defusing_ticks_remaining = defusing_ticks;
+        }
+
+Round Round::create_warmup_round(int fps) {
+    const auto& config = YamlParser::getConfigData();
+    int warmup_ticks = config.game.warmupTime * fps;
+    Round r(0, 0, fps);
     r.state = RoundState::Warmup;
-    r.ticks_for_warmup_phase = 600;
-    r.active_ticks_remaining = 600;
+    r.ticks_for_warmup_phase = warmup_ticks;
+    r.active_ticks_remaining = warmup_ticks;
     r.is_warmup_round = true;
     return r;
 }
@@ -179,7 +186,7 @@ std::vector<DroppedWeapon>& Round::get_dropped_weapons() {
     return dropped_weapons;
 }
 
-DTO::RoundDTO Round::to_dto(int fps) const {
+DTO::RoundDTO Round::to_dto() const {
 
     uint8_t defuse_progress = 0;
 

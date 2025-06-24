@@ -10,6 +10,7 @@
 
 #include "vector_2d.h"
 #include "weapon.h"
+#include "server/parser/yaml_parser.h"
 
 namespace DTO {
 class PlayerDTO;
