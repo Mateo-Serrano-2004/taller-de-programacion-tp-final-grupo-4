@@ -8,6 +8,22 @@
 
 Counter Strike 2D es un juego multijugador en 2D inspirado en Counter-Strike. Permite a los jugadores crear y unirse a partidas, jugar en diferentes mapas, y utilizar un editor de mapas integrado para crear nuevos niveles.
 
+## Índice
+
+- [Características](#características)
+- [Requisitos del Sistema](#requisitos-del-sistema)
+- [Instalación](#instalación)
+- [Guía de Uso](#guía-de-uso)
+  - [Servidor](#servidor)
+  - [Cliente](#cliente)
+    - [Controles](#controles-del-juego)
+  - [Editor de Mapas](#editor-de-mapas)
+    - [Controles](#funcionalidades-del-editor)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Documentación](#documentación)
+- [Créditos](#créditos)
+- [Licencia](#licencia)
+
 ## Características
 
 - **Juego multijugador**: Soporte para múltiples jugadores simultáneos
@@ -116,6 +132,22 @@ Para unirte a una partida existente:
 - El sistema te asignará automáticamente un equipo (CT/TT)
 
 <img src="docs/pics/cliente4.png" alt="Unirse a partida" width="700">
+
+#### Controles del juego
+
+| Acción | Descripción |
+|--------|-------------|
+| **Click izquierdo** | Disparar / Colocar Bomba |
+| **WASD** | Movimiento |
+| **B** | Abrir tienda |
+| **G** | Tirar arma |
+| **R** | Recargar arma |
+| **1-2-3-4** | Cambio de arma |
+| **E** | Desactivar bomba |
+| **Esc** | Menu de salida |
+| **Tab** | Menu de stats |
+| **,** | Comprar balas de arma principal |
+| **.** | Comprar balas de arma secundaria |
 
 ### Editor de Mapas
 
