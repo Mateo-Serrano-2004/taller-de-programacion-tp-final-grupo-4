@@ -24,6 +24,7 @@ void View::TrackingSoundEffect::play() {
     if (player) {
         auto new_pos = player->get_position();
         set_position(SDL2pp::Point(new_pos.get_x(), new_pos.get_y()));
+        fix(player->get_fixation());
     }
     View::SoundEffect::play();
 }

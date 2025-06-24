@@ -70,6 +70,7 @@ void Controller::GameStateManager::load_bomb_explosion(DTO::GameStateDTO& dto) {
         game_state->bomb_position.has_value() &&
         game_state->round_state == RoundState::Active
     ) {
+        std::cout << "BOMB TIME\n";
         game_state->bomb_explosion = make_shared<View::BombExplosionAnimation>(
             controller,
             game_state->bomb_position.value()
@@ -78,7 +79,6 @@ void Controller::GameStateManager::load_bomb_explosion(DTO::GameStateDTO& dto) {
             controller,
             Model::SoundID::BOMB_EXPLOSION
         );
-        game_state->bomb_explosion_sound->set_position(game_state->bomb_position.value());
     }
 }
 
@@ -132,20 +132,7 @@ void Controller::GameStateManager::update_camera(const Shared<View::RenderedPlay
 }
 
 void Controller::GameStateManager::update_bomb_position(DTO::GameStateDTO& dto) {
-    if (game_state->bomb_explosion && game_state->bomb_explosion->has_ended())
-        game_state->bomb_explosion = nullptr;
-    if (
-        dto.round.state == RoundState::PostRound &&
-        dto.round.bomb_planted &&
-        !dto.round.bomb_defused &&
-        game_state->bomb_position.has_value() &&
-        game_state->round_state == RoundState::Active
-    ) {
-        game_state->bomb_explosion = make_shared<View::BombExplosionAnimation>(
-            controller,
-            game_state->bomb_position.value()
-        );
-    }
+    load_bomb_explosion(dto);
 
     if (dto.round.bomb_planted && !game_state->bomb_position.has_value()) {
         auto pos = dto.round.bomb_position;
