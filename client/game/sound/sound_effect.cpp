@@ -46,7 +46,7 @@ void View::SoundEffect::play() {
         channel = -1;
     }
     if (channel != -1)
-        std::cout << "VOLUME: " << (int) mixer->GetVolume(channel) << std::endl;
+        std::cout << "VOLUME: " << (int)mixer->GetVolume(channel) << std::endl;
 }
 
 void View::SoundEffect::end() {
