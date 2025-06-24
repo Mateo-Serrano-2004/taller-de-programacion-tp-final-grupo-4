@@ -35,11 +35,15 @@ private:
     Shared<Model::GameState> game_state;
     Weak<GameController> controller;
 
-    void load_animation(const Shared<Model::GameState>& new_game_state, const Shared<View::RenderedPlayer>& player);
-    void load_shot_sound(const Shared<Model::GameState>& new_game_state, const Shared<View::RenderedPlayer>& player);
-    void load_reload_sound(const Shared<Model::GameState>& new_game_state, const Shared<View::RenderedPlayer>& player);
+    void load_animation(const Shared<Model::GameState>& new_game_state,
+                        const Shared<View::RenderedPlayer>& player);
+    void load_shot_sound(const Shared<Model::GameState>& new_game_state,
+                         const Shared<View::RenderedPlayer>& player);
+    void load_reload_sound(const Shared<Model::GameState>& new_game_state,
+                           const Shared<View::RenderedPlayer>& player);
     void load_bomb_explosion(const DTO::GameStateDTO& dto);
-    void load_start_round_sound(const DTO::GameStateDTO& dto, const Shared<View::RenderedPlayer>& player);
+    void load_start_round_sound(const DTO::GameStateDTO& dto,
+                                const Shared<View::RenderedPlayer>& player);
     void load_bomb_state_sound(const DTO::GameStateDTO& dto);
     void load_hit_sound(const Shared<Model::GameState>& new_game_state);
     void winner_sound(const DTO::GameStateDTO& dto);

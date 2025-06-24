@@ -14,13 +14,10 @@ private:
     SDL2pp::Mixer mixer;
 
 public:
-    SubsystemManager(
-        int sdl_flags = SDL_INIT_VIDEO | SDL_INIT_AUDIO,
-        int frequency = MIX_DEFAULT_FREQUENCY,
-        Uint16 format = MIX_DEFAULT_FORMAT,
-        int channels = MIX_DEFAULT_CHANNELS,
-        int chunksize = 4096
-    );
+    explicit SubsystemManager(int sdl_flags = SDL_INIT_VIDEO | SDL_INIT_AUDIO,
+                              int frequency = MIX_DEFAULT_FREQUENCY,
+                              Uint16 format = MIX_DEFAULT_FORMAT,
+                              int channels = MIX_DEFAULT_CHANNELS, int chunksize = 4096);
 
     SDL2pp::Mixer& get_mixer();
 

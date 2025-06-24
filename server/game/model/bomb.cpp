@@ -1,19 +1,11 @@
 #include "bomb.h"
-#include "server/parser/yaml_parser.h"
-#include "common/definitions.h"
 
 #include <algorithm>
 
-Bomb::Bomb()
-    : FullWeapon(
-        Model::WeaponID::BOMB,
-        Model::SlotID::BOMB_SLOT,
-        1,
-        1,
-        1,
-        0,
-        0
-    ) {
+#include "common/definitions.h"
+#include "server/parser/yaml_parser.h"
+
+Bomb::Bomb(): FullWeapon(Model::WeaponID::BOMB, Model::SlotID::BOMB_SLOT, 1, 1, 1, 0, 0) {
     required_ticks_to_plant = (YamlParser::getConfigData().game.bombPlantTime * GAME_FPS);
 }
 
@@ -52,4 +44,4 @@ bool Bomb::is_planted() const { return planted; }
 
 bool Bomb::reload(uint16_t ticks_to_process) { return false; }
 
-void Bomb::add_ammo() { return; }
+void Bomb::add_ammo() {}

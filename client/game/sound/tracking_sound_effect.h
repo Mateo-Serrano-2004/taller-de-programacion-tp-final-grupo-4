@@ -1,11 +1,10 @@
 #ifndef CLIENT_GAME_SOUND_TRACKING_SOUND_EFFECT_H
 #define CLIENT_GAME_SOUND_TRACKING_SOUND_EFFECT_H
 
-#include "distanced_sound_effect.h"
-
 #include "asset/sound_id.h"
 #include "common/weapon_id.h"
 
+#include "distanced_sound_effect.h"
 #include "sound_effect.h"
 
 namespace SDL2pp {

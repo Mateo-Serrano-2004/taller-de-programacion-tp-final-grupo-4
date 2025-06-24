@@ -21,28 +21,19 @@ void View::SoundEffectPlayer::play_shots(const Model::GameState& game_state) {
 }
 
 void View::SoundEffectPlayer::play_radio_message(const Model::GameState& game_state) {
-    if (
-        game_state.start_round_radio &&
-       !game_state.start_round_radio->has_ended()
-    ) {
+    if (game_state.start_round_radio && !game_state.start_round_radio->has_ended()) {
         game_state.start_round_radio->play();
     }
 }
 
 void View::SoundEffectPlayer::play_bomb_state(const Model::GameState& game_state) {
-    if (
-        game_state.bomb_state_sound &&
-       !game_state.bomb_state_sound->has_ended()
-    ) {
+    if (game_state.bomb_state_sound && !game_state.bomb_state_sound->has_ended()) {
         game_state.bomb_state_sound->play();
     }
 }
 
 void View::SoundEffectPlayer::play_explosion(const Model::GameState& game_state) {
-    if (
-        game_state.bomb_explosion_sound &&
-       !game_state.bomb_explosion_sound->has_ended()
-    ) {
+    if (game_state.bomb_explosion_sound && !game_state.bomb_explosion_sound->has_ended()) {
         game_state.bomb_explosion_sound->fix(game_state.camera);
         if (game_state.bomb_position.has_value())
             game_state.bomb_explosion_sound->set_position(game_state.bomb_position.value());
@@ -51,10 +42,7 @@ void View::SoundEffectPlayer::play_explosion(const Model::GameState& game_state)
 }
 
 void View::SoundEffectPlayer::play_winning_sound(const Model::GameState& game_state) {
-    if (
-        game_state.winner_sound &&
-       !game_state.winner_sound->has_ended()
-    ) {
+    if (game_state.winner_sound && !game_state.winner_sound->has_ended()) {
         game_state.winner_sound->play();
     }
 }

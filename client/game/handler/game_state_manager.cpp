@@ -54,36 +54,23 @@ void Controller::GameStateManager::load_bomb_explosion(const DTO::GameStateDTO& 
         game_state->round_state == RoundState::Active) {
         std::cout << "BOMB TIME\n";
         game_state->bomb_explosion = make_shared<View::BombExplosionAnimation>(
-            controller,
-            game_state->bomb_position.value()
-        );
-        game_state->bomb_explosion_sound = make_shared<View::DistancedSoundEffect>(
-            controller,
-            Model::SoundID::BOMB_EXPLOSION
-        );
+                controller, game_state->bomb_position.value());
+        game_state->bomb_explosion_sound =
+                make_shared<View::DistancedSoundEffect>(controller, Model::SoundID::BOMB_EXPLOSION);
     }
 }
 
 void Controller::GameStateManager::load_start_round_sound(
-    const DTO::GameStateDTO& dto,
-    const Shared<View::RenderedPlayer>& player
-) {
+        const DTO::GameStateDTO& dto, const Shared<View::RenderedPlayer>& player) {
     if (game_state->start_round_radio && game_state->start_round_radio->has_ended())
         game_state->start_round_radio = nullptr;
-    if (
-        dto.round.state == RoundState::Active &&
-        game_state->round_state == RoundState::Buying
-    ) {
+    if (dto.round.state == RoundState::Active && game_state->round_state == RoundState::Buying) {
         if (player->get_team() == Model::TeamID::CT) {
-            game_state->start_round_radio = make_shared<View::SoundEffect>(
-                controller,
-                Model::SoundID::START_ROUND_CT
-            );
+            game_state->start_round_radio =
+                    make_shared<View::SoundEffect>(controller, Model::SoundID::START_ROUND_CT);
         } else {
-            game_state->start_round_radio = make_shared<View::SoundEffect>(
-                controller,
-                Model::SoundID::START_ROUND_TT
-            );
+            game_state->start_round_radio =
+                    make_shared<View::SoundEffect>(controller, Model::SoundID::START_ROUND_TT);
         }
     }
 }
@@ -91,23 +78,13 @@ void Controller::GameStateManager::load_start_round_sound(
 void Controller::GameStateManager::load_bomb_state_sound(const DTO::GameStateDTO& dto) {
     if (game_state->bomb_state_sound && game_state->bomb_state_sound->has_ended())
         game_state->bomb_state_sound = nullptr;
-    if (
-        dto.round.bomb_defused &&
-        !game_state->bomb_defused
-    ) {
-        game_state->bomb_state_sound = make_shared<View::SoundEffect>(
-            controller,
-            Model::SoundID::BOMB_DEFUSED
-        );
+    if (dto.round.bomb_defused && !game_state->bomb_defused) {
+        game_state->bomb_state_sound =
+                make_shared<View::SoundEffect>(controller, Model::SoundID::BOMB_DEFUSED);
     }
-    if (
-        dto.round.bomb_planted &&
-        !game_state->bomb_planted
-    ) {
-        game_state->bomb_state_sound = make_shared<View::SoundEffect>(
-            controller,
-            Model::SoundID::BOMB_PLANTED
-        );
+    if (dto.round.bomb_planted && !game_state->bomb_planted) {
+        game_state->bomb_state_sound =
+                make_shared<View::SoundEffect>(controller, Model::SoundID::BOMB_PLANTED);
     }
 }
 
@@ -120,11 +97,8 @@ void Controller::GameStateManager::load_hit_sound(const Shared<Model::GameState>
             else
                 id = Model::SoundID::DEATH_SOUND;
 
-            new_game_state->sound_effects.push_back(
-                make_shared<View::TrackingSoundEffect>(
-                    controller, id, player.second->get_id()
-                )
-            );
+            new_game_state->sound_effects.push_back(make_shared<View::TrackingSoundEffect>(
+                    controller, id, player.second->get_id()));
         }
     }
 }
@@ -132,29 +106,17 @@ void Controller::GameStateManager::load_hit_sound(const Shared<Model::GameState>
 void Controller::GameStateManager::winner_sound(const DTO::GameStateDTO& dto) {
     if (game_state->winner_sound && game_state->winner_sound->has_ended())
         game_state->winner_sound = nullptr;
-    if (
-        dto.winner == Model::TeamID::CT &&
-        game_state->game_winner == Model::TeamID::NONE
-    ) {
-        game_state->winner_sound = make_shared<View::SoundEffect>(
-            controller,
-            Model::SoundID::WINNER_CT
-        );
-    } else if (
-        dto.winner == Model::TeamID::TT &&
-        game_state->game_winner == Model::TeamID::NONE
-    ) {
-        game_state->winner_sound = make_shared<View::SoundEffect>(
-            controller,
-            Model::SoundID::WINNER_TT
-        );
+    if (dto.winner == Model::TeamID::CT && game_state->game_winner == Model::TeamID::NONE) {
+        game_state->winner_sound =
+                make_shared<View::SoundEffect>(controller, Model::SoundID::WINNER_CT);
+    } else if (dto.winner == Model::TeamID::TT && game_state->game_winner == Model::TeamID::NONE) {
+        game_state->winner_sound =
+                make_shared<View::SoundEffect>(controller, Model::SoundID::WINNER_TT);
     }
 }
 
-void Controller::GameStateManager::load_animation(
-    const Shared<Model::GameState>& new_game_state,
-    const Shared<View::RenderedPlayer>& player
-) {
+void Controller::GameStateManager::load_animation(const Shared<Model::GameState>& new_game_state,
+                                                  const Shared<View::RenderedPlayer>& player) {
     if (!player->is_shooting())
         return;
     auto weapon_id = player->get_current_weapon()->get_weapon_id();
@@ -178,7 +140,8 @@ void Controller::GameStateManager::update_sounds(const Shared<Model::GameState>&
                                      new_game_state->sound_effects);
 }
 
-void Controller::GameStateManager::update_animations(const Shared<Model::GameState>& new_game_state) {
+void Controller::GameStateManager::update_animations(
+        const Shared<Model::GameState>& new_game_state) {
     game_state->fires.remove_if(
             [](Shared<View::MuzzleFireAnimation>& a) { return a->has_ended(); });
     game_state->fires.splice(game_state->fires.end(), new_game_state->fires);

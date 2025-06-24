@@ -20,16 +20,13 @@ private:
     void update_volume();
 
 public:
-    DistancedSoundEffect(
-        Weak<Controller::BaseController> controller,
-        Model::SoundID sound_id
-    );
+    DistancedSoundEffect(Weak<Controller::BaseController> controller, Model::SoundID sound_id);
 
     void set_position(const SDL2pp::Point& new_poisition);
     virtual void play() override;
 
     virtual ~DistancedSoundEffect() override = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_SOUND_DISTANCED_SOUND_H
+#endif  // CLIENT_GAME_SOUND_DISTANCED_SOUND_H

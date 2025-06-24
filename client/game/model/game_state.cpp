@@ -13,11 +13,9 @@
 #include "animation/winner_team_message_animation.h"
 #include "common/DTO/drop_weapon_dto.h"
 #include "model/rendered_player.h"
-#include "sound/sound_effect.h"
-#include "sound/tracking_sound_effect.h"
 #include "sound/distanced_sound_effect.h"
 #include "sound/sound_effect.h"
-#include "model/rendered_player.h"
+#include "sound/tracking_sound_effect.h"
 
 Model::GameState::GameState():
         reference_player_id(std::nullopt),

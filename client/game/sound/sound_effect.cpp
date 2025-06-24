@@ -31,9 +31,7 @@ bool View::SoundEffect::is_playing() const { return started; }
 
 bool View::SoundEffect::has_ended() const { return ended; }
 
-void View::SoundEffect::set_volume(int new_volume) {
-    mixer->SetVolume(channel, new_volume);
-}
+void View::SoundEffect::set_volume(int new_volume) { mixer->SetVolume(channel, new_volume); }
 
 void View::SoundEffect::play() {
     if (!ended && !started && chunk) {

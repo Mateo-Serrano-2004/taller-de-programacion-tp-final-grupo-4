@@ -177,7 +177,7 @@ void Game::swap_teams() {
         } else if (player.get_team() == Model::TeamID::TT) {
             player.set_new_team(Model::TeamID::CT);
         } else {
-            continue;  // no deberia apsar que llegue acá igual
+            continue;
         }
 
         Model::RoleID current = player.get_role_id();
@@ -214,7 +214,6 @@ void Game::swap_teams() {
     std::swap(ct_rounds_won, tt_rounds_won);
 }
 
-// VER EL TEMA DE JUGADORES MAXIMOS ANTES
 void Game::start_new_round() {
     state = GameState::Playing;
 
@@ -402,7 +401,6 @@ bool Game::is_valid() { return round.is_warmup() && is_not_finished; }
 
 bool Game::is_dead() { return !is_not_finished; }
 
-// FALTA: ESTO ESTA ARRANCANDO LA RONDA CON 1 SOLO PLAYER, QUE EVENTUALMENTE GANARÍA TODO Y TERMINA
 void Game::add_player(const std::string& username, ClientQueue& client_queue, short_id_t player_id,
                       Model::TeamID team_id, Model::RoleID role_id) {
     std::lock_guard<std::mutex> lock(mutex);

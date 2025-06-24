@@ -11,6 +11,7 @@ private:
     bool planted = false;
 
     uint16_t required_ticks_to_plant;
+
 public:
     Bomb();
 

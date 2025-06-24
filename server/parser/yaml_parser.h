@@ -20,25 +20,25 @@ struct TileData {
 
 struct GameConfig {
     std::string title;
-    int rounds;               
-    int roundsPerSide;      
-    int buyTime;              
-    int warmupTime;    
+    int rounds;
+    int roundsPerSide;
+    int buyTime;
+    int warmupTime;
     int postRoundTime;
-    int roundTime;            
-    int roundWonMoney;        
-    int roundLostMoney;       
-    int bombExplotionTime;    
-    int bombPlantTime;        
-    int bombDefuseTime;       
+    int roundTime;
+    int roundWonMoney;
+    int roundLostMoney;
+    int bombExplotionTime;
+    int bombPlantTime;
+    int bombDefuseTime;
     int killMoney;
     int costPrimaryAmmo;
     int costSecondaryAmmo;
 };
 
 struct PlayerConfig {
-    int health;           
-    int initialMoney;     
+    int health;
+    int initialMoney;
 };
 
 struct WeaponConfig {

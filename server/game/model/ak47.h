@@ -20,8 +20,9 @@ private:
     bool in_burst;
     uint8_t bullets_in_current_burst;
     uint16_t ticks_until_next_bullet;
-    uint16_t ticks_between_burst_bullets; 
+    uint16_t ticks_between_burst_bullets;
     uint16_t burst_cooldown_ticks;
+
 public:
     AK47();
     void press_trigger() override;

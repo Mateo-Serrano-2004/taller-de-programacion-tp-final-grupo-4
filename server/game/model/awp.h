@@ -4,7 +4,7 @@
 #include "full_weapon.h"
 #include "weapon_shot_info.h"
 
-class AWP : public FullWeapon {
+class AWP: public FullWeapon {
 private:
     float damage;
     float precision;

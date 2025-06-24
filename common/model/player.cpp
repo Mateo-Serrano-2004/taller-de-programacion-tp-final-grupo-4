@@ -87,7 +87,7 @@ void Model::Player::set_position(Physics::Vector2D new_position) {
     position = std::move(new_position);
 }
 
-bool Model::Player::get_has_hit() const {return has_hit; }
+bool Model::Player::get_has_hit() const { return has_hit; }
 
 void Model::Player::set_current_weapon(Shared<Model::Weapon> weapon) { current_weapon = weapon; }
 
@@ -107,9 +107,7 @@ void Model::Player::add_kill() { kills++; }
 
 void Model::Player::add_death() { deaths++; }
 
-void Model::Player::set_has_hit(bool new_has_hit) {
-    has_hit = new_has_hit;
-}
+void Model::Player::set_has_hit(bool new_has_hit) { has_hit = new_has_hit; }
 
 Shared<Model::Weapon> Model::Player::get_current_weapon() const { return current_weapon; }
 

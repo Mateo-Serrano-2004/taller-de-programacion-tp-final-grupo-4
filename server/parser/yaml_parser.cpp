@@ -57,7 +57,7 @@ void YamlParser::parseGameConfigYaml(const std::string& yamlGameConfigPath) {
     gameConfig.game.bombExplotionTime = game["bomb_explotion_time"].as<int>();
     gameConfig.game.bombPlantTime = game["bomb_plant_time"].as<int>();
     gameConfig.game.bombDefuseTime = game["bomb_defuse_time"].as<int>();
-    gameConfig.game.killMoney = game["kill_money"].as<int>();   
+    gameConfig.game.killMoney = game["kill_money"].as<int>();
     gameConfig.game.costPrimaryAmmo = game["cost_primary_ammo"].as<int>();
     gameConfig.game.costSecondaryAmmo = game["cost_secondary_ammo"].as<int>();
 
@@ -80,7 +80,7 @@ void YamlParser::parseGameConfigYaml(const std::string& yamlGameConfigPath) {
         wc.bulletsPerShot = w["bullets_per_shot"].as<int>();
         wc.fireRate = w["fire_rate"] ? w["fire_rate"].as<float>() : 0.0f;
         wc.dispersion = w["dispersion"].as<float>();
-        wc.reloadTime = w["reload_time"].as<float>();   
+        wc.reloadTime = w["reload_time"].as<float>();
 
         gameConfig.weapons[name] = wc;
     }
