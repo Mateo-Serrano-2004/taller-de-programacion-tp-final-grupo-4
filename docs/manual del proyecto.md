@@ -182,4 +182,6 @@ Se añade el mapa, nuevas animaciones, tablero de estadísticas, configuración,
 - No hay música de fondo en el juego.
 - No hay sonido de cargador vacio ni de pasos.
 - No se puede cambiar ni el volumen de los sonidos ni los FPS.
+- No hay sonidos con distancia.
 - No se puede cambiar el keybinding.
+- No se puede seleccionar el equipo al ingresar partida ni elegir la skin cuando cambias de equipo automáticamente.
