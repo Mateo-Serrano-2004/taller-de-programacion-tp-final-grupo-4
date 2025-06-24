@@ -41,3 +41,6 @@ std::string Model::AssetAddresser::get_sound_path(const std::string& partial_pat
     return assets_main_path + "sfx/" + partial_path;
 }
 
+std::string Model::AssetAddresser::get_cursor_path(const std::string& partial_path) {
+    return assets_main_path + "gfx/cursors/" + partial_path;
+}

@@ -45,6 +45,7 @@ private:
     void load_shot_animation();
     void load_animations();
     void load_sounds();
+    void load_cursor();
 
 public:
     AssetLoader(Shared<AssetManager> manager, Shared<SDL2pp::Renderer> renderer,

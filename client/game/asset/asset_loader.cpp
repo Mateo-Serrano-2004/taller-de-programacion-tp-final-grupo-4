@@ -15,6 +15,7 @@
 #include "controller/game_controller.h"
 
 #include "animation_id.h"
+#include "cursor_id.h"
 #include "sound_id.h"
 #include "asset_manager.h"
 #include "texture_id.h"
@@ -139,6 +140,15 @@ void Model::AssetLoader::load_sounds() {
     manager->load_sound(Model::SoundID::RELOAD_SOUND, sounds[8]);
 }
 
+void Model::AssetLoader::load_cursor() {
+    manager->load_cursor(
+        Model::CursorID::RED,
+        addresser.get_cursor_path("pointer.bmp"),
+        SDL2pp::Rect(48, 0, 48, 48)
+    );
+    manager->set_cursor(Model::CursorID::RED, SDL2pp::Point(10, 10));
+}
+
 Model::AssetLoader::AssetLoader(Shared<AssetManager> manager, Shared<SDL2pp::Renderer> renderer,
                                 const DTO::ConfigDTO& config):
         player_sprites({"ct1.bmp", "ct2.bmp", "ct3.bmp", "ct4.bmp", "t1.bmp", "t2.bmp", "t3.bmp",
@@ -167,4 +177,5 @@ void Model::AssetLoader::load_all_textures() {
     load_fov();
     load_animations();
     load_sounds();
+    load_cursor();
 }
