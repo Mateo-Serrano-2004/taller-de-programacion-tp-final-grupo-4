@@ -36,6 +36,7 @@ protected:
     uint8_t kills;
     uint8_t planting_progress;
     bool has_bomb;
+    bool has_hit;
 
 public:
     Player(short_id_t id, uint16_t money, const std::string& name,
@@ -46,7 +47,7 @@ public:
            angle_t angle, uint16_t money, const std::string& name,
            const Physics::Vector2D& position, Shared<Weapon> weapon, uint8_t health,
            Model::TeamID team, uint8_t deaths, uint8_t kills, uint8_t planting_progress,
-           bool has_bomb);
+           bool has_bomb, bool has_hit);
 
     Player(const Player&) = delete;
     Player& operator=(const Player&) = delete;
@@ -54,6 +55,7 @@ public:
     Player& operator=(Player&&) = default;
 
     bool is_alive() const;
+    bool get_has_hit() const;
     bool is_shooting() const;
     bool is_defusing() const;
     bool is_reloading() const;
@@ -80,6 +82,7 @@ public:
     void set_new_team(Model::TeamID new_team);
     void add_kill();
     void add_death();
+    void set_has_hit(bool new_has_hit);
 
     DTO::PlayerDTO to_dto() const;
 

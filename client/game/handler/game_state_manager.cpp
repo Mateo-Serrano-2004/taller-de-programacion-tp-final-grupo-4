@@ -82,6 +82,53 @@ void Controller::GameStateManager::load_bomb_explosion(DTO::GameStateDTO& dto) {
     }
 }
 
+void Controller::GameStateManager::load_start_round_sound(
+    DTO::GameStateDTO& dto,
+    const Shared<View::RenderedPlayer>& player
+) {
+    if (game_state->start_round_radio && game_state->start_round_radio->has_ended())
+        game_state->start_round_radio = nullptr;
+    if (
+        dto.round.state == RoundState::Active &&
+        game_state->round_state == RoundState::Buying
+    ) {
+        if (player->get_team() == Model::TeamID::CT) {
+            game_state->start_round_radio = make_shared<View::SoundEffect>(
+                controller,
+                Model::SoundID::START_ROUND_CT
+            );
+        } else {
+            game_state->start_round_radio = make_shared<View::SoundEffect>(
+                controller,
+                Model::SoundID::START_ROUND_TT
+            );
+        }
+    }
+}
+
+void Controller::GameStateManager::load_bomb_state_sound(DTO::GameStateDTO& dto) {
+    if (game_state->bomb_state_sound && game_state->bomb_state_sound->has_ended())
+        game_state->bomb_state_sound = nullptr;
+    if (
+        dto.round.bomb_defused &&
+        !game_state->bomb_defused
+    ) {
+        game_state->bomb_state_sound = make_shared<View::SoundEffect>(
+            controller,
+            Model::SoundID::BOMB_DEFUSED
+        );
+    }
+    if (
+        dto.round.bomb_planted &&
+        !game_state->bomb_planted
+    ) {
+        game_state->bomb_state_sound = make_shared<View::SoundEffect>(
+            controller,
+            Model::SoundID::BOMB_PLANTED
+        );
+    }
+}
+
 void Controller::GameStateManager::load_animation(
     Shared<Model::GameState>& new_game_state,
     const Shared<View::RenderedPlayer>& player
@@ -174,6 +221,12 @@ void Controller::GameStateManager::update_winner_message(DTO::GameStateDTO& dto)
         game_state->winner_message = make_shared<View::WinnerTeamMessageAnimation>(
             controller, game_state->round_winner
         );
+        // Model::SoundID id = (dto.round.winner == Model::TeamID::CT) ? Model::SoundID::WINNER_CT :
+        //                     (dto.round.winner == Model::TeamID::TT) ? Model::SoundID::WINNER_TT :
+        //                      Model::SoundID::NO_SOUND;
+        // game_state->winner_sound = make_shared<View::SoundEffect>(
+        //     controller, id
+        // );
     }
 }
 
@@ -184,6 +237,8 @@ void Controller::GameStateManager::update_stats(DTO::GameStateDTO& dto) {
     game_state->second_team_victories = dto.tt_rounds_won;
     game_state->game_winner = dto.winner;
     game_state->round_state = dto.round.state;
+    game_state->bomb_defused = dto.round.bomb_defused;
+    game_state->bomb_planted = dto.round.bomb_planted;
 }
 
 Controller::GameStateManager::GameStateManager(Weak<Controller::GameController> controller):
@@ -222,8 +277,10 @@ void Controller::GameStateManager::update(DTO::GameStateDTO& game_state_dto) {
     game_state->players = new_game_state->players;
     update_animations(new_game_state);
     update_sounds(new_game_state);
+    load_bomb_state_sound(game_state_dto);
 
     auto ref_player = game_state->get_reference_player();
+    load_start_round_sound(game_state_dto, ref_player);
     update_camera(ref_player);
     update_progress_bar(ref_player);
     

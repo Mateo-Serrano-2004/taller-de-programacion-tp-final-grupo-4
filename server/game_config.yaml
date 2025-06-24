@@ -3,8 +3,8 @@ game:
   rounds_to_win: 6
   rounds_per_side: 5
 
-  buy_time: 15
-  warmup_time: 30
+  buy_time: 3
+  warmup_time: 10
   round_time: 120
   round_won_money: 500
   round_lost_money: 250
@@ -86,7 +86,7 @@ weapons:
 fov:
   angle: 45
   ratio: 40
-  opacity: 153
+  opacity: 160
 
 display:
   width: 580

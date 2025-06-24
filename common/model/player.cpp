@@ -27,13 +27,14 @@ Model::Player::Player(short_id_t id, uint16_t money, const std::string& name,
         deaths(0),
         kills(0),
         planting_progress(0),
-        has_bomb(false) {}
+        has_bomb(false),
+        has_hit(false) {}
 
 Model::Player::Player(bool shooting, bool defusing_bomb, bool reloading, short_id_t id,
                       Model::RoleID role_id, angle_t angle, uint16_t money, const std::string& name,
                       const Physics::Vector2D& position, Shared<Model::Weapon> weapon,
                       uint8_t health, Model::TeamID team, uint8_t deaths, uint8_t kills,
-                      uint8_t planting_progress, bool has_bomb):
+                      uint8_t planting_progress, bool has_bomb, bool has_hit):
         alive(true),
         shooting(shooting),
         defusing_bomb(defusing_bomb),
@@ -50,7 +51,8 @@ Model::Player::Player(bool shooting, bool defusing_bomb, bool reloading, short_i
         deaths(deaths),
         kills(kills),
         planting_progress(planting_progress),
-        has_bomb(has_bomb) {}
+        has_bomb(has_bomb),
+        has_hit(has_hit) {}
 
 bool Model::Player::is_alive() const { return alive; }
 
@@ -86,6 +88,8 @@ void Model::Player::set_position(Physics::Vector2D new_position) {
     position = std::move(new_position);
 }
 
+bool Model::Player::get_has_hit() const {return has_hit; }
+
 void Model::Player::set_current_weapon(Shared<Model::Weapon> weapon) { current_weapon = weapon; }
 
 uint8_t Model::Player::get_health() const { return health; }
@@ -104,11 +108,15 @@ void Model::Player::add_kill() { kills++; }
 
 void Model::Player::add_death() { deaths++; }
 
+void Model::Player::set_has_hit(bool new_has_hit) {
+    has_hit = new_has_hit;
+}
+
 Shared<Model::Weapon> Model::Player::get_current_weapon() const { return current_weapon; }
 
 DTO::PlayerDTO Model::Player::to_dto() const {
     return DTO::PlayerDTO(id, (short_id_t)(role_id), angle, money, position.get_x(),
                           position.get_y(), name, current_weapon->to_dto(), shooting, defusing_bomb,
                           reloading, health, (short_id_t)(team), deaths, kills, planting_progress,
-                          has_bomb ? 1 : 0);
+                          has_bomb ? 1 : 0, has_hit ? 1 : 0);
 }

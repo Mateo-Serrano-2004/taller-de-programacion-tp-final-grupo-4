@@ -67,6 +67,7 @@ void Net::ClientProtocol::receive_player(DTO::PlayerDTO& player) {
     skt.recvall(&player.deaths, sizeof(player.deaths));
     skt.recvall(&player.planting_progress, sizeof(player.planting_progress));
     skt.recvall(&player.has_bomb, sizeof(player.has_bomb));
+    skt.recvall(&player.has_hit, sizeof(player.has_hit));
 
     receive_weapon(player.weapon_dto);
 }
@@ -215,7 +216,12 @@ void Net::ClientProtocol::send_event(const DTO::EventDTO& event_dto) {
 
 DTO::ConfigDTO Net::ClientProtocol::receive_config() {
     DTO::ConfigDTO config;
-    skt.recvall(&config, sizeof(config));
+
+    skt.recvall(&config.width, sizeof(config.width));
+    skt.recvall(&config.height, sizeof(config.height));
+    skt.recvall(&config.opacity, sizeof(config.opacity));
+    skt.recvall(&config.angle, sizeof(config.angle));
+    skt.recvall(&config.ratio, sizeof(config.ratio));
 
     config.width = ntohs(config.width);
     config.height = ntohs(config.height);

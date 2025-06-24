@@ -107,7 +107,7 @@ Shared<SDL2pp::Texture> View::AssetGenerator::generate_fov() {
     // Set blend for the current target
     renderer->SetTarget(*fov_texture);
     renderer->SetDrawBlendMode(SDL_BLENDMODE_BLEND);
-    renderer->SetDrawColor(0, 0, 0, 128);  // Semi-transparent black
+    renderer->SetDrawColor(0, 0, 0, config.opacity);  // Semi-transparent black
 
     renderer->Clear();
 

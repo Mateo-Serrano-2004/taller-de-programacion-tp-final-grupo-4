@@ -168,6 +168,7 @@ void ServerProtocol::send_player(const DTO::PlayerDTO& player) {
     peer.sendall(&player.deaths, sizeof(player.deaths));
     peer.sendall(&player.planting_progress, sizeof(player.planting_progress));
     peer.sendall(&player.has_bomb, sizeof(player.has_bomb));
+    peer.sendall(&player.has_hit, sizeof(player.has_hit));
 
     send_weapon(player.weapon_dto);
 }
@@ -291,5 +292,9 @@ void ServerProtocol::send_config(const DTO::ConfigDTO& config_dto) {
     config.angle = htons(config.angle);
     config.ratio = htons(config.ratio);
 
-    peer.sendall(&config, sizeof(config));
+    peer.sendall(&config.width, sizeof(config.width));
+    peer.sendall(&config.height, sizeof(config.height));
+    peer.sendall(&config.opacity, sizeof(config.opacity));
+    peer.sendall(&config.angle, sizeof(config.angle));
+    peer.sendall(&config.ratio, sizeof(config.ratio));
 }

@@ -11,14 +11,14 @@
 #include "utils/enum_translator.h"
 
 int View::SoundEffect::calculate_volume(int current_distance, int min_range, int max_range) {
-    // Volume in range [0, 100]
+    // Volume in range [0, 80]
 
-    if (current_distance <= min_range) return 100;
+    if (current_distance <= min_range) return 80;
     if (current_distance >= max_range) return 0;
 
     float t = (float) ((current_distance - min_range)) / (float) ((max_range - min_range));
     float cosine = std::cos(t * M_PI);
-    float volume = 0.5f * (1 + cosine) * 100.0f;
+    float volume = 0.5f * (1 + cosine) * 80.0f;
 
     return static_cast<int>(volume);
 }

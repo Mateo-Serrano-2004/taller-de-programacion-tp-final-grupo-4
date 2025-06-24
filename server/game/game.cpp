@@ -269,8 +269,9 @@ void Game::process_frames(uint16_t frames_to_process) {
 
 void Game::broadcast_game_state() {
     std::vector<DTO::PlayerDTO> player_dtos;
-    for (const auto& [id, player]: players) {
+    for (auto& [id, player]: players) {
         player_dtos.push_back(player.to_dto());
+        player.set_has_hit(false);
     }
 
     DTO::RoundDTO round_dto = round.to_dto();

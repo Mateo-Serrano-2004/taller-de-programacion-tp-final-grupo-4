@@ -16,6 +16,8 @@ enum class SoundID: uint8_t {
     BOMB_DEFUSED = 0x08,
     START_ROUND_CT = 0x09,
     START_ROUND_TT = 0x0A,
+    WINNER_CT = 0x0B,
+    WINNER_TT = 0x0C,
     NO_SOUND = 0xFF
 };
 };

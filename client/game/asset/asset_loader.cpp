@@ -129,8 +129,8 @@ void Model::AssetLoader::load_animations() {
 }
 
 void Model::AssetLoader::load_sounds() {
-    manager->load_sound(Model::SoundID::BOMB_PLANTED, sounds[0]);
-    manager->load_sound(Model::SoundID::BOMB_DEFUSED, sounds[1]);
+    manager->load_sound(Model::SoundID::BOMB_DEFUSED, sounds[0]);
+    manager->load_sound(Model::SoundID::BOMB_PLANTED, sounds[1]);
     manager->load_sound(Model::SoundID::AK47_FIRE, sounds[2]);
     manager->load_sound(Model::SoundID::AWP_FIRE, sounds[3]);
     manager->load_sound(Model::SoundID::BOMB_EXPLOSION, sounds[4]);
@@ -138,6 +138,10 @@ void Model::AssetLoader::load_sounds() {
     manager->load_sound(Model::SoundID::KNIFE_SLASH, sounds[6]);
     manager->load_sound(Model::SoundID::M3_FIRE, sounds[7]);
     manager->load_sound(Model::SoundID::RELOAD_SOUND, sounds[8]);
+    manager->load_sound(Model::SoundID::START_ROUND_CT, sounds[9]);
+    manager->load_sound(Model::SoundID::START_ROUND_TT, sounds[10]);
+    manager->load_sound(Model::SoundID::WINNER_CT, sounds[11]);
+    manager->load_sound(Model::SoundID::WINNER_TT, sounds[12]);
 }
 
 void Model::AssetLoader::load_cursor() {
@@ -163,7 +167,8 @@ Model::AssetLoader::AssetLoader(Shared<AssetManager> manager, Shared<SDL2pp::Ren
         sounds({"radio/bomb-defused.ogg", "radio/bomb-planted.ogg",
                 "weapons/ak47.wav", "weapons/awp.wav", "weapons/bomb.wav",
                 "weapons/glock.wav", "weapons/knife.wav", "weapons/m3.wav",
-                "weapons/reload.wav"}),
+                "weapons/reload.wav", "radio/letsgo.ogg", "radio/moveout.ogg",
+                "radio/ctwin.ogg", "radio/terwin.ogg"}),
         manager(manager),
         renderer(renderer),
         config(config),

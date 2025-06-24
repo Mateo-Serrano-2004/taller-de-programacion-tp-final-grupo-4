@@ -18,6 +18,8 @@
 
 Model::GameState::GameState():
         reference_player_id(std::nullopt),
+        bomb_defused(false),
+        bomb_planted(false),
         bomb_position(std::nullopt),
         time_left(0),
         defusing_progress(0),

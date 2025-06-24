@@ -1,6 +1,7 @@
 #include "subsystem_manager.h"
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 #include <SDL2pp/Mixer.hh>
 
 Controller::SubsystemManager::SubsystemManager(
@@ -12,6 +13,7 @@ Controller::SubsystemManager::SubsystemManager(
 ): sdl(sdl_flags),
    ttf(),
    mixer(frequency, format, channels, chunksize) {
+    int initted = Mix_Init(MIX_INIT_OGG);
     mixer.AllocateChannels(32);
 }
 

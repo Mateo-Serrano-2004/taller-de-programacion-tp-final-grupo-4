@@ -41,13 +41,18 @@ struct GameState {
     std::vector<Shared<DTO::DropWeaponDTO>> dropped_weapons;
     std::list<Shared<View::MuzzleFireAnimation>> fires;
     std::list<Shared<View::TrackingSoundEffect>> sound_effects;
+    Shared<View::SoundEffect> start_round_radio;
+    Shared<View::SoundEffect> bomb_state_sound;
     Shared<View::WinnerTeamMessageAnimation> winner_message;
     Shared<View::ProgressBarAnimation> progress_bar;
     Shared<View::BombExplosionAnimation> bomb_explosion;
     Shared<View::SoundEffect> bomb_explosion_sound;
+    Shared<View::SoundEffect> winner_sound;
     View::Camera camera;
     Shared<SDL2pp::Texture> map;
     Maybe<short_id_t> reference_player_id;
+    bool bomb_defused;
+    bool bomb_planted;
     Maybe<SDL2pp::Point> bomb_position;
     uint16_t time_left;
     uint8_t defusing_progress;

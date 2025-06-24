@@ -28,6 +28,7 @@ public:
     uint8_t kills;
     uint8_t planting_progress;
     uint8_t has_bomb;
+    uint8_t has_hit;
 
     WeaponDTO weapon_dto;
 
@@ -37,7 +38,7 @@ public:
               coord_t position_x, coord_t position_y, const std::string& name,
               const DTO::WeaponDTO& weapon_dto, uint8_t shooting, uint8_t defusing_bomb,
               uint8_t reloading, uint8_t health, short_id_t team, uint8_t deaths, uint8_t kills,
-              uint8_t planting_progress, uint8_t has_bomb);
+              uint8_t planting_progress, uint8_t has_bomb, uint8_t has_hit);
 
     Model::Player to_player() const;
 };

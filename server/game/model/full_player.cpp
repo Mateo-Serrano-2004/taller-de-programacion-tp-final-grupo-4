@@ -205,9 +205,11 @@ void FullPlayer::take_damage(uint8_t damage) {
     if (health <= damage) {
         health = 0;
         alive = false;
+        has_hit = true;
         add_death();
     } else {
         health -= damage;
+        has_hit = true;
     }
 }
 
@@ -226,6 +228,7 @@ void FullPlayer::reset_for_new_round(Physics::Vector2D new_position) {
     planting_progress = 0;
     bomb.reset();
     has_bomb = false;
+    has_hit = false;
 }
 
 bool FullPlayer::has_bomb_equipped() const {

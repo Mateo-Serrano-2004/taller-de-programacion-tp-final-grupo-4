@@ -17,7 +17,7 @@ void ClientHandler::handle_map_request() {
 
 void ClientHandler::handle_create_game(const CreateGameEvent& event) {
     const ConfigData& config = YamlParser::getConfigData();
-    DTO::ConfigDTO config_dto(config.display.width, config.display.height, config.fov.angle,
+    DTO::ConfigDTO config_dto(config.display.width, config.display.height, config.fov.opacity, config.fov.angle,
                               config.fov.ratio);
     auto map = game_manager.get_map(event.get_map_name());
     sender_queue.push(config_dto);
@@ -32,7 +32,7 @@ void ClientHandler::handle_create_game(const CreateGameEvent& event) {
 void ClientHandler::handle_join_game(const JoinGameEvent& event) {
     try {
         const ConfigData& config = YamlParser::getConfigData();
-        DTO::ConfigDTO config_dto(config.display.width, config.display.height, config.fov.angle,
+        DTO::ConfigDTO config_dto(config.display.width, config.display.height, config.fov.opacity, config.fov.angle,
                                   config.fov.ratio);
         sender_queue.push(config_dto);
         auto pair = game_manager.join_game(event.get_game_id(), username, sender_queue);
