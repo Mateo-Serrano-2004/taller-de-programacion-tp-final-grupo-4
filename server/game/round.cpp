@@ -15,6 +15,7 @@ Round::Round(int ct_alive, int tt_alive, int fps):
         bomb_being_defused(false),
         player_defusing_bomb(-1),
         is_warmup_round(false),
+        bomb_exploded(false),
         fps(fps) {
 
     const auto& config = YamlParser::getConfigData();
@@ -53,6 +54,7 @@ void Round::update_if_finished_buying() {
 void Round::update_if_finished_playing() {
     if (bomb_planted && !bomb_defused) {
         winner_team = Model::TeamID::TT;
+        bomb_exploded = true;
     } else {
         winner_team = Model::TeamID::CT;
     }
@@ -94,16 +96,6 @@ void Round::update(int frames_to_process) {
     }
 
     active_ticks_remaining = 0;
-
-    if (bomb_planted && !bomb_defused && !bomb_being_defused && is_active()) {
-        bomb_defused = false;
-        bomb_being_defused = false;
-        player_defusing_bomb = -1;
-        winner_team = Model::TeamID::TT;
-        state = RoundState::PostRound;
-        active_ticks_remaining = ticks_for_post_round_phase;
-        return;
-    }
 
     if (state == RoundState::Warmup) {
         update_if_finished_warmup();
@@ -227,5 +219,7 @@ DTO::RoundDTO Round::to_dto() const {
 int Round::get_ticks_remaining() const { return active_ticks_remaining; }
 
 bool Round::bomb_is_being_defused() const { return bomb_being_defused; }
+
+bool Round::get_bomb_exploded() const { return bomb_exploded; }
 
 Physics::Vector2D Round::get_bomb_position() const { return bomb_position; }

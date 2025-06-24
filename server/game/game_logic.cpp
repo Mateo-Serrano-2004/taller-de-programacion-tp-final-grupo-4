@@ -246,7 +246,7 @@ void GameLogic::process_shooting(std::map<uint8_t, FullPlayer>& players, Round& 
 }
 
 void GameLogic::process_bomb_explosion(std::map<uint8_t, FullPlayer>& players, Round& round) const {
-    if (round.get_state() != RoundState::PostRound || round.get_winner_team() != Model::TeamID::TT)
+    if (!round.is_post_round() || !round.get_bomb_exploded())
         return;
 
     for (auto& [id, player]: players) {
