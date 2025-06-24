@@ -22,7 +22,7 @@ Round::Round(int ct_alive, int tt_alive, int fps):
     ticks_for_warmup_phase = 0;
     ticks_for_buying_phase = config.game.buyTime * fps;
     ticks_for_playing_phase = config.game.roundTime * fps;
-    ticks_for_post_round_phase = 300;
+    ticks_for_post_round_phase = config.game.postRoundTime * fps;
     bomb_total_ticks = config.game.bombExplotionTime * fps;
     active_ticks_remaining = ticks_for_buying_phase;
     defusing_ticks = config.game.bombDefuseTime * fps;

@@ -6,6 +6,7 @@
 #include <utility>
 
 #include "common/weapon_id.h"
+#include "server/parser/yaml_parser.h"
 
 void GameLogic::buy_weapon(FullPlayer& player, Model::WeaponID weapon_id, Round& round) const {
     if (!round.is_buying())
@@ -285,7 +286,7 @@ void GameLogic::apply_impacts(const std::vector<Impact>& impacts, Round& round,
         if (!victim->second.is_alive()) {
 
             round.notify_on_one_player_less(victim->second.get_team());
-            shooter->second.add_money(800);
+            shooter->second.add_money(YamlParser::getConfigData().game.killMoney);
             shooter->second.add_kill();
 
             auto drops = victim->second.drop_weapons();

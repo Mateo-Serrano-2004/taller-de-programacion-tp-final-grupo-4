@@ -1,13 +1,21 @@
 #include "bomb.h"
+#include "server/parser/yaml_parser.h"
+#include "common/definitions.h"
 
 #include <algorithm>
 
-Bomb::Bomb():
-        FullWeapon(Model::WeaponID::BOMB, Model::SlotID::BOMB_SLOT,
-                   1,  // loaded_ammo
-                   1,
-                   1,  // total_ammo (no se recarga)
-                   0, 0) {}
+Bomb::Bomb()
+    : FullWeapon(
+        Model::WeaponID::BOMB,
+        Model::SlotID::BOMB_SLOT,
+        1,
+        1,
+        1,
+        0,
+        0
+    ) {
+    required_ticks_to_plant = (YamlParser::getConfigData().game.bombPlantTime * GAME_FPS);
+}
 
 uint8_t Bomb::get_planting_progress() const {
     return std::min(100, planting_ticks * 100 / required_ticks_to_plant);
