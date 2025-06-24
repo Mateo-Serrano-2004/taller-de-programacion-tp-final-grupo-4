@@ -1,5 +1,5 @@
 game:
-  rounds: 2
+  rounds: 10
   rounds_to_win: 6
   rounds_per_side: 5
 
