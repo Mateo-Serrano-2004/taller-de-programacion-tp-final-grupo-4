@@ -4,7 +4,7 @@
 #include "model/game_state.h"
 #include "model/rendered_player.h"
 
-#include "sound_effect.h"
+#include "tracking_sound_effect.h"
 
 void View::SoundEffectPlayer::play(const Model::GameState& game_state) {
     for (auto& shot: game_state.sound_effects) {
@@ -15,5 +15,12 @@ void View::SoundEffectPlayer::play(const Model::GameState& game_state) {
         }
         shot->set_player(player);
         shot->play();
+    }
+    if (
+        game_state.bomb_explosion_sound &&
+       !game_state.bomb_explosion_sound->has_ended()
+    ) {
+        game_state.bomb_explosion_sound->fix(game_state.camera);
+        game_state.bomb_explosion_sound->play();
     }
 }

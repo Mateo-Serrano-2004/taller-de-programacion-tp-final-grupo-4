@@ -26,7 +26,7 @@
 #include "handler/game_state_manager.h"
 #include "model/game_state.h"
 #include "model/rendered_player.h"
-#include "sound/sound_effect.h"
+#include "sound/tracking_sound_effect.h"
 
 #include "camera.h"
 

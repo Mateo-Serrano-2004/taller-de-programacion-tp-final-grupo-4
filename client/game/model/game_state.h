@@ -26,6 +26,7 @@ class MuzzleFireAnimation;
 class WinnerTeamMessageAnimation;
 class ProgressBarAnimation;
 class BombExplosionAnimation;
+class TrackingSoundEffect;
 class SoundEffect;
 };  // namespace View
 
@@ -39,10 +40,11 @@ struct GameState {
     std::map<short_id_t, Shared<View::RenderedPlayer>> players;
     std::vector<Shared<DTO::DropWeaponDTO>> dropped_weapons;
     std::list<Shared<View::MuzzleFireAnimation>> fires;
-    std::list<Shared<View::SoundEffect>> sound_effects;
+    std::list<Shared<View::TrackingSoundEffect>> sound_effects;
     Shared<View::WinnerTeamMessageAnimation> winner_message;
     Shared<View::ProgressBarAnimation> progress_bar;
     Shared<View::BombExplosionAnimation> bomb_explosion;
+    Shared<View::SoundEffect> bomb_explosion_sound;
     View::Camera camera;
     Shared<SDL2pp::Texture> map;
     Maybe<short_id_t> reference_player_id;

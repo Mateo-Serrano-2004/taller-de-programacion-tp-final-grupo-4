@@ -12,6 +12,7 @@
 #include "animation/progress_bar_animation.h"
 #include "animation/winner_team_message_animation.h"
 #include "common/DTO/drop_weapon_dto.h"
+#include "sound/tracking_sound_effect.h"
 #include "sound/sound_effect.h"
 #include "model/rendered_player.h"
 

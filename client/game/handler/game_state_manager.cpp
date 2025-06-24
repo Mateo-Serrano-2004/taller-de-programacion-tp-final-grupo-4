@@ -16,6 +16,7 @@
 #include "animation/muzzle_fire_animation.h"
 #include "animation/progress_bar_animation.h"
 #include "animation/winner_team_message_animation.h"
+#include "asset/sound_id.h"
 #include "common/DTO/game_state_dto.h"
 #include "common/model/player.h"
 #include "controller/game_controller.h"
@@ -23,7 +24,6 @@
 #include "model/rendered_player.h"
 #include "render/camera.h"
 #include "sound/shot_sound.h"
-#include "sound/reload_sound.h"
 
 void Controller::GameStateManager::load_shot_sound(
     Shared<Model::GameState>& new_game_state,
@@ -36,8 +36,8 @@ void Controller::GameStateManager::load_shot_sound(
         new_game_state->sound_effects.push_back(
             make_shared<View::ShotSound>(
                 controller,
-                player->get_id(),
-                player->get_current_weapon()->get_weapon_id()
+                player->get_current_weapon()->get_weapon_id(),
+                player->get_id()
             )
         );
     }
@@ -50,11 +50,36 @@ void Controller::GameStateManager::load_reload_sound(
     if (!player->is_reloading())
         return;
     new_game_state->sound_effects.push_back(
-        make_shared<View::ReloadSound>(
+        make_shared<View::TrackingSoundEffect>(
             controller,
+            Model::SoundID::RELOAD_SOUND,
             player->get_id()
         )
     );
+}
+
+void Controller::GameStateManager::load_bomb_explosion(DTO::GameStateDTO& dto) {
+    if (game_state->bomb_explosion && game_state->bomb_explosion->has_ended())
+        game_state->bomb_explosion = nullptr;
+    if (game_state->bomb_explosion_sound && game_state->bomb_explosion_sound->has_ended())
+        game_state->bomb_explosion_sound = nullptr;
+    if (
+        dto.round.state == RoundState::PostRound &&
+        dto.round.bomb_planted &&
+        !dto.round.bomb_defused &&
+        game_state->bomb_position.has_value() &&
+        game_state->round_state == RoundState::Active
+    ) {
+        game_state->bomb_explosion = make_shared<View::BombExplosionAnimation>(
+            controller,
+            game_state->bomb_position.value()
+        );
+        game_state->bomb_explosion_sound = make_shared<View::SoundEffect>(
+            controller,
+            Model::SoundID::BOMB_EXPLOSION
+        );
+        game_state->bomb_explosion_sound->set_position(game_state->bomb_position.value());
+    }
 }
 
 void Controller::GameStateManager::load_animation(
@@ -82,7 +107,7 @@ void Controller::GameStateManager::update_dropped_weapons(DTO::GameStateDTO& dto
 
 void Controller::GameStateManager::update_sounds(Shared<Model::GameState>& new_game_state) {
     game_state->sound_effects.remove_if(
-        [](Shared<View::SoundEffect>& sf) { return sf->has_ended(); }
+        [](Shared<View::TrackingSoundEffect>& sf) { return sf->has_ended(); }
     );
     game_state->sound_effects.splice(game_state->sound_effects.end(), new_game_state->sound_effects);
 }

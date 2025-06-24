@@ -1,12 +1,12 @@
 #include "sound_effect.h"
 
+#include <algorithm>
 #include <cmath>
-#include <iostream>
 #include <SDL2pp/Chunk.hh>
 #include <SDL2pp/Mixer.hh>
 
 #include "asset/asset_manager.h"
-#include "controller/game_controller.h"
+#include "controller/base_controller.h"
 #include "model/rendered_player.h"
 #include "utils/enum_translator.h"
 
@@ -24,25 +24,21 @@ int View::SoundEffect::calculate_volume(int current_distance, int min_range, int
 }
 
 void View::SoundEffect::update_volume() {
-    auto position = player->get_position();
-    auto camera_view = player->get_fixation().get_center();
-    int dx = std::abs(camera_view.GetX() - position.get_x());
-    int dy = std::abs(camera_view.GetY() - position.get_y());
+    auto camera_view = get_fixation().get_center();
+    int dx = std::abs(camera_view.GetX() - position.GetX());
+    int dy = std::abs(camera_view.GetY() - position.GetY());
     int distance = std::sqrt((dx * dx) + (dy * dy));
     mixer->SetVolume(channel, calculate_volume(distance, 100, 350));
 }
 
 View::SoundEffect::SoundEffect(
-    Weak<Controller::GameController> controller,
-    short_id_t player_id
-): started(false), ended(false), channel(-1), mixer(nullptr), chunk(nullptr),
-   controller(controller), player_id(player_id) {
+    Weak<Controller::BaseController> controller,
+    Model::SoundID sound_id
+): started(false), ended(false), channel(-1), mixer(nullptr),
+   chunk(nullptr), controller(controller) {
     auto asset_manager = controller.lock()->get_asset_manager();
     mixer = asset_manager->get_mixer();
-}
-
-short_id_t View::SoundEffect::get_player_id() const {
-    return player_id;
+    chunk = asset_manager->get_sound(sound_id);
 }
 
 bool View::SoundEffect::is_playing() const {
@@ -53,8 +49,8 @@ bool View::SoundEffect::has_ended() const {
     return ended;
 }
 
-void View::SoundEffect::set_player(Shared<View::RenderedPlayer> new_player) {
-    player = new_player;
+void View::SoundEffect::set_position(const SDL2pp::Point& new_poisition) {
+    position = new_poisition;
 }
 
 void View::SoundEffect::play() {
@@ -75,3 +71,4 @@ void View::SoundEffect::end() {
     ended = true;
     started = false;
 }
+

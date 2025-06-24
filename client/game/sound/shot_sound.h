@@ -1,19 +1,19 @@
 #ifndef CLIENT_GAME_SOUND_SHOT_SOUND_H
 #define CLIENT_GAME_SOUND_SHOT_SOUND_H
 
-#include "sound_effect.h"
+#include "tracking_sound_effect.h"
 
 namespace Controller {
 class GameController;
 };
 
 namespace View {
-class ShotSound: public SoundEffect {
+class ShotSound: public TrackingSoundEffect {
 public:
     ShotSound(
         Weak<Controller::GameController> controller,
-        short_id_t player_id,
-        Model::WeaponID weapon_id
+        Model::WeaponID weapon_id,
+        short_id_t player_id
     );
 
     ~ShotSound() override = default;
