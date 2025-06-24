@@ -251,7 +251,6 @@ void GameLogic::process_bomb_explosion(std::map<uint8_t, FullPlayer>& players, R
     for (auto& [id, player]: players) {
         if (player.is_alive()) {
             player.take_damage(100);
-            round.notify_on_one_player_less(player.get_team());
 
             auto drops = player.drop_weapons();
             for (const auto& drop: drops) {
