@@ -66,5 +66,6 @@ using Func = std::function<void(T)>;
 constexpr int TILE_SIZE = 32;
 const int BOMB_ZONE_RADIUS = 32;
 const int DEFUSE_RADIUS = 32;
+const int GAME_FPS = 60;
 
 #endif  // COMMON_DEFINITIONS_H
