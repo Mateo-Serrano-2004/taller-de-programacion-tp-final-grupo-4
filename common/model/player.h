@@ -38,7 +38,8 @@ protected:
     bool has_bomb;
 
 public:
-    Player(short_id_t id, const std::string& name, Model::TeamID team, Model::RoleID role_id,
+    Player(short_id_t id, uint16_t money, const std::string& name,
+           uint8_t health, Model::TeamID team, Model::RoleID role_id,
            Physics::Vector2D position);
 
     Player(bool shooting, bool defusing_bomb, bool reloading, short_id_t id, Model::RoleID role_id,

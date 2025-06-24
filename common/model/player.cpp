@@ -7,9 +7,11 @@
 #include "common/DTO/player_dto.h"
 #include "common/DTO/weapon_dto.h"
 #include "common/weapon_id.h"
+#include "server/parser/yaml_parser.h"
 
-Model::Player::Player(short_id_t id, const std::string& name, Model::TeamID team,
-                      Model::RoleID role_id, Physics::Vector2D position):
+Model::Player::Player(short_id_t id, uint16_t money, const std::string& name,
+                      uint8_t health, Model::TeamID team, Model::RoleID role_id,
+                      Physics::Vector2D position):
         alive(true),
         shooting(false),
         defusing_bomb(false),
@@ -17,10 +19,10 @@ Model::Player::Player(short_id_t id, const std::string& name, Model::TeamID team
         id(id),
         role_id(role_id),
         angle(0),
-        money(YamlParser::getConfigData().player.initialMoney),
+        money(money),
         name(name),
         position(position),
-        health(YamlParser::getConfigData().player.health),
+        health(health),
         team(team),
         deaths(0),
         kills(0),

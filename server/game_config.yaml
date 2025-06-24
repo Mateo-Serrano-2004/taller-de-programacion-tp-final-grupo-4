@@ -43,7 +43,7 @@ weapons:
     cost: 0
     range: 4
     bullets_per_shot: 1
-    fire_rate: 0.4
+    fire_rate: 1
     bounty_money: 300
     reload_time: 2.2
 

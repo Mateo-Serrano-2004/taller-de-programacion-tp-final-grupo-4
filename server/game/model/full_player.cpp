@@ -11,12 +11,21 @@
 #include "common/slot_id.h"
 #include "common/weapon_id.h"
 #include "server/game/weapon_factory.h"
+#include "server/parser/yaml_parser.h"
 
 #include "bomb.h"
 
 FullPlayer::FullPlayer(short_id_t id, const std::string& name, Model::TeamID team,
                        Model::RoleID role, Physics::Vector2D position):
-        Model::Player(id, name, team, role, position),
+        Model::Player(
+            id,
+            YamlParser::getConfigData().player.initialMoney,
+            name,
+            YamlParser::getConfigData().player.health,
+            team,
+            role,
+            position
+        ),
         movement_direction(0, 0),
         size(28, 28),
         secondary_weapon(WeaponFactory::create(Model::WeaponID::GLOCK)),
