@@ -1,5 +1,6 @@
 #include <cstdint>
 #include <thread>
+#include <utility>
 #include <variant>
 
 #include "client/game/event/movement_event.h"
@@ -20,7 +21,7 @@ TEST(MovementTest, send_and_receive_movement) {
     });
 
     Socket peer = server_socket.accept();
-    ServerProtocol protocol(peer);
+    ServerProtocol protocol(std::move(peer));
     auto received_event = protocol.receive_event();
     auto received_movement = std::get<MovementEvent>(std::get<GameEventVariant>(received_event));
     EXPECT_EQ(received_movement.get_direction().get_x(), 1);

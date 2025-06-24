@@ -1,5 +1,6 @@
 #include <cstdint>
 #include <thread>
+#include <utility>
 
 #include "client/net/client_protocol.h"
 #include "common/DTO/dto_variant.h"
@@ -13,8 +14,8 @@ TEST(GameStateTest, send_and_receive_game_state) {
 
     DTO::WeaponDTO weapon1(Model::WeaponID::M3, 30, 150);
     DTO::WeaponDTO weapon2(Model::WeaponID::AK47, 15, 70);
-    DTO::PlayerDTO player1(1, 1, 30, 1500, 2, 40, "Juan", weapon1, 0, 0, 1, 100, 1, 0, 0, 0, 1);
-    DTO::PlayerDTO player2(3, 2, 60, 6000, 4, 26, "Maria", weapon2, 1, 1, 0, 70, 2, 0, 0, 0, 0);
+    DTO::PlayerDTO player1(1, 1, 30, 1500, 2, 40, "Juan", weapon1, 0, 0, 1, 100, 1, 0, 0, 0, 1, 1);
+    DTO::PlayerDTO player2(3, 2, 60, 6000, 4, 26, "Maria", weapon2, 1, 1, 0, 70, 2, 0, 0, 0, 0, 0);
 
     std::vector<DTO::DropWeaponDTO> dropped_weapons = {
             DTO::DropWeaponDTO(Model::WeaponID::M3, 2, 40)};
@@ -92,7 +93,7 @@ TEST(GameStateTest, send_and_receive_game_state) {
     });
 
     Socket peer = server_socket.accept();
-    ServerProtocol protocol(peer);
+    ServerProtocol protocol(std::move(peer));
     EXPECT_NO_THROW(protocol.send_variant(DTO::DTOVariant(game_state)));
 
     client_thread.join();

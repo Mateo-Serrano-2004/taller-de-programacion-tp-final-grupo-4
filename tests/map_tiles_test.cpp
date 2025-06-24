@@ -1,5 +1,6 @@
 #include <cstdint>
 #include <thread>
+#include <utility>
 
 #include "client/net/client_protocol.h"
 #include "common/DTO/dto_variant.h"
@@ -38,7 +39,7 @@ TEST(MapTilesTest, send_and_receive_map_tiles) {
     });
 
     Socket peer = server_socket.accept();
-    ServerProtocol protocol(peer);
+    ServerProtocol protocol(std::move(peer));
     EXPECT_NO_THROW(protocol.send_variant(DTO::DTOVariant(map_tiles_dto)));
 
     client_thread.join();

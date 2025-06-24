@@ -32,6 +32,6 @@ std::optional<WeaponShotInfo> Knife::shoot(uint16_t ticks_to_process) {
                           close_range_multiplier);
 }
 
-bool Knife::reload(uint16_t ticks_to_process) { return false; }
+bool Knife::reload(uint16_t) { return false; }
 
 void Knife::add_ammo() {}

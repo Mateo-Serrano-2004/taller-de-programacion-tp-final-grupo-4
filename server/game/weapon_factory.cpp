@@ -1,6 +1,5 @@
 #include "weapon_factory.h"
 
-#include <iostream>
 #include <memory>
 
 #include "model/ak47.h"
@@ -28,10 +27,8 @@ Shared<FullWeapon> WeaponFactory::create(Model::WeaponID id) {
             return make_shared<Knife>();
 
         case Model::WeaponID::BOMB:
-            // Por ahora puede tirar un assert o nullptr si no está implementada
-            std::cout << "ENTRA EN BOMB" << std::endl;
             return make_shared<Bomb>();
+        default:
+            return nullptr;
     }
-
-    return nullptr;
 }

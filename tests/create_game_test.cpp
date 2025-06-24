@@ -1,5 +1,6 @@
 #include <cstdint>
 #include <thread>
+#include <utility>
 #include <variant>
 
 #include "client/game/event/create_game_event.h"
@@ -20,7 +21,7 @@ TEST(CreateGameTest, send_and_receive_create_game) {
     });
 
     Socket peer = server_socket.accept();
-    ServerProtocol protocol(peer);
+    ServerProtocol protocol(std::move(peer));
     auto received_event = protocol.receive_event();
     auto received_create_game = std::get<CreateGameEvent>(received_event);
     EXPECT_EQ(received_create_game.get_party_name(), "Partida de Juan");

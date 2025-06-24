@@ -16,11 +16,11 @@ project(counter_strike_2d
     LANGUAGES CXX
     )
 
-option(CS2D_TESTS "Enable / disable tests." OFF)
+option(CS2D_TESTS "Enable / disable tests." ON)
 option(CS2D_CLIENT "Enable / disable client program." ON)
 option(CS2D_SERVER "Enable / disable server program." ON)
-option(CS2D_EDITOR "Enable / disable editor program." OFF)
-option(CS2D_MAKE_WARNINGS_AS_ERRORS "Enable / disable warnings as errors." OFF)
+option(CS2D_EDITOR "Enable / disable editor program." ON)
+option(CS2D_MAKE_WARNINGS_AS_ERRORS "Enable / disable warnings as errors." ON)
 
 message(CMAKE_CXX_COMPILER_ID="${CMAKE_CXX_COMPILER_ID}")
 
