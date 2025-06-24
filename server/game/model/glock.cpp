@@ -16,31 +16,36 @@ Glock::Glock()
     precision(YamlParser::getConfigData().weapons.at("glock").precision),
     range(YamlParser::getConfigData().weapons.at("glock").range * TILE_SIZE),
     bullets_per_shot(YamlParser::getConfigData().weapons.at("glock").bulletsPerShot),
-    fire_rate(YamlParser::getConfigData().weapons.at("glock").fireRate * GAME_FPS) {}
+    dispersion(1.0f),
+    falloff_factor(0.05f),
+    close_range_threshold(0.0f),
+    close_range_multiplier(1.0f),
+    fire_rate(YamlParser::getConfigData().weapons.at("glock").fireRate * GAME_FPS),
+    fire_rate_remaining(0) {}
 
-    std::optional<WeaponShotInfo> Glock::shoot(uint16_t ticks_to_process) {
-        fire_rate_remaining = std::max(0, fire_rate_remaining - static_cast<int>(ticks_to_process));
+std::optional<WeaponShotInfo> Glock::shoot(uint16_t ticks_to_process) {
+    fire_rate_remaining = std::max(0, fire_rate_remaining - static_cast<int>(ticks_to_process));
     
-        if (!triggered || trigger_blocked || get_loaded_ammo() == 0 || fire_rate_remaining > 0)
-            return std::nullopt;
+    if (!triggered || trigger_blocked || get_loaded_ammo() == 0 || fire_rate_remaining > 0)
+        return std::nullopt;
     
-        set_loaded_ammo(get_loaded_ammo() - 1);
-        trigger_blocked = true;
-        fire_rate_remaining = fire_rate;
+    set_loaded_ammo(get_loaded_ammo() - 1);
+    trigger_blocked = true;
+    fire_rate_remaining = fire_rate;
     
-        return WeaponShotInfo(
-            bullets_per_shot,
-            damage,
-            damage / 3, // min_damage
-            range,
-            precision,
-            1.0f,  // dispersión
-            DamageMode::LINEAR_FALLOFF,
-            0.05f,  // caída
-            0.0f,
-            1.0f
-        );
-    }
+    return WeaponShotInfo(
+        bullets_per_shot,
+        damage,
+        damage / 3, // min_damage
+        range,
+        precision,
+        dispersion,
+        DamageMode::LINEAR_FALLOFF,
+        falloff_factor,  // caída
+        close_range_threshold,
+        close_range_multiplier
+    );
+}
     
 
 /* viejo 
