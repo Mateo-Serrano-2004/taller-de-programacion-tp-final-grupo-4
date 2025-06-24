@@ -200,9 +200,20 @@ Counter-Strike-2D/
 ## Documentación
 
 - **[Documentación Técnica](docs/Documentación%20Técnica.md)**: Arquitectura y estructura técnica del servidor
-- **[Manual del Proyecto](docs/Manual%20del%20Proyecto.md)**: Documentación de organización del proyecto
+- **[Manual del Proyecto](docs/manual%20del%20proyecto.md)**: Documentación de organización del proyecto
 
 ## Créditos
+
+### Desarrolladores
+
+- [Camila Mantilla](https://github.com/milamantilla00)
+- [Jonathan Dominguez](https://github.com/dominguez-j)
+- [Marcos Navarro](https://github.com/NVRar)
+- [Mateo Serrano](https://github.com/Mateo-Serrano-2004)
+
+### Corrector
+
+- [Mateo Capon](https://github.com/mateocapon)
 
 ### Librerías Utilizadas
 
