@@ -17,6 +17,4 @@ Controller::SubsystemManager::SubsystemManager(
     mixer.AllocateChannels(32);
 }
 
-SDL2pp::Mixer& Controller::SubsystemManager::get_mixer() {
-    return mixer;
-}
+SDL2pp::Mixer& Controller::SubsystemManager::get_mixer() { return mixer; }

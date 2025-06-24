@@ -12,10 +12,10 @@
 #include "entity/pane.h"
 #include "sound/sound_effect_player.h"
 
-#include "renderer.h"
 #include "animation_renderer.h"
-#include "map_renderer.h"
 #include "dropped_weapon_renderer.h"
+#include "map_renderer.h"
+#include "renderer.h"
 
 namespace SDL2pp {
 class Font;

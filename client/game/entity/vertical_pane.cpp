@@ -24,14 +24,10 @@ void View::VerticalPane::position_children() {
 void View::VerticalPane::fit() {
     int width = 0;
     int height = 0;
-    std::for_each(
-        children.begin(),
-        children.end(),
-        [&width, &height] (View::Pane* child) {
-            width = std::max(width, child->get_width());
-            height += child->get_height();
-        }
-    );
+    std::for_each(children.begin(), children.end(), [&width, &height](const View::Pane* child) {
+        width = std::max(width, child->get_width());
+        height += child->get_height();
+    });
     size.SetX(width);
     size.SetY(height);
     if (children.size())

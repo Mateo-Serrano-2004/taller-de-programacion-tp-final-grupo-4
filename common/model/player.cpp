@@ -9,9 +9,8 @@
 #include "common/weapon_id.h"
 #include "server/parser/yaml_parser.h"
 
-Model::Player::Player(short_id_t id, uint16_t money, const std::string& name,
-                      uint8_t health, Model::TeamID team, Model::RoleID role_id,
-                      Physics::Vector2D position):
+Model::Player::Player(short_id_t id, uint16_t money, const std::string& name, uint8_t health,
+                      Model::TeamID team, Model::RoleID role_id, Physics::Vector2D position):
         alive(true),
         shooting(false),
         defusing_bomb(false),

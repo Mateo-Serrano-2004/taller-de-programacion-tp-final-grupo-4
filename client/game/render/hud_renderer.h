@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <list>
 #include <vector>
+
 #include <SDL2pp/Rect.hh>
 
 #include "common/definitions.h"
@@ -46,7 +47,7 @@ protected:
     std::vector<SDL2pp::Rect> get_time_slices(int seconds_left);
 
     void render_item(std::list<View::Pane>& numbers, View::HorizontalPane& parent,
-                       const SDL2pp::Rect& slice, Shared<SDL2pp::Texture> texture);
+                     const SDL2pp::Rect& slice, Shared<SDL2pp::Texture> texture);
 
     void render_time(uint16_t time_left);
     void render_life_points(Shared<RenderedPlayer> player);

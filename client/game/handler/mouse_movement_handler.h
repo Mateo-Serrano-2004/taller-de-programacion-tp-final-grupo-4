@@ -17,12 +17,12 @@ private:
     Shared<SDL2pp::Renderer> renderer;
 
 public:
-    MouseMovementHandler(Weak<GameController> controller);
+    explicit MouseMovementHandler(Weak<GameController> controller);
 
     void notify_current_rotation();
 
     ~MouseMovementHandler() = default;
 };
-};
+};  // namespace Controller
 
-#endif // CLIENT_GAME_HANDLER_MOUSE_MOVEMENT_HANDLER_H
+#endif  // CLIENT_GAME_HANDLER_MOUSE_MOVEMENT_HANDLER_H

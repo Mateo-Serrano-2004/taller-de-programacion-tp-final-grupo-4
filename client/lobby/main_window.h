@@ -70,5 +70,6 @@ private:
     void handleGameCreationRequest(const QString& gameName, const QString& selectedMap);
     void handleJoinGameRequest();
     void handleWelcomeStart(const QString& username, const QString& ip, const QString& port);
+    void handleServerConnectionError();
 };
 #endif  // MAIN_WINDOW_H

@@ -2,5 +2,4 @@
 
 #include "controller/game_controller.h"
 
-Controller::GameHandler::GameHandler(Weak<GameController> controller)
-: controller(controller) {}
+Controller::GameHandler::GameHandler(Weak<GameController> controller): controller(controller) {}

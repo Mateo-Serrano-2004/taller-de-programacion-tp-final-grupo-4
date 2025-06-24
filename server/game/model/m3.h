@@ -16,6 +16,7 @@ private:
     float close_range_multiplier;
     int fire_rate;
     int fire_rate_remaining;
+    int min_damage;
 
 public:
     M3();

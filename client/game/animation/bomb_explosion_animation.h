@@ -1,8 +1,8 @@
 #ifndef CLIENT_GAME_ANIMATION_BOMB_EXPLOSION_ANIMATION_H
 #define CLIENT_GAME_ANIMATION_BOMB_EXPLOSION_ANIMATION_H
 
-#include <SDL2pp/Rect.hh>
 #include <SDL2pp/Point.hh>
+#include <SDL2pp/Rect.hh>
 
 #include "common/definitions.h"
 #include "interface/fixed.h"
@@ -24,13 +24,11 @@ private:
     SDL2pp::Point get_rpoint() override;
 
 public:
-    BombExplosionAnimation(
-        Weak<Controller::GameController> controller,
-        const SDL2pp::Point& bomb_position
-    );
+    BombExplosionAnimation(Weak<Controller::GameController> controller,
+                           const SDL2pp::Point& bomb_position);
 
     ~BombExplosionAnimation() override = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_ANIMATION_BOMB_EXPLOSION_ANIMATION_H
+#endif  // CLIENT_GAME_ANIMATION_BOMB_EXPLOSION_ANIMATION_H

@@ -7,10 +7,10 @@
 #include "common/definitions.h"
 #include "common/role_id.h"
 #include "common/team.h"
+#include "server/parser/yaml_parser.h"
 
 #include "vector_2d.h"
 #include "weapon.h"
-#include "server/parser/yaml_parser.h"
 
 namespace DTO {
 class PlayerDTO;
@@ -39,9 +39,8 @@ protected:
     bool has_hit;
 
 public:
-    Player(short_id_t id, uint16_t money, const std::string& name,
-           uint8_t health, Model::TeamID team, Model::RoleID role_id,
-           Physics::Vector2D position);
+    Player(short_id_t id, uint16_t money, const std::string& name, uint8_t health,
+           Model::TeamID team, Model::RoleID role_id, Physics::Vector2D position);
 
     Player(bool shooting, bool defusing_bomb, bool reloading, short_id_t id, Model::RoleID role_id,
            angle_t angle, uint16_t money, const std::string& name,

@@ -1,8 +1,10 @@
 #ifndef CLIENT_GAME_ASSET_CURSOR_MANAGER_H
 #define CLIENT_GAME_ASSET_CURSOR_MANAGER_H
 
-#include <SDL2/SDL.h>
+#include <string>
 #include <unordered_map>
+
+#include <SDL2/SDL.h>
 
 #include "asset/cursor_id.h"
 #include "common/definitions.h"
@@ -12,7 +14,7 @@ class Surface;
 class Renderer;
 class Rect;
 class Point;
-};
+};  // namespace SDL2pp
 
 namespace Model {
 class CursorManager {
@@ -26,13 +28,14 @@ private:
     Shared<SDL2pp::Renderer> renderer;
 
 public:
-    CursorManager(Shared<SDL2pp::Renderer> renderer);
+    explicit CursorManager(Shared<SDL2pp::Renderer> renderer);
 
-    void load_cursor_texture(Model::CursorID id, const std::string& path, const SDL2pp::Rect& srect);
+    void load_cursor_texture(Model::CursorID id, const std::string& path,
+                             const SDL2pp::Rect& srect);
     void apply_cursor(CursorID id, const SDL2pp::Point& hotspot);
 
     ~CursorManager();
 };
-};
+};  // namespace Model
 
-#endif // CLIENT_GAME_ASSET_CURSOR_MANAGER_H
+#endif  // CLIENT_GAME_ASSET_CURSOR_MANAGER_H

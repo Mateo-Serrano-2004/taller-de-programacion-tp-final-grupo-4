@@ -3,8 +3,8 @@
 
 #include <map>
 
-#include "asset/texture_id.h"
 #include "asset/sound_id.h"
+#include "asset/texture_id.h"
 #include "common/definitions.h"
 #include "common/role_id.h"
 #include "common/weapon_id.h"

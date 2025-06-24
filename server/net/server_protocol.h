@@ -35,8 +35,8 @@ private:
     ServerProtocol& operator=(const ServerProtocol&) = delete;
 
 public:
-    explicit ServerProtocol(Socket& peer): peer(std::move(peer)) {}
-
+    explicit ServerProtocol(Socket&& peer): peer(std::move(peer)) {}
+    void close_socket();
     EventVariant receive_event();
     void send_variant(const DTO::DTOVariant& variant);
 

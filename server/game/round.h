@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <iostream>
+#include <vector>
 
 #include "common/DTO/round_dto.h"
 #include "common/model/vector_2d.h"
@@ -34,6 +35,7 @@ private:
     bool bomb_being_defused;
     int player_defusing_bomb;
     bool is_warmup_round;
+    bool bomb_exploded;
 
     int fps;
 
@@ -73,7 +75,7 @@ public:
     void notify_bomb_exploded();
     bool bomb_is_being_defused() const;
     int player_id_defusing_bomb() const;
-
+    bool get_bomb_exploded() const;
 
     void add_dropped_weapon(const DroppedWeapon& drop);
     std::vector<DroppedWeapon>& get_dropped_weapons();

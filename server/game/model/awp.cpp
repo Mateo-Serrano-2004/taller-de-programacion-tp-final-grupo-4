@@ -16,7 +16,7 @@ AWP::AWP()
     precision(YamlParser::getConfigData().weapons.at("awp").precision),
     range(YamlParser::getConfigData().weapons.at("awp").range * TILE_SIZE),
     bullets_per_shot(YamlParser::getConfigData().weapons.at("awp").bulletsPerShot),
-    dispersion(0.0f),
+    dispersion(YamlParser::getConfigData().weapons.at("awp").dispersion),
     falloff_factor(0.0f),
     close_range_threshold(0.0f),
     close_range_multiplier(1.0f),

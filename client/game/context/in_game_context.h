@@ -5,8 +5,8 @@
 
 #include "common/definitions.h"
 #include "entity/horizontal_pane.h"
-#include "entity/vertical_pane.h"
 #include "entity/label.h"
+#include "entity/vertical_pane.h"
 #include "event/event.h"
 #include "handler/in_game_event_handler_strategy.h"
 #include "model/game_state.h"
@@ -22,7 +22,7 @@ class GameStateManager;
 
 namespace Context {
 class InGameContext: public BaseContext {
-friend class Controller::InGameEventHandlerStrategy;
+    friend class Controller::InGameEventHandlerStrategy;
 
 protected:
     Model::GameState current_game_state;

@@ -2,7 +2,7 @@
 
 #include "common/definitions.h"
 
-MovementSystem::MovementSystem(const MapMatrix& map_matrix) : map_matrix(map_matrix) {}
+MovementSystem::MovementSystem(const MapMatrix& map_matrix): map_matrix(map_matrix) {}
 
 bool MovementSystem::is_colliding_with_map(const Physics::Vector2D& position,
                                            const Physics::Vector2D& size) const {
@@ -19,33 +19,36 @@ bool MovementSystem::is_colliding_with_map(const Physics::Vector2D& position,
     int max_rows = static_cast<int>(map_matrix.size());
     int max_cols = static_cast<int>(map_matrix[0].size());
 
-    if (tile_top < 0 || tile_top >= max_rows ||
-        tile_left < 0 || tile_left >= max_cols ||
-        tile_bottom < 0 || tile_bottom >= max_rows ||
-        tile_right < 0 || tile_right >= max_cols) {
+    if (tile_top < 0 || tile_top >= max_rows || tile_left < 0 || tile_left >= max_cols ||
+        tile_bottom < 0 || tile_bottom >= max_rows || tile_right < 0 || tile_right >= max_cols) {
         return true;
     }
 
-    if (map_matrix[tile_top][tile_left] == TileType::COLLIDABLE) return true;
-    if (map_matrix[tile_top][tile_right] == TileType::COLLIDABLE) return true;
-    if (map_matrix[tile_bottom][tile_left] == TileType::COLLIDABLE) return true;
-    if (map_matrix[tile_bottom][tile_right] == TileType::COLLIDABLE) return true;
+    if (map_matrix[tile_top][tile_left] == TileType::COLLIDABLE)
+        return true;
+    if (map_matrix[tile_top][tile_right] == TileType::COLLIDABLE)
+        return true;
+    if (map_matrix[tile_bottom][tile_left] == TileType::COLLIDABLE)
+        return true;
+    if (map_matrix[tile_bottom][tile_right] == TileType::COLLIDABLE)
+        return true;
 
     return false;
 }
 
-bool MovementSystem::is_colliding_with_other_players(const Physics::Vector2D& pos,
-                                                     const Physics::Vector2D& size,
-                                                     uint8_t current_id,
-                                                     const std::map<uint8_t, FullPlayer>& players) const {
+bool MovementSystem::is_colliding_with_other_players(
+        const Physics::Vector2D& pos, const Physics::Vector2D& size, uint8_t current_id,
+        const std::map<uint8_t, FullPlayer>& players) const {
     int left = static_cast<int>(pos.get_x());
     int top = static_cast<int>(pos.get_y());
     int right = left + static_cast<int>(size.get_x());
     int bottom = top + static_cast<int>(size.get_y());
 
-    for (const auto& [id, other] : players) {
-        if (id == current_id) continue;
-        if (!other.is_alive()) continue;
+    for (const auto& [id, other]: players) {
+        if (id == current_id)
+            continue;
+        if (!other.is_alive())
+            continue;
 
         Physics::Vector2D other_pos = other.get_position();
         Physics::Vector2D other_size = other.get_size();
@@ -58,20 +61,22 @@ bool MovementSystem::is_colliding_with_other_players(const Physics::Vector2D& po
         bool overlap_x = !(right <= o_left || left >= o_right);
         bool overlap_y = !(bottom <= o_top || top >= o_bottom);
 
-        if (overlap_x && overlap_y) return true;
+        if (overlap_x && overlap_y)
+            return true;
     }
 
     return false;
 }
 
-void MovementSystem::try_pick_up_weapon(std::map<uint8_t, FullPlayer>& players,
-                                        uint8_t player_id,
+void MovementSystem::try_pick_up_weapon(std::map<uint8_t, FullPlayer>& players, uint8_t player_id,
                                         Round& round) {
     auto player_it = players.find(player_id);
-    if (player_it == players.end()) return;
+    if (player_it == players.end())
+        return;
 
     FullPlayer& player = player_it->second;
-    if (!player.is_alive()) return;
+    if (!player.is_alive())
+        return;
 
     Physics::Vector2D pos = player.get_position();
     Physics::Vector2D size = player.get_size();
@@ -97,7 +102,8 @@ void MovementSystem::try_pick_up_weapon(std::map<uint8_t, FullPlayer>& players,
 
         if (overlap_x && overlap_y) {
             Shared<FullWeapon> weapon = drop.get_weapon();
-            if (!weapon) continue;
+            if (!weapon)
+                continue;
 
             Model::SlotID slot = weapon->get_slot_id();
 
@@ -110,7 +116,8 @@ void MovementSystem::try_pick_up_weapon(std::map<uint8_t, FullPlayer>& players,
                     can_pick_it = !player.has_secondary_weapon();
                     break;
                 case Model::SlotID::BOMB_SLOT:
-                    can_pick_it = (player.get_team() == Model::TeamID::TT && !player.get_has_bomb());
+                    can_pick_it =
+                            (player.get_team() == Model::TeamID::TT && !player.get_has_bomb());
                     break;
                 default:
                     break;
@@ -125,14 +132,18 @@ void MovementSystem::try_pick_up_weapon(std::map<uint8_t, FullPlayer>& players,
     }
 }
 
-void MovementSystem::process_movements(std::map<uint8_t, FullPlayer>& players, Round& round, uint16_t frames_to_process, bool players_collisions_enabled) {
+void MovementSystem::process_movements(std::map<uint8_t, FullPlayer>& players, Round& round,
+                                       uint16_t frames_to_process,
+                                       bool players_collisions_enabled) {
     if (round.is_buying())
         return;
-    for (auto& [id, player] : players) {
-        if (!player.is_alive()) continue;
+    for (auto& [id, player]: players) {
+        if (!player.is_alive())
+            continue;
 
         Physics::Vector2D dir = player.get_direction();
-        if (dir.get_x() == 0 && dir.get_y() == 0) continue;
+        if (dir.get_x() == 0 && dir.get_y() == 0)
+            continue;
 
         Physics::Vector2D pos = player.get_position();
         Physics::Vector2D size = player.get_size();
@@ -141,9 +152,12 @@ void MovementSystem::process_movements(std::map<uint8_t, FullPlayer>& players, R
             Physics::Vector2D next = pos + dir;
 
             if (is_colliding_with_map(next, size) ||
-                (players_collisions_enabled && is_colliding_with_other_players(next, size, id, players))) {
-                if (dir.get_x() != 0) player.stop_horizontal_movement();
-                if (dir.get_y() != 0) player.stop_vertical_movement();
+                (players_collisions_enabled &&
+                 is_colliding_with_other_players(next, size, id, players))) {
+                if (dir.get_x() != 0)
+                    player.stop_horizontal_movement();
+                if (dir.get_y() != 0)
+                    player.stop_vertical_movement();
                 break;
             }
 

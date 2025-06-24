@@ -21,19 +21,19 @@ private:
 
     void on_vertical_stop();
     void on_horizontal_stop();
-    void on_vertical_movement(SDL_Event& event);
-    void on_horizontal_movement(SDL_Event& event);
-    void update_movement_state(SDL_Event& event);
+    void on_vertical_movement(const SDL_Event& event);
+    void on_horizontal_movement(const SDL_Event& event);
+    void update_movement_state(const SDL_Event& event);
 
 public:
-    MovementHandler(Weak<GameController> controller);
+    explicit MovementHandler(Weak<GameController> controller);
 
-    void handle(SDL_Event& event) override;
-    bool can_handle(SDL_Event& event) override;
+    void handle(const SDL_Event& event) override;
+    bool can_handle(const SDL_Event& event) override;
     void stop();
 
     ~MovementHandler() override = default;
 };
-};
+};  // namespace Controller
 
-#endif // CLIENT_GAME_HANDLER_MOVEMENT_HANDLER_H
+#endif  // CLIENT_GAME_HANDLER_MOVEMENT_HANDLER_H

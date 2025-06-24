@@ -16,12 +16,18 @@ Glock::Glock()
     precision(YamlParser::getConfigData().weapons.at("glock").precision),
     range(YamlParser::getConfigData().weapons.at("glock").range * TILE_SIZE),
     bullets_per_shot(YamlParser::getConfigData().weapons.at("glock").bulletsPerShot),
-    dispersion(1.0f),
+    dispersion(YamlParser::getConfigData().weapons.at("glock").dispersion),
     falloff_factor(0.05f),
     close_range_threshold(0.0f),
     close_range_multiplier(1.0f),
     fire_rate(YamlParser::getConfigData().weapons.at("glock").fireRate * GAME_FPS),
-    fire_rate_remaining(0) {}
+    fire_rate_remaining(0) {
+        if(range == 0){
+                min_damage = 0;
+        } else {
+                min_damage = damage / (range / TILE_SIZE);
+        }
+    }
 
 std::optional<WeaponShotInfo> Glock::shoot(uint16_t ticks_to_process) {
     fire_rate_remaining = std::max(0, fire_rate_remaining - static_cast<int>(ticks_to_process));
@@ -36,12 +42,12 @@ std::optional<WeaponShotInfo> Glock::shoot(uint16_t ticks_to_process) {
     return WeaponShotInfo(
         bullets_per_shot,
         damage,
-        damage / 3, // min_damage
+        min_damage,
         range,
         precision,
         dispersion,
         DamageMode::LINEAR_FALLOFF,
-        falloff_factor,  // caída
+        falloff_factor,
         close_range_threshold,
         close_range_multiplier
     );

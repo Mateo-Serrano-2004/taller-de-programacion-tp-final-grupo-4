@@ -6,12 +6,22 @@
 
 class AK47: public FullWeapon {
 private:
-    bool in_burst = false;
-    uint8_t bullets_in_current_burst = 0;
-    uint16_t ticks_until_next_bullet = 0;
-    static constexpr uint16_t ticks_between_burst_bullets = 24;  // 0.4s a 60 FPS
-    static constexpr uint16_t burst_cooldown_ticks = 48;         // 0.8s a 60 FPS
-
+    float damage;
+    float precision;
+    int range;
+    int bullets_per_shot;
+    float dispersion;
+    float falloff_factor;
+    float close_range_threshold;
+    float close_range_multiplier;
+    int fire_rate;
+    int fire_rate_remaining;
+    int min_damage;
+    bool in_burst;
+    uint8_t bullets_in_current_burst;
+    uint16_t ticks_until_next_bullet;
+    uint16_t ticks_between_burst_bullets; 
+    uint16_t burst_cooldown_ticks;
 public:
     AK47();
     void press_trigger() override;

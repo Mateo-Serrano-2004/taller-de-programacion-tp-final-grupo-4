@@ -156,8 +156,8 @@ public:
 using GameEventVariant =
         std::variant<LeaveGameEvent, MovementEvent, StopMovementEvent, RotationEvent,
                      DropWeaponEvent, UseWeaponEvent, DefuseBombEvent, SwitchWeaponEvent,
-                     ReloadWeaponEvent, BuyEvent, BuyAmmoEvent, QuitEvent,
-                     PickRoleEvent, StopUsingWeaponEvent, StopDefusingBombEvent>;
+                     ReloadWeaponEvent, BuyEvent, BuyAmmoEvent, QuitEvent, PickRoleEvent,
+                     StopUsingWeaponEvent, StopDefusingBombEvent>;
 
 using EventVariant = std::variant<GameEventVariant, UsernameEvent, CreateGameEvent, MapRequestEvent,
                                   JoinGameEvent, ListGamesEvent>;

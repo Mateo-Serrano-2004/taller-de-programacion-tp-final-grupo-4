@@ -1,13 +1,15 @@
 #include "mouse_movement_handler.h"
 
+#include <memory>
+
 #include <SDL2pp/Renderer.hh>
 
 #include "controller/game_controller.h"
 #include "event/rotation_event.h"
 #include "utils/mouse_coords_translator.h"
 
-Controller::MouseMovementHandler::MouseMovementHandler(Weak<GameController> controller)
-: controller(controller), renderer(controller.lock()->get_renderer()) {}
+Controller::MouseMovementHandler::MouseMovementHandler(Weak<GameController> controller):
+        controller(controller), renderer(controller.lock()->get_renderer()) {}
 
 void Controller::MouseMovementHandler::notify_current_rotation() {
     auto mouse_coords = MouseCoordsTranslator::get_logical_coords(renderer);

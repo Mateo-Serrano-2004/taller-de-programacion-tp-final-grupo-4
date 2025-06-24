@@ -1,9 +1,9 @@
 #ifndef SERVER_GAME_MODEL_DROPPED_WEAPON_H
 #define SERVER_GAME_MODEL_DROPPED_WEAPON_H
 
+#include "common/DTO/drop_weapon_dto.h"
 #include "common/model/vector_2d.h"
 #include "server/game/model/full_weapon.h"
-#include "common/DTO/drop_weapon_dto.h"
 
 class DroppedWeapon {
 private:

@@ -9,7 +9,8 @@
 #include "model/game_state.h"
 #include "model/rendered_player.h"
 
-void View::AnimationRenderer::render_muzzle_fires(const Model::GameState& game_state, uint8_t frames) {
+void View::AnimationRenderer::render_muzzle_fires(const Model::GameState& game_state,
+                                                  uint8_t frames) {
     for (auto& animation: game_state.fires) {
         auto player = game_state.get_player_by_id(animation->get_player_id());
         if (!player) {
@@ -21,7 +22,8 @@ void View::AnimationRenderer::render_muzzle_fires(const Model::GameState& game_s
     }
 }
 
-void View::AnimationRenderer::render_winner_message(const Model::GameState& game_state, uint8_t frames) {
+void View::AnimationRenderer::render_winner_message(const Model::GameState& game_state,
+                                                    uint8_t frames) {
     if (game_state.winner_message) {
         game_state.winner_message->step(frames);
     }
@@ -29,9 +31,9 @@ void View::AnimationRenderer::render_winner_message(const Model::GameState& game
 
 void View::AnimationRenderer::render_progress_bar(const Model::GameState& game_state) {
     if (game_state.progress_bar) {
-        if (game_state.defusing_progress)
+        if (game_state.defusing_progress) {
             game_state.progress_bar->progress(game_state.defusing_progress);
-        else {
+        } else {
             auto ref_player = game_state.get_reference_player();
             game_state.progress_bar->progress(ref_player->get_planting_progress());
         }

@@ -1,5 +1,7 @@
 #include "iterative_animation.h"
 
+#include <algorithm>
+
 #include <SDL2pp/Rect.hh>
 #include <SDL2pp/Renderer.hh>
 

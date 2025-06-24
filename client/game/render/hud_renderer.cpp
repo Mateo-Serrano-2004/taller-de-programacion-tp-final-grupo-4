@@ -2,10 +2,10 @@
 
 #include <cmath>
 #include <cstdint>
-#include <vector>
 #include <iostream>
 #include <list>
 #include <utility>
+#include <vector>
 
 #include <SDL2pp/Point.hh>
 #include <SDL2pp/Rect.hh>
@@ -39,17 +39,13 @@ std::vector<SDL2pp::Rect> View::HUDRenderer::get_time_slices(int seconds_left) {
         seconds_textures.insert(seconds_textures.begin(), SDL2pp::Rect(0, 0, 44, 66));
 
     time_textures.push_back(colon);
-    time_textures.insert(
-        time_textures.end(),
-        seconds_textures.begin(),
-        seconds_textures.end()
-    );
+    time_textures.insert(time_textures.end(), seconds_textures.begin(), seconds_textures.end());
 
     return time_textures;
 }
 
 void View::HUDRenderer::render_item(std::list<View::Pane>& numbers, View::HorizontalPane& parent,
-                                      const SDL2pp::Rect& slice, Shared<SDL2pp::Texture> texture) {
+                                    const SDL2pp::Rect& slice, Shared<SDL2pp::Texture> texture) {
     View::Pane number_pane(controller);
     number_pane.set_draw_texture(true);
     number_pane.set_texture(texture);
@@ -89,7 +85,7 @@ void View::HUDRenderer::render_money(Shared<View::RenderedPlayer> player) {
     auto slices = View::NumberTextureSlicer::get_hud_number(player->get_money());
 
     money.clear_children();
-    
+
     render_item(money_numbers, money, dollar_symbol, hud_symbols);
     for (const auto& slice: slices) {
         render_item(money_numbers, money, slice, hud_numbers);

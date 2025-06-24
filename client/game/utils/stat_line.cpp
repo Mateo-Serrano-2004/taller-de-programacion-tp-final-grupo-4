@@ -2,16 +2,16 @@
 
 #include "controller/game_controller.h"
 
-View::StatLine::StatLine(Weak<Controller::GameController> controller)
-: View::VerticalPane(controller),
-  line(controller),
-  player_name_pane(controller),
-  player_name(controller),
-  kills_pane(controller),
-  kills(controller),
-  deaths_pane(controller),
-  deaths(controller),
-  separator(controller) {
+View::StatLine::StatLine(Weak<Controller::GameController> controller):
+        View::VerticalPane(controller),
+        line(controller),
+        player_name_pane(controller),
+        player_name(controller),
+        kills_pane(controller),
+        kills(controller),
+        deaths_pane(controller),
+        deaths(controller),
+        separator(controller) {
     set_height(20);
     set_width(200);
     add_child(&line);
@@ -45,17 +45,11 @@ View::StatLine::StatLine(Weak<Controller::GameController> controller)
     separator.set_draw_background(true);
 }
 
-void View::StatLine::set_name(const std::string& name) {
-    player_name.set_text(name);
-}
+void View::StatLine::set_name(const std::string& name) { player_name.set_text(name); }
 
-void View::StatLine::set_kills(const std::string& kills_text) {
-    kills.set_text(kills_text);
-}
+void View::StatLine::set_kills(const std::string& kills_text) { kills.set_text(kills_text); }
 
-void View::StatLine::set_deaths(const std::string& deaths_text) {
-    deaths.set_text(deaths_text);
-}
+void View::StatLine::set_deaths(const std::string& deaths_text) { deaths.set_text(deaths_text); }
 
 void View::StatLine::set_all_texts_color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) {
     player_name.set_font_color(red, green, blue, alpha);
@@ -76,6 +70,4 @@ void View::StatLine::set_all_fonts_size(uint8_t size) {
     deaths.set_height(19);
 }
 
-void View::StatLine::set_line_height(uint8_t size) {
-    line.set_height(size);
-}
+void View::StatLine::set_line_height(uint8_t size) { line.set_height(size); }

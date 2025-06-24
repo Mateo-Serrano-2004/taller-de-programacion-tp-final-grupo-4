@@ -1,8 +1,9 @@
 #ifndef CLIENT_GAME_HANDLER_WEAPON_HANDLER_H
 #define CLIENT_GAME_HANDLER_WEAPON_HANDLER_H
 
-#include <unordered_set>
 #include <unordered_map>
+#include <unordered_set>
+
 #include <SDL2/SDL.h>
 
 #include "common/definitions.h"
@@ -26,24 +27,24 @@ private:
 
     void set_up_handled_types();
 
-    void handle_mouse(SDL_Event& event);
+    void handle_mouse(const SDL_Event& event);
 
-    void handle_switching(SDL_Event& event);
-    void handle_buy_ammo(SDL_Event& event);
-    void handle_reload(SDL_Event& event);
-    void handle_defusing(SDL_Event& event);
-    void handle_drop(SDL_Event& event);
-    void handle_key(SDL_Event& event);
+    void handle_switching(const SDL_Event& event);
+    void handle_buy_ammo(const SDL_Event& event);
+    void handle_reload(const SDL_Event& event);
+    void handle_defusing(const SDL_Event& event);
+    void handle_drop(const SDL_Event& event);
+    void handle_key(const SDL_Event& event);
 
 public:
-    WeaponHandler(Weak<GameController> controller);
+    explicit WeaponHandler(Weak<GameController> controller);
 
-    void handle(SDL_Event& event) override;
-    bool can_handle(SDL_Event& event) override;
+    void handle(const SDL_Event& event) override;
+    bool can_handle(const SDL_Event& event) override;
     void stop();
 
     ~WeaponHandler() override = default;
 };
-};
+};  // namespace Controller
 
-#endif // CLIENT_GAME_HANDLER_WEAPON_HANDLER_H
+#endif  // CLIENT_GAME_HANDLER_WEAPON_HANDLER_H

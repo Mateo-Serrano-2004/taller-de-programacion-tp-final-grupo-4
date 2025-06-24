@@ -6,55 +6,54 @@
 #include <mutex>
 #include <optional>
 
+#include "common/definitions.h"
 #include "common/model/vector_2d.h"
 #include "common/overloaded.h"
 #include "common/periodic_clock.h"
-#include "common/definitions.h"
 #include "server/exception/invalid_game_exception.h"
 #include "server/exception/invalid_player_exception.h"
 #include "server/parser/yaml_parser.h"
 
 void Game::with_valid_player(short_id_t player_id, std::function<void(FullPlayer&)> action) {
     auto it = players.find(player_id);
-    if (it == players.end()) return;
+    if (it == players.end())
+        return;
     action(it->second);
 }
 
-bool Game::is_playing_state() {
-    return state == GameState::Playing;
-}
+bool Game::is_playing_state() { return state == GameState::Playing; }
 
 void Game::handle_use_weapon(const uint8_t& player_id) {
-    if (!is_playing_state()) return;
+    if (!is_playing_state())
+        return;
     with_valid_player(player_id, [this](FullPlayer& player) {
         gamelogic.start_using_weapon(player, round, bomb_sites);
     });
 }
 
 void Game::handle_reload(const uint8_t& player_id) {
-    if (!is_playing_state()) return;
+    if (!is_playing_state())
+        return;
     with_valid_player(player_id, [this](FullPlayer& player) {
         gamelogic.start_reloading_weapon(player, round);
     });
 }
 
 void Game::handle_start_defusing_bomb(const uint8_t& player_id) {
-    if (!is_playing_state()) return;
-    with_valid_player(player_id, [this](FullPlayer& player) {
-        gamelogic.start_defusing_bomb(player, round);
-    });
+    if (!is_playing_state())
+        return;
+    with_valid_player(player_id,
+                      [this](FullPlayer& player) { gamelogic.start_defusing_bomb(player, round); });
 }
 
 void Game::handle_stop_defusing_bomb(const uint8_t& player_id) {
-    with_valid_player(player_id, [this](FullPlayer& player) {
-        gamelogic.stop_defusing_bomb(player);
-    });
+    with_valid_player(player_id,
+                      [this](FullPlayer& player) { gamelogic.stop_defusing_bomb(player); });
 }
 
 void Game::handle_stop_using_weapon(const uint8_t& player_id) {
-    with_valid_player(player_id, [this](FullPlayer& player) {
-        gamelogic.stop_using_weapon(player);
-    });
+    with_valid_player(player_id,
+                      [this](FullPlayer& player) { gamelogic.stop_using_weapon(player); });
 }
 
 void Game::handle_drop_weapon(const uint8_t& player_id) {
@@ -70,7 +69,8 @@ void Game::handle_switch_weapon(const uint8_t& player_id, const SwitchWeaponEven
 }
 
 void Game::handle_buy_ammo(const uint8_t& player_id, const BuyAmmoEvent& event) {
-    if (!is_playing_state()) return;
+    if (!is_playing_state())
+        return;
 
     with_valid_player(player_id, [this, &event](FullPlayer& player) {
         gamelogic.buy_ammo(player, event.get_slot_id(), round);
@@ -78,7 +78,8 @@ void Game::handle_buy_ammo(const uint8_t& player_id, const BuyAmmoEvent& event) 
 }
 
 void Game::handle_buy_weapon(const uint8_t& player_id, const BuyEvent& event) {
-    if (!is_playing_state()) return;
+    if (!is_playing_state())
+        return;
 
     with_valid_player(player_id, [this, &event](FullPlayer& player) {
         gamelogic.buy_weapon(player, event.get_weapon_id(), round);
@@ -90,9 +91,13 @@ void Game::handle_leave_game(const uint8_t& player_id) {
         round.notify_on_one_player_less(player.get_team());
         players.erase(player.get_id());
     });
-    client_queues.erase(player_id);
 
-    if (players.empty()) kill();
+    try {
+        client_queues.erase(player_id);
+    } catch (const std::exception&) {}
+
+    if (players.empty())
+        kill();
 }
 
 void Game::handle_movement(const uint8_t& player_id, const MovementEvent& event) {
@@ -118,9 +123,8 @@ void Game::handle_rotation(const uint8_t& player_id, const RotationEvent& event)
 }
 
 void Game::handle_pick_role(const uint8_t player_id, const PickRoleEvent& event) {
-    with_valid_player(player_id, [&event](FullPlayer& player) {
-        player.set_role_id(event.get_role_id());
-    });
+    with_valid_player(player_id,
+                      [&event](FullPlayer& player) { player.set_role_id(event.get_role_id()); });
 }
 
 void Game::handle(uint8_t player_id, const GameEventVariant& event) {
@@ -167,27 +171,44 @@ Physics::Vector2D Game::get_position_for_new_player(Model::TeamID team) {
 }
 
 void Game::swap_teams() {
-    for (auto& [id, player] : players) {
+    for (auto& [id, player]: players) {
         if (player.get_team() == Model::TeamID::CT) {
             player.set_new_team(Model::TeamID::TT);
         } else if (player.get_team() == Model::TeamID::TT) {
             player.set_new_team(Model::TeamID::CT);
         } else {
-            continue; // no deberia apsar que llegue acá igual
+            continue;  // no deberia apsar que llegue acá igual
         }
 
         Model::RoleID current = player.get_role_id();
 
         switch (current) {
-            case Model::RoleID::CT1: player.set_role_id(Model::RoleID::T1); break;
-            case Model::RoleID::CT2: player.set_role_id(Model::RoleID::T2); break;
-            case Model::RoleID::CT3: player.set_role_id(Model::RoleID::T3); break;
-            case Model::RoleID::CT4: player.set_role_id(Model::RoleID::T4); break;
-            case Model::RoleID::T1: player.set_role_id(Model::RoleID::CT1); break;
-            case Model::RoleID::T2: player.set_role_id(Model::RoleID::CT2); break;
-            case Model::RoleID::T3: player.set_role_id(Model::RoleID::CT3); break;
-            case Model::RoleID::T4: player.set_role_id(Model::RoleID::CT4); break;
-            default: break;
+            case Model::RoleID::CT1:
+                player.set_role_id(Model::RoleID::T1);
+                break;
+            case Model::RoleID::CT2:
+                player.set_role_id(Model::RoleID::T2);
+                break;
+            case Model::RoleID::CT3:
+                player.set_role_id(Model::RoleID::T3);
+                break;
+            case Model::RoleID::CT4:
+                player.set_role_id(Model::RoleID::T4);
+                break;
+            case Model::RoleID::T1:
+                player.set_role_id(Model::RoleID::CT1);
+                break;
+            case Model::RoleID::T2:
+                player.set_role_id(Model::RoleID::CT2);
+                break;
+            case Model::RoleID::T3:
+                player.set_role_id(Model::RoleID::CT3);
+                break;
+            case Model::RoleID::T4:
+                player.set_role_id(Model::RoleID::CT4);
+                break;
+            default:
+                break;
         }
     }
     std::swap(ct_rounds_won, tt_rounds_won);
@@ -206,7 +227,7 @@ void Game::start_new_round() {
 
     for (auto& [id, player]: players) {
         handle_stop_using_weapon(id);
-        
+
         Model::TeamID player_team = player.get_team();
         if (player_team == Model::TeamID::CT) {
             player.reset_for_new_round(ct_spawn_positions[ct_count]);
@@ -235,7 +256,6 @@ void Game::update_players_that_won() {
         tt_rounds_won++;
     }
 
-    // modularizar y pasar a gamelogic
     for (auto& [player_id, player]: players) {
         if (player.get_team() == winner) {
             player.add_money(round_won_money);
@@ -246,7 +266,8 @@ void Game::update_players_that_won() {
 }
 
 void Game::process_frames(uint16_t frames_to_process) {
-    movement_system.process_movements(players, round, frames_to_process, state != GameState::WaitingStart);
+    movement_system.process_movements(players, round, frames_to_process,
+                                      state != GameState::WaitingStart);
     gamelogic.process_defusing(players, round);
     round.update(frames_to_process);
     gamelogic.process_reloading(players, round, frames_to_process);
@@ -292,21 +313,20 @@ void Game::broadcast_game_state() {
         try {
             queue->push(game_snapshot);
         } catch (const ClosedQueue&) {
-            client_queues.erase(id);
-        } 
-        catch (const std::exception&) {}
+            try {
+                client_queues.erase(id);
+            } catch (const std::exception&) {}
+        } catch (const std::exception&) {}
     }
 }
 
 void Game::update_game_with_events() {
     std::pair<uint8_t, GameEventVariant> event_info;
-    try {
-        while (game_queue.try_pop(event_info)) {
-            uint8_t player_id = event_info.first;
-            GameEventVariant event = event_info.second;
-            handle(player_id, event);
-        }
-    } catch (const ClosedQueue&) {}
+    while (game_queue.try_pop(event_info)) {
+        uint8_t player_id = event_info.first;
+        GameEventVariant event = event_info.second;
+        handle(player_id, event);
+    }
 }
 
 void Game::tick(uint16_t frames_to_process) {
@@ -350,12 +370,12 @@ void Game::load_map_features() {
     }
 }
 
-Game::Game(const std::string& party_name, const std::string& map_name, const MapMatrix& map_matrix)
-    : round(Round::create_warmup_round(GAME_FPS)),
-      party_name(party_name),
-      map_name(map_name),
-      map_matrix(map_matrix),
-      movement_system(MovementSystem(this->map_matrix)) {
+Game::Game(const std::string& party_name, const std::string& map_name, const MapMatrix& map_matrix):
+        round(Round::create_warmup_round(GAME_FPS)),
+        party_name(party_name),
+        map_name(map_name),
+        map_matrix(map_matrix),
+        movement_system(MovementSystem(this->map_matrix)) {
     load_map_features();
 
     const auto& config = YamlParser::getConfigData();
@@ -393,7 +413,10 @@ void Game::add_player(const std::string& username, ClientQueue& client_queue, sh
 
     players.emplace(player_id, FullPlayer(player_id, username, team_id, role_id,
                                           get_position_for_new_player(team_id)));
-    client_queues[player_id] = &client_queue;
+
+    try {
+        client_queues[player_id] = &client_queue;
+    } catch (const std::exception&) {}
 
     round.notify_player_joined(team_id);
 }
@@ -404,8 +427,10 @@ void Game::run() {
     PeriodicClock clock(GAME_FPS);
 
     while (is_not_finished) {
-        uint16_t frames_to_process = clock.sleep_and_get_frames();
-        this->tick(frames_to_process);
+        try {
+            uint16_t frames_to_process = clock.sleep_and_get_frames();
+            this->tick(frames_to_process);
+        } catch (const std::exception&) {}
     }
 }
 

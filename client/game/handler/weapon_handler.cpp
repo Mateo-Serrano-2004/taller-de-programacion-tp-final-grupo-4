@@ -1,5 +1,7 @@
 #include "weapon_handler.h"
 
+#include <memory>
+
 #include <SDL2/SDL.h>
 
 #include "controller/game_controller.h"
@@ -9,8 +11,8 @@
 #include "event/reload_event.h"
 #include "event/stop_defusing_bomb_event.h"
 #include "event/stop_using_weapon_event.h"
-#include "event/use_weapon_event.h"
 #include "event/switch_weapon_event.h"
+#include "event/use_weapon_event.h"
 
 void Controller::WeaponHandler::set_up_handled_types() {
     handled_types.insert(SDL_KEYDOWN);
@@ -34,7 +36,7 @@ void Controller::WeaponHandler::set_up_handled_types() {
     ids.insert({SDLK_4, Model::SlotID::BOMB_SLOT});
 }
 
-void Controller::WeaponHandler::handle_mouse(SDL_Event& event) {
+void Controller::WeaponHandler::handle_mouse(const SDL_Event& event) {
     if (event.type == SDL_MOUSEBUTTONDOWN) {
         if (!is_shooting) {
             controller.lock()->push_event(make_shared<Model::UseWeaponEvent>());
@@ -48,7 +50,7 @@ void Controller::WeaponHandler::handle_mouse(SDL_Event& event) {
     }
 }
 
-void Controller::WeaponHandler::handle_switching(SDL_Event& event) {
+void Controller::WeaponHandler::handle_switching(const SDL_Event& event) {
     auto slot = ids.at(event.key.keysym.sym);
     if (event.type == SDL_KEYDOWN) {
         if (!is_switching) {
@@ -60,8 +62,9 @@ void Controller::WeaponHandler::handle_switching(SDL_Event& event) {
     }
 }
 
-void Controller::WeaponHandler::handle_buy_ammo(SDL_Event& event) {
-    auto slot = event.key.keysym.sym == SDLK_COMMA ? Model::SlotID::PRIMARY_WEAPON : Model::SlotID::SECONDARY_WEAPON;
+void Controller::WeaponHandler::handle_buy_ammo(const SDL_Event& event) {
+    auto slot = event.key.keysym.sym == SDLK_COMMA ? Model::SlotID::PRIMARY_WEAPON :
+                                                     Model::SlotID::SECONDARY_WEAPON;
     if (event.type == SDL_KEYDOWN) {
         if (!is_buying_ammo) {
             controller.lock()->push_event(make_shared<Model::BuyAmmoEvent>(slot));
@@ -72,7 +75,7 @@ void Controller::WeaponHandler::handle_buy_ammo(SDL_Event& event) {
     }
 }
 
-void Controller::WeaponHandler::handle_reload(SDL_Event& event) {
+void Controller::WeaponHandler::handle_reload(const SDL_Event& event) {
     if (event.type == SDL_KEYDOWN) {
         if (!is_reloading) {
             controller.lock()->push_event(make_shared<Model::ReloadEvent>());
@@ -83,7 +86,7 @@ void Controller::WeaponHandler::handle_reload(SDL_Event& event) {
     }
 }
 
-void Controller::WeaponHandler::handle_defusing(SDL_Event& event) {
+void Controller::WeaponHandler::handle_defusing(const SDL_Event& event) {
     if (event.type == SDL_KEYDOWN) {
         if (!is_defusing) {
             controller.lock()->push_event(make_shared<Model::DefuseBombEvent>());
@@ -97,7 +100,7 @@ void Controller::WeaponHandler::handle_defusing(SDL_Event& event) {
     }
 }
 
-void Controller::WeaponHandler::handle_drop(SDL_Event& event) {
+void Controller::WeaponHandler::handle_drop(const SDL_Event& event) {
     if (event.type == SDL_KEYDOWN) {
         if (!is_dropping) {
             controller.lock()->push_event(make_shared<Model::DropWeaponEvent>());
@@ -108,7 +111,7 @@ void Controller::WeaponHandler::handle_drop(SDL_Event& event) {
     }
 }
 
-void Controller::WeaponHandler::handle_key(SDL_Event& event) {
+void Controller::WeaponHandler::handle_key(const SDL_Event& event) {
     if (event.key.keysym.sym == SDLK_e) {
         handle_defusing(event);
     } else if (event.key.keysym.sym == SDLK_g) {
@@ -122,18 +125,18 @@ void Controller::WeaponHandler::handle_key(SDL_Event& event) {
     }
 }
 
-Controller::WeaponHandler::WeaponHandler(Weak<GameController> controller)
-: Controller::GameHandler(controller),
-  is_shooting(false),
-  is_switching(false),
-  is_defusing(false),
-  is_dropping(false),
-  is_buying_ammo(false),
-  is_reloading(false) {
+Controller::WeaponHandler::WeaponHandler(Weak<GameController> controller):
+        Controller::GameHandler(controller),
+        is_shooting(false),
+        is_switching(false),
+        is_defusing(false),
+        is_dropping(false),
+        is_buying_ammo(false),
+        is_reloading(false) {
     set_up_handled_types();
 }
 
-void Controller::WeaponHandler::handle(SDL_Event& event) {
+void Controller::WeaponHandler::handle(const SDL_Event& event) {
     if (can_handle(event)) {
         if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
             handle_key(event);
@@ -143,7 +146,7 @@ void Controller::WeaponHandler::handle(SDL_Event& event) {
     }
 }
 
-bool Controller::WeaponHandler::can_handle(SDL_Event& event) {
+bool Controller::WeaponHandler::can_handle(const SDL_Event& event) {
     if (handled_types.find(event.type) == handled_types.end())
         return false;
 

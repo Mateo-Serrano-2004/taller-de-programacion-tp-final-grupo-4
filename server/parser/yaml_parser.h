@@ -20,29 +20,25 @@ struct TileData {
 
 struct GameConfig {
     std::string title;
-    int rounds;//LISTO
-    int roundsToWin;//-------------------------> NO ES NECESARIO
-    int roundsPerSide;//LISTO
-    int buyTime;//LISTO
-    int warmupTime;//LISTO
-    int roundTime;//LISTO
-    int roundWonMoney;//LISTO
-    int roundLostMoney;//LISTO
-    int bombExplotionTime;//LISTO
-    int bombExplotionRadius;//CONSTANTE DEFINITIONS
-    int bombExplotionDamage;//NO SE IMPLEMENTA
-    int bombPlantTime;//*********BOMBA
-    int bombDefuseTime;//LISTO
-    int bombPlantMoney;//NO
-    int bombDefuseMoney;//NO
-    //no hay post roudn time
-    //no hay premio por muerte
+    int rounds;               
+    int roundsPerSide;      
+    int buyTime;              
+    int warmupTime;    
+    int postRoundTime;
+    int roundTime;            
+    int roundWonMoney;        
+    int roundLostMoney;       
+    int bombExplotionTime;    
+    int bombPlantTime;        
+    int bombDefuseTime;       
+    int killMoney;
+    int costPrimaryAmmo;
+    int costSecondaryAmmo;
 };
 
 struct PlayerConfig {
-    int health;//LISTO
-    int initialMoney;//LISTO
-    float movementSpeed;//NO
+    int health;           
+    int initialMoney;     
 };
 
 struct WeaponConfig {
@@ -54,7 +50,7 @@ struct WeaponConfig {
     int range;
     int bulletsPerShot;
     float fireRate;
-    int bountyMoney;
+    float dispersion;
     float reloadTime;
 };
 

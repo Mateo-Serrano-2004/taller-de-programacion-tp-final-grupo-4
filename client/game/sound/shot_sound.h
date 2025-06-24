@@ -10,14 +10,11 @@ class GameController;
 namespace View {
 class ShotSound: public TrackingSoundEffect {
 public:
-    ShotSound(
-        Weak<Controller::GameController> controller,
-        Model::WeaponID weapon_id,
-        short_id_t player_id
-    );
+    ShotSound(Weak<Controller::GameController> controller, Model::WeaponID weapon_id,
+              short_id_t player_id);
 
     ~ShotSound() override = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_SOUND_SHOT_SOUND_H
+#endif  // CLIENT_GAME_SOUND_SHOT_SOUND_H

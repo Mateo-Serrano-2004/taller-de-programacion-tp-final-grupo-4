@@ -1,5 +1,7 @@
 #include "horizontal_pane.h"
 
+#include <algorithm>
+
 #include "controller/base_controller.h"
 
 void View::HorizontalPane::position_children() {
@@ -21,7 +23,7 @@ void View::HorizontalPane::position_children() {
 void View::HorizontalPane::fit() {
     int width = 0;
     int height = 0;
-    for (auto* child : children) {
+    for (const auto* child: children) {
         width += child->get_width();
         height = std::max(height, child->get_height());
     }

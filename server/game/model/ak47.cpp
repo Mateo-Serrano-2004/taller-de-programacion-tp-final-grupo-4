@@ -1,11 +1,38 @@
 #include "ak47.h"
+#include "server/parser/yaml_parser.h"
+#include "common/definitions.h"
 
-AK47::AK47():
-        FullWeapon(Model::WeaponID::AK47, Model::SlotID::PRIMARY_WEAPON,
-                   30,  // loaded_ammo
-                   30,
-                   60,  // total_ammo
-                   90, 90) {}
+AK47::AK47()
+    : FullWeapon(
+        Model::WeaponID::AK47,
+        Model::SlotID::PRIMARY_WEAPON,
+        YamlParser::getConfigData().weapons.at("ak-47").initialAmmo,
+        YamlParser::getConfigData().weapons.at("ak-47").initialAmmo,
+        YamlParser::getConfigData().weapons.at("ak-47").maxAmmo,
+        static_cast<uint16_t>(YamlParser::getConfigData().weapons.at("ak-47").reloadTime * GAME_FPS),
+        static_cast<uint16_t>(YamlParser::getConfigData().weapons.at("ak-47").reloadTime * GAME_FPS)
+    ),
+    damage(YamlParser::getConfigData().weapons.at("ak-47").damagePerBullet),
+    precision(YamlParser::getConfigData().weapons.at("ak-47").precision),
+    range(YamlParser::getConfigData().weapons.at("ak-47").range * TILE_SIZE),
+    bullets_per_shot(YamlParser::getConfigData().weapons.at("ak-47").bulletsPerShot),
+    dispersion(YamlParser::getConfigData().weapons.at("ak-47").dispersion),
+    falloff_factor(0.05f),
+    close_range_threshold(0.0f),
+    close_range_multiplier(1.0f),
+    fire_rate(YamlParser::getConfigData().weapons.at("ak-47").fireRate * GAME_FPS),
+    fire_rate_remaining(0),
+    in_burst(false),
+    bullets_in_current_burst(0),
+    ticks_until_next_bullet(0),
+    ticks_between_burst_bullets(0.4 * GAME_FPS),
+    burst_cooldown_ticks(0.8 * GAME_FPS) {
+        if(range == 0){
+                min_damage = 0;
+        } else {
+                min_damage = damage / (range / TILE_SIZE);
+        }
+    }
 
 void AK47::press_trigger() {
     triggered = true;
@@ -64,15 +91,15 @@ std::optional<WeaponShotInfo> AK47::shoot(uint16_t ticks_to_process) {
     ticks_until_next_bullet = ticks_between_burst_bullets;
 
     return WeaponShotInfo(
-        1,
-        20.0f,
-        8.0f,
-        200.0f,
-        0.75f,
-        0.07f,
+        bullets_per_shot,
+        damage,
+        min_damage,
+        range,
+        precision,
+        dispersion,
         DamageMode::LINEAR_FALLOFF,
-        0.12,
-        0.0f,
-        1.0f
+        falloff_factor,
+        close_range_threshold,
+        close_range_multiplier
     );
 }

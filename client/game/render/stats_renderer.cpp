@@ -16,29 +16,24 @@ void View::StatsRenderer::clear() {
 
 void View::StatsRenderer::add_victories(const Model::GameState& game_state) {
     first_team_stats.add_child(&first_team_victories);
-    first_team_victories.set_text(
-        std::to_string(game_state.first_team_victories) + " victories"
-    );
+    first_team_victories.set_text(std::to_string(game_state.first_team_victories) + " victories");
 
     second_team_stats.add_child(&second_team_victories);
-    second_team_victories.set_text(
-        std::to_string(game_state.second_team_victories) + " victories"
-    );
+    second_team_victories.set_text(std::to_string(game_state.second_team_victories) + " victories");
 }
 
-View::StatsRenderer::StatsRenderer(
-    Weak<Controller::GameController> controller,
-    View::Pane* viewport
-): controller(controller),
-   viewport(viewport),
-   stats(controller),
-   first_team_stats(controller),
-   first_team_victories(controller),
-   first_stats_indicator(controller),
-   second_stats_indicator(controller),
-   separator(controller),
-   second_team_stats(controller),
-   second_team_victories(controller) {
+View::StatsRenderer::StatsRenderer(Weak<Controller::GameController> controller,
+                                   View::Pane* viewport):
+        controller(controller),
+        viewport(viewport),
+        stats(controller),
+        first_team_stats(controller),
+        first_team_victories(controller),
+        first_stats_indicator(controller),
+        second_stats_indicator(controller),
+        separator(controller),
+        second_team_stats(controller),
+        second_team_victories(controller) {
     viewport->add_child(&stats);
     stats.add_child(&first_team_stats);
     stats.add_child(&separator);

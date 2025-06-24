@@ -2,9 +2,9 @@
 #define CLIENT_GAME_CONTROLLER_SUBSYSTEM_MANAGER_H
 
 #include <SDL2/SDL.h>
+#include <SDL2pp/Mixer.hh>
 #include <SDL2pp/SDL.hh>
 #include <SDL2pp/SDLTTF.hh>
-#include <SDL2pp/Mixer.hh>
 
 namespace Controller {
 class SubsystemManager {
@@ -26,6 +26,6 @@ public:
 
     ~SubsystemManager() = default;
 };
-};
+};  // namespace Controller
 
-#endif // CLIENT_GAME_CONTROLLER_SUBSYSTEM_MANAGER_H
+#endif  // CLIENT_GAME_CONTROLLER_SUBSYSTEM_MANAGER_H

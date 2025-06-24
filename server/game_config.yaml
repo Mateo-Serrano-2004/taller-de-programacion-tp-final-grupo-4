@@ -3,8 +3,9 @@ game:
   rounds_to_win: 6
   rounds_per_side: 5
 
-  buy_time: 3
-  warmup_time: 10
+  buy_time: 15
+  warmup_time: 30
+  post_round_time: 5
   round_time: 120
   round_won_money: 500
   round_lost_money: 250
@@ -12,15 +13,14 @@ game:
   bomb_plant_time: 3
   bomb_defuse_time: 10
   bomb_explotion_time: 45
-  bomb_explotion_radius: 10
-  bomb_explotion_damage: 1000
-  bomb_plant_money: 500
-  bomb_defuse_money: 500
+
+  kill_money: 200
+  cost_primary_ammo: 100
+  cost_secondary_ammo: 75
 
 player:
   health: 100
   initial_money: 1000
-  movement_speed: 1.0
 
 weapons:
   knife:
@@ -30,9 +30,9 @@ weapons:
     precision: 1.0
     cost: 0
     range: 1
-    bullets_per_shot: 0
+    bullets_per_shot: 1
     fire_rate: 0.3
-    bounty_money: 1500
+    dispersion: 0.0
     reload_time: 0
 
   glock:
@@ -44,7 +44,7 @@ weapons:
     range: 4
     bullets_per_shot: 1
     fire_rate: 1
-    bounty_money: 300
+    dispersion: 0.03
     reload_time: 2.2
 
   ak-47:
@@ -52,11 +52,11 @@ weapons:
     initial_ammo: 30
     damage_per_bullet: 20
     precision: 0.7
-    cost: 2700
+    cost: 1300
     range: 6
     bullets_per_shot: 3
     fire_rate: 0.2
-    bounty_money: 300
+    dispersion: 0.07
     reload_time: 2.5
 
   m3:
@@ -64,11 +64,11 @@ weapons:
     initial_ammo: 8
     damage_per_bullet: 15
     precision: 0.6
-    cost: 1700
+    cost: 1100
     range: 3
-    bullets_per_shot: 1
+    bullets_per_shot: 8
     fire_rate: 0.8
-    bounty_money: 300
+    dispersion: 20.0
     reload_time: 3.0
 
   awp:
@@ -76,11 +76,11 @@ weapons:
     initial_ammo: 5
     damage_per_bullet: 100
     precision: 1.0
-    cost: 4750
+    cost: 1700
     range: 100
     bullets_per_shot: 1
     fire_rate: 1.3
-    bounty_money: 300
+    dispersion: 0
     reload_time: 3.7
 
 fov:

@@ -20,11 +20,11 @@ void Context::StatsContext::dispatch_events() {
     strategy.handle_current_game_state();
 }
 
-Context::StatsContext::StatsContext(Weak<Controller::GameController> controller)
-: Context::BaseContext("stats", controller),
-  player_renderer(controller),
-  hud_renderer(controller),
-  strategy(controller),
-  game_state_manager(controller.lock()->get_game_state_manager()),
-  viewport(controller),
-  stats_renderer(controller, &viewport) {}
+Context::StatsContext::StatsContext(Weak<Controller::GameController> controller):
+        Context::BaseContext("stats", controller),
+        player_renderer(controller),
+        hud_renderer(controller),
+        strategy(controller),
+        game_state_manager(controller.lock()->get_game_state_manager()),
+        viewport(controller),
+        stats_renderer(controller, &viewport) {}

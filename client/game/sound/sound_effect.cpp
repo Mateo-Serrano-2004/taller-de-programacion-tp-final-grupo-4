@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+
 #include <SDL2pp/Chunk.hh>
 #include <SDL2pp/Mixer.hh>
 
@@ -10,11 +11,14 @@
 #include "model/rendered_player.h"
 #include "utils/enum_translator.h"
 
-View::SoundEffect::SoundEffect(
-    Weak<Controller::BaseController> controller,
-    Model::SoundID sound_id
-): started(false), ended(false), channel(-1), mixer(nullptr),
-   chunk(nullptr), controller(controller) {
+View::SoundEffect::SoundEffect(Weak<Controller::BaseController> controller,
+                               Model::SoundID sound_id):
+        started(false),
+        ended(false),
+        channel(-1),
+        mixer(nullptr),
+        chunk(nullptr),
+        controller(controller) {
     auto asset_manager = controller.lock()->get_asset_manager();
     mixer = asset_manager->get_mixer();
     chunk = asset_manager->get_sound(sound_id);
@@ -23,13 +27,9 @@ View::SoundEffect::SoundEffect(
     set_volume(80);
 }
 
-bool View::SoundEffect::is_playing() const {
-    return started;
-}
+bool View::SoundEffect::is_playing() const { return started; }
 
-bool View::SoundEffect::has_ended() const {
-    return ended;
-}
+bool View::SoundEffect::has_ended() const { return ended; }
 
 void View::SoundEffect::set_volume(int new_volume) {
     mixer->SetVolume(channel, new_volume);
@@ -52,4 +52,3 @@ void View::SoundEffect::end() {
     ended = true;
     started = false;
 }
-

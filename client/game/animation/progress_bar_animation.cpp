@@ -17,8 +17,6 @@ View::ProgressBarAnimation::ProgressBarAnimation(Weak<Controller::BaseController
 
 void View::ProgressBarAnimation::render() {
     if (current_progression)
-        progress_bar.set_width(
-            std::max(0, 100 - current_progression)
-        );
+        progress_bar.set_width(std::max(0, 100 - current_progression));
     viewport.render();
 }

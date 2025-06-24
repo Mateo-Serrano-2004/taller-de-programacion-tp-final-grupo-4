@@ -12,9 +12,9 @@
 #include "common/definitions.h"
 #include "common/queue.h"
 #include "server/events/events.h"
+#include "server/parser/types.h"
 #include "server/parser/yaml_addresser.h"
 #include "server/parser/yaml_parser.h"
-#include "server/parser/types.h"
 
 #include "game.h"
 
@@ -38,7 +38,8 @@ public:
     GameManager(const std::string& config_file, const std::vector<std::string>& maps_names);
 
     GameQueue* create_game(const std::string& party_name, const std::string& map_name,
-                           const MapMatrix& map_matrix, const std::string& username, Queue<DTO::DTOVariant>& client_queue);
+                           const MapMatrix& map_matrix, const std::string& username,
+                           Queue<DTO::DTOVariant>& client_queue);
     std::pair<short_id_t, GameQueue*> join_game(const uint8_t& game_id, const std::string& username,
                                                 Queue<DTO::DTOVariant>& client_queue);
 

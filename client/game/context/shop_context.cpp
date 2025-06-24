@@ -37,9 +37,7 @@ void Context::ShopContext::trigger_buttons(Shared<SDL_Event> event) {
 
 void Context::ShopContext::render(uint8_t) { background.render(); }
 
-void Context::ShopContext::dispatch_events() {
-    strategy.dispatch();
-}
+void Context::ShopContext::dispatch_events() { strategy.dispatch(); }
 
 Context::ShopContext::ShopContext(Weak<Controller::GameController> controller):
         Context::BaseContext("shop", controller),

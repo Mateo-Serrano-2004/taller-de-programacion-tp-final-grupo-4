@@ -3,8 +3,8 @@
 
 #include <cstdint>
 #include <list>
-#include <vector>
 #include <map>
+#include <vector>
 
 #include "common/definitions.h"
 #include "common/round_state.h"
@@ -37,7 +37,7 @@ struct DropWeaponDTO;
 
 namespace Model {
 struct GameState {
-    public:
+public:
     std::map<short_id_t, Shared<View::RenderedPlayer>> players;
     std::vector<Shared<DTO::DropWeaponDTO>> dropped_weapons;
     std::list<Shared<View::MuzzleFireAnimation>> fires;
@@ -64,17 +64,17 @@ struct GameState {
     Model::TeamID round_winner;
     Model::TeamID game_winner;
     RoundState round_state;
-    
+
     GameState();
     GameState(const GameState&) = default;
     GameState& operator=(const GameState&) = default;
-    
+
     Shared<View::RenderedPlayer> get_reference_player() const;
     Shared<View::RenderedPlayer> get_player_by_id(Maybe<short_id_t> id) const;
     Shared<View::RenderedPlayer> get_any_player_by_team(Model::TeamID team) const;
     Shared<View::RenderedPlayer> get_any_player_alive() const;
     Shared<View::RenderedPlayer> get_any_player_alive_by_team(Model::TeamID team) const;
-    
+
     ~GameState() = default;
 };
 };  // namespace Model

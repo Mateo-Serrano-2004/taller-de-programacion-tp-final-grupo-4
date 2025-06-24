@@ -2,9 +2,9 @@
 
 #include <algorithm>
 #include <cmath>
-#include <utility>
 #include <limits>
 #include <random>
+#include <utility>
 
 bool does_bullet_hit_player(const Physics::Vector2D& origin, const Physics::Vector2D& end,
                             const FullPlayer& player) {
@@ -81,8 +81,9 @@ Physics::Vector2D calculate_bullet_endpoint(const Physics::Vector2D& origin,
 bool collidable_blocking_bullet(const Physics::Vector2D& origin, const Physics::Vector2D& end,
                                 float max_distance, const MapMatrix& map_matrix) {
 
-    if (origin == end) return false;
-                                
+    if (origin == end)
+        return false;
+
     std::pair<float, float> direction = (end - origin).normalized();
     float step_size = TILE_SIZE / 4.0f;
 
@@ -101,8 +102,8 @@ bool collidable_blocking_bullet(const Physics::Vector2D& origin, const Physics::
         int tile_x = static_cast<int>(x) / TILE_SIZE;
         int tile_y = static_cast<int>(y) / TILE_SIZE;
 
-        if (tile_y < 0 || tile_y >= static_cast<int>(map_matrix.size()) ||
-            tile_x < 0 || tile_x >= static_cast<int>(map_matrix[0].size())) {
+        if (tile_y < 0 || tile_y >= static_cast<int>(map_matrix.size()) || tile_x < 0 ||
+            tile_x >= static_cast<int>(map_matrix[0].size())) {
             return false;
         }
 
@@ -118,7 +119,8 @@ bool collidable_blocking_bullet(const Physics::Vector2D& origin, const Physics::
 }
 
 std::vector<Impact> ShotManager::calculate_shot_impacts(
-        const ShotInfo& shot_info, const std::map<uint8_t, FullPlayer>& players, const MapMatrix& map_matrix) {
+        const ShotInfo& shot_info, const std::map<uint8_t, FullPlayer>& players,
+        const MapMatrix& map_matrix) {
     std::vector<Impact> impacts;
 
     const WeaponShotInfo& winfo = shot_info.weapon_info;
@@ -126,8 +128,8 @@ std::vector<Impact> ShotManager::calculate_shot_impacts(
     float base_angle = shot_info.angle - 2 * (shot_info.angle - 270);
 
     for (int i = 0; i < winfo.bullets_fired; ++i) {
-        Physics::Vector2D end =
-                calculate_bullet_endpoint(origin, base_angle, winfo.dispersion, winfo.max_range, winfo.precision);
+        Physics::Vector2D end = calculate_bullet_endpoint(origin, base_angle, winfo.dispersion,
+                                                          winfo.max_range, winfo.precision);
 
         std::cout << "\n--- DISPARO " << (i + 1) << " ---\n";
         std::cout << "  Disparo sale desde: (" << origin.get_x() << ", " << origin.get_y() << ")\n";

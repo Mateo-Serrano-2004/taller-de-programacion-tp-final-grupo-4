@@ -2,14 +2,15 @@
 #define CLIENT_GAME_HANDLER_IN_GAME_EVENT_HANDLER_STRATEGY_H
 
 #include <string>
+
 #include <SDL2/SDL.h>
 
 #include "common/definitions.h"
 
 #include "event_handler_strategy.h"
+#include "mouse_movement_handler.h"
 #include "movement_handler.h"
 #include "weapon_handler.h"
-#include "mouse_movement_handler.h"
 
 namespace Context {
 class InGameContext;
@@ -28,10 +29,7 @@ protected:
     void handle_switch_context_event() override;
 
 public:
-    InGameEventHandlerStrategy(
-        Weak<GameController> controller,
-        Context::InGameContext* context
-    );
+    InGameEventHandlerStrategy(Weak<GameController> controller, Context::InGameContext* context);
 
     void handle() override;
     void handle_current_game_state();

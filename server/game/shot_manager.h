@@ -14,7 +14,8 @@
 class ShotManager {
 public:
     static std::vector<Impact> calculate_shot_impacts(const ShotInfo& shot_info,
-                                                      const std::map<uint8_t, FullPlayer>& players, const MapMatrix& map_matrix);
+                                                      const std::map<uint8_t, FullPlayer>& players,
+                                                      const MapMatrix& map_matrix);
 };
 
 #endif  // SERVER_GAME_LOGIC_SHOT_MANAGER_H

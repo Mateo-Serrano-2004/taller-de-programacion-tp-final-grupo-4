@@ -1,6 +1,8 @@
 #include "round.h"
 
+#include <algorithm>
 #include <iostream>
+#include <vector>
 
 Round::Round(int ct_alive, int tt_alive, int fps):
         winner_team(Model::TeamID::NONE),
@@ -13,19 +15,20 @@ Round::Round(int ct_alive, int tt_alive, int fps):
         bomb_being_defused(false),
         player_defusing_bomb(-1),
         is_warmup_round(false),
+        bomb_exploded(false),
         fps(fps) {
 
-            const auto& config = YamlParser::getConfigData();
+    const auto& config = YamlParser::getConfigData();
 
-            ticks_for_warmup_phase = 0;
-            ticks_for_buying_phase = config.game.buyTime * fps;
-            ticks_for_playing_phase = config.game.roundTime * fps;
-            ticks_for_post_round_phase = 300;
-            bomb_total_ticks = config.game.bombExplotionTime * fps;
-            active_ticks_remaining = ticks_for_buying_phase;
-            defusing_ticks = config.game.bombDefuseTime * fps;
-            defusing_ticks_remaining = defusing_ticks;
-        }
+    ticks_for_warmup_phase = 0;
+    ticks_for_buying_phase = config.game.buyTime * fps;
+    ticks_for_playing_phase = config.game.roundTime * fps;
+    ticks_for_post_round_phase = config.game.postRoundTime * fps;
+    bomb_total_ticks = config.game.bombExplotionTime * fps;
+    active_ticks_remaining = ticks_for_buying_phase;
+    defusing_ticks = config.game.bombDefuseTime * fps;
+    defusing_ticks_remaining = defusing_ticks;
+}
 
 Round Round::create_warmup_round(int fps) {
     const auto& config = YamlParser::getConfigData();
@@ -51,6 +54,7 @@ void Round::update_if_finished_buying() {
 void Round::update_if_finished_playing() {
     if (bomb_planted && !bomb_defused) {
         winner_team = Model::TeamID::TT;
+        bomb_exploded = true;
     } else {
         winner_team = Model::TeamID::CT;
     }
@@ -92,16 +96,6 @@ void Round::update(int frames_to_process) {
     }
 
     active_ticks_remaining = 0;
-
-    if (bomb_planted && !bomb_defused && !bomb_being_defused && is_active()) {
-        bomb_defused = false;
-        bomb_being_defused = false;
-        player_defusing_bomb = -1;
-        winner_team = Model::TeamID::TT;
-        state = RoundState::PostRound;
-        active_ticks_remaining = ticks_for_post_round_phase;
-        return;
-    }
 
     if (state == RoundState::Warmup) {
         update_if_finished_warmup();
@@ -185,10 +179,7 @@ void Round::notify_bomb_is_not_longer_being_defused() {
 void Round::notify_bomb_exploded() {
     if (!bomb_planted || bomb_defused || !is_active())
         return;
-    
-    bomb_defused = false;
-    bomb_being_defused = false;
-    player_defusing_bomb = -1;
+
     winner_team = Model::TeamID::TT;
     state = RoundState::PostRound;
     active_ticks_remaining = ticks_for_post_round_phase;
@@ -200,13 +191,9 @@ int Round::player_id_defusing_bomb() const {
     return player_defusing_bomb;
 }
 
-void Round::add_dropped_weapon(const DroppedWeapon& drop) {
-    dropped_weapons.push_back(drop);
-}
+void Round::add_dropped_weapon(const DroppedWeapon& drop) { dropped_weapons.push_back(drop); }
 
-std::vector<DroppedWeapon>& Round::get_dropped_weapons() {
-    return dropped_weapons;
-}
+std::vector<DroppedWeapon>& Round::get_dropped_weapons() { return dropped_weapons; }
 
 DTO::RoundDTO Round::to_dto() const {
 
@@ -218,9 +205,8 @@ DTO::RoundDTO Round::to_dto() const {
     }
 
     std::vector<DTO::DropWeaponDTO> drop_dtos;
-    for (const auto& drop : dropped_weapons) {
-        drop_dtos.push_back(drop.to_dto());
-    }
+    std::transform(dropped_weapons.begin(), dropped_weapons.end(), std::back_inserter(drop_dtos),
+                   [](const auto& drop) { return drop.to_dto(); });
 
     return DTO::RoundDTO(state, this->ended(), this->get_ticks_remaining() / fps,
                          this->get_winner_team(), this->bomb_planted, this->bomb_defused,
@@ -230,5 +216,7 @@ DTO::RoundDTO Round::to_dto() const {
 int Round::get_ticks_remaining() const { return active_ticks_remaining; }
 
 bool Round::bomb_is_being_defused() const { return bomb_being_defused; }
+
+bool Round::get_bomb_exploded() const { return bomb_exploded; }
 
 Physics::Vector2D Round::get_bomb_position() const { return bomb_position; }

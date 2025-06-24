@@ -14,7 +14,7 @@ class GameController;
 namespace Model {
 struct GameState;
 class AssetManager;
-};
+};  // namespace Model
 
 namespace View {
 class DroppedWeaponRenderer {
@@ -23,12 +23,12 @@ private:
     Shared<Model::AssetManager> manager;
 
 public:
-    DroppedWeaponRenderer(Weak<Controller::GameController> controller);
+    explicit DroppedWeaponRenderer(Weak<Controller::GameController> controller);
 
     void render_weapons(const Model::GameState& game_state);
 
     ~DroppedWeaponRenderer() = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_RENDER_DROPPED_WEAPON_RENDERER_H
+#endif  // CLIENT_GAME_RENDER_DROPPED_WEAPON_RENDERER_H

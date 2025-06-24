@@ -6,8 +6,8 @@
 #include <utility>
 
 #include "animation/animation_details.h"
-#include "asset/texture_id.h"
 #include "asset/sound_id.h"
+#include "asset/texture_id.h"
 #include "common/DTO/config_dto.h"
 #include "common/asset_addresser.h"
 
@@ -54,11 +54,8 @@ private:
     Shared<SDL2pp::Texture> current_map;
 
 public:
-    AssetManager(
-        Controller::SubsystemManager* subsystem_manager,
-        Shared<SDL2pp::Renderer> renderer,
-        const DTO::ConfigDTO& config
-    );
+    AssetManager(Controller::SubsystemManager* subsystem_manager, Shared<SDL2pp::Renderer> renderer,
+                 const DTO::ConfigDTO& config);
 
     void load_texture(TextureID id, const std::string& path);
     void load_texture(TextureID id, Shared<SDL2pp::Texture> texture);

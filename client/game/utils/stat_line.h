@@ -1,8 +1,8 @@
 #ifndef CLIENT_GAME_UTILS_STAT_LINE_H
 #define CLIENT_GAME_UTILS_STAT_LINE_H
 
-#include <string>
 #include <cstdint>
+#include <string>
 
 #include "common/definitions.h"
 #include "entity/horizontal_pane.h"
@@ -26,7 +26,7 @@ public:
     Label deaths;
     Pane separator;
 
-    StatLine(Weak<Controller::GameController> controller);
+    explicit StatLine(Weak<Controller::GameController> controller);
 
     void set_name(const std::string& name);
     void set_kills(const std::string& kills_text);
@@ -38,6 +38,6 @@ public:
 
     ~StatLine() override = default;
 };
-};
+};  // namespace View
 
-#endif // CLIENT_GAME_UTILS_STAT_LINE_H
+#endif  // CLIENT_GAME_UTILS_STAT_LINE_H

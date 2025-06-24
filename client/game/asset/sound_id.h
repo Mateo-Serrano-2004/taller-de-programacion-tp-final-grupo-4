@@ -4,7 +4,7 @@
 #include <cstdint>
 
 namespace Model {
-enum class SoundID: uint8_t {
+enum class SoundID : uint8_t {
     GLOCK_FIRE = 0x00,
     AK47_FIRE = 0x01,
     AWP_FIRE = 0x02,
@@ -24,4 +24,4 @@ enum class SoundID: uint8_t {
 };
 };
 
-#endif // CLIENT_GAME_ASSET_SOUND_ID_H
+#endif  // CLIENT_GAME_ASSET_SOUND_ID_H

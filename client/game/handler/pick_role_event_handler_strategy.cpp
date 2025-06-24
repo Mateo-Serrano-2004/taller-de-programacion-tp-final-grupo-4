@@ -1,5 +1,7 @@
 #include "pick_role_event_handler_strategy.h"
 
+#include <memory>
+
 #include "context/pick_role_context.h"
 #include "controller/game_controller.h"
 
