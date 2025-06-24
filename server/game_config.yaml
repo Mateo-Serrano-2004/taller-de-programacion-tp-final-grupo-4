@@ -30,7 +30,7 @@ weapons:
     precision: 1.0
     cost: 0
     range: 1
-    bullets_per_shot: 0
+    bullets_per_shot: 1
     fire_rate: 0.3
     dispersion: 0.0
     reload_time: 0
@@ -52,7 +52,7 @@ weapons:
     initial_ammo: 30
     damage_per_bullet: 20
     precision: 0.7
-    cost: 2700
+    cost: 1300
     range: 6
     bullets_per_shot: 3
     fire_rate: 0.2
@@ -64,7 +64,7 @@ weapons:
     initial_ammo: 8
     damage_per_bullet: 15
     precision: 0.6
-    cost: 1700
+    cost: 1100
     range: 3
     bullets_per_shot: 8
     fire_rate: 0.8
@@ -76,7 +76,7 @@ weapons:
     initial_ammo: 5
     damage_per_bullet: 100
     precision: 1.0
-    cost: 4750
+    cost: 1700
     range: 100
     bullets_per_shot: 1
     fire_rate: 1.3

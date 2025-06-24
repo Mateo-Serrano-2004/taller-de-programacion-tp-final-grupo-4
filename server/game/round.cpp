@@ -180,9 +180,6 @@ void Round::notify_bomb_exploded() {
     if (!bomb_planted || bomb_defused || !is_active())
         return;
 
-    bomb_defused = false;
-    bomb_being_defused = false;
-    player_defusing_bomb = -1;
     winner_team = Model::TeamID::TT;
     state = RoundState::PostRound;
     active_ticks_remaining = ticks_for_post_round_phase;
