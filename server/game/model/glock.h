@@ -10,8 +10,12 @@ private:
     float precision;
     int range;
     int bullets_per_shot;
+    float dispersion;
+    float falloff_factor;
+    float close_range_threshold;
+    float close_range_multiplier;
     int fire_rate;
-    int fire_rate_remaining = 0;
+    int fire_rate_remaining;
 
 public:
     Glock();
