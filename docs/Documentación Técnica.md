@@ -80,6 +80,23 @@ Este documento describe la arquitectura y estructura técnica del proyecto Count
 
 **Responsabilidad**: Lógica de una partida específica
 
+La clase **Game** depende de **GameLogic** para aplicar la lógica del modelo, y de
+la clase **MovementSystem** para procesar movimientos. Esto sucded durante la ejecución de
+cada *frame*
+
+<div align="center">
+<img src="pics/game-gamelogic.png">
+</div>
+<div align="center">
+<img src="pics/tiempo-ronda.png">
+</div>
+<div align="center">
+<img src="pics/movimiento.png">
+</div>
+<div align="center">
+<img src="pics/disparo.png">
+</div>
+
 **Funciones principales**:
 
 - Procesamiento de eventos de jugadores
@@ -120,3 +137,33 @@ Este documento describe la arquitectura y estructura técnica del proyecto Count
 
 - **Reap de juegos**: Limpieza automática de juegos terminados
 - **Reap de clientes**: Eliminación de clientes desconectados
+
+
+## Arquitectura del cliente
+
+Esta es una representación simplificada de la arquitectura del cliente en un diagrama de clases.
+
+<div align="center">
+<img src="pics/client-diagram.png">
+</div>
+
+El siguiente representa el flujo de la aplicación por cada frame de ejecución.
+
+<div align="center">
+<img src="pics/client-frame-sequence.png">
+</div>
+
+El cliente está construido usando el patrón de arquitectura **MVC**, donde un controlador
+central organiza el acceso al modelo para las demás clases. Se modela una Single Window
+Application (SWA), lo que permite permitir un único punto de acceso al manejo de eventos
+y a los recursos del modelo.
+
+Está construido con un sistema de *contextos*, donde cada contexto es una instancia de
+una clase que es capaz de renderizar el estado actual del juego en una ventana de SDL2 y
+pre procesar eventos para despacharlos al controlador central. El estado del juego es
+administrado y provisto (a modo de *snapshots*) por un GameManager, que también registra
+eventos enviados por el servidor a través de flags específicas.
+
+El controlador lanza un hilo secundario para popear eventos de una cola de eventos asincrónica,
+e instancia un **Receiver** y un **Sender**, que también administran sus hilos secundarios para
+recibir eventos del servidor y enviarlos, respectivamente.
