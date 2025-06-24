@@ -69,7 +69,7 @@ Manejo de eventos con Variantes y Visitor. Implementación Dummy de un GameManag
 
 **Marcos Navarro**:
 
-- *COMPLETAR*
+Lógica de negocio, round y player básico.
 
 **Mateo Serrano**:
 
@@ -150,7 +150,7 @@ Refactor al protocolo y a la queue del sender del cliente, para poder mandar cua
 
 **Marcos Navarro**:
 
-Mejora en ronda y cambio de estado. Refactor de armas, manejo de bomba  y demás features.
+Mejora en ronda y cambio de estado. Refactor de armas, manejo de bomba  y demás features. Mejora de disparo.
 
 **Mateo Serrano**:
 
@@ -170,7 +170,7 @@ Implementación completa de los test y arreglo de errores. Y ayuda en el armado 
 
 **Marcos Navarro**:
 
-- *COMPLETAR*
+Dropeo de weapon por casos. Swap de teams. Uso de configs para los parámetros de game, round y weapon. Sistema de colisiones. Compra munición y arreglo de disparo y recarga. Mejora de disparo por colisiones. Fixes en general.
 
 **Mateo Serrano**:
 
@@ -181,4 +181,5 @@ Se añade el mapa, nuevas animaciones, tablero de estadísticas, configuración,
 - El editor no puede crear mapas con armas.
 - No hay música de fondo en el juego.
 - No hay sonido de cargador vacio ni de pasos.
+- No se puede cambiar ni el volumen de los sonidos ni los FPS.
 - No se puede cambiar el keybinding.

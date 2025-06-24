@@ -61,7 +61,7 @@ void View::AssetGenerator::insert_tiles(
         for (size_t j = 0; j < map_dto.count_of_columns; j++) {
             if (map_dto.map[i][j].empty())
                 continue;
-            renderer->Copy(*(tiles.find(map_dto.map[i][j])->second), SDL2pp::NullOpt,
+            renderer->Copy(*(tiles.at(map_dto.map[i][j])), SDL2pp::NullOpt,
                            SDL2pp::Rect(j * 32, i * 32, 32, 32));
         }
     }

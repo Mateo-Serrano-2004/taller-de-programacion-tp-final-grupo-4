@@ -30,18 +30,21 @@ std::vector<SDL2pp::Rect> View::HUDRenderer::get_time_slices(int seconds_left) {
 
     auto time_textures = View::NumberTextureSlicer::get_hud_number(minutes);
     if (time_textures.size() < 2)
-        time_textures.insert(time_textures.begin(), SDL2pp::Rect(0, 0, 44, 66));
+        time_textures = { SDL2pp::Rect(0, 0, 44, 66), time_textures.front() };
 
     auto colon = View::NumberTextureSlicer::get_colon();
 
     auto seconds_textures = View::NumberTextureSlicer::get_hud_number(seconds);
     if (seconds_textures.size() < 2)
-        seconds_textures.insert(seconds_textures.begin(), SDL2pp::Rect(0, 0, 44, 66));
+        seconds_textures = { SDL2pp::Rect(0, 0, 44, 66), seconds_textures.front() };
 
-    time_textures.push_back(colon);
-    time_textures.insert(time_textures.end(), seconds_textures.begin(), seconds_textures.end());
+    std::vector<SDL2pp::Rect> result;
+    result.reserve(time_textures.size() + 1 + seconds_textures.size());
+    result.insert(result.end(), time_textures.begin(), time_textures.end());
+    result.push_back(colon);
+    result.insert(result.end(), seconds_textures.begin(), seconds_textures.end());
 
-    return time_textures;
+    return result;
 }
 
 void View::HUDRenderer::render_item(std::list<View::Pane>& numbers, View::HorizontalPane& parent,

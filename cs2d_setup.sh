@@ -25,7 +25,7 @@ confirm_action() {
 
 # Chequea si SDL2 está instalado en /usr/local/lib/cmake/SDL2
 sdl2_already_installed() {
-    if [ -d "/usr/local/lib/cmake/SDL2" ] && [ -f "/usr/local/lib/cmake/SDL2/SDL2Config.cmake" ]; then
+    if pkg-config --exists sdl2; then
         return 0
     else
         return 1
