@@ -12,6 +12,7 @@ private:
     void play_radio_message(const Model::GameState& game_state);
     void play_bomb_state(const Model::GameState& game_state);
     void play_explosion(const Model::GameState& game_state);
+    void play_winning_sound(const Model::GameState& game_state);
 
 public:
     SoundEffectPlayer() = default;

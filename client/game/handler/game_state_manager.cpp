@@ -75,7 +75,7 @@ void Controller::GameStateManager::load_bomb_explosion(DTO::GameStateDTO& dto) {
             controller,
             game_state->bomb_position.value()
         );
-        game_state->bomb_explosion_sound = make_shared<View::SoundEffect>(
+        game_state->bomb_explosion_sound = make_shared<View::DistancedSoundEffect>(
             controller,
             Model::SoundID::BOMB_EXPLOSION
         );
@@ -125,6 +125,28 @@ void Controller::GameStateManager::load_bomb_state_sound(DTO::GameStateDTO& dto)
         game_state->bomb_state_sound = make_shared<View::SoundEffect>(
             controller,
             Model::SoundID::BOMB_PLANTED
+        );
+    }
+}
+
+void Controller::GameStateManager::winner_sound(DTO::GameStateDTO& dto) {
+    if (game_state->winner_sound && game_state->winner_sound->has_ended())
+        game_state->winner_sound = nullptr;
+    if (
+        dto.winner == Model::TeamID::CT &&
+        game_state->game_winner == Model::TeamID::NONE
+    ) {
+        game_state->winner_sound = make_shared<View::SoundEffect>(
+            controller,
+            Model::SoundID::WINNER_CT
+        );
+    } else if (
+        dto.winner == Model::TeamID::TT &&
+        game_state->game_winner == Model::TeamID::NONE
+    ) {
+        game_state->winner_sound = make_shared<View::SoundEffect>(
+            controller,
+            Model::SoundID::WINNER_TT
         );
     }
 }

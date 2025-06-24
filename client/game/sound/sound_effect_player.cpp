@@ -25,16 +25,6 @@ void View::SoundEffectPlayer::play_radio_message(const Model::GameState& game_st
         game_state.start_round_radio &&
        !game_state.start_round_radio->has_ended()
     ) {
-        game_state.start_round_radio->fix(game_state.camera);
-        auto player = game_state.get_reference_player();
-        if (!player->get_health())
-            player = game_state.get_any_player_alive_by_team(player->get_team());
-        game_state.start_round_radio->set_position(
-            SDL2pp::Point(
-                player->get_position().get_x(),
-                player->get_position().get_y()
-            )
-        );
         game_state.start_round_radio->play();
     }
 }
@@ -44,9 +34,6 @@ void View::SoundEffectPlayer::play_bomb_state(const Model::GameState& game_state
         game_state.bomb_state_sound &&
        !game_state.bomb_state_sound->has_ended()
     ) {
-        game_state.bomb_state_sound->fix(game_state.camera);
-        if (game_state.bomb_position.has_value())
-            game_state.bomb_state_sound->set_position(game_state.bomb_position.value());
         game_state.bomb_state_sound->play();
     }
 }
@@ -60,6 +47,15 @@ void View::SoundEffectPlayer::play_explosion(const Model::GameState& game_state)
         if (game_state.bomb_position.has_value())
             game_state.bomb_explosion_sound->set_position(game_state.bomb_position.value());
         game_state.bomb_explosion_sound->play();
+    }
+}
+
+void View::SoundEffectPlayer::play_winning_sound(const Model::GameState& game_state) {
+    if (
+        game_state.winner_sound &&
+       !game_state.winner_sound->has_ended()
+    ) {
+        game_state.winner_sound->play();
     }
 }
 

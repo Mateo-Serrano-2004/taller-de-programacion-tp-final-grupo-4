@@ -28,6 +28,7 @@ class ProgressBarAnimation;
 class BombExplosionAnimation;
 class TrackingSoundEffect;
 class SoundEffect;
+class DistancedSoundEffect;
 };  // namespace View
 
 namespace DTO {
@@ -46,7 +47,7 @@ struct GameState {
     Shared<View::WinnerTeamMessageAnimation> winner_message;
     Shared<View::ProgressBarAnimation> progress_bar;
     Shared<View::BombExplosionAnimation> bomb_explosion;
-    Shared<View::SoundEffect> bomb_explosion_sound;
+    Shared<View::DistancedSoundEffect> bomb_explosion_sound;
     Shared<View::SoundEffect> winner_sound;
     View::Camera camera;
     Shared<SDL2pp::Texture> map;

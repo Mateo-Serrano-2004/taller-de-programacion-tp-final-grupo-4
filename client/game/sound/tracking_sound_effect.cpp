@@ -10,7 +10,7 @@ View::TrackingSoundEffect::TrackingSoundEffect(
     Weak<Controller::GameController> controller,
     Model::SoundID sound_id,
     short_id_t player_id
-): View::SoundEffect(controller, sound_id), player_id(player_id) {}
+): View::DistancedSoundEffect(controller, sound_id), player_id(player_id) {}
 
 short_id_t View::TrackingSoundEffect::get_player_id() const {
     return player_id;

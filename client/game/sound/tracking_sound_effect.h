@@ -1,7 +1,7 @@
 #ifndef CLIENT_GAME_SOUND_TRACKING_SOUND_EFFECT_H
 #define CLIENT_GAME_SOUND_TRACKING_SOUND_EFFECT_H
 
-#include "sound_effect.h"
+#include "distanced_sound_effect.h"
 
 #include "asset/sound_id.h"
 #include "common/weapon_id.h"
@@ -18,7 +18,7 @@ class GameController;
 namespace View {
 class RenderedPlayer;
 
-class TrackingSoundEffect: public SoundEffect {
+class TrackingSoundEffect: public DistancedSoundEffect {
 protected:
     Shared<RenderedPlayer> player;
     short_id_t player_id;
