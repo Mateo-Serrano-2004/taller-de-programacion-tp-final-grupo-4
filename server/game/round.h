@@ -7,6 +7,7 @@
 #include "common/DTO/round_dto.h"
 #include "common/model/vector_2d.h"
 #include "server/game/model/dropped_weapon.h"
+#include "server/parser/yaml_parser.h"
 
 class Round {
 private:
@@ -34,6 +35,8 @@ private:
     int player_defusing_bomb;
     bool is_warmup_round;
 
+    int fps;
+
     void update_if_finished_warmup();
     void update_if_finished_buying();
     void update_if_finished_playing();
@@ -44,9 +47,9 @@ private:
     std::vector<DroppedWeapon> dropped_weapons;
 
 public:
-    Round(int ct_alive, int tt_alive);
+    Round(int ct_alive, int tt_alive, int fps);
 
-    static Round create_warmup_round();
+    static Round create_warmup_round(int fps);
 
     Model::TeamID get_winner_team() const;
     RoundState get_state() const;
@@ -75,7 +78,7 @@ public:
     void add_dropped_weapon(const DroppedWeapon& drop);
     std::vector<DroppedWeapon>& get_dropped_weapons();
 
-    DTO::RoundDTO to_dto(int fps) const;
+    DTO::RoundDTO to_dto() const;
 };
 
 #endif  // ROUND_H

@@ -59,16 +59,16 @@ float calculate_damage(const WeaponShotInfo& info, float distance) {
 
 Physics::Vector2D calculate_bullet_endpoint(const Physics::Vector2D& origin,
                                             float base_angle_degrees, float dispersion_degrees,
-                                            float max_range) {
+                                            float max_range, float precision) {
     static std::default_random_engine generator(std::random_device{}());
     std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
 
     constexpr float DEG_TO_RAD = 3.14159265f / 180.0f;
 
     float random_factor = distribution(generator);
-    float final_angle = base_angle_degrees + random_factor * dispersion_degrees;
+    float effective_dispersion = (1.0f - precision) * dispersion_degrees;
+    float final_angle = base_angle_degrees + random_factor * effective_dispersion;
 
-    // Ajuste para que 0° sea arriba (Y+) y crezca horario (tipo reloj)
     float fixed_angle = 90.0f - final_angle;
     float angle_radians = fixed_angle * DEG_TO_RAD;
 
@@ -127,7 +127,7 @@ std::vector<Impact> ShotManager::calculate_shot_impacts(
 
     for (int i = 0; i < winfo.bullets_fired; ++i) {
         Physics::Vector2D end =
-                calculate_bullet_endpoint(origin, base_angle, winfo.dispersion, winfo.max_range);
+                calculate_bullet_endpoint(origin, base_angle, winfo.dispersion, winfo.max_range, winfo.precision);
 
         std::cout << "\n--- DISPARO " << (i + 1) << " ---\n";
         std::cout << "  Disparo sale desde: (" << origin.get_x() << ", " << origin.get_y() << ")\n";

@@ -5,6 +5,14 @@
 #include "weapon_shot_info.h"
 
 class Glock: public FullWeapon {
+private:
+    float damage;
+    float precision;
+    int range;
+    int bullets_per_shot;
+    int fire_rate;
+    int fire_rate_remaining = 0;
+
 public:
     Glock();
 

@@ -219,7 +219,7 @@ void Game::start_new_round() {
 
     gamelogic.assign_bomb_to_random_tt(players);
 
-    round = Round(ct_count, tt_count);
+    round = Round(ct_count, tt_count, GAME_FPS);
     rounds_played++;
 }
 
@@ -273,7 +273,7 @@ void Game::broadcast_game_state() {
         player_dtos.push_back(player.to_dto());
     }
 
-    DTO::RoundDTO round_dto = round.to_dto(GAME_FPS);
+    DTO::RoundDTO round_dto = round.to_dto();
 
     Model::TeamID winner = Model::TeamID::NONE;
     bool ended = (state == GameState::Finished);
@@ -350,7 +350,7 @@ void Game::load_map_features() {
 }
 
 Game::Game(const std::string& party_name, const std::string& map_name, const MapMatrix& map_matrix)
-    : round(Round::create_warmup_round()),
+    : round(Round::create_warmup_round(GAME_FPS)),
       party_name(party_name),
       map_name(map_name),
       map_matrix(map_matrix),
