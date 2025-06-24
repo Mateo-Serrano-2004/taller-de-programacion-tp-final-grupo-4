@@ -18,8 +18,7 @@
 
 EventVariant ServerProtocol::receive_event() {
     uint8_t size;
-    if (!peer.recvall(&size, sizeof(size)))
-        throw std::runtime_error("End of communication");
+    peer.recvall(&size, sizeof(size));
 
     std::vector<char> data(size);
     peer.recvall(data.data(), size);
@@ -292,4 +291,8 @@ void ServerProtocol::send_config(const DTO::ConfigDTO& config_dto) {
     config.ratio = htons(config.ratio);
 
     peer.sendall(&config, sizeof(config));
+}
+
+void ServerProtocol::close_socket() {
+    peer.shutdown(SHUT_RDWR);
 }

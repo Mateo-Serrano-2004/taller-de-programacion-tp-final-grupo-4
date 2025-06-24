@@ -24,6 +24,7 @@ void ClientHandlerSender::run() {
 }
 
 ClientHandlerSender::~ClientHandlerSender() {
+    kill();
     close();
     join();
 }

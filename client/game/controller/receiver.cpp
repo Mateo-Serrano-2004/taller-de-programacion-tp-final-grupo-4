@@ -78,6 +78,9 @@ void Controller::Receiver::run() {
         } catch (const std::exception& e) {
             std::cerr << "Receiver error: " << e.what() << "\n";
             keep_running = false;
+            try {
+                controller.lock()->push_event(make_shared<Model::EndOfGameEvent>());
+            } catch (const std::exception&) {}
         }
     }
     std::cout << "Finishing receiver\n";
