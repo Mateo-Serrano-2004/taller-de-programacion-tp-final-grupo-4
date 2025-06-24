@@ -10,6 +10,8 @@
 #include <SDL2pp/Texture.hh>
 #include <SDL2pp/Chunk.hh>
 #include <SDL2pp/Mixer.hh>
+#include <SDL2pp/Rect.hh>
+#include <SDL2pp/Point.hh>
 
 #include "common/DTO/map_dto.h"
 #include "controller/subsystem_manager.h"
@@ -21,6 +23,7 @@ Model::AssetManager::AssetManager(
         subsystem_manager(subsystem_manager),
         renderer(renderer),
         config(config),
+        cursor_manager(renderer),
         asset_generator(renderer, config),
         current_map(nullptr) {}
 
@@ -38,6 +41,11 @@ void Model::AssetManager::load_animation(Model::AnimationID id, const Model::Ani
 
 void Model::AssetManager::load_sound(Model::SoundID id, const std::string& path) {
     chunks.insert({id, make_shared<SDL2pp::Chunk>(asset_addresser.get_sound_path(path))});
+}
+
+void Model::AssetManager::load_cursor(CursorID id, const std::string& path,
+                                      const SDL2pp::Rect& srect) {
+    cursor_manager.load_cursor_texture(id, path, srect);
 }
 
 Shared<SDL2pp::Texture> Model::AssetManager::generate_background(uint8_t red, uint8_t green,
@@ -91,4 +99,8 @@ Shared<SDL2pp::Texture> Model::AssetManager::apply_font_to_text(Shared<SDL2pp::F
                                                                 const SDL2pp::Color& color) {
     SDL_Color sdl_color{color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha()};
     return make_shared<SDL2pp::Texture>(*renderer, font->RenderText_Blended(text, sdl_color));
+}
+
+void Model::AssetManager::set_cursor(CursorID id, const SDL2pp::Point& hotspot) {
+    cursor_manager.apply_cursor(id, hotspot);
 }
