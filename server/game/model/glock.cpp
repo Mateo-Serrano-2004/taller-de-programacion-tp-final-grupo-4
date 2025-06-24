@@ -21,7 +21,6 @@ Glock::Glock()
     std::optional<WeaponShotInfo> Glock::shoot(uint16_t ticks_to_process) {
         fire_rate_remaining = std::max(0, fire_rate_remaining - static_cast<int>(ticks_to_process));
     
-        // 2. Si todavía no puedo disparar, o no debo, salgo
         if (!triggered || trigger_blocked || get_loaded_ammo() == 0 || fire_rate_remaining > 0)
             return std::nullopt;
     
