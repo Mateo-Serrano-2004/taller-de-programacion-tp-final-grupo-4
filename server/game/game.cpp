@@ -379,8 +379,10 @@ void Game::run() {
     PeriodicClock clock(GAME_FPS);
 
     while (is_not_finished) {
-        uint16_t frames_to_process = clock.sleep_and_get_frames();
-        this->tick(frames_to_process);
+        try {
+            uint16_t frames_to_process = clock.sleep_and_get_frames();
+            this->tick(frames_to_process);
+        } catch (const std::exception&) {}
     }
 }
 
