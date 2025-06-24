@@ -42,6 +42,8 @@ struct GameState {
     std::vector<Shared<DTO::DropWeaponDTO>> dropped_weapons;
     std::list<Shared<View::MuzzleFireAnimation>> fires;
     std::list<Shared<View::TrackingSoundEffect>> sound_effects;
+    std::list<Shared<View::TrackingSoundEffect>> death_sound_effect;
+    std::list<Shared<View::TrackingSoundEffect>> hit_sound_effect;
     Shared<View::SoundEffect> start_round_radio;
     Shared<View::SoundEffect> bomb_state_sound;
     Shared<View::WinnerTeamMessageAnimation> winner_message;

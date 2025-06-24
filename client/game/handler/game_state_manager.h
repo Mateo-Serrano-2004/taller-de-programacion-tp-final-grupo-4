@@ -41,6 +41,7 @@ private:
     void load_bomb_explosion(DTO::GameStateDTO& dto);
     void load_start_round_sound(DTO::GameStateDTO& dto, const Shared<View::RenderedPlayer>& player);
     void load_bomb_state_sound(DTO::GameStateDTO& dto);
+    void load_hit_sound(Shared<Model::GameState>& new_game_state);
     void winner_sound(DTO::GameStateDTO& dto);
 
     void update_dropped_weapons(DTO::GameStateDTO& dto);

@@ -129,6 +129,24 @@ void Controller::GameStateManager::load_bomb_state_sound(DTO::GameStateDTO& dto)
     }
 }
 
+void Controller::GameStateManager::load_hit_sound(Shared<Model::GameState>& new_game_state) {
+    for (const auto& player: new_game_state->players) {
+        if (player.second->get_has_hit()) {
+            Model::SoundID id;
+            if (player.second->get_health())
+                id = Model::SoundID::HIT_SOUND;
+            else
+                id = Model::SoundID::DEATH_SOUND;
+
+            new_game_state->sound_effects.push_back(
+                make_shared<View::TrackingSoundEffect>(
+                    controller, id, player.second->get_id()
+                )
+            );
+        }
+    }
+}
+
 void Controller::GameStateManager::winner_sound(DTO::GameStateDTO& dto) {
     if (game_state->winner_sound && game_state->winner_sound->has_ended())
         game_state->winner_sound = nullptr;
@@ -243,12 +261,6 @@ void Controller::GameStateManager::update_winner_message(DTO::GameStateDTO& dto)
         game_state->winner_message = make_shared<View::WinnerTeamMessageAnimation>(
             controller, game_state->round_winner
         );
-        // Model::SoundID id = (dto.round.winner == Model::TeamID::CT) ? Model::SoundID::WINNER_CT :
-        //                     (dto.round.winner == Model::TeamID::TT) ? Model::SoundID::WINNER_TT :
-        //                      Model::SoundID::NO_SOUND;
-        // game_state->winner_sound = make_shared<View::SoundEffect>(
-        //     controller, id
-        // );
     }
 }
 
@@ -296,6 +308,7 @@ void Controller::GameStateManager::update(DTO::GameStateDTO& game_state_dto) {
     }
 
     std::lock_guard<std::mutex> lock(mutex);
+    load_hit_sound(new_game_state);
     game_state->players = new_game_state->players;
     update_animations(new_game_state);
     update_sounds(new_game_state);

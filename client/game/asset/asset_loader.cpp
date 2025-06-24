@@ -142,6 +142,8 @@ void Model::AssetLoader::load_sounds() {
     manager->load_sound(Model::SoundID::START_ROUND_TT, sounds[10]);
     manager->load_sound(Model::SoundID::WINNER_CT, sounds[11]);
     manager->load_sound(Model::SoundID::WINNER_TT, sounds[12]);
+    manager->load_sound(Model::SoundID::HIT_SOUND, sounds[13]);
+    manager->load_sound(Model::SoundID::DEATH_SOUND, sounds[14]);
 }
 
 void Model::AssetLoader::load_cursor() {
@@ -168,7 +170,8 @@ Model::AssetLoader::AssetLoader(Shared<AssetManager> manager, Shared<SDL2pp::Ren
                 "weapons/ak47.wav", "weapons/awp.wav", "weapons/bomb.wav",
                 "weapons/glock.wav", "weapons/knife.wav", "weapons/m3.wav",
                 "weapons/reload.wav", "radio/letsgo.ogg", "radio/moveout.ogg",
-                "radio/ctwin.ogg", "radio/terwin.ogg"}),
+                "radio/ctwin.ogg", "radio/terwin.ogg", "players/hit-player.wav",
+                "players/death.wav"}),
         manager(manager),
         renderer(renderer),
         config(config),

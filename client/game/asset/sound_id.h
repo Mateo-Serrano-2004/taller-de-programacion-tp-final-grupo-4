@@ -18,6 +18,8 @@ enum class SoundID: uint8_t {
     START_ROUND_TT = 0x0A,
     WINNER_CT = 0x0B,
     WINNER_TT = 0x0C,
+    HIT_SOUND = 0x0D,
+    DEATH_SOUND = 0x0E,
     NO_SOUND = 0xFF
 };
 };
