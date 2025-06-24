@@ -10,8 +10,7 @@ private:
     uint16_t planting_ticks = 0;
     bool planted = false;
 
-    static constexpr uint16_t required_ticks_to_plant = 180;  // 3 segundos a 60 FPS
-
+    uint16_t required_ticks_to_plant;
 public:
     Bomb();
 
