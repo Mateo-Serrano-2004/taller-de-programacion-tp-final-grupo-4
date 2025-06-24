@@ -65,7 +65,7 @@ void Controller::GameStateManager::load_bomb_explosion(const DTO::GameStateDTO& 
 }
 
 void Controller::GameStateManager::load_start_round_sound(
-    DTO::GameStateDTO& dto,
+    const DTO::GameStateDTO& dto,
     const Shared<View::RenderedPlayer>& player
 ) {
     if (game_state->start_round_radio && game_state->start_round_radio->has_ended())
@@ -88,7 +88,7 @@ void Controller::GameStateManager::load_start_round_sound(
     }
 }
 
-void Controller::GameStateManager::load_bomb_state_sound(DTO::GameStateDTO& dto) {
+void Controller::GameStateManager::load_bomb_state_sound(const DTO::GameStateDTO& dto) {
     if (game_state->bomb_state_sound && game_state->bomb_state_sound->has_ended())
         game_state->bomb_state_sound = nullptr;
     if (
@@ -111,7 +111,7 @@ void Controller::GameStateManager::load_bomb_state_sound(DTO::GameStateDTO& dto)
     }
 }
 
-void Controller::GameStateManager::load_hit_sound(Shared<Model::GameState>& new_game_state) {
+void Controller::GameStateManager::load_hit_sound(const Shared<Model::GameState>& new_game_state) {
     for (const auto& player: new_game_state->players) {
         if (player.second->get_has_hit()) {
             Model::SoundID id;
@@ -129,7 +129,7 @@ void Controller::GameStateManager::load_hit_sound(Shared<Model::GameState>& new_
     }
 }
 
-void Controller::GameStateManager::winner_sound(DTO::GameStateDTO& dto) {
+void Controller::GameStateManager::winner_sound(const DTO::GameStateDTO& dto) {
     if (game_state->winner_sound && game_state->winner_sound->has_ended())
         game_state->winner_sound = nullptr;
     if (
@@ -152,7 +152,7 @@ void Controller::GameStateManager::winner_sound(DTO::GameStateDTO& dto) {
 }
 
 void Controller::GameStateManager::load_animation(
-    Shared<Model::GameState>& new_game_state,
+    const Shared<Model::GameState>& new_game_state,
     const Shared<View::RenderedPlayer>& player
 ) {
     if (!player->is_shooting())
@@ -171,14 +171,14 @@ void Controller::GameStateManager::update_dropped_weapons(const DTO::GameStateDT
     }
 }
 
-void Controller::GameStateManager::update_sounds(Shared<Model::GameState>& new_game_state) {
+void Controller::GameStateManager::update_sounds(const Shared<Model::GameState>& new_game_state) {
     game_state->sound_effects.remove_if(
             [](Shared<View::TrackingSoundEffect>& sf) { return sf->has_ended(); });
     game_state->sound_effects.splice(game_state->sound_effects.end(),
                                      new_game_state->sound_effects);
 }
 
-void Controller::GameStateManager::update_animations(Shared<Model::GameState>& new_game_state) {
+void Controller::GameStateManager::update_animations(const Shared<Model::GameState>& new_game_state) {
     game_state->fires.remove_if(
             [](Shared<View::MuzzleFireAnimation>& a) { return a->has_ended(); });
     game_state->fires.splice(game_state->fires.end(), new_game_state->fires);

@@ -13,7 +13,7 @@ Controller::SubsystemManager::SubsystemManager(
 ): sdl(sdl_flags),
    ttf(),
    mixer(frequency, format, channels, chunksize) {
-    int initted = Mix_Init(MIX_INIT_OGG);
+    (void) Mix_Init(MIX_INIT_OGG);
     mixer.AllocateChannels(32);
 }
 

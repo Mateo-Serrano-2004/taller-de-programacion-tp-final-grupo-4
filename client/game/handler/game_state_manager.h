@@ -35,18 +35,18 @@ private:
     Shared<Model::GameState> game_state;
     Weak<GameController> controller;
 
-    void load_animation(Shared<Model::GameState>& new_game_state, const Shared<View::RenderedPlayer>& player);
-    void load_shot_sound(Shared<Model::GameState>& new_game_state, const Shared<View::RenderedPlayer>& player);
-    void load_reload_sound(Shared<Model::GameState>& new_game_state, const Shared<View::RenderedPlayer>& player);
-    void load_bomb_explosion(DTO::GameStateDTO& dto);
-    void load_start_round_sound(DTO::GameStateDTO& dto, const Shared<View::RenderedPlayer>& player);
-    void load_bomb_state_sound(DTO::GameStateDTO& dto);
-    void load_hit_sound(Shared<Model::GameState>& new_game_state);
-    void winner_sound(DTO::GameStateDTO& dto);
+    void load_animation(const Shared<Model::GameState>& new_game_state, const Shared<View::RenderedPlayer>& player);
+    void load_shot_sound(const Shared<Model::GameState>& new_game_state, const Shared<View::RenderedPlayer>& player);
+    void load_reload_sound(const Shared<Model::GameState>& new_game_state, const Shared<View::RenderedPlayer>& player);
+    void load_bomb_explosion(const DTO::GameStateDTO& dto);
+    void load_start_round_sound(const DTO::GameStateDTO& dto, const Shared<View::RenderedPlayer>& player);
+    void load_bomb_state_sound(const DTO::GameStateDTO& dto);
+    void load_hit_sound(const Shared<Model::GameState>& new_game_state);
+    void winner_sound(const DTO::GameStateDTO& dto);
 
     void update_dropped_weapons(const DTO::GameStateDTO& dto);
-    void update_animations(Shared<Model::GameState>& new_game_state);
-    void update_sounds(Shared<Model::GameState>& new_game_state);
+    void update_animations(const Shared<Model::GameState>& new_game_state);
+    void update_sounds(const Shared<Model::GameState>& new_game_state);
     void update_camera(const Shared<View::RenderedPlayer>& ref_player);
     void update_bomb_position(const DTO::GameStateDTO& dto);
     void update_progress_bar(const Shared<View::RenderedPlayer>& ref_player);
