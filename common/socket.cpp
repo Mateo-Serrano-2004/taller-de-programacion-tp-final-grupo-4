@@ -258,7 +258,7 @@ int Socket::recvsome(void* data, unsigned int sz) {
          * no es un error sino algo esperado.
          * */
         stream_status |= STREAM_RECV_CLOSED;
-        return 0;
+        throw std::runtime_error("End of communication");
     } else if (s == -1) {
         /*
          * 99% casi seguro que es un error real
@@ -302,7 +302,7 @@ int Socket::sendsome(const void* data, unsigned int sz) {
              * Puede o no ser un error (véase el comentario en `Socket::recvsome`)
              * */
             stream_status |= STREAM_SEND_CLOSED;
-            return 0;
+            throw std::runtime_error("End of communication");
         }
 
         /* En cualquier otro caso supondremos un error
@@ -314,7 +314,7 @@ int Socket::sendsome(const void* data, unsigned int sz) {
          * Jamas debería pasar.
          * */
         stream_status |= STREAM_SEND_CLOSED;
-        return 0;
+        throw std::runtime_error("End of communication");
     } else {
         return s;
     }
@@ -341,7 +341,7 @@ int Socket::recvall(void* data, unsigned int sz) {
             if (received)
                 throw LibError(EPIPE, "socket received only %d of %d bytes", received, sz);
             else
-                return 0;
+                throw std::runtime_error("End of communication");
         } else {
             /*
              * OK, recibimos algo pero no necesariamente todo lo que
@@ -366,7 +366,7 @@ int Socket::sendall(const void* data, unsigned int sz) {
             if (sent)
                 throw LibError(EPIPE, "socket sent only %d of %d bytes", sent, sz);
             else
-                return 0;
+                throw std::runtime_error("End of communication");
         } else {
             sent += s;
         }

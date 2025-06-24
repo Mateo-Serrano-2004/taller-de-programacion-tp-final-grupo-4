@@ -90,7 +90,10 @@ void Game::handle_leave_game(const uint8_t& player_id) {
         round.notify_on_one_player_less(player.get_team());
         players.erase(player.get_id());
     });
-    client_queues.erase(player_id);
+
+    try {
+        client_queues.erase(player_id);
+    } catch (const std::exception&) {}
 
     if (players.empty()) kill();
 }
@@ -235,7 +238,6 @@ void Game::update_players_that_won() {
         tt_rounds_won++;
     }
 
-    // modularizar y pasar a gamelogic
     for (auto& [player_id, player]: players) {
         if (player.get_team() == winner) {
             player.add_money(round_won_money);
@@ -291,21 +293,20 @@ void Game::broadcast_game_state() {
         try {
             queue->push(game_snapshot);
         } catch (const ClosedQueue&) {
-            client_queues.erase(id);
-        } 
-        catch (const std::exception&) {}
+            try {
+                client_queues.erase(id);
+            } catch (const std::exception&) {}
+        } catch (const std::exception&) {}
     }
 }
 
 void Game::update_game_with_events() {
     std::pair<uint8_t, GameEventVariant> event_info;
-    try {
-        while (game_queue.try_pop(event_info)) {
-            uint8_t player_id = event_info.first;
-            GameEventVariant event = event_info.second;
-            handle(player_id, event);
-        }
-    } catch (const ClosedQueue&) {}
+    while (game_queue.try_pop(event_info)) {
+        uint8_t player_id = event_info.first;
+        GameEventVariant event = event_info.second;
+        handle(player_id, event);
+    }
 }
 
 void Game::tick(uint16_t frames_to_process) {
@@ -392,7 +393,10 @@ void Game::add_player(const std::string& username, ClientQueue& client_queue, sh
 
     players.emplace(player_id, FullPlayer(player_id, username, team_id, role_id,
                                           get_position_for_new_player(team_id)));
-    client_queues[player_id] = &client_queue;
+    
+    try {
+        client_queues[player_id] = &client_queue;
+    } catch (const std::exception&) {}
 
     round.notify_player_joined(team_id);
 }
@@ -403,8 +407,10 @@ void Game::run() {
     PeriodicClock clock(GAME_FPS);
 
     while (is_not_finished) {
-        uint16_t frames_to_process = clock.sleep_and_get_frames();
-        this->tick(frames_to_process);
+        try {
+            uint16_t frames_to_process = clock.sleep_and_get_frames();
+            this->tick(frames_to_process);
+        } catch (const std::exception&) {}
     }
 }
 

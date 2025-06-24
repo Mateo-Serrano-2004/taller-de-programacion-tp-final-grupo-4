@@ -1,6 +1,7 @@
 #include "main_window.h"
 
 #include <memory>
+#include <QMessageBox>
 
 #include "client/exception/closed_app.h"
 #include "client/exception/closed_game.h"
@@ -22,9 +23,21 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::connectToServer() {
-    protocol = make_shared<Net::ClientProtocol>(host, port);
-    auto usernameEvent = make_shared<Model::UsernameEvent>(username);
-    protocol->send_event(usernameEvent->as_dto());
+    try {
+        protocol.reset();
+        protocol = make_shared<Net::ClientProtocol>(host, port);
+        auto usernameEvent = make_shared<Model::UsernameEvent>(username);
+        protocol->send_event(usernameEvent->as_dto());
+    } catch (const std::exception&) {
+        handleServerConnectionError();
+    }
+}
+
+void MainWindow::handleServerConnectionError() {
+    QMessageBox::critical(this, "Error de Conexión", 
+                         "No se pudo conectar al servidor. El servidor puede estar cerrado o no disponible.");
+    clearCurrentScene();
+    QApplication::quit();
 }
 
 void MainWindow::runGame() {
@@ -51,11 +64,15 @@ void MainWindow::runGame() {
 }
 
 void MainWindow::loadGames() {
-    auto requestGamesListEvent = make_shared<Model::RequestGamesListEvent>();
-    protocol->send_event(requestGamesListEvent->as_dto());
+    try {
+        auto requestGamesListEvent = make_shared<Model::RequestGamesListEvent>();
+        protocol->send_event(requestGamesListEvent->as_dto());
 
-    auto games = std::get<DTO::GameListDTO>(protocol->receive_variant());
-    joinGameScene->setAvailableGames(games.games);
+        auto games = std::get<DTO::GameListDTO>(protocol->receive_variant());
+        joinGameScene->setAvailableGames(games.games);
+    } catch (const std::exception&) {
+        handleServerConnectionError();
+    }
 }
 
 void MainWindow::clearCurrentScene() {
@@ -115,21 +132,29 @@ void MainWindow::showGameCreationScene() {
             },
             Qt::QueuedConnection);
 
-    auto requestMapsEvent = std::make_shared<Model::RequestMapsEvent>();
-    protocol->send_event(requestMapsEvent->as_dto());
+    try {
+        auto requestMapsEvent = std::make_shared<Model::RequestMapsEvent>();
+        protocol->send_event(requestMapsEvent->as_dto());
 
-    auto map_name_list = std::get<DTO::MapNameListDTO>(protocol->receive_variant());
-    QStringList qMaps;
-    for (const auto& map: map_name_list.maps_names) qMaps << QString::fromStdString(map);
+        auto map_name_list = std::get<DTO::MapNameListDTO>(protocol->receive_variant());
+        QStringList qMaps;
+        for (const auto& map: map_name_list.maps_names) qMaps << QString::fromStdString(map);
 
-    gameCreationScene->setAvailableMaps(qMaps);
+        gameCreationScene->setAvailableMaps(qMaps);
+    } catch (const std::exception&) {
+        handleServerConnectionError();
+    }
 }
 
 void MainWindow::handleGameCreationRequest(const QString& gameName, const QString& selectedMap) {
-    auto createGameEvent = std::make_shared<Model::CreateGameEvent>(gameName.toStdString(),
-                                                                    selectedMap.toStdString());
-    protocol->send_event(createGameEvent->as_dto());
-    runGame();
+    try {
+        auto createGameEvent = std::make_shared<Model::CreateGameEvent>(gameName.toStdString(),
+                                                                        selectedMap.toStdString());
+        protocol->send_event(createGameEvent->as_dto());
+        runGame();
+    } catch (const std::exception&) {
+        handleServerConnectionError();
+    }
 }
 
 void MainWindow::showJoinGameScene() {
@@ -151,9 +176,13 @@ void MainWindow::showJoinGameScene() {
 void MainWindow::handleJoinGameRequest() {
     int partida_id = joinGameScene->selectedGameId();
     if (partida_id != -1) {
-        auto joinGameEvent = make_shared<Model::JoinGameEvent>(partida_id);
-        protocol->send_event(joinGameEvent->as_dto());
-        runGame();
+        try {
+            auto joinGameEvent = make_shared<Model::JoinGameEvent>(partida_id);
+            protocol->send_event(joinGameEvent->as_dto());
+            runGame();
+        } catch (const std::exception&) {
+            handleServerConnectionError();
+        }
     }
 }
 

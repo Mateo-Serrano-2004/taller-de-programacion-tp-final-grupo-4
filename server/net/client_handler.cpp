@@ -74,13 +74,16 @@ void ClientHandler::handle_event(const EventVariant& event) {
 
 void ClientHandler::close() {
     kill();
+    protocol->close_socket();
+    join();
     sender.reset();
+    protocol.reset();
 }
 
 ClientHandler::ClientHandler(Socket&& skt, GameManager& game_manager):
-        protocol(skt),
+        protocol(std::make_unique<ServerProtocol>(std::move(skt))),
         game_manager(game_manager),
-        sender(make_unique<ClientHandlerSender>(protocol)),
+        sender(std::make_unique<ClientHandlerSender>(*protocol)),
         sender_queue(sender->get_queue()) {
     start();
 }
@@ -92,7 +95,7 @@ void ClientHandler::kill() { is_alive = false; }
 void ClientHandler::run() {
     try {
         while (is_alive) {
-            EventVariant event = protocol.receive_event();
+            EventVariant event = protocol->receive_event();
             handle_event(event);
         }
     } catch (const std::exception&) {
@@ -102,5 +105,4 @@ void ClientHandler::run() {
 
 ClientHandler::~ClientHandler() {
     close();
-    join();
 }

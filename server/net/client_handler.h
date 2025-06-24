@@ -22,7 +22,7 @@ class ClientHandler: public Thread {
 private:
     uint8_t player_id = 0;
     std::atomic<bool> is_alive = true;
-    ServerProtocol protocol;
+    Unique<ServerProtocol> protocol;
     GameManager& game_manager;
     Unique<ClientHandlerSender> sender;
     Queue<DTO::DTOVariant>& sender_queue;
