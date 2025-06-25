@@ -8,6 +8,20 @@
 
 Counter Strike 2D es un juego multijugador en 2D inspirado en Counter-Strike. Permite a los jugadores crear y unirse a partidas, jugar en diferentes mapas, y utilizar un editor de mapas integrado para crear nuevos niveles.
 
+## Tráiler
+
+<div align="center">
+  <video width="600" controls>
+    <source src="https://github.com/Mateo-Serrano-2004/taller-de-programacion-tp-final-grupo-4/releases/latest/download/CS2D.mp4" type="video/mp4">
+    Tu navegador no soporta el elemento video.
+    <a href="https://youtu.be/SuIemh6AR5s">🎬 Ver Trailer en YouTube</a>
+  </video>
+</div>
+
+<div align="center">
+  <a href="https://youtu.be/SuIemh6AR5s">🎬 Ver Trailer Completo en YouTube</a>
+</div>
+
 ## Índice
 
 - [Características](#características)
